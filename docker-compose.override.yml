@@ -7,6 +7,26 @@ version: '3.4'
 # An external IP or DNS name has to be used (instead localhost and the 10.0.75.1 IP) when testing the Web apps and the Xamarin apps from remote machines/devices using the same WiFi, for instance.
 
 services:
+
+  business.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=Microsoft.eShopOnContainers.Services.BusinessDb;User Id=sa;Password=Pass@word}
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
+      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
+      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
+      - UseCustomizationData=True
+      - AzureServiceBusEnabled=False
+      - AzureStorageEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    ports:
+      - "5130:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
+                    # The API Gateway redirects and access through the internal port (80).
       
   basket.api:
     environment:
@@ -235,10 +255,10 @@ services:
 
   sql.data:
     environment:
-      - SA_PASSWORD=P@ssword
+      - MYSQL_ROOT_PASSWORD=P@ssword
       - ACCEPT_EULA=Y
     ports:
-      - "3306:3306"    # Important: In a production environment your should remove the external port
+      - "5306:3306"    # Important: In a production environment your should remove the external port
 
   nosql.data:
     ports:

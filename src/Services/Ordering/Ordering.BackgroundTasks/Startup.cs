@@ -16,6 +16,7 @@ using Ordering.BackgroundTasks.Configuration;
 using Ordering.BackgroundTasks.Tasks;
 using RabbitMQ.Client;
 using System;
+using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 
 namespace Ordering.BackgroundTasks
 {
@@ -40,7 +41,7 @@ namespace Ordering.BackgroundTasks
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddSqlCheck("OrderingDb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+                checks.AddMySQLCheck("OrderingDb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
             });
 
             //configure settings

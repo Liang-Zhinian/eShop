@@ -2,6 +2,16 @@ version: '3.4'
 
 services:
 
+  business.api:
+    image: eshop/business.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Business/Business.API/Dockerfile    
+    depends_on:
+      - sql.data
+#      - identity.api
+      - rabbitmq
+
   basket.api:
     image: eshop/basket.api:${TAG:-latest}
     build:
@@ -108,7 +118,7 @@ services:
 #  sql.data:
 #    image: microsoft/mssql-server-linux:2017-latest
   sql.data:
-    image: mysql/mysql-server:tag
+    image: mysql/mysql-server:${TAG:-latest}
 
   nosql.data:
     image: mongo
