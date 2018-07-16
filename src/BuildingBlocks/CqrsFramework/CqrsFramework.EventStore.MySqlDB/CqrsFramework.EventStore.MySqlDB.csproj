@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+<RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CqrsFramework\CqrsFramework.csproj" />
+    <ProjectReference Include="..\CqrsFramework.EventStore.EF\CqrsFramework.EventSourcing.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20180709150631_first.cs" />
+  </ItemGroup>
+</Project>

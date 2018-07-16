@@ -12,7 +12,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="AggregatesModel\AppointmentAggregate\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="AggregatesModel\AppointmentAggregate\Appointment.cs" />
+    <Compile Remove="Events\Appointments\AppointmentConfirmedEvent.cs" />
+  </ItemGroup>
 </Project>
