@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SaaSEqt.eShop.Services.Ordering.Domain.SeedWork;
+using SaaSEqt.eShop.Services.Appointment.Domain.SeedWork;
 
-namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.AppointmentAggregate
+namespace SaaSEqt.eShop.Services.Appointment.Domain.AggregatesModel.AppointmentAggregate
 {
     public class AppointmentStatus : Enumeration
     {
