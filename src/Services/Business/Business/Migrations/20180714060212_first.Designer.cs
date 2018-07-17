@@ -28,7 +28,7 @@ namespace Business.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<byte[]>("Logo")
+                b.Property<string>("Logo")
                         .HasColumnType("varchar(4000)");
 
                     b.Property<string>("PageColor1")
@@ -65,7 +65,7 @@ namespace Business.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("varchar(2000)");
 
-                    b.Property<byte[]>("Image");
+                b.Property<string>("Image").HasColumnType("varchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,7 +87,7 @@ namespace Business.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<byte[]>("Image");
+                b.Property<string>("Image").HasColumnType("varchar(1000)");
 
                     b.Property<Guid>("LocationId")
                         .HasColumnType("char(36)");

@@ -26,4 +26,55 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\HealthChecks\src\HealthChecks.MySQL\HealthChecks.MySQL.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Pics\1.png" />
+    <None Remove="Pics\10.png" />
+    <None Remove="Pics\12.png" />
+    <None Remove="Pics\2.png" />
+    <None Remove="Pics\3.png" />
+    <None Remove="Pics\4.png" />
+    <None Remove="Pics\5.png" />
+    <None Remove="Pics\6.png" />
+    <None Remove="Pics\7.png" />
+    <None Remove="Pics\8.png" />
+    <None Remove="Pics\9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pics\1.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\10.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\12.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\2.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\3.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\4.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\5.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\6.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\7.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\8.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Pics\9.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pics\" />
+  </ItemGroup>
 </Project>

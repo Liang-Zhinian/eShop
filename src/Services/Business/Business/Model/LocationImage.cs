@@ -5,7 +5,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
     public class LocationImage
     {
         public Guid Id { get; private set; }
-        public byte[] Image { get; private set; }
+        public string Image { get; private set; }
 
         public Guid LocationId { get; private set; }
         public virtual Location Location { get; private set; }
@@ -18,7 +18,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
 
         }
 
-        public LocationImage(Guid siteId, Guid locationId, byte[] image)
+        public LocationImage(Guid siteId, Guid locationId, string image)
         {
             Id = Guid.NewGuid();
             LocationId = locationId;

@@ -12,7 +12,26 @@ namespace SaaSEqt.eShop.Services.Appointment.Domain.Commands
         public MakeAnAppointmentCommand()
         {
         }
-		public Guid Id {get;set;}
+
+        public MakeAnAppointmentCommand(Guid commandId, Guid appointmentId, Guid siteId, Guid locationId, Guid staffId, DateTime startDateTime, DateTime endDateTime, Guid clientId, string genderPreference, int duration, bool staffRequested, string notes, ICollection<AppointmentServiceItemRM> appointmentServiceItems, ICollection<AppointmentResourceRM> appointmentResources)
+        {
+            Id = commandId;
+            AppointmentId = appointmentId;
+            SiteId = siteId;
+            LocationId = locationId;
+            StaffId = staffId;
+            StartDateTime = startDateTime;
+            EndDateTime = endDateTime;
+            ClientId = clientId;
+            GenderPreference = genderPreference;
+            Duration = duration;
+            StaffRequested = staffRequested;
+            Notes = notes;
+            AppointmentServiceItems = appointmentServiceItems;
+            AppointmentResources = appointmentResources;
+        }
+
+        public Guid Id {get;set;}
         public Guid AppointmentId {get;set;}
         public Guid SiteId { get; set; }
         public Guid LocationId { get; set; }
@@ -24,8 +43,8 @@ namespace SaaSEqt.eShop.Services.Appointment.Domain.Commands
         public int Duration { get; set; }
         public bool StaffRequested { get; set; }
 		public string Notes { get; set; }
-        public IList<AppointmentServiceItemRM> AppointmentServiceItems { get; set; }
-        public IList<AppointmentResourceRM> AppointmentResources { get; set; }
+        public ICollection<AppointmentServiceItemRM> AppointmentServiceItems { get; set; }
+        public ICollection<AppointmentResourceRM> AppointmentResources { get; set; }
 
         public override bool IsValid()
         {

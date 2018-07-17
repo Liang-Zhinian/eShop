@@ -37,7 +37,7 @@ namespace Business.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    Logo = table.Column<byte[]>(type: "varchar(4000)", nullable: true),
+                    Logo = table.Column<string>(type: "varchar(4000)", nullable: true),
                     PageColor1 = table.Column<string>(type: "varchar(10)", nullable: true),
                     PageColor2 = table.Column<string>(type: "varchar(10)", nullable: true),
                     PageColor3 = table.Column<string>(type: "varchar(10)", nullable: true),
@@ -64,7 +64,7 @@ namespace Business.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(type: "varchar(2000)", nullable: true),
-                    Image = table.Column<byte[]>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
                     SiteId = table.Column<Guid>(type: "char(36)", nullable: false),
                     Address_City = table.Column<string>(type: "varchar(255)", nullable: true),
@@ -121,7 +121,7 @@ namespace Business.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    Image = table.Column<byte[]>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
                     LocationId = table.Column<Guid>(type: "char(36)", nullable: false),
                     SiteId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },

@@ -120,7 +120,7 @@ namespace SaaSEqt.eShop.Services.Business.Services
                     //longitude));
         }
 
-        public async Task UpdateLocationImage(Guid siteId, Guid locationId, byte[] image)
+        public async Task UpdateLocationImage(Guid siteId, Guid locationId, string image)
         {
             //Guid siteId, Guid locationId, byte[] image
             var location = await FindExistingLocation(siteId, locationId);
@@ -141,7 +141,7 @@ namespace SaaSEqt.eShop.Services.Business.Services
                                                                            //updateLocationImageCommand.Image));
         }
 
-        public async Task AddAdditionalLocationImage(Guid siteId, Guid locationId, byte[] image)
+        public async Task AddAdditionalLocationImage(Guid siteId, Guid locationId, string image)
         {
             var location = await FindExistingLocation(siteId, locationId);
 
@@ -163,7 +163,7 @@ namespace SaaSEqt.eShop.Services.Business.Services
                                                                                      //image));
         }
 
-        private async Task<Location> FindExistingLocation(Guid siteId, Guid locationId)
+        public async Task<Location> FindExistingLocation(Guid siteId, Guid locationId)
         {
             var location = await _businessDbContext.Locations.SingleOrDefaultAsync(y => y.SiteId.Equals(siteId) &&
                                                                                y.Id.Equals(locationId));

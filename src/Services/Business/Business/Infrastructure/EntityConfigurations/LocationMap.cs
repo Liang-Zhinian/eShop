@@ -15,7 +15,7 @@ namespace SaaSEqt.eShop.Services.Business.Infrastructure.EntityConfigurations
             builder.Property(_ => _.Id).HasColumnType(DbConstants.KeyType);
             builder.Property(_ => _.Name).IsRequired().HasColumnType(DbConstants.String255);
             builder.Property(_ => _.Description).IsRequired(false).HasColumnType(DbConstants.String2000);
-            builder.Property(_ => _.Image).IsRequired(false);
+            builder.Property(_ => _.Image).IsRequired(false).HasColumnType(DbConstants.String1000);
             builder.Property(_ => _.SiteId).IsRequired().HasColumnType(DbConstants.KeyType);
             //builder.Property(_ => _.LocationAddressId).IsRequired(false).HasColumnType(DbConstants.KeyType);
 

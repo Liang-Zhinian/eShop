@@ -10,7 +10,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
 
         }
 
-        public Branding(Guid siteId, byte[] logo, string pageColor1, string pageColor2, string pageColor3, string pageColor4)
+        public Branding(Guid siteId, string logo, string pageColor1, string pageColor2, string pageColor3, string pageColor4)
         {
             this.SiteId = siteId;
             //this.Site = site;
@@ -25,7 +25,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
         /// A site Id unique to a business
         public Guid Id { get; private set; }
         /// The image data to the site logo
-        public byte[] Logo { get; private set; }
+        public string Logo { get; private set; }
         /// Page color
         public string PageColor1 { get; private set; }
         /// Page color
@@ -43,5 +43,14 @@ namespace SaaSEqt.eShop.Services.Business.Model
 
         //    return branding;
         //}
+
+        public void UpdateBranding(string logo, string pageColor1, string pageColor2, string pageColor3, string pageColor4)
+        {
+            this.Logo = logo;
+            this.PageColor1 = pageColor1;
+            this.PageColor2 = pageColor2;
+            this.PageColor3 = pageColor3;
+            this.PageColor4 = pageColor4;
+        }
     }
 }

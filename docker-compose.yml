@@ -119,6 +119,18 @@ services:
 #    image: microsoft/mssql-server-linux:2017-latest
   sql.data:
     image: mysql/mysql-server:${TAG:-latest}
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+#      MYSQL_DATABASE: accountowner
+      MYSQL_USER: book2
+      MYSQL_PASSWORD: P@ssword
+    restart: always
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/conf.d:/etc/mysql/conf.d
+      - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"    # Important: In a production environment your should remove the external port
 
   nosql.data:
     image: mongo

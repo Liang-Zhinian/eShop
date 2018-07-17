@@ -15,6 +15,7 @@
   <ItemGroup>
     <Compile Remove="AggregatesModel\OrderAggregate\Address.cs" />
     <Compile Remove="Class1.cs" />
+    <Compile Remove="Commands\IdentifiedCommandHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="4.0.1" />

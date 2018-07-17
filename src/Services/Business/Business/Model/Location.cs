@@ -53,7 +53,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
 
         public string Description { get; private set; }
 
-        public byte[] Image { get; private set; }
+        public string Image { get; private set; }
 
         public ContactInformation ContactInformation { get; private set; }
 
@@ -104,7 +104,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
             //ApplyChange(new LocationGeolocationChangedEvent(this.Id, this.SiteId, geolocation.Latitude, geolocation.Longitude));
         }
 
-        public void ChangeImage(byte[] image)
+        public void ChangeImage(string image)
         {
             this.Image = image;
 

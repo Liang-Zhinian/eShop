@@ -66,9 +66,14 @@ namespace SaaSEqt.eShop.Services.Business.Model
             return location;
         }
 
-        public void UpdateBranding(byte[] logo, string pageColor1, string pageColor2, string pageColor3, string pageColor4)
+        public void UpdateBranding(string logo, string pageColor1, string pageColor2, string pageColor3, string pageColor4)
         {
-            //this.Branding = new Branding(this.Id, logo, pageColor1, pageColor2, pageColor3, pageColor4);
+            if (null == this.Branding)
+                this.Branding = new Branding(this.Id, logo, pageColor1, pageColor2, pageColor3, pageColor4);
+            else
+                this.Branding.UpdateBranding(logo, pageColor1, pageColor2, pageColor3, pageColor4);
+
+
             //ApplyChange(new SiteBrandingAppliedEvent(this.Id, this.Id, this.Branding.Id, logo, pageColor1, pageColor2, pageColor3, pageColor4));
         }
 
