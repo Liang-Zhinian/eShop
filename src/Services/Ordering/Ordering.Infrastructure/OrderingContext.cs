@@ -68,7 +68,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Infrastructure
         public OrderingContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<OrderingContext>()
-                .UseMySql("Server=localhost;database=SaaSEqt.eShop.Services.OrderingDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=localhost;database=SaaSEqt.eShop.Services.OrderingDb;uid=book2;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
 
             return new OrderingContext(optionsBuilder.Options,new NoMediator());
         }
