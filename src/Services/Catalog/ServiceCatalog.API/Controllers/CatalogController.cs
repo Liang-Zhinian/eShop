@@ -44,7 +44,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
 
             if (catalogTypeId.HasValue)
             {
-                root = root.Where(ci => ci.SchedulableCatalogTypeId == catalogTypeId);
+                root = root.Where(ci => ci.ServiceCategoryId == catalogTypeId);
             }
 
             var totalItems = await root
@@ -73,7 +73,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
                                                   schedulableCatalogItem.Description,
                                                   schedulableCatalogItem.DefaultTimeLength,
                                                   schedulableCatalogItem.Price,
-                                                  schedulableCatalogItem.SchedulableCatalogTypeId,
+                                                  schedulableCatalogItem.ServiceCategoryId,
                                                   schedulableCatalogItem.IndustryStandardCategoryId);
             _catalogContext.ServiceItems.Add(item);
 
@@ -154,7 +154,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         {
             var item = new Availability(availability.SiteId,
                                         availability.StaffId,
-                                        availability.SchedulableCatalogItemId,
+                                        availability.ServiceItemId,
                                         availability.LocationId,
                                         availability.StartDateTime,
                                         availability.EndDateTime,
@@ -202,7 +202,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         {
             var item = new Unavailability(unavailability.SiteId,
                                           unavailability.StaffId,
-                                          unavailability.SchedulableCatalogItemId,
+                                          unavailability.ServiceItemId,
                                           unavailability.LocationId,
                                           unavailability.StartDateTime,
                                           unavailability.EndDateTime,

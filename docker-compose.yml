@@ -2,6 +2,24 @@ version: '3.4'
 
 services:
 
+  appointment.api:
+    image: eshop/appointment.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Appointment/Appointment.API/Dockerfile    
+    depends_on:
+      - sql.data
+      - rabbitmq
+
+  servicecatalog.api:
+    image: eshop/servicecatalog.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/ServiceCatalog.API/Dockerfile    
+    depends_on:
+      - sql.data
+      - rabbitmq
+
   business.api:
     image: eshop/business.api:${TAG:-latest}
     build:
@@ -120,10 +138,12 @@ services:
   sql.data:
     image: mysql/mysql-server:${TAG:-latest}
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 1
-#      MYSQL_DATABASE: accountowner
       MYSQL_USER: book2
       MYSQL_PASSWORD: P@ssword
+      MYSQL_DATABASES: test
+      MYSQL_ROOT_PASSWORD: P@ssword
+      MYSQL_HOST: localhost
+      MYSQL_MY_DATABASE: test
     restart: always
     volumes:
       - ./db/mysql/data:/var/lib/mysql

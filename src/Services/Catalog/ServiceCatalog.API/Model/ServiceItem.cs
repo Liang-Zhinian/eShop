@@ -11,14 +11,14 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
             Id = Guid.NewGuid();
         }
 
-        public ServiceItem(Guid siteId, string name, string description, int defaultTimeLength, double price, Guid schedulableCatalogTypeId, int industryStandardCategoryId)
+        public ServiceItem(Guid siteId, string name, string description, int defaultTimeLength, double price, Guid serviceCategoryId, int industryStandardCategoryId)
             : this()
         {
             SiteId = siteId;
             Name = name;
             Description = description;
             DefaultTimeLength = defaultTimeLength;
-            SchedulableCatalogTypeId = schedulableCatalogTypeId;
+            ServiceCategoryId = serviceCategoryId;
             Price = price;
             IndustryStandardCategoryId = industryStandardCategoryId;
 
@@ -45,8 +45,8 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
 
         public int DefaultTimeLength { get; set; }
 
-        public Guid SchedulableCatalogTypeId { get; set; }
-        public virtual ServiceCategory SchedulableCatalogType { get; set; }
+        public Guid ServiceCategoryId { get; set; }
+        public virtual ServiceCategory ServiceCategory { get; set; }
 
         public int IndustryStandardCategoryId { get; set; }
 

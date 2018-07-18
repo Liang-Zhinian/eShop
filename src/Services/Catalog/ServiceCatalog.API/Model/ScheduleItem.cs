@@ -8,13 +8,13 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
         {
         }
 
-        protected ScheduleItem(Guid siteId, Guid staffId, Guid schedulableCatalogItemId, Guid locationId, DateTime startTime, DateTime endTime
+        protected ScheduleItem(Guid siteId, Guid staffId, Guid serviceItemId, Guid locationId, DateTime startTime, DateTime endTime
                                /*, bool Sunday, bool Monday, bool Tuesday, bool Wednesday, bool Thursday, bool Friday, bool Saturday*/)
         {
             this.Id = Guid.NewGuid();
             this.SiteId = siteId;
             this.StaffId = staffId;
-            this.SchedulableCatalogItemId = schedulableCatalogItemId;
+            this.ServiceItemId = serviceItemId;
             this.LocationId = locationId;
             this.StartDateTime = startTime;
             this.EndDateTime = endTime;
@@ -40,8 +40,8 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
         public Guid StaffId { get; set; }
 
         /// The session type of the schedule
-        public Guid SchedulableCatalogItemId { get; set; }
-        public virtual ServiceItem SchedulableCatalogItem { get; set; }
+        public Guid ServiceItemId { get; set; }
+        public virtual ServiceItem ServiceItem { get; set; }
 
         /// The location of the schedule
         public Guid LocationId { get; set; }

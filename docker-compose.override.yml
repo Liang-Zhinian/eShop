@@ -8,6 +8,48 @@
 
 services:
 
+  appointment.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=Microsoft.eShopOnContainers.Services.AppointmentDb;uid=book2;pwd=P@ssword}
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
+      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
+      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
+      - UseCustomizationData=True
+      - AzureServiceBusEnabled=False
+      - AzureStorageEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    ports:
+      - "5131:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
+                    # The API Gateway redirects and access through the internal port (80).
+
+
+  servicecatalog.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=Microsoft.eShopOnContainers.Services.ServiceCatalogDb;uid=book2;pwd=P@ssword}
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
+      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
+      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
+      - UseCustomizationData=True
+      - AzureServiceBusEnabled=False
+      - AzureStorageEnabled=False
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    ports:
+      - "5132:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
+                    # The API Gateway redirects and access through the internal port (80).
+  
+
   business.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -256,17 +298,19 @@ services:
   sql.data:
     image: mysql:5.7
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 1
-#      MYSQL_DATABASE: accountowner
       MYSQL_USER: book2
       MYSQL_PASSWORD: P@ssword
+      MYSQL_DATABASES: test
+      MYSQL_ROOT_PASSWORD: P@ssword
+      MYSQL_HOST: localhost
+      MYSQL_MY_DATABASE: test
     restart: always
     volumes:
       - ./db/mysql/data:/var/lib/mysql
       - ./db/mysql/conf.d:/etc/mysql/conf.d
       - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
     ports:
-      - "3306:3306"    # Important: In a production environment your should remove the external port
+      - "33306:3306"    # Important: In a production environment your should remove the external port
 
   nosql.data:
     ports:

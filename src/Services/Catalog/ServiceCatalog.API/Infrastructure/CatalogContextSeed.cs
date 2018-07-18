@@ -28,6 +28,12 @@
                 var contentRootPath = env.ContentRootPath;
                 var picturePath = env.WebRootPath;
 
+                if (!context.ScheduleTypes.Any())
+                {
+                    await context.ScheduleTypes.AddRangeAsync(GetPreconfiguredScheduleTypes());
+
+                    await context.SaveChangesAsync();
+                }
 
                 if (!context.ServiceCategories.Any())
                 {
@@ -37,6 +43,17 @@
                 }
             });
         }
+
+        private IEnumerable<ScheduleType> GetPreconfiguredScheduleTypes()
+        {
+            return new List<ScheduleType>()
+            {
+                new ScheduleType(1,"All"),
+                new ScheduleType(2,"Appointment"),
+                new ScheduleType(3,"Resource")
+            };
+        }
+
 
         private IEnumerable<ServiceCategory> GetPreconfiguredServiceCategories()
         {

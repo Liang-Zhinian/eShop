@@ -19,7 +19,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.EntityConfigu
             builder.Property<DateTime>(_ => _.BookableEndDateTime);
             builder.Property<Guid>(_=>_.StaffId).IsRequired().HasColumnType(Constants.DbConstants.KeyType);
             builder.Property<Guid>(_ => _.LocationId).IsRequired().HasColumnType(Constants.DbConstants.KeyType);
-            builder.Property<Guid>(_ => _.SchedulableCatalogItemId).IsRequired().HasColumnType(Constants.DbConstants.KeyType);
+            builder.Property<Guid>(_ => _.ServiceItemId).IsRequired().HasColumnType(Constants.DbConstants.KeyType);
             builder.Property<bool>(_ => _.Sunday).IsRequired();
             builder.Property<bool>(_ => _.Monday).IsRequired();
             builder.Property<bool>(_ => _.Tuesday).IsRequired();

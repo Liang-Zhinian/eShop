@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+  <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Catalog.API</AssemblyName>
@@ -14,8 +15,6 @@
   <ItemGroup>
     <Compile Remove="Migrations\Catalog\20180714102828_init.cs" />
     <Compile Remove="Migrations\Catalog\20180714103157_init.cs" />
-    <Compile Remove="Migrations\Catalog\20180714113211_init.Designer.cs" />
-    <Compile Remove="Migrations\Catalog\20180714113211_init.cs" />
     <Compile Remove="Infrastructure\EntityConfigurations\CatalogBrandEntityTypeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,5 +91,6 @@
   <ItemGroup>
     <Folder Include="Infrastructure\EntityConfigurations\Constants\" />
     <Folder Include="IntegrationEvents\EventHandling\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

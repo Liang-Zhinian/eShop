@@ -103,9 +103,9 @@
                 options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "eShopOnContainers - Catalog HTTP API",
+                    Title = "Book2 - Service Catalog HTTP API",
                     Version = "v1",
-                    Description = "The Catalog Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
+                    Description = "The Service Catalog Microservice HTTP API. This is a Data-Driven/CRUD microservice",
                     TermsOfService = "Terms Of Service"
                 });
             });
