@@ -86,18 +86,6 @@ services:
       - identity.api
       - rabbitmq
 
-  webspa:
-    image: eshop/webspa:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Web/WebSPA/Dockerfile    
-    depends_on:
-      - catalog.api
-      - ordering.api
-      - identity.api
-      - basket.api
-      - marketing.api
-
   webmvc:
     image: eshop/webmvc:${TAG:-latest}
     build:
@@ -146,8 +134,8 @@ services:
       MYSQL_MY_DATABASE: test
     restart: always
     volumes:
-      - ./db/mysql/data:/var/lib/mysql
-      - ./db/mysql/conf.d:/etc/mysql/conf.d
+      - ~/mysql/data:/var/lib/mysql
+      - ~/mysql/conf.d:/etc/mysql/conf.d
       - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"    # Important: In a production environment your should remove the external port
