@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Business.Api.Requests.Locations
+namespace Business.API.Requests.Locations
 {
     public class AddAdditionalLocationImageRequest
     {

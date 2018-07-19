@@ -1,4 +1,8 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Appointment.API.CommandHandlers;
+using Autofac;
+using CqrsFramework.Events;
+using SaaSEqt.eShop.Services.Appointment.Infrastructure.Idempotency;
 
 namespace Appointment.API.Infrastructure.AutofacModules
 {
@@ -71,12 +75,12 @@ namespace Appointment.API.Infrastructure.AutofacModules
                                                                      //y.GetService<ICache>()));
 
 
-            //builder.RegisterType<RequestManager>()
-            //   .As<IRequestManager>()
-            //   .InstancePerLifetimeScope();
+            builder.RegisterType<RequestManager>()
+               .As<IRequestManager>()
+               .InstancePerLifetimeScope();
 
-            //builder.RegisterAssemblyTypes(typeof(AppointmentCommandHandler).GetTypeInfo().Assembly)
-                //.AsClosedTypesOf(typeof(IEventHandler<>));
+            builder.RegisterAssemblyTypes(typeof(AppointmentCommandHandler).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IEventHandler<>));
 
         }
     }

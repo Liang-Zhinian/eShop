@@ -19,7 +19,7 @@ namespace SaaSEqt.eShop.Services.Business.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(DbConstants.Schema);
+            //modelBuilder.HasDefaultSchema(DbConstants.Schema);
 
             modelBuilder.ApplyConfiguration(new BrandingMap());
             modelBuilder.ApplyConfiguration(new SiteMap());
@@ -60,7 +60,7 @@ namespace SaaSEqt.eShop.Services.Business.Infrastructure
         public BusinessDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BusinessDbContext>();
-            optionsBuilder.UseMySql("Server=localhost;database=SaaSEqt.eShop.Services.BusinessDb;uid=book2;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+            optionsBuilder.UseMySql("Server=localhost;database=SaaSEqt.eShop.Services.BusinessDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
 
             return new BusinessDbContext(optionsBuilder.Options);
         }

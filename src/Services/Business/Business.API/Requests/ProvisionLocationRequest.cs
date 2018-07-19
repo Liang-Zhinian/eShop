@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Business.Api.Requests.Locations
+namespace Business.API.Requests.Locations
 {
     public class ProvisionLocationRequest
     {

@@ -76,5 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pics\" />
+    <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
 </Project>

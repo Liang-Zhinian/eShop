@@ -14,6 +14,7 @@
     <Folder Include="Application\CommandHandlers\" />
     <Folder Include="Application\Behaviors\" />
     <Folder Include="Application\Validations\" />
+    <Folder Include="Infrastructure\IntegrationEventMigrations\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,5 +50,6 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework.EventStore.MySqlDB\CqrsFramework.EventStore.MySqlDB.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework.Bus.RabbitMQ\CqrsFramework.Bus.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework.EventStore.EF\CqrsFramework.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
   </ItemGroup>
 </Project>

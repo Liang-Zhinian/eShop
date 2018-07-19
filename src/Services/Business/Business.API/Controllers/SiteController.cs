@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Services.Business.Api.Requests;
+using SaaSEqt.eShop.Services.Business.API.Requests;
 using SaaSEqt.eShop.Services.Business.Infrastructure;
 using SaaSEqt.eShop.Services.Business.Model;
 using SaaSEqt.eShop.Services.Business.Services;

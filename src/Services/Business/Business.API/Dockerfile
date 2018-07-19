@@ -6,7 +6,7 @@ FROM microsoft/aspnetcore-build:2.0.5-2.1.4 AS build
 WORKDIR /src
 COPY . .
 RUN dotnet restore -nowarn:msb3202,nu1503
-WORKDIR /src/src/Services/Catalog/Catalog.API
+WORKDIR /src/src/Services/Business/Business.API
 RUN dotnet build --no-restore -c Release -o /app
 
 FROM build AS publish

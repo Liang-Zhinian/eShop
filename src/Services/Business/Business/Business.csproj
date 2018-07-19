@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-<RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,5 +26,6 @@
   <ItemGroup>
     <Compile Remove="Migrations\20180714043307_first.cs" />
     <Compile Remove="Migrations\20180714060101_first.cs" />
+    <Compile Remove="Migrations\20180714060212_first.cs" />
   </ItemGroup>
 </Project>

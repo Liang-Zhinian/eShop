@@ -63,7 +63,7 @@ namespace Appointment.API
                 }
                 checks.AddMySQLCheck("book2appointmentdb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
                 //checks.AddMySQLCheck("book2appointmentdb", Configuration["EventStoreConnectionString"], TimeSpan.FromMinutes(minutes));
-                checks.AddUrlCheck("http://localhost:15672/", TimeSpan.FromMinutes(minutes));
+                //checks.AddUrlCheck("http://localhost:15672/", TimeSpan.FromMinutes(minutes));
 
             });
 
@@ -86,7 +86,7 @@ namespace Appointment.API
 
             services.AddDbContext<EventStoreDbContext>(options =>
             {
-                options.UseMySql(Configuration["EventStoreConnectionString"],
+                options.UseMySql(Configuration["ConnectionString"],
                                  mySqlOptionsAction: sqlOptions =>
                                  {
                                      sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -107,8 +107,8 @@ namespace Appointment.API
                     .AllowCredentials());
             });
 
-            services.AddScoped<IMediator, Mediator>();
-            services.AddMediatorHandlersSetup(typeof(AppointmentCommandHandler).GetTypeInfo().Assembly);
+            //services.AddScoped<IMediator, Mediator>();
+            //services.AddMediatorHandlersSetup(typeof(AppointmentCommandHandler).GetTypeInfo().Assembly);
 
             //services.AddAutoMapperSetup();
 

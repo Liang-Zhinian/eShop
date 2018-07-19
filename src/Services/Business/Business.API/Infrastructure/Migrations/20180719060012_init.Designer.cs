@@ -4,21 +4,19 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SaaSEqt.eShop.Services.Business.Infrastructure;
 using System;
 
-namespace Business.Migrations
+namespace Business.API.Migrations
 {
     [DbContext(typeof(BusinessDbContext))]
-    [Migration("20180714060212_first")]
-    partial class first
+    [Migration("20180719060012_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("SaaSEqt.eShop.Services.BusinessDb")
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026");
 
@@ -28,7 +26,7 @@ namespace Business.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                b.Property<string>("Logo")
+                    b.Property<string>("Logo")
                         .HasColumnType("varchar(4000)");
 
                     b.Property<string>("PageColor1")
@@ -65,7 +63,8 @@ namespace Business.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("varchar(2000)");
 
-                b.Property<string>("Image").HasColumnType("varchar(1000)");
+                    b.Property<string>("Image")
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,7 +86,8 @@ namespace Business.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                b.Property<string>("Image").HasColumnType("varchar(1000)");
+                    b.Property<string>("Image")
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<Guid>("LocationId")
                         .HasColumnType("char(36)");
@@ -212,7 +212,7 @@ namespace Business.Migrations
                             b1.Property<string>("ZipCode")
                                 .HasColumnType("varchar(255)");
 
-                            b1.ToTable("Location","book2.business");
+                            b1.ToTable("Location");
 
                             b1.HasOne("SaaSEqt.eShop.Services.Business.Model.Location")
                                 .WithOne("Address")
@@ -237,7 +237,7 @@ namespace Business.Migrations
                             b1.Property<string>("SecondaryTelephone")
                                 .HasColumnType("varchar(255)");
 
-                            b1.ToTable("Location","book2.business");
+                            b1.ToTable("Location");
 
                             b1.HasOne("SaaSEqt.eShop.Services.Business.Model.Location")
                                 .WithOne("ContactInformation")
@@ -254,7 +254,7 @@ namespace Business.Migrations
 
                             b1.Property<double>("Longitude");
 
-                            b1.ToTable("Location","book2.business");
+                            b1.ToTable("Location");
 
                             b1.HasOne("SaaSEqt.eShop.Services.Business.Model.Location")
                                 .WithOne("Geolocation")
@@ -295,7 +295,7 @@ namespace Business.Migrations
                             b1.Property<string>("SecondaryTelephone")
                                 .HasColumnType("varchar(255)");
 
-                            b1.ToTable("Site","book2.business");
+                            b1.ToTable("Site");
 
                             b1.HasOne("SaaSEqt.eShop.Services.Business.Model.Site")
                                 .WithOne("ContactInformation")

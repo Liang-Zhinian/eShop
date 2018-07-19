@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.eShop.Services.Business.Api.Requests
+namespace SaaSEqt.eShop.Services.Business.API.Requests
 {
     public class GetLocationsRequest: BaseRequest
     {

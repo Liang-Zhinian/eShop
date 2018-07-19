@@ -8,7 +8,7 @@ namespace SaaSEqt.eShop.Services.Appointment.Infrastructure
 {
     public class AppointmentContext : DbContext, IUnitOfWork
     {
-        public AppointmentContext()
+        public AppointmentContext(DbContextOptions<AppointmentContext> options) : base(options)
         {
         }
 

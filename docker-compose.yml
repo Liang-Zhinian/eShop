@@ -126,12 +126,8 @@ services:
   sql.data:
     image: mysql/mysql-server:${TAG:-latest}
     environment:
-      MYSQL_USER: book2
-      MYSQL_PASSWORD: P@ssword
-      MYSQL_DATABASES: test
       MYSQL_ROOT_PASSWORD: P@ssword
       MYSQL_HOST: localhost
-      MYSQL_MY_DATABASE: test
     restart: always
     volumes:
       - ~/mysql/data:/var/lib/mysql

@@ -3,6 +3,7 @@ using System.Reflection;
 using Appointment.API.Infrastructure.Behaviors;
 using Autofac;
 using MediatR;
+using SaaSEqt.eShop.Services.Appointment.Domain.Commands;
 
 namespace Appointment.API.Infrastructure.AutofacModules
 {
@@ -17,8 +18,8 @@ namespace Appointment.API.Infrastructure.AutofacModules
                 .AsImplementedInterfaces();
 
             // Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
-            //builder.RegisterAssemblyTypes(typeof(MakeAnAppointmentCommand).GetTypeInfo().Assembly)
-                //.AsClosedTypesOf(typeof(IRequestHandler<,>));
+            builder.RegisterAssemblyTypes(typeof(MakeAnAppointmentCommand).GetTypeInfo().Assembly)
+                .AsClosedTypesOf(typeof(IRequestHandler<,>));
             
 
 

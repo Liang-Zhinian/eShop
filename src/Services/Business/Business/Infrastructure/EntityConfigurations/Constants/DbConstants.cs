@@ -6,7 +6,7 @@ namespace SaaSEqt.eShop.Services.Business.Infrastructure.EntityConfigurations.Co
 {
     public class DbConstants
     {
-        public static string Schema = "book2.business";
+        //public static string Schema = "book2.business";
 
         public static string KeyType = "uniqueidentifier";
         public static string String10 = "NVarchar(10)";
