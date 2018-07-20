@@ -17,7 +17,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API
                 .MigrateDbContext<CatalogContext>((context,services)=>
                 {
                     var env = services.GetService<IHostingEnvironment>();
-                    var settings = services.GetService<IOptions<CatalogSettings>>();
+                    var settings = services.GetService<IOptions<ServiceCatalogSettings>>();
                     var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
                     new CatalogContextSeed()

@@ -18,7 +18,7 @@
 
     public class CatalogContextSeed
     {
-        public async Task SeedAsync(CatalogContext context,IHostingEnvironment env,IOptions<CatalogSettings> settings,ILogger<CatalogContextSeed> logger)
+        public async Task SeedAsync(CatalogContext context,IHostingEnvironment env,IOptions<ServiceCatalogSettings> settings,ILogger<CatalogContextSeed> logger)
         {
             var policy = CreatePolicy(logger, nameof(CatalogContextSeed));
 

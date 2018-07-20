@@ -23,9 +23,9 @@ namespace SaaSEqt.eShop.Services.Business.API.Configurations
                 });
 
                 //Set the comments path for the swagger json and ui.
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var xmlPath = Path.Combine(basePath, "Business.API.xml");
-                c.IncludeXmlComments(xmlPath);
+                //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                //var xmlPath = Path.Combine(basePath, "Business.API.xml");
+                //c.IncludeXmlComments(xmlPath);
 
                 //  c.OperationFilter<HttpHeaderOperation>(); // 添加httpHeader参数
             });

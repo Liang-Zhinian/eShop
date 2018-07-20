@@ -1,12 +1,13 @@
 ﻿namespace SaaSEqt.eShop.Services.ServiceCatalog.API
 {
-    public class CatalogSettings
+    public class ServiceCatalogSettings
     {
         public string PicBaseUrl { get;set;}
 
         public string EventBusConnection { get; set; }
 
         public bool UseCustomizationData { get; set; }
-	public bool AzureStorageEnabled { get; set; }
+
+	    public bool AzureStorageEnabled { get; set; }
     }
 }

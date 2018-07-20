@@ -14,6 +14,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\Catalog\20180714102828_init.cs" />
     <Compile Remove="Migrations\Catalog\20180714103157_init.cs" />
+    <Compile Remove="Model\SchedulableCatalog\Availability.cs" />
+    <Compile Remove="Infrastructure\EntityConfigurations\SchedulableCatalogs\AvailabilityMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
@@ -87,9 +89,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\SchedulableCatalog\" />
-    <Folder Include="Infrastructure\EntityConfigurations\SchedulableCatalogs\" />
-    <Folder Include="Infrastructure\EntityConfigurations\SchedulableCatalogs\Constants\" />
-  </ItemGroup>
 </Project>

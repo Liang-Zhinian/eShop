@@ -95,7 +95,7 @@
                                      });
             });
 
-            services.Configure<CatalogSettings>(Configuration);
+            services.Configure<ServiceCatalogSettings>(Configuration);
 
             // Add framework services.
             services.AddSwaggerGen(options =>
@@ -128,7 +128,7 @@
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
-                    var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+                    var settings = sp.GetRequiredService<IOptions<ServiceCatalogSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
                     var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
@@ -140,7 +140,7 @@
             {
                 services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
                 {
-                    var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+                    var settings = sp.GetRequiredService<IOptions<ServiceCatalogSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
                     var factory = new ConnectionFactory()

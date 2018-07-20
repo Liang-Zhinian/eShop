@@ -5,13 +5,16 @@
   <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Catalog.API</AssemblyName>
-    <PackageId>Catalog.API</PackageId>
+    <AssemblyName>ServiceCatalog.API</AssemblyName>
+    <PackageId>ServiceCatalog.API</PackageId>
     <UserSecretsId>aspnet-Catalog.API-20161122013618</UserSecretsId>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DocumentationFile>bin\Debug\netcoreapp2.0\ServiceCatalog.API.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Migrations\Catalog\20180714102828_init.cs" />
     <Compile Remove="Migrations\Catalog\20180714103157_init.cs" />
@@ -25,9 +28,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="Pics\**\*;">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Setup\**\*;">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Remove="Setup\Catalogitems - Copy.zip" />
@@ -47,6 +47,7 @@
     <None Remove="Pics\8.png" />
     <None Remove="Pics\9.png" />
     <Content Remove="Pics\11.png" />
+    <Content Remove="Setup\CatalogBrands.csv" />
   </ItemGroup>
 
 
@@ -83,14 +84,12 @@
   <ItemGroup>
     <None Update="Pics\*">
     </None>
-    <None Update="Setup\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Infrastructure\EntityConfigurations\Constants\" />
     <Folder Include="IntegrationEvents\EventHandling\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Setup\" />
   </ItemGroup>
 </Project>
