@@ -76,9 +76,9 @@ namespace Ordering.BackgroundTasks.Tasks
                 {
                     conn.Open();
                     orderIds = conn.Query<int>(
-                        @"SELECT Id FROM [ordering].[orders] 
-                            WHERE DATEDIFF(minute, [OrderDate], GETDATE()) >= @GracePeriodTime
-                            AND [OrderStatusId] = 1",
+                        @"SELECT Id FROM `ordering`.`orders` 
+                            WHERE DATE_ADD(`OrderDate`, INTERVAL @GracePeriodTime MINUTE) <= now()
+                            AND `OrderStatusId` = 1",
                         new { GracePeriodTime = _settings.GracePeriodTime });
                 }
                 catch (MySqlException exception)
