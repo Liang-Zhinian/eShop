@@ -12,7 +12,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<PaymentMethod> paymentConfiguration)
         {
-            paymentConfiguration.ToTable("paymentmethods", OrderingContext.DEFAULT_SCHEMA);
+            paymentConfiguration.ToTable("paymentmethods"/*, OrderingContext.DEFAULT_SCHEMA*/);
 
             paymentConfiguration.HasKey(b => b.Id);
 

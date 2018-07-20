@@ -76,7 +76,7 @@ namespace Ordering.BackgroundTasks.Tasks
                 {
                     conn.Open();
                     orderIds = conn.Query<int>(
-                        @"SELECT Id FROM `ordering`.`orders` 
+                        @"SELECT Id FROM `orders` 
                             WHERE DATE_ADD(`OrderDate`, INTERVAL @GracePeriodTime MINUTE) <= now()
                             AND `OrderStatusId` = 1",
                         new { GracePeriodTime = _settings.GracePeriodTime });

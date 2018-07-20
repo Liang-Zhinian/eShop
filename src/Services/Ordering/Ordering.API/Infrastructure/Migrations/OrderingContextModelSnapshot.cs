@@ -36,7 +36,7 @@ namespace Ordering.API.Migrations
                     b.HasIndex("IdentityGuid")
                         .IsUnique();
 
-                    b.ToTable("buyers","ordering");
+                    b.ToTable("buyers");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType", b =>
@@ -50,7 +50,7 @@ namespace Ordering.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("cardtypes","ordering");
+                    b.ToTable("cardtypes");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
@@ -82,7 +82,7 @@ namespace Ordering.API.Migrations
 
                     b.HasIndex("CardTypeId");
 
-                    b.ToTable("paymentmethods","ordering");
+                    b.ToTable("paymentmethods");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order", b =>
@@ -108,7 +108,7 @@ namespace Ordering.API.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("orders","ordering");
+                    b.ToTable("orders");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.OrderItem", b =>
@@ -135,7 +135,7 @@ namespace Ordering.API.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("orderItems","ordering");
+                    b.ToTable("orderItems");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.OrderStatus", b =>
@@ -149,7 +149,7 @@ namespace Ordering.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("orderstatus","ordering");
+                    b.ToTable("orderstatus");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency.ClientRequest", b =>
@@ -164,7 +164,7 @@ namespace Ordering.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("requests","ordering");
+                    b.ToTable("requests");
                 });
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
@@ -200,7 +200,7 @@ namespace Ordering.API.Migrations
                         {
                             b1.Property<int>("OrderId");
 
-                            b1.ToTable("orders","ordering");
+                            b1.ToTable("orders");
 
                             b1.HasOne("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order")
                                 .WithOne("Address")

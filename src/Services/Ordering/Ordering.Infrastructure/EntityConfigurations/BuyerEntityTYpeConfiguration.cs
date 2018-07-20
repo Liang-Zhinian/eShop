@@ -11,7 +11,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Buyer> buyerConfiguration)
         {
-            buyerConfiguration.ToTable("buyers", OrderingContext.DEFAULT_SCHEMA);
+            buyerConfiguration.ToTable("buyers"/*, OrderingContext.DEFAULT_SCHEMA*/);
 
             buyerConfiguration.HasKey(b => b.Id);
 

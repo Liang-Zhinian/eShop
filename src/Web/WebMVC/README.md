@@ -19,7 +19,7 @@ Once the deploy process of docker-compose finishes you have to be able to access
 - Orders service: http://localhost:5102
 - Basket service: http://localhost:5103
 - Identity service: http://localhost:5105
-- Orders data (SQL Server): Server=tcp:localhost,5432;Database=SaaSEqt.eShop.Services.OrderingDb;uid=root;pwd=P@ssword;
+- Orders data (SQL Server): Server=tcp:localhost,5432;Database=SaaSEqt_eShop_Services_OrderingDb;uid=root;pwd=P@ssword;
 - Catalog data (SQL Server): Server=tcp:localhost,5434;Database=CatalogDB;uid=root;pwd=P@ssword
 - Identity data (SQL Server): Server=localhost,5433;Database=aspnet-SaaSEqt.eShop;uid=root;pwd=P@ssword
 - Basket data (Redis): listening in localhost:6379

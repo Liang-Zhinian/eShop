@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
