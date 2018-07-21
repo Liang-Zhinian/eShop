@@ -48,6 +48,7 @@
     <None Remove="Pics\8.png" />
     <None Remove="Pics\9.png" />
     <Content Remove="Pics\11.png" />
+    <Content Remove="Pics\8.png" />
   </ItemGroup>
 
 

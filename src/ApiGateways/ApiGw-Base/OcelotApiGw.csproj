@@ -13,4 +13,12 @@
     <PackageReference Include="Ocelot" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="configuration\configuration.json" />
+    <Content Remove="configuration\configuration %28copy%29.json" />
+    <Content Remove="configuration\configuration.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="configuration\configuration.json" />
+  </ItemGroup>
 </Project>

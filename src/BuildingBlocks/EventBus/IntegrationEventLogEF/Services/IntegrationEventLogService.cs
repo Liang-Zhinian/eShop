@@ -35,8 +35,8 @@ namespace SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services
             var eventLogEntry = new IntegrationEventLogEntry(@event);
 
 
-            if (null == _integrationEventLogContext.Database.CurrentTransaction)
-                _integrationEventLogContext.Database.UseTransaction(transaction);
+            //if (null == _integrationEventLogContext.Database.CurrentTransaction)
+            _integrationEventLogContext.Database.UseTransaction(transaction);
             _integrationEventLogContext.IntegrationEventLogs.Add(eventLogEntry);
 
             return _integrationEventLogContext.SaveChangesAsync();

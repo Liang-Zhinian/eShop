@@ -5,8 +5,32 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 8081
+            "Host": "appointment.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/{version}/a/{everything}",
+        "UpstreamHttpMethod": [ "GET" ]
+      },
+      {
+        "DownstreamPathTemplate": "/api/{version}/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "servicecatalog.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/{version}/sc/{everything}",
+        "UpstreamHttpMethod": [ "GET" ]
+      },
+      {
+        "DownstreamPathTemplate": "/api/{version}/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "business.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/biz/{everything}",
@@ -17,8 +41,8 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 8081
+            "Host": "business.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/business-api/{everything}",
@@ -29,32 +53,20 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 5101
+            "Host": "catalog.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/c/{everything}",
         "UpstreamHttpMethod": [ "GET" ]
       },
       {
-        "DownstreamPathTemplate": "/{everything}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5101
-          }
-        ],
-        "UpstreamPathTemplate": "/catalog-api/{everything}",
-        "UpstreamHttpMethod": []
-      },
-      {
         "DownstreamPathTemplate": "/api/{version}/{everything}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 5103
+            "Host": "basket.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/b/{everything}",
@@ -65,24 +77,12 @@
         }
       },
       {
-        "DownstreamPathTemplate": "/{everything}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "localhost",
-            "Port": 5103
-          }
-        ],
-        "UpstreamPathTemplate": "/basket-api/{everything}",
-        "UpstreamHttpMethod": []
-      },
-      {
         "DownstreamPathTemplate": "/api/{version}/{everything}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 5102
+            "Host": "ordering.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/o/{everything}",
@@ -97,7 +97,7 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "mobileshoppingagg",
+            "Host": "webshoppingagg",
             "Port": 80
           }
         ],
@@ -113,19 +113,56 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 5102
+            "Host": "ordering.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/orders-api/{everything}",
         "UpstreamHttpMethod": []
-      },{
+      },
+      {
         "DownstreamPathTemplate": "/{everything}",
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "localhost",
-            "Port": 5108
+            "Host": "ordering.signalrhub",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/hub/{everything}",
+        "UpstreamHttpMethod": []
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "basket.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/basket-api/{everything}",
+        "UpstreamHttpMethod": []
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "catalog.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/catalog-api/{everything}",
+        "UpstreamHttpMethod": []
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "payment.api",
+            "Port": 80
           }
         ],
         "UpstreamPathTemplate": "/payment-api/{everything}",

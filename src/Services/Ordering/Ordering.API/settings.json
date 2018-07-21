@@ -1,5 +1,5 @@
 ﻿{
-  "ConnectionString": "Server=localhost;database=SaaSEqt_eShop_Services_OrderingDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None",
+  "ConnectionString": "Server=localhost;database=SaaSEqt_eShop_Services_OrderingDb;uid=book2;pwd=P@ssword;charset=utf8;port=3306;SslMode=None",
   "IdentityUrl": "http://localhost:5105",
   "UseCustomizationData": false,
   "Logging": {
