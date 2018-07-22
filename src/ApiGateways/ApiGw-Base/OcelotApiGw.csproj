@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="configuration\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +18,7 @@
     <Content Remove="configuration\configuration.json" />
     <Content Remove="configuration\configuration %28copy%29.json" />
     <Content Remove="configuration\configuration.json" />
+    <Content Remove="configuration.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="configuration\configuration.json" />

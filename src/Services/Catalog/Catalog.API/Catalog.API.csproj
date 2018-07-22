@@ -49,6 +49,12 @@
     <None Remove="Pics\9.png" />
     <Content Remove="Pics\11.png" />
     <Content Remove="Pics\8.png" />
+    <Content Remove="Pics\10.png" />
+    <None Remove="Pics\1.png" />
+    <Content Remove="Pics\5.png" />
+    <Content Remove="Pics\6.png" />
+    <Content Remove="Pics\7.png" />
+    <Content Remove="Pics\9.png" />
   </ItemGroup>
 
 
@@ -83,8 +89,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Pics\*">
-    </None>
     <None Update="Setup\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

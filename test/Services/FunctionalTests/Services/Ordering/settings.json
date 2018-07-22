@@ -1,5 +1,5 @@
 ﻿{
-  "ConnectionString": "Server=tcp:127.0.0.1,5433;Database=SaaSEqt.eShop.Services.OrderingDb;User Id=sa;Password=Pass@word;",
+  "ConnectionString": "Server=127.0.0.1;Database=SaaSEqt.eShop.Services.OrderingDb;uid=book2;password=P@ssword;",
   "ExternalCatalogBaseUrl": "http://localhost:5101",
   "IdentityUrl": "http://localhost:5105",
   "isTest": "true",
