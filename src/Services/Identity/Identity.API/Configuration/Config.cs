@@ -17,7 +17,8 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 new ApiResource("locations", "Locations Service"),
                 new ApiResource("mobileshoppingagg", "Mobile Shopping Aggregator"),
                 new ApiResource("webshoppingagg", "Web Shopping Aggregator"),
-                new ApiResource("orders.signalrhub", "Ordering Signalr Hub")
+                new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
+                new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator")
             };
         }
 

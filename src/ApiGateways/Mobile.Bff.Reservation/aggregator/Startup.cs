@@ -12,12 +12,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Config;
-using SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Filters.Basket.API.Infrastructure.Filters;
-using SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Services;
+using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config;
+using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Filters.Basket.API.Infrastructure.Filters;
+using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator
+namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
 {
     public class Startup
     {
@@ -47,9 +47,9 @@ namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator
                 options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "Shopping Aggregator for Mobile Clients",
+                    Title = "Reservation Aggregator for Mobile Clients",
                     Version = "v1",
-                    Description = "Shopping Aggregator for Mobile Clients",
+                    Description = "Reservation Aggregator for Mobile Clients",
                     TermsOfService = "Terms Of Service"
                 });
 
@@ -61,7 +61,7 @@ namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator
                     TokenUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
                     Scopes = new Dictionary<string, string>()
                     {
-                        { "mobileshoppingagg", "Shopping Aggregator for Mobile Clients" }
+                        { "mobilereservationagg", "Reservation Aggregator for Mobile Clients" }
                     }
                 });
 
@@ -89,7 +89,7 @@ namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator
             {
                 options.Authority = identityUrl;
                 options.RequireHttpsMetadata = false;
-                options.Audience = "mobileshoppingagg";
+                options.Audience = "mobilereservationagg";
                 options.Events = new JwtBearerEvents()
                 {
                     OnAuthenticationFailed = async ctx =>
@@ -129,7 +129,7 @@ namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator
             app.UseSwagger().UseSwaggerUI(c =>
            {
                 c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Reservation BFF V1");
-                c.ConfigureOAuth2("SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregatorwaggerui", "", "", "Reservation BFF Swagger UI");
+                c.ConfigureOAuth2("SaaSEqt.eShop.Mobile.Reservation.HttpAggregatorwaggerui", "", "", "Reservation BFF Swagger UI");
            });
 
 

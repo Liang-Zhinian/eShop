@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Config
+namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config
 {
     public class UrlsConfig
     {

@@ -7,7 +7,7 @@ using Ordering.BackgroundTasks.IntegrationEvents;
 using Ordering.BackgroundTasks.Tasks.Base;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;

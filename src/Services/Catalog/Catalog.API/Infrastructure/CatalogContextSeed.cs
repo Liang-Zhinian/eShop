@@ -1,4 +1,6 @@
-﻿namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
+﻿extern alias MySqlConnectorAlias;
+
+namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
 {
     using Microsoft.Extensions.Logging;
     using global::Catalog.API.Extensions;
@@ -8,13 +10,14 @@
     using Polly;
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
+    //using System.Data.SqlClient;
     using System.Globalization;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using MySql.Data.MySqlClient;
 
     public class CatalogContextSeed
     {
@@ -368,7 +371,7 @@
 
         private Policy CreatePolicy( ILogger<CatalogContextSeed> logger, string prefix,int retries = 3)
         {
-            return Policy.Handle<SqlException>().
+            return Policy.Handle<MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlException>().
                 WaitAndRetryAsync(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

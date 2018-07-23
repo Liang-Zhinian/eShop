@@ -1,11 +1,13 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure
+﻿extern alias MySqlConnectorAlias;
+
+namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure
 {
     using SaaSEqt.eShop.Services.Marketing.API.Model;
     using Microsoft.Extensions.Logging;
     using Polly;
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
+    //using System.Data.SqlClient;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -70,7 +72,7 @@
      
         private Policy CreatePolicy(int retries, ILogger<MarketingContextSeed> logger, string prefix)
         {
-            return Policy.Handle<SqlException>().
+            return Policy.Handle<MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlException>().
                 WaitAndRetryAsync(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

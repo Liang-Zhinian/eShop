@@ -46,7 +46,7 @@
     <PackageReference Include="Polly" Version="5.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="MySql.Data" Version="8.0.11">
-      <Aliases>MySqlDataAlias</Aliases>
+      <Aliases>MySqlConnectorAlias</Aliases>
     </PackageReference>
   </ItemGroup>
 
@@ -63,7 +63,7 @@
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'MySqlConnector'">
-        <Aliases>MySqlDataAlias</Aliases>
+        <Aliases>MySqlConnectorAlias</Aliases>
       </ReferencePath>
     </ItemGroup>
   </Target>

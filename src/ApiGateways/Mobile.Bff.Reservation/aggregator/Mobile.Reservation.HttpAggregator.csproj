@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Mobile.Shopping.HttpAggregator</AssemblyName>
-    <RootNamespace>SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator</RootNamespace>
+    <AssemblyName>Mobile.Reservation.HttpAggregator</AssemblyName>
+    <RootNamespace>SaaSEqt.eShop.Mobile.Reservation.HttpAggregator</RootNamespace>
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 

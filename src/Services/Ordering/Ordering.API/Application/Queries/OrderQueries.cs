@@ -1,4 +1,4 @@
-﻿extern alias MySqlDataAlias;
+﻿extern alias MySqlConnectorAlias;
 //extern alias MySqlDataEfCoreAlias;
 //extern alias MySqlConnectorAlias;
 
@@ -24,7 +24,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
 
         public async Task<Order> GetOrderAsync(int id)
         {
-            using (var connection = new MySqlDataAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
             {
                 connection.Open();
 
@@ -49,7 +49,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
 
         public async Task<IEnumerable<OrderSummary>> GetOrdersAsync()
         {
-            using (var connection = new MySqlDataAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
             {
                 connection.Open();
 
@@ -64,7 +64,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
 
         public async Task<IEnumerable<CardType>> GetCardTypesAsync()
         {
-            using (var connection = new MySqlDataAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
             {
                 connection.Open();
 

@@ -6,10 +6,10 @@ using SaaSEqt.eShop.BuildingBlocks.Resilience.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Config;
-using SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Models;
+using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config;
+using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Models;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Services
+namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
 {
     public class ServiceCatalogService : IServiceCatalogService
     {

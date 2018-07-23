@@ -1,10 +1,10 @@
-﻿using SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Models;
+﻿using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Services
+namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
 {
     public interface IServiceCatalogService
     {

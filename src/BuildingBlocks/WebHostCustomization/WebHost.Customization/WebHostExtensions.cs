@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using System;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace Microsoft.AspNetCore.Hosting
 {
@@ -24,7 +24,7 @@ namespace Microsoft.AspNetCore.Hosting
                 {
                     logger.LogInformation($"Migrating database associated with context {typeof(TContext).Name}");
 
-                    var retry = Policy.Handle<SqlException>()
+                    var retry = Policy.Handle<MySqlException>()
                          .WaitAndRetry(new TimeSpan[]
                          {
                              TimeSpan.FromSeconds(5),

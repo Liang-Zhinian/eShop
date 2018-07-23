@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Controllers
+namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Controllers
 {
     [Route("")]
     public class HomeController : Controller

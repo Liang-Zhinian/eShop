@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator.Filters
+﻿namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Filters
 {
     using Microsoft.AspNetCore.Authorization;
     using Swashbuckle.AspNetCore.Swagger;

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.Reservation.HttpAggregator
+namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
 {
     public class Program
     {
