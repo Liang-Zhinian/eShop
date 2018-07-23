@@ -100,7 +100,12 @@ namespace Ordering.API.Migrations
                     Description = table.Column<string>(nullable: true),
                     OrderDate = table.Column<DateTime>(nullable: false),
                     OrderStatusId = table.Column<int>(nullable: false),
-                    PaymentMethodId = table.Column<int>(nullable: true)
+                    PaymentMethodId = table.Column<int>(nullable: true),
+                    Address_City = table.Column<string>(nullable: true),
+                    Address_Country = table.Column<string>(nullable: true),
+                    Address_State = table.Column<string>(nullable: true),
+                    Address_Street = table.Column<string>(nullable: true),
+                    Address_ZipCode = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

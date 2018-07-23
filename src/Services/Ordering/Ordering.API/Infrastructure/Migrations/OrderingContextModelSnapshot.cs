@@ -200,6 +200,16 @@ namespace Ordering.API.Migrations
                         {
                             b1.Property<int>("OrderId");
 
+                            b1.Property<string>("City");
+
+                            b1.Property<string>("Country");
+
+                            b1.Property<string>("State");
+
+                            b1.Property<string>("Street");
+
+                            b1.Property<string>("ZipCode");
+
                             b1.ToTable("orders");
 
                             b1.HasOne("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order")

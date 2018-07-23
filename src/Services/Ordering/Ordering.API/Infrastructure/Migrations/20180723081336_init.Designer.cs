@@ -11,7 +11,7 @@ using System;
 namespace Ordering.API.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20180720081104_init")]
+    [Migration("20180723081336_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,6 +200,16 @@ namespace Ordering.API.Migrations
                     b.OwnsOne("SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Address", "Address", b1 =>
                         {
                             b1.Property<int>("OrderId");
+
+                            b1.Property<string>("City");
+
+                            b1.Property<string>("Country");
+
+                            b1.Property<string>("State");
+
+                            b1.Property<string>("Street");
+
+                            b1.Property<string>("ZipCode");
 
                             b1.ToTable("orders");
 

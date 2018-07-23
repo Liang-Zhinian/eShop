@@ -14,7 +14,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
-    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.11">
+      <Aliases>MySqlDataEfCoreAlias</Aliases>
+    </PackageReference>
     <PackageReference Include="MySqlConnector" Version="0.42.3" />
   </ItemGroup>
 
@@ -29,5 +31,6 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20180715132707_init.cs" />
+    <Compile Remove="Migrations\20180723080224_init.cs" />
   </ItemGroup>
 </Project>

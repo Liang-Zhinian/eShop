@@ -22,7 +22,13 @@ namespace Ordering.Infrastructure.EntityConfigurations
                               .UseMySQLAutoIncrementColumn("orderseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
 
             //Address value object persisted as owned entity type supported since EF Core 2.0
-            orderConfiguration.OwnsOne(o => o.Address);
+            orderConfiguration.OwnsOne(o => o.Address, y=>{
+                y.Property(_ => _.Street);
+                y.Property(_ => _.City);
+                y.Property(_ => _.State);
+                y.Property(_ => _.Country);
+                y.Property(_ => _.ZipCode);
+            });
 
             orderConfiguration.Property<DateTime>("OrderDate").IsRequired();
             orderConfiguration.Property<int?>("BuyerId").IsRequired(false);
