@@ -156,8 +156,8 @@ namespace Appointment.API
             // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
             .UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book2 Public API V1");
-                //c.ShowRequestHeaders();
+                //c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book2 Public API V1");
+                c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Appointment.API V1");
             });
 
             //app.UseMvc();
