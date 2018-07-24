@@ -1,5 +1,5 @@
-﻿using SaaSEqt.IdentityAccess.Api.Infrastructure.ActionResults;
-using SaaSEqt.IdentityAccess.Api.Infrastructure.Exceptions;
+﻿using SaaSEqt.IdentityAccess.API.Infrastructure.ActionResults;
+using SaaSEqt.IdentityAccess.API.Infrastructure.Exceptions;
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace SaaSEqt.IdentityAccess.Api.Infrastructure.Filters
+namespace SaaSEqt.IdentityAccess.API.Infrastructure.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {

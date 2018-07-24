@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.IdentityAccess.Api.ViewModel
+namespace SaaSEqt.IdentityAccess.API.ViewModel
 {
     public class StaffViewModel
     {

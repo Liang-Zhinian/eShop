@@ -1,11 +1,11 @@
 ﻿using System;
 using CqrsFramework.Events;
-using SaaSEqt.IdentityAccess.Api.Events;
-using SaaSEqt.IdentityAccess.Api.ViewModel;
+using SaaSEqt.IdentityAccess.API.Events;
+using SaaSEqt.IdentityAccess.API.ViewModel;
 using SaaSEqt.IdentityAccess.Application;
 using SaaSEqt.IdentityAccess.Application.Commands;
 
-namespace SaaSEqt.IdentityAccess.Api.Services
+namespace SaaSEqt.IdentityAccess.API.Services
 {
     public class TenantService: ITenantService
     {

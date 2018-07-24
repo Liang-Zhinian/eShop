@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
-using SaaSEqt.IdentityAccess.Api.ViewModel;
-using SaaSEqt.IdentityAccess.Api.Services;
+using SaaSEqt.IdentityAccess.API.ViewModel;
+using SaaSEqt.IdentityAccess.API.Services;
 
-namespace SaaSEqt.IdentityAccess.Api.Controllers
+namespace SaaSEqt.IdentityAccess.API.Controllers
 {
     //[Authorize]
     [Route("api/tenants")]

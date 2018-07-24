@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.IdentityAccess.Infra.Data.Context;
 using System;
 
-namespace SaaSEqt.IdentityAccess.Infra.Data.Migrations
+namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityAccessDbContext))]
     [Migration("20180706185039_first")]

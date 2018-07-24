@@ -9,9 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace SaaSEqt.IdentityAccess.Api.Configurations
+namespace SaaSEqt.IdentityAccess.API.Configurations
 {
-    /*
+    
     public static class RabbitMQEventBusSetup
     {
         public static IConfiguration Configuration { get; private set; }
@@ -71,11 +71,11 @@ namespace SaaSEqt.IdentityAccess.Api.Configurations
                 return new RabbitMQBus(rabbitMQPersistentConnection, logger, iLifetimeScope, "book2business", "fanout", "book2events", false, retryCount);
             });
 
-            services.AddSingleton<ICommandSender>(y => y.GetService<RabbitMQBus>());
+            //services.AddSingleton<ICommandSender>(y => y.GetService<RabbitMQBus>());
             services.AddSingleton<IEventPublisher>(y => y.GetService<RabbitMQBus>());
             services.AddSingleton<IHandlerRegistrar>(y => y.GetService<RabbitMQBus>());
 
 
         }
-    }*/
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SaaSEqt.IdentityAccess.Api.Infrastructure.ActionResults
+namespace SaaSEqt.IdentityAccess.API.Infrastructure.ActionResults
 {
     public class InternalServerErrorObjectResult : ObjectResult
     {

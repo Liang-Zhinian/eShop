@@ -1,7 +1,7 @@
 ﻿using System;
 using CqrsFramework.Events;
 
-namespace SaaSEqt.IdentityAccess.Api.Events
+namespace SaaSEqt.IdentityAccess.API.Events
 {
     public class TenantCreatedEvent: TenantEvent, IEvent
     {

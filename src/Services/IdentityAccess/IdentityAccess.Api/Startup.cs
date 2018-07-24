@@ -6,8 +6,8 @@ using Autofac.Extensions.DependencyInjection;
 using CqrsFramework.EventSourcing;
 using CqrsFramework.EventStore.MySqlDB.Services;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
-using SaaSEqt.IdentityAccess.Api.Infrastructure.AutofacModules;
-using SaaSEqt.IdentityAccess.Api.Infrastructure.Filters;
+using SaaSEqt.IdentityAccess.API.Infrastructure.AutofacModules;
+using SaaSEqt.IdentityAccess.API.Infrastructure.Filters;
 //using Infrastructure.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,11 +20,11 @@ using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using SaaSEqt.IdentityAccess.Api.Configurations;
+using SaaSEqt.IdentityAccess.API.Configurations;
 using SaaSEqt.IdentityAccess.Application;
 using SaaSEqt.IdentityAccess.Infra.Data.Context;
 
-namespace SaaSEqt.IdentityAccess.Api
+namespace SaaSEqt.IdentityAccess.API
 {
     public class Startup
     {
@@ -119,7 +119,7 @@ namespace SaaSEqt.IdentityAccess.Api
 
             services.AddApplicationSetup();
 
-            //services.AddRabbitMQEventBusSetup(Configuration);
+            services.AddRabbitMQEventBusSetup(Configuration);
 
             services.AddIdentityAccessEventProcessorSetup();
 
@@ -162,7 +162,7 @@ namespace SaaSEqt.IdentityAccess.Api
             // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
             .UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book2 IdentityAccess API V1");
+                c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Identity Access API V1");
                 //c.ShowRequestHeaders();
             });
 

@@ -1,4 +1,4 @@
-﻿using SaaSEqt.IdentityAccess.Api.Services;
+﻿using SaaSEqt.IdentityAccess.API.Services;
 using Microsoft.Extensions.DependencyInjection;
 using SaaSEqt.Common.Domain.Model;
 using SaaSEqt.IdentityAccess;
@@ -11,7 +11,7 @@ using SaaSEqt.IdentityAccess.Infrastructure.Services;
 using SaaSEqt.IdentityAccess.Domain.Identity.Repositories;
 using SaaSEqt.IdentityAccess.Domain.Access.Repositories;
 
-namespace SaaSEqt.IdentityAccess.Api.Configurations
+namespace SaaSEqt.IdentityAccess.API.Configurations
 {
     public static class ApplicationSetup
     {

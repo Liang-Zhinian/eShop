@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>SaaSEqt.IdentityAccess.Api</RootNamespace>
+    <RootNamespace>SaaSEqt.IdentityAccess.API</RootNamespace>
+    <AssemblyName>IdentityAccess.API</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\IdentityAccess.Api.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -14,6 +14,8 @@
     <Folder Include="ViewModel\" />
     <Folder Include="Events\" />
     <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Migrations\" />
+    <Folder Include="Infrastructure\EventStoreMigrations\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace SaaSEqt.IdentityAccess.Api.Configurations
+namespace SaaSEqt.IdentityAccess.API.Configurations
 {
     public static class SwaggerSupport
     {
@@ -22,9 +22,9 @@ namespace SaaSEqt.IdentityAccess.Api.Configurations
                 });
 
                 //Set the comments path for the swagger json and ui.
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var xmlPath = Path.Combine(basePath, "IdentityAccess.Api.xml");
-                c.IncludeXmlComments(xmlPath);
+                //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                //var xmlPath = Path.Combine(basePath, "IdentityAccess.API.xml");
+                //c.IncludeXmlComments(xmlPath);
 
                 //  c.OperationFilter<HttpHeaderOperation>(); // 添加httpHeader参数
             });

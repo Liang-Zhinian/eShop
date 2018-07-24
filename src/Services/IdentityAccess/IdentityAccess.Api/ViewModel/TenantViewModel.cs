@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SaaSEqt.IdentityAccess.Api.ViewModel
+namespace SaaSEqt.IdentityAccess.API.ViewModel
 {
     public class TenantViewModel
     {

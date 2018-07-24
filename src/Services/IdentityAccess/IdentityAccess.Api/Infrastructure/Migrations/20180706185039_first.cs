@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.IdentityAccess.Infra.Data.Migrations
+namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 {
     public partial class first : Migration
     {

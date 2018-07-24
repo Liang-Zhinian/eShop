@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaaSEqt.IdentityAccess.Api.Infrastructure.Exceptions
+namespace SaaSEqt.IdentityAccess.API.Infrastructure.Exceptions
 {
     /// <summary>
     /// Exception type for app exceptions

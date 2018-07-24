@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SaaSEqt.IdentityAccess.Infra.Data.Context;
 
-namespace SaaSEqt.IdentityAccess.Api
+namespace SaaSEqt.IdentityAccess.API
 {
     public class Program
     {

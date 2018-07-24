@@ -5,7 +5,7 @@ using SaaSEqt.IdentityAccess.Domain.Repositories;
 using SaaSEqt.IdentityAccess.Infra.Data.Repositories;
 using System;
 
-namespace SaaSEqt.IdentityAccess.Api.Infrastructure.AutofacModules
+namespace SaaSEqt.IdentityAccess.API.Infrastructure.AutofacModules
 {
     public class ApplicationModule
         : Autofac.Module
