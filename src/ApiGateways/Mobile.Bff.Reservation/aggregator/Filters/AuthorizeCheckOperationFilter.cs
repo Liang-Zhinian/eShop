@@ -24,7 +24,7 @@
                     operation.Security = new List<IDictionary<string, IEnumerable<string>>>();
                     operation.Security.Add(new Dictionary<string, IEnumerable<string>>
                 {
-                    { "oauth2", new [] { "SaaSEqt.eShop.Mobile.Shopping.HttpAggregator" } }
+                    { "oauth2", new [] { "SaaSEqt.eShop.Mobile.Reservation.HttpAggregator" } }
                 });
                 }
             }

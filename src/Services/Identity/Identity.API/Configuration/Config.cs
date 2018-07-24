@@ -248,6 +248,21 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                     {
                         "webshoppingagg"
                     }
+                },
+                new Client
+                {
+                    ClientId = "mobilereservationaggswaggerui",
+                    ClientName = "Mobile Reservation Aggregattor Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["MobileReservationAgg"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["MobileReservationAgg"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "mobilereservationagg"
+                    }
                 }
 
             };

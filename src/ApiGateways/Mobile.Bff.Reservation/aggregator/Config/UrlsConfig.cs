@@ -27,10 +27,11 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config
         public string Basket { get; set; }
         public string Catalog { get; set; }
         public string Orders { get; set; }
+        public string Business { get; set; }
 
 
         // Schedulable Catalog
-        public class SchedulableCatalogOperations
+        public class ServiceCatalogOperations
         {
             public static string GetItemById(Guid id) => $"/api/v1/catalog/serviceitems/{id}";
             public static string GetItemsById(IEnumerable<Guid> ids) => $"/api/v1/catalog/serviceitems?ids={string.Join(',', ids)}";

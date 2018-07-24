@@ -27,14 +27,14 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
 
         public async Task<ServiceItem> GetCatalogItem(Guid id)
         {
-            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.SchedulableCatalogOperations.GetItemById(id));
+            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.ServiceCatalogOperations.GetItemById(id));
             var item = JsonConvert.DeserializeObject<ServiceItem>(data);
             return item;
         }
 
         public async Task<IEnumerable<ServiceItem>> GetCatalogItems(IEnumerable<Guid> ids)
         {
-            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.SchedulableCatalogOperations.GetItemsById(ids));
+            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.ServiceCatalogOperations.GetItemsById(ids));
             var item = JsonConvert.DeserializeObject<ServiceItem[]>(data);
             return item;
 
@@ -42,14 +42,14 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
 
         public async Task<ServiceCategory> GetCatalog(Guid id)
         {
-            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.SchedulableCatalogOperations.GetCatalogById(id));
+            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.ServiceCatalogOperations.GetCatalogById(id));
             var item = JsonConvert.DeserializeObject<ServiceCategory>(data);
             return item;
         }
 
         public async Task<IEnumerable<ServiceCategory>> GetCatalogs(IEnumerable<Guid> ids)
         {
-            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.SchedulableCatalogOperations.GetCatalogsById(ids));
+            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.ServiceCatalogOperations.GetCatalogsById(ids));
             var item = JsonConvert.DeserializeObject<ServiceCategory[]>(data);
             return item;
         }

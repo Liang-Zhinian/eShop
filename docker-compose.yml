@@ -35,6 +35,13 @@ services:
       context: .
       dockerfile: src/ApiGateways/Mobile.Bff.Reservation/aggregator/Dockerfile
 
+  mobilereservationapigw:
+    image: eshop/ocelotapigw:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+
+
   basket.api:
     image: eshop/basket.api:${TAG:-latest}
     build:

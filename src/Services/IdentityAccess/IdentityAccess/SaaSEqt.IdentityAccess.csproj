@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\Access\" />
+    <Folder Include="Domain\Identity\" />
+    <Folder Include="Domain\Access\Events\" />
+    <Folder Include="Domain\Access\Repositories\" />
+    <Folder Include="Domain\Access\Services\" />
+    <Folder Include="Domain\Access\Entities\" />
+    <Folder Include="Domain\Identity\Entities\" />
+    <Folder Include="Domain\Identity\Events\" />
+    <Folder Include="Domain\Identity\Repositories\" />
+    <Folder Include="Domain\Identity\Services\" />
+    <Folder Include="Domain\Identity\Events\Group\" />
+    <Folder Include="Domain\Identity\Events\Tenant\" />
+    <Folder Include="Domain\Identity\Events\User\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Domain\Context\.DS_Store" />
+    <None Remove="Domain\Models\ReadModels\.DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="IdentityAccessContextFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Common\SaaSEqt.Common.csproj" />
+  </ItemGroup>
+</Project>

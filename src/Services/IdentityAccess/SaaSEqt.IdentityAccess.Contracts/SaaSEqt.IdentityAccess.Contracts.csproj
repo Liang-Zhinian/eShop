@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="IntegrationEvents\" />
+    <Folder Include="IntegrationEvents\Tenant\" />
+    <Folder Include="IntegrationEvents\User\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="IntegrationEvents\Tenant\TenantProvisioned.cs" />
+    <Compile Remove="IntegrationEvents\User\UserPasswordChanged.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework\CqrsFramework.csproj" />
+    <ProjectReference Include="..\IdentityAccess\SaaSEqt.IdentityAccess.csproj" />
+  </ItemGroup>
+</Project>
