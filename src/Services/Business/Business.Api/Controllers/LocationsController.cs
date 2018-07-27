@@ -12,6 +12,9 @@ using SaaSEqt.eShop.Services.Business.API.Infrastructure;
 using SaaSEqt.eShop.Services.Business.Infrastructure;
 using SaaSEqt.eShop.Services.Business.Model;
 using SaaSEqt.eShop.Services.Business.Services;
+using System.Collections.Generic;
+using Microsoft.Extensions.Options;
+using SaaSEqt.eShop.Services.Business.API.Extensions;
 
 namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
@@ -20,16 +23,26 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
     {
         private readonly IHostingEnvironment _env;
         private readonly BusinessService _businessService;
+        private readonly BusinessSettings _settings;
 
-        public LocationsController(IHostingEnvironment env,BusinessService businessService)
+        public LocationsController(IHostingEnvironment env, IOptionsSnapshot<BusinessSettings> settings, BusinessService businessService)
         {
             _env = env;
+            _settings = settings.Value;
             _businessService = businessService;
         }
 
-        //GET api/v1/[controller]
+        // GET api/v1/[controller]/test
         [HttpGet]
-        [Route("[controller]/{id:Guid}")]
+        [Route("test")]
+        public IEnumerable<string> Test()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        //GET api/v1/[controller]/siteId/{siteId:Guid}/locationId/{locationId:Guid}
+        [HttpGet]
+        [Route("ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Location), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetLocationById(Guid siteId, Guid locationId)
@@ -39,11 +52,14 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                 return BadRequest();
             }
 
-            var site = await _businessService.FindExistingLocation(siteId, locationId);
+            var location = await _businessService.FindExistingLocation(siteId, locationId);
+            var baseUri = _settings.LocationPicBaseUrl;
+            var azureStorageEnabled = _settings.AzureStorageEnabled;
+            location.FillLocationUrl(baseUri, azureStorageEnabled: azureStorageEnabled);
 
-            if (site != null)
+            if (location != null)
             {
-                return Ok(site);
+                return Ok(location);
             }
 
             return NotFound();
@@ -52,7 +68,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         //POST api/v1/[controller]
         [HttpPost]
         //[Authorize(Policy = "CanWriteTenantData")]
-        [Route("[controller]")]
+        //[Route("[controller]")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ProvisionLocation([FromBody]ProvisionLocationRequest provisionLocationRequest)
@@ -74,7 +90,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
         //POST api/v1/[controller]/address
         [HttpPost]
-        [Route("[controller]/address")]
+        [Route("address")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> SetLocationAddress([FromBody]SetLocationAddressRequest request)
@@ -102,7 +118,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
         //POST api/v1/[controller]/image
         [HttpPost]
-        [Route("[controller]/image")]
+        [Route("image")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> SetLocationImage(SetLocationImageRequest request)
@@ -138,7 +154,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
         //POST api/v1/[controller]/location
         [HttpPost]
-        [Route("[controller]/location")]
+        [Route("geolocation")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> SetLocationGeolocation([FromBody]SetLocationGeolocationRequest request)
@@ -162,7 +178,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
         //POST api/v1/[controller]/additionalimages
         [HttpPost]
-        [Route("[controller]/additionalimages")]
+        [Route("additionalimage")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> AddAdditionalLocationImage(AddAdditionalLocationImageRequest request)
@@ -189,6 +205,19 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             await _businessService.AddAdditionalLocationImage(siteId, locationId, path);
 
             return CreatedAtAction(nameof(GetLocationById), new { siteId = siteId, locationId = locationId }, null);
+        }
+
+        private List<Location> ChangeUriPlaceholder(List<Location> locations)
+        {
+            var baseUri = _settings.LocationPicBaseUrl;
+            var azureStorageEnabled = _settings.AzureStorageEnabled;
+
+            foreach (var item in locations)
+            {
+                item.FillLocationUrl(baseUri, azureStorageEnabled: azureStorageEnabled);
+            }
+
+            return locations;
         }
     }
 }

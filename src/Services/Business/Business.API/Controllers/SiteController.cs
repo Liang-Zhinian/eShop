@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using SaaSEqt.eShop.Services.Business.API.Extensions;
 using SaaSEqt.eShop.Services.Business.API.Requests;
 using SaaSEqt.eShop.Services.Business.Infrastructure;
 using SaaSEqt.eShop.Services.Business.Model;
@@ -14,15 +17,19 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
     [Route("api/v1/[controller]")]
     public class SiteController : Controller
     {
+        private readonly IHostingEnvironment _env;
         private BusinessService _businessService;
+        private readonly BusinessSettings _settings;
 
-        public SiteController(BusinessService businessService)
+        public SiteController(IHostingEnvironment env, IOptionsSnapshot<BusinessSettings> settings, BusinessService businessService)
         {
-            this._businessService = businessService;
+            _env = env;
+            _settings = settings.Value;
+            _businessService = businessService;
         }
 
         [HttpGet]
-        [Route("sites/{id:Guid}")]
+        //[Route("sites/{id:Guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Site), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSiteById(Guid id)
@@ -33,6 +40,9 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             }
 
             var site = await _businessService.FindExistingSite(id);
+            var baseUri = _settings.SiteLogoBaseUrl;
+            var azureStorageEnabled = _settings.AzureStorageEnabled;
+            site.FillSiteUrl(baseUri, azureStorageEnabled: azureStorageEnabled);
 
             if (site != null)
             {
@@ -42,9 +52,9 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return NotFound();
         }
 
-        // POST api/v1/[controller]/ProvisionSite
+        // POST api/v1/[controller]
         [HttpPost]
-        [Route("ProvisionSite")]
+        //[Route("ProvisionSite")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ProvisionSite([FromBody]ProvisionSiteRequest request)

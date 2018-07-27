@@ -56,6 +56,9 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_BusinessDb;uid=book2;pwd=P@ssword}
       - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - SiteLogoBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/biz/sites/[0]/logo/}
+      - LocationPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/biz/locations/ofSiteId/[0]/locationId/[1]/pic/}
+      - LocationAdditionalPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/biz/locations/ofSiteId/[0]/locationId/[1]/additionalpic/}
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         

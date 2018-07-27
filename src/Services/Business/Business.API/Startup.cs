@@ -94,6 +94,8 @@ namespace SaaSEqt.eShop.Services.Business.API
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }, ServiceLifetime.Scoped);
 
+            services.Configure<BusinessSettings>(Configuration);
+
             services.AddSwaggerSupport();
 
             services.AddCors(options =>

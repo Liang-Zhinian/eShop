@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SaaSEqt.eShop.Services.Business.Model
 {
@@ -26,6 +27,10 @@ namespace SaaSEqt.eShop.Services.Business.Model
         public Guid Id { get; private set; }
         /// The image data to the site logo
         public string Logo { get; private set; }
+
+        [NotMapped]
+        public string LogoUri { get; set; }
+
         /// Page color
         public string PageColor1 { get; private set; }
         /// Page color

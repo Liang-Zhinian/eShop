@@ -38,6 +38,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
 
                 if (!context.Locations.Any())
                 {
+                    logger.LogDebug("Seeding locations ...");
                     await context.Locations.AddRangeAsync(GetLocationsFromFile(contentRootPath, context, logger));
                     await context.SaveChangesAsync();
 
@@ -65,6 +66,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
 
             if (!File.Exists(csvFileLocations))
             {
+                logger.LogDebug("File csvFileLocations does not exists ...");
                 return GetPreconfiguredLocations();
             }
 
@@ -77,6 +79,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
             }
             catch (Exception ex)
             {
+                logger.LogDebug("Reading file csvFileLocations errors ...");
                 logger.LogError(ex.Message);
                 return GetPreconfiguredLocations();
             }
@@ -84,7 +87,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
             var siteIdLookup = context.Sites.ToDictionary(ct => ct.Name, ct => ct.Id);
             //var catalogBrandIdLookup = context.CatalogBrands.ToDictionary(ct => ct.Brand, ct => ct.Id);
 
-            return File.ReadAllLines(csvFileLocations)
+            return File.ReadAllLines(csvFileLocations, System.Text.Encoding.Default)
                         .Skip(1) // skip header row
                         .Select(row => Regex.Split(row, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
                        .SelectTry(column => CreateLocation(column, csvheaders, siteIdLookup, contentRootPath))
@@ -132,7 +135,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
             var siteIdLookup = context.Sites.ToDictionary(ct => ct.Name, ct => ct.Id);
             //var catalogBrandIdLookup = context.CatalogBrands.ToDictionary(ct => ct.Brand, ct => ct.Id);
 
-            return File.ReadAllLines(csvFileLocations)
+            return File.ReadAllLines(csvFileLocations, System.Text.Encoding.Default)
                             .Skip(1) // skip header row
                         .Select(row => Regex.Split(row, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
                        .SelectTry(column => UpdateLocation(context, column, csvheaders, siteIdLookup, contentRootPath))
@@ -180,10 +183,12 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
                 logo = memoryStream.ToArray();
             }
 
-            var dir = Path.Combine(contentRootPath, "Pics", siteIdLookup["Chanel"].ToString(), location.Id.ToString());
-            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            var dir = "Pics" + "/" + siteIdLookup["Chanel"].ToString() + "/" + location.Id.ToString();
+            var abs_dir = Path.Combine(contentRootPath, dir);
+            if (!Directory.Exists(abs_dir)) Directory.CreateDirectory(abs_dir);
 
-            var path = Path.Combine(dir, "1.png");
+            var fileName = "1.png";
+            var path = Path.Combine(abs_dir, fileName);
 
             using (var memoryStream = new MemoryStream())
             {
@@ -195,28 +200,26 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
                 }
             }
 
-            location.ChangeImage(path);
+            location.ChangeImage(dir+"/"+fileName);
 
-            //context.Locations.Update(location);
+            fileName = "2.png";
+            path = Path.Combine(abs_dir, fileName);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                (new StreamReader(picFileLocation)).BaseStream.CopyTo(memoryStream);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    memoryStream.CopyTo(stream);
+                }
+            }
+
+            LocationImage locationImage = new LocationImage(siteIdLookup["Chanel"], location.Id, dir + "/" + fileName);
+            location.AddAdditionalImage(locationImage);
+
+
             return location;
-
-            //path = Path.Combine(contentRootPath, siteIdLookup["Chanel"].ToString(), location.Id.ToString(), "2.png");
-
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    (new StreamReader(picFileLocation)).BaseStream.CopyTo(memoryStream);
-
-            //    using (var stream = new FileStream(path, FileMode.Create))
-            //    {
-            //        memoryStream.CopyToAsync(stream);
-            //    }
-            //}
-
-            //LocationImage locationImage = new LocationImage()
-            //location.AddAdditionalImage(path);
-
-
-            //return location;
         }
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SaaSEqt.eShop.Services.Business.Model
 {
@@ -54,6 +55,9 @@ namespace SaaSEqt.eShop.Services.Business.Model
         public string Description { get; private set; }
 
         public string Image { get; private set; }
+
+        [NotMapped]
+        public string ImageUri { get; set; }
 
         public ContactInformation ContactInformation { get; private set; }
 

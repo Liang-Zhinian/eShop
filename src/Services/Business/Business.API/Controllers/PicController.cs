@@ -25,7 +25,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/business/sites/{siteId:Guid}/logo")]
+        [Route("api/v1/sites/{siteId:Guid}/logo")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         // GET: /<controller>/
@@ -44,6 +44,36 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                 var path = Path.Combine(webRoot, item.Id.ToString(), item.Branding.Logo);
 
                 string imageFileExtension = Path.GetExtension(item.Branding.Logo);
+                string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
+
+                var buffer = System.IO.File.ReadAllBytes(path);
+
+                return File(buffer, mimetype);
+            }
+
+            return NotFound();
+        }
+
+        // GET api/v1/business/locations/ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}/pic
+        [HttpGet]
+        [Route("api/v1/locations/ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}/pic")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetLocationImage(Guid siteId, Guid locationId)
+        {
+            if (siteId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var item = await _businessService.FindExistingLocation(siteId, locationId);
+
+            if (item != null)
+            {
+                var webRoot = _env.WebRootPath;
+                var path = Path.Combine(webRoot, item.Image);
+
+                string imageFileExtension = Path.GetExtension(item.Image);
                 string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
 
                 var buffer = System.IO.File.ReadAllBytes(path);
