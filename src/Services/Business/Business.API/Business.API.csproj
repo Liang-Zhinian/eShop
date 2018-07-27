@@ -15,6 +15,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.2.0" />
   </ItemGroup>
 
+
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'MySqlConnector'">
+        <Aliases>MySqlConnectorAlias</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
@@ -38,6 +47,7 @@
     <None Remove="Pics\7.png" />
     <None Remove="Pics\8.png" />
     <None Remove="Pics\9.png" />
+    <None Remove="Pics\36d068bf-da28-4a7f-a6c1-bfd70155ac9d\0ab37cf3-62d4-4a71-9a3c-a734bff5697d\1.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pics\1.png">
@@ -78,6 +88,7 @@
     <Folder Include="Pics\" />
     <Folder Include="Infrastructure\Migrations\" />
     <Folder Include="Setup\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controllers\TenantController.cs" />

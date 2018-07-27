@@ -175,7 +175,7 @@ namespace SaaSEqt.IdentityAccess.API
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var services = app.ApplicationServices;
-            services.GetService<IdentityAccessEventProcessor>().Listen();
+            //services.GetService<IdentityAccessEventProcessor>().Listen();
 
             //var eventBus = app.ApplicationServices.GetRequiredService<BuildingBlocks.EventBus.Abstractions.IEventBus>();
 

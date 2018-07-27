@@ -23,7 +23,7 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(DbConstants.Schema);
+            //modelBuilder.HasDefaultSchema(DbConstants.Schema);
             
             modelBuilder.ApplyConfiguration(new TenantMap());
             modelBuilder.ApplyConfiguration(new UserMap());

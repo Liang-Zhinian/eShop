@@ -143,6 +143,7 @@ services:
       - ~/mysql/data:/var/lib/mysql
       - ~/mysql/conf.d:/etc/mysql/conf.d
       - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
+      - ~/mysql/conf.d/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     ports:
       - "3306:3306"    # Important: In a production environment your should remove the external port
 

@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure;
 using SaaSEqt.eShop.Services.Business.Infrastructure;
 
 namespace SaaSEqt.eShop.Services.Business.API
@@ -17,11 +19,12 @@ namespace SaaSEqt.eShop.Services.Business.API
                 .MigrateDbContext<BusinessDbContext>((context,services)=>
                 {
                     var env = services.GetService<IHostingEnvironment>();
-                    //var logger = services.GetService<ILogger<BusinessDbContextSeed>>();
+                    var settings = services.GetService<IOptions<BusinessSettings>>();
+                    var logger = services.GetService<ILogger<BusinessDbContextSeed>>();
 
-                    //new BusinessDbContextSeed()
-                    //.SeedAsync(context,logger)
-                    //.Wait();
+                    new BusinessDbContextSeed()
+                        .SeedAsync(context, env, settings, logger)
+                        .Wait();
 
                 })
                 .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
