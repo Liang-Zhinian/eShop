@@ -36,20 +36,6 @@
     <ProjectReference Include="..\Business.Domain\Business.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Pics\1.png" />
-    <None Remove="Pics\10.png" />
-    <None Remove="Pics\12.png" />
-    <None Remove="Pics\2.png" />
-    <None Remove="Pics\3.png" />
-    <None Remove="Pics\4.png" />
-    <None Remove="Pics\5.png" />
-    <None Remove="Pics\6.png" />
-    <None Remove="Pics\7.png" />
-    <None Remove="Pics\8.png" />
-    <None Remove="Pics\9.png" />
-    <None Remove="Pics\36d068bf-da28-4a7f-a6c1-bfd70155ac9d\0ab37cf3-62d4-4a71-9a3c-a734bff5697d\1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Pics\1.png">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -83,14 +69,20 @@
     <Content Include="Pics\9.png">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="Setup\locations.csv">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Setup\ChanelLogo%402x.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Setup\ChanelLogoMini.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pics\" />
     <Folder Include="Infrastructure\Migrations\" />
     <Folder Include="Setup\" />
     <Folder Include="Extensions\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Controllers\TenantController.cs" />
   </ItemGroup>
 </Project>
