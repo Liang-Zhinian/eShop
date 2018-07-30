@@ -134,7 +134,10 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             string imageFileExtension = Path.GetExtension(request.Image.FileName);
             var webRoot = _env.WebRootPath;
-            var path = Path.Combine(webRoot, siteId.ToString(), request.Id.ToString() + "." + imageFileExtension);
+
+            string dir = Path.Combine(webRoot, siteId.ToString());
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            var path = Path.Combine(dir, request.Id.ToString() + "." + imageFileExtension);
 
             using (var stream = new FileStream(path, FileMode.Create))
 

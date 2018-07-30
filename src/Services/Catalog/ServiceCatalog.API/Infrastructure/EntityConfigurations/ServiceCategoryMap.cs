@@ -6,7 +6,7 @@ using SaaSEqt.eShop.Services.ServiceCatalog.API.Model;
 
 namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.EntityConfigurations
 {
-    public class SchedulableCatalogTypeMap : IEntityTypeConfiguration<ServiceCategory>
+    public class ServiceCategoryMap : IEntityTypeConfiguration<ServiceCategory>
     {
         public void Configure(EntityTypeBuilder<ServiceCategory> builder)
         {

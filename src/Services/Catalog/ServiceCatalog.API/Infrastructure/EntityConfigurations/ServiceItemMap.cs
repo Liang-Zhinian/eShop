@@ -6,7 +6,7 @@ using SaaSEqt.eShop.Services.ServiceCatalog.API.Model;
 
 namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.EntityConfigurations
 {
-    public class SchedulableCatalogItemMap : IEntityTypeConfiguration<ServiceItem>
+    public class ServiceItemMap : IEntityTypeConfiguration<ServiceItem>
     {
         public void Configure(EntityTypeBuilder<ServiceItem> builder)
         {
@@ -22,9 +22,9 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.EntityConfigu
 
             //builder.Ignore("Version");
 
-            //builder.HasOne(_ => _.Category)
-                   //.WithMany(_ => _.Services)
-                   //.HasForeignKey(_ => _.CategoryId);
+            builder.HasOne(_ => _.ServiceCategory)
+                   .WithMany()
+                   .HasForeignKey(_ => _.ServiceCategoryId);
 
 
         }

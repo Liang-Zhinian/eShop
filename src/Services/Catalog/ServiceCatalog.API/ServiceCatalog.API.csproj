@@ -99,5 +99,6 @@
     <Folder Include="IntegrationEvents\EventHandling\" />
     <Folder Include="Migrations\" />
     <Folder Include="Setup\" />
+    <Folder Include="Requests\" />
   </ItemGroup>
 </Project>

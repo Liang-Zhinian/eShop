@@ -243,6 +243,5 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         }
 
         #endregion
-
     }
 }
