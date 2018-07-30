@@ -38,7 +38,7 @@ namespace SaaSEqt.eShop.Services.Business.API
 		           .UseApplicationInsights()
                 .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                //.UseWebRoot("Pics")
+                .UseWebRoot("Pics")
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
                     config.AddEnvironmentVariables();

@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,12 +17,15 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
     {
         private readonly IHostingEnvironment _env;
         private readonly BusinessService _businessService;
+        private readonly ILogger<PicController> _logger;
 
         public PicController(IHostingEnvironment env,
-                             BusinessService businessService)
+                             BusinessService businessService,
+                             ILogger<PicController> logger)
         {
             _businessService = businessService;
             _env = env;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -41,7 +45,10 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             if (item != null)
             {
                 var webRoot = _env.WebRootPath;
+                _logger.LogDebug("webRoot: " + webRoot);
+
                 var path = Path.Combine(webRoot, item.Id.ToString(), item.Branding.Logo);
+                _logger.LogDebug("path: " + path);
 
                 string imageFileExtension = Path.GetExtension(item.Branding.Logo);
                 string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
@@ -71,7 +78,10 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             if (item != null)
             {
                 var webRoot = _env.WebRootPath;
+                _logger.LogDebug("webRoot: " + webRoot);
+
                 var path = Path.Combine(webRoot, item.Image);
+                _logger.LogDebug("path: " + path);
 
                 string imageFileExtension = Path.GetExtension(item.Image);
                 string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);

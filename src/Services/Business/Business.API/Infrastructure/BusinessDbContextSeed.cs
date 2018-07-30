@@ -90,16 +90,21 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
             return File.ReadAllLines(csvFileLocations, System.Text.Encoding.Default)
                         .Skip(1) // skip header row
                         .Select(row => Regex.Split(row, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
-                       .SelectTry(column => CreateLocation(column, csvheaders, siteIdLookup, contentRootPath))
+                       .SelectTry(column => CreateLocation(column, csvheaders, siteIdLookup, contentRootPath, logger))
                         .OnCaughtException(ex => { logger.LogError(ex.Message); return null; })
                         .Where(x => x != null);
         }
 
-        private Location CreateLocation(string[] column, string[] headers, Dictionary<String, Guid> siteIdLookup, string contentRootPath)
+        private Location CreateLocation(string[] column, string[] headers, Dictionary<String, Guid> siteIdLookup, string contentRootPath, ILogger<BusinessDbContextSeed> logger)
         {
             if (column.Count() != headers.Count())
             {
                 throw new Exception($"column count '{column.Count()}' not the same as headers count'{headers.Count()}'");
+            }
+
+            for (int i = 0; i < column.Length; i++)
+            {
+                logger.LogDebug(column[i]);
             }
 
             var location = new Location(siteIdLookup["Chanel"],
@@ -176,44 +181,46 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
             string picFileLocation = Path.Combine(contentRootPath, "Setup", "ChanelLogo@2x.png");
 
 
-            byte[] logo;
-            using (var memoryStream = new MemoryStream())
-            {
-                (new StreamReader(picFileLogo)).BaseStream.CopyTo(memoryStream);
-                logo = memoryStream.ToArray();
-            }
+            //byte[] logo;
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    (new StreamReader(picFileLogo)).BaseStream.CopyTo(memoryStream);
+            //    logo = memoryStream.ToArray();
+            //}
 
-            var dir = "Pics" + "/" + siteIdLookup["Chanel"].ToString() + "/" + location.Id.ToString();
-            var abs_dir = Path.Combine(contentRootPath, dir);
+            var dir = siteIdLookup["Chanel"].ToString() + "/" + location.Id.ToString();
+            var abs_dir = Path.Combine(contentRootPath+"/Pics/", dir);
             if (!Directory.Exists(abs_dir)) Directory.CreateDirectory(abs_dir);
 
             var fileName = "1.png";
             var path = Path.Combine(abs_dir, fileName);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                (new StreamReader(picFileLogo)).BaseStream.CopyTo(memoryStream);
+            //using (var memoryStream = new MemoryStream())
+            //{
+                //(new StreamReader(picFileLogo)).BaseStream.CopyTo(memoryStream);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    memoryStream.CopyTo(stream);
+                    (new StreamReader(picFileLogo)).BaseStream.CopyTo(stream);
+                    stream.Flush();
                 }
-            }
+            //}
 
             location.ChangeImage(dir+"/"+fileName);
 
             fileName = "2.png";
             path = Path.Combine(abs_dir, fileName);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                (new StreamReader(picFileLocation)).BaseStream.CopyTo(memoryStream);
+            //using (var memoryStream = new MemoryStream())
+            //{
+                //(new StreamReader(picFileLocation)).BaseStream.CopyTo(memoryStream);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    memoryStream.CopyTo(stream);
+                    (new StreamReader(picFileLocation)).BaseStream.CopyTo(stream);
+                    stream.Flush();
                 }
-            }
+            //}
 
             LocationImage locationImage = new LocationImage(siteIdLookup["Chanel"], location.Id, dir + "/" + fileName);
             location.AddAdditionalImage(locationImage);

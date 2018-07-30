@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
 using System.IO;
 using System.Net;
@@ -14,12 +15,15 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
     {
         private readonly IHostingEnvironment _env;
         private readonly CatalogContext _catalogContext;
+        private readonly ILogger<PicController> _logger;
 
         public PicController(IHostingEnvironment env,
-            CatalogContext catalogContext)
+                             CatalogContext catalogContext,
+                             ILogger<PicController> logger)
         {
             _env = env;
             _catalogContext = catalogContext;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -41,6 +45,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             {
                 var webRoot = _env.WebRootPath;
                 var path = Path.Combine(webRoot, item.PictureFileName);
+                _logger.LogDebug("path: " + path);
 
                 string imageFileExtension = Path.GetExtension(item.PictureFileName);
                 string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
