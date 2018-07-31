@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -168,6 +169,11 @@ namespace SaaSEqt.eShop.Services.Business.Services
             var location = await _businessDbContext.Locations.SingleOrDefaultAsync(y => y.SiteId.Equals(siteId) &&
                                                                                y.Id.Equals(locationId));
             return location;
+        }
+
+        public async Task<IEnumerable<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText) {
+            var root = _businessDbContext.Locations;
+            return await root.ToListAsync();
         }
 
         #endregion

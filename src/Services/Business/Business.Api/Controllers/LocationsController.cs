@@ -15,6 +15,8 @@ using SaaSEqt.eShop.Services.Business.Services;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using SaaSEqt.eShop.Services.Business.API.Extensions;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
@@ -38,6 +40,30 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         public IEnumerable<string> Test()
         {
             return new string[] { "value1", "value2" };
+        }
+
+        //POST api/v1/[controller]/serviceitems
+        [HttpGet]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<Location>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<Location>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        {
+            var root = (IQueryable<Location>)await _businessService.GetBusinessLocationsWithinRadius(latitude, longitude, radius, searchText);
+
+            var totalItems = await root
+                .LongCountAsync();
+
+            var itemsOnPage = await root
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var model = new PaginatedItemsViewModel<Location>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
         }
 
         //GET api/v1/[controller]/siteId/{siteId:Guid}/locationId/{locationId:Guid}
