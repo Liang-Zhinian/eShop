@@ -10,6 +10,8 @@ namespace SaaSEqt.eShop.Services.Business.API.Extensions
     {
         public static void FillSiteUrl(this Site site, string picBaseUrl, bool azureStorageEnabled)
         {
+            if (site.Branding == null) return;
+
             site.Branding.LogoUri = azureStorageEnabled
                 ? picBaseUrl + site.Branding.LogoUri
                 : picBaseUrl.Replace("[0]", site.Id.ToString());
