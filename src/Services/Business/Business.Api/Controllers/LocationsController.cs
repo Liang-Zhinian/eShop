@@ -49,16 +49,17 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Location>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            var root = (IQueryable<Location>)await _businessService.GetBusinessLocationsWithinRadius(latitude, longitude, radius, searchText);
+            var root = await _businessService.GetBusinessLocationsWithinRadius(latitude, longitude, radius, searchText);
 
-            var totalItems = await root
-                .LongCountAsync();
+            var totalItems = root.LongCount();
 
-            var itemsOnPage = await root
+            var itemsOnPage = root
                 .OrderBy(c => c.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToList();
+
+            itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
 
             var model = new PaginatedItemsViewModel<Location>(
                 pageIndex, pageSize, totalItems, itemsOnPage);
@@ -163,7 +164,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             string dir = Path.Combine(webRoot, siteId.ToString());
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            var path = Path.Combine(dir, request.Id.ToString() + "." + imageFileExtension);
+            var path = Path.Combine(dir, request.Id.ToString() + imageFileExtension);
 
             using (var stream = new FileStream(path, FileMode.Create))
 
@@ -224,7 +225,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             string imageFileExtension = Path.GetExtension(request.Image.FileName);
             var webRoot = _env.WebRootPath;
-            var path = Path.Combine(webRoot, siteId.ToString(), locationId.ToString() + "." + imageFileExtension);
+            var path = Path.Combine(webRoot, siteId.ToString(), locationId.ToString() + imageFileExtension);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
