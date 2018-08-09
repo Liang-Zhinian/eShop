@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Registration.Api.Requests
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Request
 {
     public class BaseRequest
     {

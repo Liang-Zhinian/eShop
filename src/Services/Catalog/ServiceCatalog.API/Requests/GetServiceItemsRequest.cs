@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Registration.Api.Requests
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Request
 {
     public class GetServiceItemsRequest : BaseRequest
     {
@@ -7,7 +7,7 @@ namespace Registration.Api.Requests
         {
         }
 
-        public Registration.Domain.ReadModel.Program[] ProgramIds { get; set; }
+        public Guid[] ProgramIds { get; set; }
         public bool OnlineOnly { get; set; }
     }
 }

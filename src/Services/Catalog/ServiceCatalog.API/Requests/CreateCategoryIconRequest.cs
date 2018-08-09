@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Request
 {
     public class CreateCategoryIconRequest
     {

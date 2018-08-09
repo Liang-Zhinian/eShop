@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure;
 using SaaSEqt.eShop.Services.ServiceCatalog.API.Model;
+using SaaSEqt.eShop.Services.ServiceCatalog.API.Request;
 using SaaSEqt.eShop.Services.ServiceCatalog.API.ViewModel;
 using System.Collections.Generic;
 using System.IO;
