@@ -42,7 +42,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        //POST api/v1/[controller]/serviceitems
+        //POST api/v1/[controller]/GetBusinessLocationsWithinRadius
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<Location>), (int)HttpStatusCode.OK)]
@@ -67,7 +67,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return Ok(model);
         }
 
-        //GET api/v1/[controller]/siteId/{siteId:Guid}/locationId/{locationId:Guid}
+        //GET api/v1/[controller]/ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}
         [HttpGet]
         [Route("ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -245,6 +245,12 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             foreach (var item in locations)
             {
                 item.FillLocationUrl(baseUri, azureStorageEnabled: azureStorageEnabled);
+                if (item.AdditionalLocationImages != null){
+                    foreach (var img in item.AdditionalLocationImages)
+                    {
+                        img.FillLocationImageUrl(_settings.LocationAdditionalPicBaseUrl, azureStorageEnabled: azureStorageEnabled);
+                    }
+                }
             }
 
             return locations;

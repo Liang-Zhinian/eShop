@@ -166,14 +166,16 @@ namespace SaaSEqt.eShop.Services.Business.Services
 
         public async Task<Location> FindExistingLocation(Guid siteId, Guid locationId)
         {
-            var location = await _businessDbContext.Locations.SingleOrDefaultAsync(y => y.SiteId.Equals(siteId) &&
+            var location = await _businessDbContext.Locations
+                                                   .Include(y=>y.AdditionalLocationImages)
+                                                   .SingleOrDefaultAsync(y => y.SiteId.Equals(siteId) &&
                                                                                y.Id.Equals(locationId));
             return location;
         }
 
         public async Task<IEnumerable<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText) {
             var root = _businessDbContext.Locations;
-            return await root.ToListAsync();
+            return await root.Include(y=>y.AdditionalLocationImages).ToListAsync();
         }
 
         #endregion

@@ -6,6 +6,7 @@ namespace SaaSEqt.eShop.Services.Business.Model
     {
         public Guid Id { get; private set; }
         public string Image { get; private set; }
+        public string ImageUri { get; set; }
 
         public Guid LocationId { get; private set; }
         public virtual Location Location { get; private set; }

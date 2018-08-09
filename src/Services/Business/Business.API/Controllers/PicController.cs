@@ -8,6 +8,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -93,6 +94,44 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             return NotFound();
         }
+
+        // GET api/v1/business/locations/ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}/itemId/{itemId:Guid}/pic
+        [HttpGet]
+        [Route("api/v1/locations/ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}/itemId/{itemId:Guid}/pic")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetLocationAdditionalImage(Guid siteId, Guid locationId, Guid itemId)
+        {
+            if (siteId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var item = await _businessService.FindExistingLocation(siteId, locationId);
+
+            if (item != null && item.AdditionalLocationImages != null)
+            {
+                var img = item.AdditionalLocationImages.SingleOrDefault(y => y.Id.Equals(itemId));
+                if (img != null)
+                {
+                    var webRoot = _env.WebRootPath;
+                    _logger.LogDebug("webRoot: " + webRoot);
+
+                    var path = Path.Combine(webRoot, img.Image);
+                    _logger.LogDebug("path: " + path);
+
+                    string imageFileExtension = Path.GetExtension(item.Image);
+                    string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
+
+                    var buffer = System.IO.File.ReadAllBytes(path);
+
+                    return File(buffer, mimetype);
+                }
+            }
+
+            return NotFound();
+        }
+
 
         private string GetImageMimeTypeFromImageFileExtension(string extension)
         {

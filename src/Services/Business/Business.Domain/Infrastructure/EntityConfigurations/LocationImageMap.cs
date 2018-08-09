@@ -16,6 +16,7 @@ namespace SaaSEqt.eShop.Services.Business.Infrastructure.EntityConfigurations
             builder.Property(_ => _.SiteId).IsRequired().HasColumnType(DbConstants.KeyType);
             builder.Property(_ => _.LocationId).IsRequired().HasColumnType(DbConstants.KeyType);
             builder.Property(_ => _.Image).HasColumnType(DbConstants.String1000);
+            builder.Ignore(y => y.ImageUri);
 
             builder.HasOne(_ => _.Site)
                    .WithMany()
