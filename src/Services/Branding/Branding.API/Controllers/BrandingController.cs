@@ -146,10 +146,11 @@ namespace SaaSEqt.eShop.Services.Branding.API.Controllers
             var dir = webRoot; //Path.Combine(webRoot, "Pics");
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-            var fileName = string.Format("{0}_{1}_{2}_{3}{4}", 
+            var fileName = string.Format("{0}_{1}_{2}_{3}_{4}{5}", 
                                          request.Language, 
                                          request.Type,
-                                         request.Name,
+                                         request.CategoryName,
+                                         request.SubcategoryName,
                                          currentVersion.VersionNumber.ToString(),
                                          imageFileExtension);
                 var path = Path.Combine(dir, fileName);
@@ -167,8 +168,8 @@ namespace SaaSEqt.eShop.Services.Branding.API.Controllers
                 Name = request.Name,
                 //IconUri = categoryIcon.IconUri,
                 IconFileName = fileName,
-                ServiceCategoryId = request.ServiceCategoryId,
-                ServiceCategoryName = request.ServiceCategoryName,
+                SubcategoryName = request.SubcategoryName,
+                CategoryName = request.CategoryName,
                 Type = request.Type,
                 Order = request.Order,
                 VersionNumber = currentVersion.VersionNumber,

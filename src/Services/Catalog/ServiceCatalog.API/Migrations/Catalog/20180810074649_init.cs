@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
@@ -9,8 +8,6 @@ namespace ServiceCatalog.API.Migrations.Catalog
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
-
             migrationBuilder.CreateTable(
                 name: "ScheduleType",
                 columns: table => new
@@ -53,11 +50,12 @@ namespace ServiceCatalog.API.Migrations.Catalog
                     AllowOnlineScheduling = table.Column<bool>(nullable: false),
                     DefaultTimeLength = table.Column<int>(nullable: false),
                     Description = table.Column<string>(type: "varchar(2000)", nullable: false),
-                    IndustryStandardCategoryId = table.Column<int>(nullable: false),
+                    IndustryStandardCategoryName = table.Column<string>(type: "varchar(255)", nullable: false),
+                    IndustryStandardSubcategoryName = table.Column<string>(type: "varchar(255)", nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
                     Price = table.Column<double>(nullable: false),
                     ServiceCategoryId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    SiteId = table.Column<Guid>(nullable: false),
+                    SiteId = table.Column<Guid>(type: "char(36)", nullable: false),
                     TaxRate = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
@@ -83,6 +81,7 @@ namespace ServiceCatalog.API.Migrations.Catalog
                     Monday = table.Column<bool>(nullable: false),
                     Saturday = table.Column<bool>(nullable: false),
                     ServiceItemId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    SiteId = table.Column<Guid>(nullable: false),
                     StaffId = table.Column<Guid>(type: "char(36)", nullable: false),
                     StartDateTime = table.Column<DateTime>(nullable: false),
                     Sunday = table.Column<bool>(nullable: false),
@@ -113,6 +112,7 @@ namespace ServiceCatalog.API.Migrations.Catalog
                     Monday = table.Column<bool>(nullable: false),
                     Saturday = table.Column<bool>(nullable: false),
                     ServiceItemId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    SiteId = table.Column<Guid>(nullable: false),
                     StaffId = table.Column<Guid>(type: "char(36)", nullable: false),
                     StartDateTime = table.Column<DateTime>(nullable: false),
                     Sunday = table.Column<bool>(nullable: false),
@@ -156,9 +156,6 @@ namespace ServiceCatalog.API.Migrations.Catalog
         {
             migrationBuilder.DropTable(
                 name: "Availability");
-
-            migrationBuilder.DropTable(
-                name: "Catalog");
 
             migrationBuilder.DropTable(
                 name: "Unavailability");

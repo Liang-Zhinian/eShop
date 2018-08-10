@@ -12,8 +12,9 @@ namespace SaaSEqt.eShop.Services.Branding.API.Model
             categoryIcon.IconUri = azureStorageEnabled
                 ? picBaseUrl + categoryIcon.IconFileName
                 : picBaseUrl.Replace("[0]", categoryIcon.Type)
-                .Replace("[1]", categoryIcon.ServiceCategoryName)
-                .Replace("[2]", categoryIcon.Language);
+                .Replace("[1]", categoryIcon.CategoryName)
+                .Replace("[2]", categoryIcon.SubcategoryName)
+                .Replace("[3]", categoryIcon.Language);
 
 
         }

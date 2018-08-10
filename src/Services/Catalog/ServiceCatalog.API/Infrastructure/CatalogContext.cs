@@ -11,7 +11,7 @@
         {
         }
 
-        public DbSet<CategoryIcon> CategoryIcons { get; set; }
+        //public DbSet<CategoryIcon> CategoryIcons { get; set; }
 
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<ServiceItem> ServiceItems { get; set; }
@@ -23,7 +23,7 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            builder.ApplyConfiguration(new CategoryIconMap());
+            //builder.ApplyConfiguration(new CategoryIconMap());
 
             builder.ApplyConfiguration(new ServiceItemMap());
             builder.ApplyConfiguration(new ServiceCategoryMap());

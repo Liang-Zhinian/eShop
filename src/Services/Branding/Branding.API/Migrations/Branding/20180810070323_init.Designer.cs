@@ -10,7 +10,7 @@ using System;
 namespace Branding.API.Migrations.Branding
 {
     [DbContext(typeof(BrandingContext))]
-    [Migration("20180808093017_init")]
+    [Migration("20180810070323_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,10 @@ namespace Branding.API.Migrations.Branding
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Height");
 
@@ -41,10 +45,7 @@ namespace Branding.API.Migrations.Branding
 
                     b.Property<int>("Order");
 
-                    b.Property<Guid>("ServiceCategoryId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("ServiceCategoryName")
+                    b.Property<string>("SubcategoryName")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 

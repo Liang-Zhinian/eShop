@@ -25,11 +25,11 @@ namespace SaaSEqt.eShop.Services.Branding.API.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/branding/withtype/{type:minlength(1)}/category/{category:minlength(1)}/language/{language:minlength(1)}/pic")]
+        [Route("api/v1/branding/withtype/{type:minlength(1)}/category/{category:minlength(1)}/subcategory/{subcategory:minlength(1)}/language/{language:minlength(1)}/pic")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         // GET: /<controller>/
-        public async Task<IActionResult> GetImage(string type, string category, string language)
+        public async Task<IActionResult> GetImage(string type, string category, string subcategory, string language)
         {
             if (string.IsNullOrEmpty(type) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(language))
             {
@@ -38,7 +38,8 @@ namespace SaaSEqt.eShop.Services.Branding.API.Controllers
 
             var item = await _catalogContext.CategoryIcons
                                             .SingleOrDefaultAsync(ci => ci.Type == type 
-                                                                  && ci.ServiceCategoryName == category
+                                                                  && ci.CategoryName == category
+                                                                  && ci.SubcategoryName == subcategory
                                                                   && ci.Language == language);
 
             if (item != null)

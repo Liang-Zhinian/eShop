@@ -11,8 +11,8 @@ namespace SaaSEqt.eShop.Services.Branding.API.Model
         public string Name { get; set; }
         public string IconUri { get; set; }
         public string IconFileName { get; set; }
-        public Guid ServiceCategoryId { get; set; }
-        public string ServiceCategoryName { get; set; }
+        public string CategoryName { get; set; }
+        public string SubcategoryName { get; set; }
         public string Type { get; set; }
         public int Order { get; set; }
         public int VersionNumber { get; set; }

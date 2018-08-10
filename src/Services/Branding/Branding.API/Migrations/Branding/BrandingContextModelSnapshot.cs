@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.eShop.Services.Branding.API.Infrastructure;
 using System;
 
-namespace Branding.API.Infrastructure.Migrations
+namespace Branding.API.Migrations.Branding
 {
     [DbContext(typeof(BrandingContext))]
     partial class BrandingContextModelSnapshot : ModelSnapshot
@@ -23,6 +23,10 @@ namespace Branding.API.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Height");
 
@@ -40,10 +44,7 @@ namespace Branding.API.Infrastructure.Migrations
 
                     b.Property<int>("Order");
 
-                    b.Property<Guid>("ServiceCategoryId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("ServiceCategoryName")
+                    b.Property<string>("SubcategoryName")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 

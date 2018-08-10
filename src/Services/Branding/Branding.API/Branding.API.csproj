@@ -24,6 +24,7 @@
     <Compile Remove="Migrations\Branding\20180808065913_init.cs" />
     <Compile Remove="Migrations\Branding\20180808070922_init.cs" />
     <Compile Remove="Migrations\Branding\20180808084916_init.cs" />
+    <Compile Remove="Migrations\Branding\20180808093017_init.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
@@ -108,5 +109,6 @@
     <Folder Include="Setup\" />
     <Folder Include="Requests\" />
     <Folder Include="Migrations\Branding\" />
+    <Folder Include="Infrastructure\BrandingMigrations\" />
   </ItemGroup>
 </Project>

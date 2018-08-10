@@ -33,18 +33,19 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
 
         #region [service items]
 
-        //GET api/v1/[controller]/serviceitems
+        //GET api/v1/[controller]/FindServiceItemsBy/siteId/sampleguid
         [HttpGet]
-        [Route("[action]/byCategoryId/{catalogTypeId}")]
+        [Route("[action]/siteId/{siteId:guid}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceItem>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<ServiceItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FindServiceItems(Guid? catalogTypeId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> FindServiceItemsOf(Guid? siteId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            var root = (IQueryable<ServiceItem>)_catalogContext.ServiceItems;
+            var root = (IQueryable<ServiceItem>)_catalogContext.ServiceItems
+                                                               .Include(y=>y.ServiceCategory);
 
-            if (catalogTypeId.HasValue)
+            if (siteId.HasValue)
             {
-                root = root.Where(ci => ci.ServiceCategoryId == catalogTypeId);
+                root = root.Where(ci => ci.SiteId == siteId);
             }
 
             var totalItems = await root
@@ -69,12 +70,13 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         public async Task<IActionResult> AddServiceItem([FromBody]ServiceItem schedulableCatalogItem)
         {
             var item = new ServiceItem(schedulableCatalogItem.SiteId,
-                                                  schedulableCatalogItem.Name,
-                                                  schedulableCatalogItem.Description,
-                                                  schedulableCatalogItem.DefaultTimeLength,
-                                                  schedulableCatalogItem.Price,
-                                                  schedulableCatalogItem.ServiceCategoryId,
-                                                  schedulableCatalogItem.IndustryStandardCategoryId);
+                                        schedulableCatalogItem.Name,
+                                        schedulableCatalogItem.Description,
+                                        schedulableCatalogItem.DefaultTimeLength,
+                                        schedulableCatalogItem.Price,
+                                        schedulableCatalogItem.ServiceCategoryId,
+                                        schedulableCatalogItem.IndustryStandardCategoryName,
+                                        schedulableCatalogItem.IndustryStandardSubcategoryName);
             _catalogContext.ServiceItems.Add(item);
 
             await _catalogContext.SaveChangesAsync();
@@ -86,7 +88,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         [Route("serviceitems/{id:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ServiceItem), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetServiceItemById(Guid id)
+        public async Task<IActionResult> FindServiceItemById(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -125,14 +127,16 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         [Route("servicecategories/{id:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ServiceCategory), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetServiceCategoryById(Guid id)
+        public async Task<IActionResult> FindServiceCategoryById(Guid id)
         {
             if (id == Guid.Empty)
             {
                 return BadRequest();
             }
 
-            var item = await _catalogContext.ServiceCategories.SingleOrDefaultAsync(ci => ci.Id == id);
+            var item = await _catalogContext.ServiceCategories
+                                            .Include(y=>y.ScheduleType)
+                                            .SingleOrDefaultAsync(ci => ci.Id == id);
 
             if (item != null)
             {
@@ -142,14 +146,15 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
             return NotFound();
         }
 
-        //GET api/v1/[controller]/[action]/bySiteId/{siteId:guid}
+        //GET api/v1/[controller]/[action]/siteId/{siteId:guid}
         [HttpGet]
-        [Route("[action]/bySiteId/{siteId:guid}")]
+        [Route("[action]/siteId/{siteId:guid}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceCategory>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<ServiceCategory>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FindServiceCategories(Guid? siteId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> FindServiceCategoriesOf(Guid? siteId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            var root = (IQueryable<ServiceCategory>)_catalogContext.ServiceCategories;
+            var root = (IQueryable<ServiceCategory>)_catalogContext.ServiceCategories
+                                                                   .Include(y=>y.ScheduleType);
 
             if (siteId.HasValue)
             {

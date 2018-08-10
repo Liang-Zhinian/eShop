@@ -15,13 +15,13 @@ namespace Branding.API.Migrations.Branding
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CategoryName = table.Column<string>(type: "varchar(255)", nullable: false),
                     Height = table.Column<int>(nullable: false),
                     IconFileName = table.Column<string>(type: "varchar(255)", nullable: false),
                     Language = table.Column<string>(type: "varchar(255)", nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
                     Order = table.Column<int>(nullable: false),
-                    ServiceCategoryId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    ServiceCategoryName = table.Column<string>(type: "varchar(255)", nullable: false),
+                    SubcategoryName = table.Column<string>(type: "varchar(255)", nullable: false),
                     Type = table.Column<string>(type: "varchar(255)", nullable: false),
                     VersionNumber = table.Column<int>(nullable: false),
                     Width = table.Column<int>(nullable: false)

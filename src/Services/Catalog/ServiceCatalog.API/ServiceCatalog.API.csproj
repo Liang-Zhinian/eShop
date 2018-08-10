@@ -19,6 +19,7 @@
     <Compile Remove="Migrations\Catalog\20180714102828_init.cs" />
     <Compile Remove="Migrations\Catalog\20180714103157_init.cs" />
     <Compile Remove="Infrastructure\EntityConfigurations\CatalogBrandEntityTypeConfiguration.cs" />
+    <Compile Remove="Controllers\CategoryIconController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
@@ -100,5 +101,6 @@
     <Folder Include="Migrations\" />
     <Folder Include="Setup\" />
     <Folder Include="Requests\" />
+    <Folder Include="Migrations\Catalog\" />
   </ItemGroup>
 </Project>

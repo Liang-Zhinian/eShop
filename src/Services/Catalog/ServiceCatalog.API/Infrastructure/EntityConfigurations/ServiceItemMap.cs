@@ -19,6 +19,12 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.EntityConfigu
             builder.Property<int>("DefaultTimeLength").IsRequired();
             builder.Property<bool>("AllowOnlineScheduling").IsRequired();
             builder.Property<Guid>("ServiceCategoryId").HasColumnType(Constants.DbConstants.KeyType);
+            builder.Property<string>("IndustryStandardCategoryName").IsRequired().HasColumnType(Constants.DbConstants.String255);
+            builder.Property<string>("IndustryStandardSubcategoryName").IsRequired().HasColumnType(Constants.DbConstants.String255);
+            builder.Property<double>("TaxRate").IsRequired();
+            builder.Property<double>("Price").IsRequired();
+            //builder.Property<double>("TaxAmount").IsRequired();
+            builder.Property<Guid>("SiteId").IsRequired().HasColumnType(Constants.DbConstants.KeyType);
 
             //builder.Ignore("Version");
 

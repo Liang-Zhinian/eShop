@@ -5,6 +5,30 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
+            "Host": "branding.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/{version}/br/{everything}",
+        "UpstreamHttpMethod": [ "GET" ]
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "branding.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/branding-api/{everything}",
+        "UpstreamHttpMethod": []
+      },
+      {
+        "DownstreamPathTemplate": "/api/{version}/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
             "Host": "servicecatalog.api",
             "Port": 80
           }

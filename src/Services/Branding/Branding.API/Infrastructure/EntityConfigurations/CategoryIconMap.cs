@@ -16,16 +16,15 @@ namespace SaaSEqt.eShop.Services.Branding.API.Infrastructure.EntityConfiguration
 
             builder.Property<int>("Id").UseMySQLAutoIncrementColumn("versionId");
             builder.Property<string>("Name").IsRequired().HasColumnType(Constants.DbConstants.String255);
-
             builder.Property<string>("IconFileName").IsRequired().HasColumnType(Constants.DbConstants.String255);
-            builder.Property<Guid>("ServiceCategoryId").IsRequired().HasColumnType(Constants.DbConstants.KeyType);
-            builder.Property<string>("ServiceCategoryName").IsRequired().HasColumnType(Constants.DbConstants.String255);
-
+            builder.Property<string>("SubcategoryName").IsRequired().HasColumnType(Constants.DbConstants.String255);
+            builder.Property<string>("CategoryName").IsRequired().HasColumnType(Constants.DbConstants.String255);
             builder.Property<string>("Type").IsRequired().HasColumnType(Constants.DbConstants.String255);
             builder.Property<int>("Order");
             builder.Property<int>("VersionNumber");
             builder.Property<string>("Language").IsRequired().HasColumnType(Constants.DbConstants.String255);
-
+            builder.Property<int>("Width");
+            builder.Property<int>("Height");
 
             builder.Ignore(y => y.IconUri);
             //builder.Ignore(y => y.Width);
