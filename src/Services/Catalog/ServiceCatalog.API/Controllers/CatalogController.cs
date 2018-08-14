@@ -81,7 +81,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
 
             await _catalogContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetServiceItemById), new { id = item.Id }, null);
+            return CreatedAtAction(nameof(FindServiceItemById), new { id = item.Id }, null);
         }
 
         [HttpGet]
@@ -120,7 +120,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
 
             await _catalogContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetServiceCategoryById), new { id = item.Id }, null);
+            return CreatedAtAction(nameof(FindServiceCategoryById), new { id = item.Id }, null);
         }
 
         [HttpGet]
