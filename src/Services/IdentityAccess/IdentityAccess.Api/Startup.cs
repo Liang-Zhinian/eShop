@@ -8,7 +8,6 @@ using CqrsFramework.EventStore.MySqlDB.Services;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 using SaaSEqt.IdentityAccess.API.Infrastructure.AutofacModules;
 using SaaSEqt.IdentityAccess.API.Infrastructure.Filters;
-//using Infrastructure.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -64,7 +63,7 @@ namespace SaaSEqt.IdentityAccess.API
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddMySQLCheck("book2db", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+                checks.AddMySQLCheck("identityaccessdb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
                 checks.AddUrlCheck("http://localhost:15672/", TimeSpan.FromMinutes(minutes));
 
             });
