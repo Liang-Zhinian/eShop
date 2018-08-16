@@ -38,6 +38,17 @@ services:
       - sql.data
       - rabbitmq
 
+  webmvcbackend:
+    image: eshop/webmvcbackend:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Web/WebMVCBackend/Dockerfile    
+    depends_on:
+      - business.api
+      - servicecatalog.api
+      - identity.api
+      - appointment.api
+
   mobilereservationagg:
     image: eshop/mobilereservationagg:${TAG:-latest}
     build:

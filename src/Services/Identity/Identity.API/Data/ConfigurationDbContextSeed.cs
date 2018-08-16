@@ -29,6 +29,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
             clientUrls.Add("MobileShoppingAgg", configuration.GetValue<string>("MobileShoppingAggClient"));
             clientUrls.Add("WebShoppingAgg", configuration.GetValue<string>("WebShoppingAggClient"));
             clientUrls.Add("MobileReservationAgg", configuration.GetValue<string>("MobileReservationAggClient"));
+            clientUrls.Add("MvceShop", configuration.GetValue<string>("MvceShopClient"));
 
             if (!context.Clients.Any())
             {
