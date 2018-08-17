@@ -69,7 +69,7 @@ namespace SaaSEqt.eShop.WebMVCBackend
 
             // Add application services.
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddTransient<ICatalogService, CatalogService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             //services.AddTransient<IOrderingService, OrderingService>();
             //services.AddTransient<IBasketService, BasketService>();
             //services.AddTransient<ICampaignService, CampaignService>();

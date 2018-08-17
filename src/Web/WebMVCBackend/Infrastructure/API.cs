@@ -72,8 +72,15 @@ namespace WebMVCBackend.Infrastructure
 
             public static string GetAllTypes(string baseUri)
             {
-                return $"{baseUri}catalogTypes";
+                return $"{baseUri}FindServiceCategoriesOf/siteId";
             }
+
+            public static string GetAllCategories(string baseUri, int page, int take, Guid siteId)
+            {
+                return $"{baseUri}FindServiceCategoriesOf/siteId/{siteId}?pageIndex={page}&pageSize={take}";
+            }
+
+            public static string AddCategory(string baseUri) => $"{baseUri}/servicecategories";
         }
 
         public static class Marketing
