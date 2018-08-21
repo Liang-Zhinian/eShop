@@ -27,7 +27,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 	/// in the "Identity and Access" Bounded Context.
 	/// </remarks>
     [Serializable]
-    [NotMapped]
+    //[NotMapped]
 	public sealed class TenantId : Identity
 	{
 		/// <summary>

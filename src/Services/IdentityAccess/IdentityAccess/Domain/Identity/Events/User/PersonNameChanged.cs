@@ -10,13 +10,13 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
     public class PersonNameChanged : IDomainEvent
     {
         public PersonNameChanged(
-                TenantId tenantId,
+            Guid tenantId,
             Guid userId,
                 String username,
                 FullName name)
         {
             this.Name = name;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.UserId = userId;
             this.Username = username;
 
@@ -31,7 +31,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
 
         public FullName Name { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
     }

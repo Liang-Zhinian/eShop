@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebMVCBackend.Infrastructure;
 using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
 
 namespace SaaSEqt.eShop.WebMVCBackend.Services
 {
@@ -17,12 +19,17 @@ namespace SaaSEqt.eShop.WebMVCBackend.Services
         private readonly IOptionsSnapshot<AppSettings> _settings;
         private readonly IHttpClient _apiClient;
         private readonly ILogger<CategoryService> _logger;
+        private readonly IHttpContextAccessor _httpContextAccesor;
 
         private readonly string _remoteServiceBaseUrl;
 
-        public CategoryService(IOptionsSnapshot<AppSettings> settings, IHttpClient httpClient, ILogger<CategoryService> logger)
+        public CategoryService(IOptionsSnapshot<AppSettings> settings, 
+                               IHttpContextAccessor httpContextAccesor, 
+                               IHttpClient httpClient, 
+                               ILogger<CategoryService> logger)
         {
             _settings = settings;
+            _httpContextAccesor = httpContextAccesor;
             _apiClient = httpClient;
             _logger = logger;
 
@@ -56,6 +63,7 @@ namespace SaaSEqt.eShop.WebMVCBackend.Services
 
         public async Task AddCategory(Guid siteId, string name, string description, bool allowOnlineScheduling, int scheduleType)
         {
+            var token = await GetUserTokenAsync();
             var updateBasketUri = API.Catalog.AddCategory(_remoteServiceBaseUrl);
 
             var response = await _apiClient.PostAsync(updateBasketUri, new
@@ -65,8 +73,14 @@ namespace SaaSEqt.eShop.WebMVCBackend.Services
                 Description = description,
                 AllowOnlineScheduling = allowOnlineScheduling,
                 ScheduleTypeId = scheduleType
-            });
+            }, token);
 
+        }
+
+        async Task<string> GetUserTokenAsync()
+        {
+            var context = _httpContextAccesor.HttpContext;
+            return await context.GetTokenAsync("access_token");
         }
     }
 }

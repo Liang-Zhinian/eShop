@@ -55,7 +55,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Entities
         /// <param name="supportsNesting">
         /// Initial value of the <see cref="SupportsNesting"/> property.
         /// </param>
-        public Role(TenantId tenantId, string name, string description, bool supportsNesting)
+        public Role(Guid tenantId, string name, string description, bool supportsNesting)
         {
             // Defer validation to the property setters.
             this.Description = description;
@@ -88,9 +88,8 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Entities
 
         public bool SupportsNesting { get; private set; }
 
-        public string TenantId_Id { get { return TenantId.Id; } private set { } }
-        public TenantId TenantId { get; private set; }
-        [NotMapped]
+        public Guid TenantId { get; private set; }
+        //[NotMapped]
         public virtual Tenant Tenant { get; set; }
 
         public Guid GroupId { get { return this.internalGroup.Id; } private set {} }

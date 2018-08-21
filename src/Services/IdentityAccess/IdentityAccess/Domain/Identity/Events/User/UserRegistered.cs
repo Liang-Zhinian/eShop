@@ -10,7 +10,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
     public class UserRegistered : IDomainEvent
     {
         public UserRegistered(
-                TenantId tenantId,
+            Guid tenantId,
             Guid userId,
                 String username,
                 FullName name,
@@ -18,7 +18,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
         {
             this.EmailAddress = emailAddress;
             this.Name = name;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.UserId = userId;
             this.Username = username;
 
@@ -35,7 +35,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
 
         public FullName Name { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
     }

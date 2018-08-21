@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.IdentityAccess.Infra.Data.Context;
 using System;
 
-namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
+namespace SaaSEqt.IdentityAccess.Infra.Data.Migrations
 {
     [DbContext(typeof(IdentityAccessDbContext))]
     partial class IdentityAccessDbContextModelSnapshot : ModelSnapshot
@@ -19,96 +19,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026");
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Group", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(2000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("TenantId_Id")
-                        .IsRequired()
-                        .HasColumnName("TenantId_Id")
-                        .HasColumnType("varchar(36)")
-                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId_Id");
-
-                    b.ToTable("Group");
-
-                    b.HasAnnotation("MySQL:Charset", "utf8");
-
-                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
-                });
-
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.GroupMember", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
-
-                    b.Property<Guid>("GroupId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("TenantId_Id");
-
-                    b.Property<int>("TypeValue")
-                        .HasColumnName("Type");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("TenantId_Id");
-
-                    b.ToTable("GroupMember");
-
-                    b.HasAnnotation("MySQL:Charset", "utf8");
-
-                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
-                });
-
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Person", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
-
-                    b.Property<string>("TenantId_Id")
-                        .IsRequired()
-                        .HasColumnName("TenantId_Id")
-                        .HasColumnType("varchar(36)")
-                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TenantId_Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Person");
-
-                    b.HasAnnotation("MySQL:Charset", "utf8");
-
-                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
-                });
-
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Role", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Access.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,17 +36,16 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                     b.Property<bool>("SupportsNesting");
 
-                    b.Property<string>("TenantId_Id")
-                        .IsRequired()
-                        .HasColumnName("TenantId_Id")
-                        .HasColumnType("varchar(36)")
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)")
                         .HasAnnotation("MySQL:Collation", "utf8_general_ci");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("TenantId_Id");
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Role");
 
@@ -144,10 +54,98 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
                 });
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Tenant", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Group", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Group");
+
+                    b.HasAnnotation("MySQL:Charset", "utf8");
+
+                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
+                });
+
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.GroupMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
+
+                    b.Property<Guid>("GroupId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<Guid>("TenantId");
+
+                    b.Property<int>("TypeValue")
+                        .HasColumnName("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("GroupMember");
+
+                    b.HasAnnotation("MySQL:Charset", "utf8");
+
+                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
+                });
+
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Person", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Person");
+
+                    b.HasAnnotation("MySQL:Charset", "utf8");
+
+                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
+                });
+
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
                         .HasAnnotation("MySQL:Collation", "utf8_general_ci");
 
                     b.Property<bool>("Active");
@@ -159,16 +157,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("TenantId_Id")
-                        .IsRequired()
-                        .HasColumnName("TenantId_Id")
-                        .HasColumnType("varchar(36)")
-                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
-
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("TenantId_Id")
-                        .HasName("TenantId_Id");
 
                     b.ToTable("Tenant");
 
@@ -177,7 +166,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
                 });
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.User", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,10 +175,9 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("TenantId_Id")
-                        .IsRequired()
-                        .HasColumnName("TenantId_Id")
-                        .HasColumnType("varchar(36)")
+                    b.Property<Guid>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("char(36)")
                         .HasAnnotation("MySQL:Collation", "utf8_general_ci");
 
                     b.Property<string>("Username")
@@ -197,7 +185,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId_Id");
+                    b.HasIndex("TenantId");
 
                     b.ToTable("User");
 
@@ -206,54 +194,64 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
                 });
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Group", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Access.Entities.Role", b =>
                 {
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Tenant", "Tenant")
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Group", "Group")
                         .WithMany()
-                        .HasForeignKey("TenantId_Id")
-                        .HasPrincipalKey("TenantId_Id")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.GroupMember", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Group", b =>
                 {
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Group")
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.GroupMember", b =>
+                {
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Group")
                         .WithMany("GroupMembers")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Tenant", "Tenant")
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("TenantId_Id")
-                        .HasPrincipalKey("TenantId_Id")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Person", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Person", b =>
                 {
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Tenant", "Tenant")
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("TenantId_Id")
-                        .HasPrincipalKey("TenantId_Id")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.User", "User")
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.User", "User")
                         .WithOne("Person")
-                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.Person", "UserId")
+                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Person", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.ContactInformation", "ContactInformation", b1 =>
+                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.ContactInformation", "ContactInformation", b1 =>
                         {
                             b1.Property<Guid>("PersonId");
 
                             b1.ToTable("Person");
 
-                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Person")
+                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Person")
                                 .WithOne("ContactInformation")
-                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.ContactInformation", "PersonId")
+                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.ContactInformation", "PersonId")
                                 .OnDelete(DeleteBehavior.Cascade);
 
-                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.EmailAddress", "EmailAddress", b2 =>
+                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.EmailAddress", "EmailAddress", b2 =>
                                 {
                                     b2.Property<Guid>("ContactInformationPersonId");
 
@@ -262,13 +260,13 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                                     b2.ToTable("Person");
 
-                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.ContactInformation")
+                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.ContactInformation")
                                         .WithOne("EmailAddress")
-                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.EmailAddress", "ContactInformationPersonId")
+                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.EmailAddress", "ContactInformationPersonId")
                                         .OnDelete(DeleteBehavior.Cascade);
                                 });
 
-                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.PostalAddress", "PostalAddress", b2 =>
+                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.PostalAddress", "PostalAddress", b2 =>
                                 {
                                     b2.Property<Guid>("ContactInformationPersonId");
 
@@ -289,13 +287,13 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                                     b2.ToTable("Person");
 
-                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.ContactInformation")
+                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.ContactInformation")
                                         .WithOne("PostalAddress")
-                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.PostalAddress", "ContactInformationPersonId")
+                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.PostalAddress", "ContactInformationPersonId")
                                         .OnDelete(DeleteBehavior.Cascade);
                                 });
 
-                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.Telephone", "PrimaryTelephone", b2 =>
+                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Telephone", "PrimaryTelephone", b2 =>
                                 {
                                     b2.Property<Guid>("ContactInformationPersonId");
 
@@ -304,13 +302,13 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                                     b2.ToTable("Person");
 
-                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.ContactInformation")
+                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.ContactInformation")
                                         .WithOne("PrimaryTelephone")
-                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.Telephone", "ContactInformationPersonId")
+                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Telephone", "ContactInformationPersonId")
                                         .OnDelete(DeleteBehavior.Cascade);
                                 });
 
-                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.Telephone", "SecondaryTelephone", b2 =>
+                            b1.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Telephone", "SecondaryTelephone", b2 =>
                                 {
                                     b2.Property<Guid>("ContactInformationPersonId");
 
@@ -319,14 +317,29 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                                     b2.ToTable("Person");
 
-                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.ContactInformation")
+                                    b2.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.ContactInformation")
                                         .WithOne("SecondaryTelephone")
-                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.Telephone", "ContactInformationPersonId")
+                                        .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Telephone", "ContactInformationPersonId")
                                         .OnDelete(DeleteBehavior.Cascade);
                                 });
                         });
 
-                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.FullName", "Name", b1 =>
+                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.EmailAddress", "EmailAddress", b1 =>
+                        {
+                            b1.Property<Guid>("PersonId");
+
+                            b1.Property<string>("Address")
+                                .HasColumnType("varchar(255)");
+
+                            b1.ToTable("Person");
+
+                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Person")
+                                .WithOne("EmailAddress")
+                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.EmailAddress", "PersonId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+
+                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.FullName", "Name", b1 =>
                         {
                             b1.Property<Guid>("PersonId");
 
@@ -338,36 +351,21 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                             b1.ToTable("Person");
 
-                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Person")
+                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Person")
                                 .WithOne("Name")
-                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.FullName", "PersonId")
+                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.FullName", "PersonId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });
 
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.Role", b =>
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Identity.Entities.User", b =>
                 {
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Group", "Group")
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Tenant", "Tenant")
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId_Id")
-                        .HasPrincipalKey("TenantId_Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Entities.User", b =>
-                {
-                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId_Id")
-                        .HasPrincipalKey("TenantId_Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Entities.Enablement", "Enablement", b1 =>
+                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Enablement", "Enablement", b1 =>
                         {
                             b1.Property<Guid>("UserId");
 
@@ -379,9 +377,9 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
 
                             b1.ToTable("User");
 
-                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Entities.User")
+                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Identity.Entities.User")
                                 .WithOne("Enablement")
-                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Entities.Enablement", "UserId")
+                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Identity.Entities.Enablement", "UserId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });

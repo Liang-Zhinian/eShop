@@ -7,9 +7,25 @@
 
 @using (Html.BeginForm())
 {
-<div class="form-group">
-    <div class="col-md-10">
-        @Html.TextBoxFor(model => model.SiteId, new { @class = "form-control" })
-    </div>
-</div>
-    }
+    <fieldset>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.SiteId, new { @class = "form-control" })
+        </div>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.Name, new { @class = "form-control" })
+        </div>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.Description, new { @class = "form-control" })
+        </div>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.AllowOnlineScheduling, new { @class = "form-control" })
+        </div>
+        <div class="editor-label">
+            @Html.EditorFor(model => model.ScheduleTypeId, new { @class = "form-control" })
+        </div>
+    </fieldset>
+
+    <p>
+        <input type="submit" value="Create" />
+    </p>
+}

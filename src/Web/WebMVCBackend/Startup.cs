@@ -45,7 +45,7 @@ namespace SaaSEqt.eShop.WebMVCBackend
             {
                 services.AddDataProtection(opts =>
                 {
-                    opts.ApplicationDiscriminator = "eshop.webmvc";
+                    opts.ApplicationDiscriminator = "eshop.webmvceshop";
                 })
                 .PersistKeysToRedis(ConnectionMultiplexer.Connect(Configuration["DPConnectionString"]), "DataProtection-Keys");
             }
@@ -126,12 +126,7 @@ namespace SaaSEqt.eShop.WebMVCBackend
                 options.RequireHttpsMetadata = false;
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
-                options.Scope.Add("orders");
-                options.Scope.Add("basket");
-                options.Scope.Add("marketing");
-                options.Scope.Add("locations");
-                options.Scope.Add("webreservationagg");
-                options.Scope.Add("orders.signalrhub");
+                options.Scope.Add("mobilereservationagg");
             });
         }
 

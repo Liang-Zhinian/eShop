@@ -10,6 +10,7 @@
     <Folder Include="Mappings\" />
     <Folder Include="Repositories\" />
     <Folder Include="UoW\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0" />
@@ -17,70 +18,17 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.3" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.11" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Remove="Migrations\20180616080528_first.cs" />
-    <Compile Remove="Migrations\20180616082312_first.cs" />
-    <Compile Remove="Migrations\20180616082932_first.cs" />
-    <Compile Remove="Migrations\20180616085602_first.cs" />
-    <Compile Remove="Migrations\20180616090230_first.cs" />
-    <Compile Remove="Migrations\20180616091044_first.cs" />
-    <Compile Remove="Migrations\20180616091357_first.cs" />
-    <Compile Remove="Migrations\20180616091530_first.cs" />
-    <Compile Remove="Migrations\20180616091753_first.cs" />
-    <Compile Remove="Mappings\RoleMemberMap.cs" />
-    <Compile Remove="Migrations\20180617051122_first.cs" />
-    <Compile Remove="Migrations\20180617053015_first.cs" />
-    <Compile Remove="Migrations\20180617062235_first.cs" />
-    <Compile Remove="Migrations\20180617062504_first.cs" />
-    <Compile Remove="Migrations\20180617063012_first.cs" />
-    <Compile Remove="Migrations\20180617063755_first.cs" />
-    <Compile Remove="Migrations\20180617064244_first.cs" />
-    <Compile Remove="Migrations\20180617064738_first.cs" />
-    <Compile Remove="Migrations\20180617070135_first.cs" />
-    <Compile Remove="Migrations\20180617071308_first.cs" />
-    <Compile Remove="Migrations\20180617072717_first.cs" />
-    <Compile Remove="Migrations\20180617073042_first.cs" />
-    <Compile Remove="Migrations\20180617074649_first.cs" />
-    <Compile Remove="Migrations\20180617081700_first.cs" />
-    <Compile Remove="Migrations\20180617082712_first.cs" />
-    <Compile Remove="Migrations\20180617082911_first.cs" />
-    <Compile Remove="Migrations\20180617083016_first.cs" />
-    <Compile Remove="Migrations\20180617083139_first.cs" />
-    <Compile Remove="Migrations\20180617083252_first.cs" />
-    <Compile Remove="Migrations\20180617090417_first.cs" />
-    <Compile Remove="Migrations\20180617100417_first.cs" />
-    <Compile Remove="Migrations\20180617100632_first.cs" />
-    <Compile Remove="Migrations\20180617102453_first.cs" />
-    <Compile Remove="Migrations\20180617102725_first.cs" />
-    <Compile Remove="Migrations\20180617125954_first.cs" />
-    <Compile Remove="Migrations\20180617130643_first.cs" />
-    <Compile Remove="Migrations\20180617131853_first.cs" />
-    <Compile Remove="Migrations\20180617132044_first.cs" />
-    <Compile Remove="Migrations\20180617132502_first.cs" />
-    <Compile Remove="Migrations\20180617132843_first.cs" />
-    <Compile Remove="Migrations\20180617133657_first.cs" />
-    <Compile Remove="Migrations\20180617143749_first.cs" />
-    <Compile Remove="Migrations\20180617151137_first.cs" />
-    <Compile Remove="Migrations\20180617151808_first.cs" />
-    <Compile Remove="Migrations\20180617152106_first.cs" />
-    <Compile Remove="Migrations\20180617152455_first.cs" />
-    <Compile Remove="Migrations\20180617152940_first.cs" />
-    <Compile Remove="Migrations\20180617153329_first.cs" />
-    <Compile Remove="Migrations\20180617153826_first.cs" />
-    <Compile Remove="Migrations\20180617154916_first.cs" />
-    <Compile Remove="Migrations\20180617155130_first.cs" />
-    <Compile Remove="Migrations\20180617155446_first.cs" />
-    <Compile Remove="Migrations\20180617160433_first.cs" />
-    <Compile Remove="Migrations\20180617160836_first.cs" />
-    <Compile Remove="Migrations\20180617161617_first.cs" />
-    <Compile Remove="Migrations\20180617164155_first.cs" />
-    <Compile Remove="Migrations\20180617173440_first.cs" />
-    <Compile Remove="Models\Group.cs" />
-    <Compile Remove="Migrations\20180617174138_first.cs" />
-    <Compile Remove="Migrations\20180624064207_first.cs" />
-    <Compile Remove="Migrations\20180624065026_first.cs" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IdentityAccess\SaaSEqt.IdentityAccess.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20180821085200_init.cs" />
+    <Compile Remove="Migrations\20180821085958_init.cs" />
+    <Compile Remove="Migrations\20180821092946_init.cs" />
+    <Compile Remove="Migrations\20180821093630_init.cs" />
   </ItemGroup>
 </Project>

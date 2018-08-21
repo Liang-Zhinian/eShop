@@ -23,7 +23,8 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
                 .HasOne(typeof(Group))
                 .WithMany("GroupMembers")
                 .HasForeignKey("GroupId");
-            
+
+            //builder.OwnsOne(y => y.TenantId);
         }
     }
 }

@@ -22,9 +22,9 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
             //base.SaveChanges();
         }
 
-        public Tenant Get(TenantId tenantId)
+        public Tenant Get(Guid tenantId)
         {
-            var tenant = this.Find(Guid.Parse(tenantId.Id));
+            var tenant = this.Find(tenantId);
             return tenant;
             //return new DomainModels.Tenant(
             //    new DomainModels.TenantId(tenant.Id.ToString()),
@@ -46,9 +46,9 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
             //);
         }
 
-        public TenantId GetNextIdentity()
+        public Guid GetNextIdentity()
         {
-            return new TenantId(Guid.NewGuid().ToString());
+            return Guid.NewGuid();
         }
 
         public void Register(Tenant tenant)

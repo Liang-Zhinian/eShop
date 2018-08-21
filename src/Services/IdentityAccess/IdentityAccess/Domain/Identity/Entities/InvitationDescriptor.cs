@@ -8,12 +8,12 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
     [NotMapped]
     public class InvitationDescriptor
     {
-        public InvitationDescriptor(TenantId tenantId, string invitationId, string description, DateTime startingOn, DateTime until)
+        public InvitationDescriptor(Guid tenantId, string invitationId, string description, DateTime startingOn, DateTime until)
         {
             this.Description = description;
             this.InvitationId = invitationId;
             this.StartingOn = startingOn;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.Until = until;
         }
 
@@ -23,7 +23,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 
         public DateTime StartingOn;
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public DateTime Until { get; private set; }
     }

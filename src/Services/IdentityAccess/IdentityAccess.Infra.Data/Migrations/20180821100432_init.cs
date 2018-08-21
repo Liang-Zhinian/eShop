@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
+namespace SaaSEqt.IdentityAccess.Infra.Data.Migrations
 {
-    public partial class first : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,16 +12,14 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 name: "Tenant",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(type: "varchar(2000)", nullable: true),
-                    Name = table.Column<string>(type: "varchar(255)", nullable: false),
-                    TenantId_Id = table.Column<string>(type: "varchar(36)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tenant", x => x.Id);
-                    table.UniqueConstraint("TenantId_Id", x => x.TenantId_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,16 +29,16 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(type: "varchar(2000)", nullable: true),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
-                    TenantId_Id = table.Column<string>(type: "varchar(36)", nullable: false)
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Group", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Group_Tenant_TenantId_Id",
-                        column: x => x.TenantId_Id,
+                        name: "FK_Group_Tenant_TenantId",
+                        column: x => x.TenantId,
                         principalTable: "Tenant",
-                        principalColumn: "TenantId_Id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -50,7 +48,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Password = table.Column<string>(type: "varchar(255)", nullable: true),
-                    TenantId_Id = table.Column<string>(type: "varchar(36)", nullable: false),
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: false),
                     Username = table.Column<string>(type: "varchar(255)", nullable: true),
                     Enablement_Enabled = table.Column<bool>(nullable: false),
                     Enablement_EndDate = table.Column<DateTime>(nullable: false),
@@ -60,10 +58,10 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Tenant_TenantId_Id",
-                        column: x => x.TenantId_Id,
+                        name: "FK_User_Tenant_TenantId",
+                        column: x => x.TenantId,
                         principalTable: "Tenant",
-                        principalColumn: "TenantId_Id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -74,7 +72,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     GroupId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
-                    TenantId_Id = table.Column<string>(nullable: true),
+                    TenantId = table.Column<Guid>(nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -87,10 +85,10 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GroupMember_Tenant_TenantId_Id",
-                        column: x => x.TenantId_Id,
+                        name: "FK_GroupMember_Tenant_TenantId",
+                        column: x => x.TenantId,
                         principalTable: "Tenant",
-                        principalColumn: "TenantId_Id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -103,7 +101,7 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                     GroupId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
                     SupportsNesting = table.Column<bool>(nullable: false),
-                    TenantId_Id = table.Column<string>(type: "varchar(36)", nullable: false)
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,10 +113,10 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Role_Tenant_TenantId_Id",
-                        column: x => x.TenantId_Id,
+                        name: "FK_Role_Tenant_TenantId",
+                        column: x => x.TenantId,
                         principalTable: "Tenant",
-                        principalColumn: "TenantId_Id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -127,8 +125,9 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    TenantId_Id = table.Column<string>(type: "varchar(36)", nullable: false),
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
+                    EmailAddress_Address = table.Column<string>(type: "varchar(255)", nullable: true),
                     ContactInformation_EmailAddress_Address = table.Column<string>(type: "varchar(255)", nullable: true),
                     Name_FirstName = table.Column<string>(type: "varchar(255)", nullable: true),
                     Name_LastName = table.Column<string>(type: "varchar(255)", nullable: true),
@@ -144,10 +143,10 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Person", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Person_Tenant_TenantId_Id",
-                        column: x => x.TenantId_Id,
+                        name: "FK_Person_Tenant_TenantId",
+                        column: x => x.TenantId,
                         principalTable: "Tenant",
-                        principalColumn: "TenantId_Id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Person_User_UserId",
@@ -158,9 +157,9 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Group_TenantId_Id",
+                name: "IX_Group_TenantId",
                 table: "Group",
-                column: "TenantId_Id");
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupMember_GroupId",
@@ -168,14 +167,14 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupMember_TenantId_Id",
+                name: "IX_GroupMember_TenantId",
                 table: "GroupMember",
-                column: "TenantId_Id");
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_TenantId_Id",
+                name: "IX_Person_TenantId",
                 table: "Person",
-                column: "TenantId_Id");
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Person_UserId",
@@ -189,14 +188,14 @@ namespace SaaSEqt.IdentityAccess.API.Infrastructure.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Role_TenantId_Id",
+                name: "IX_Role_TenantId",
                 table: "Role",
-                column: "TenantId_Id");
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_TenantId_Id",
+                name: "IX_User_TenantId",
                 table: "User",
-                column: "TenantId_Id");
+                column: "TenantId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

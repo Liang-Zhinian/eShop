@@ -52,7 +52,7 @@ namespace SaaSEqt.IdentityAccess.Application
                         //var tenant = tenantRepository.Get(new TenantId(evt.TenantId));
 
                         TenantProvisionedIntegrationEvent tenantProvisionedEvent = new TenantProvisionedIntegrationEvent(
-                            new TenantId(evt.TenantId),
+                            evt.TenantId,
                             evt.Name,
                             evt.Description,
                             evt.Active
@@ -70,11 +70,11 @@ namespace SaaSEqt.IdentityAccess.Application
                         Console.WriteLine("To Do: TenantAdministratorRegistered.");
 
                         TenantAdministratorRegistered evt = domainEvent as TenantAdministratorRegistered;
-                        TenantId tenantId = new TenantId(evt.TenantId);
+                        var tenantId = evt.TenantId;
                         //var user = userRepository.UserWithUsername(tenantId, evt.Name);
 
                         UserRegisteredIntegrationEvent userRegisteredIntegrationEvent = new UserRegisteredIntegrationEvent(
-                                new TenantId(evt.TenantId),
+                                evt.TenantId,
                                 evt.UserId,
                                 evt.Name,
                                 evt.AdministorName,
@@ -106,10 +106,10 @@ namespace SaaSEqt.IdentityAccess.Application
                         Console.WriteLine("To Do: UserRegistered.");
 
                         UserRegistered evt = domainEvent as UserRegistered;
-                        TenantId tenantId = new TenantId(evt.TenantId);
+                        var tenantId = evt.TenantId;
 
                         UserRegisteredIntegrationEvent userRegisteredIntegrationEvent = new UserRegisteredIntegrationEvent(
-                                new TenantId(evt.TenantId),
+                                evt.TenantId,
                                 evt.UserId,
                                 evt.Username,
                                 evt.Name,

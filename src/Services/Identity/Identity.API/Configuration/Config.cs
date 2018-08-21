@@ -291,7 +291,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "webreservationagg"
+                        "mobilereservationagg"
                     },
                 },
 

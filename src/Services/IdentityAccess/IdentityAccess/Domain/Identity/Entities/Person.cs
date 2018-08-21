@@ -46,7 +46,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 	{
 		#region [ Fields and Constructor Overloads ]
 
-		private TenantId tenantId;
+        private Guid tenantId;
 		private FullName name;
 		private ContactInformation contactInformation;
 
@@ -62,7 +62,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 		/// <param name="contactInformation">
 		/// Initial value of the <see cref="ContactInformation"/> property.
 		/// </param>
-		public Person(TenantId tenantId, FullName name, ContactInformation contactInformation)
+        public Person(Guid tenantId, FullName name, ContactInformation contactInformation)
 		{
             // Defer validation to the property setters.
 			this.ContactInformation = contactInformation;
@@ -86,8 +86,8 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         //[Key]
         //public Guid Id { get; private set; }
 
-        public string TenantId_Id { get { return TenantId.Id; } private set { } }
-		public TenantId TenantId
+        //public string TenantId_Id { get { return TenantId.Id; } private set { } }
+        public Guid TenantId
 		{
 			get
 			{
@@ -138,7 +138,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             private set {}
         }
 
-        [NotMapped]
+        //[NotMapped]
         public virtual Tenant Tenant { get; set; }
 
 		#endregion

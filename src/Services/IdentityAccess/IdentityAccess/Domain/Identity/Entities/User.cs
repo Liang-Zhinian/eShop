@@ -35,7 +35,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 		/// Initial value of the <see cref="Person"/> property.
 		/// </param>
 		public User(
-			TenantId tenantId,
+            Guid tenantId,
 			string username,
 			string password,
 			Enablement enablement,
@@ -83,8 +83,8 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         //[Key]
         //public Guid Id { get; private set; }
 
-        public string TenantId_Id { get { return TenantId.Id; } private set { } }
-		public TenantId TenantId { get; private set; }
+        //public string TenantId_Id { get { return TenantId.Id; } private set { } }
+        public Guid TenantId { get; private set; }
 
 		public bool IsEnabled
 		{
@@ -119,11 +119,12 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 					this.Username,
 					this.Person.EmailAddress.Address);
 			}
+            private set { }
 		}
 
 		public string Username { get; private set; }
 
-        [NotMapped]
+        //[NotMapped]
         public virtual Tenant Tenant { get; set; }
 
 		#endregion

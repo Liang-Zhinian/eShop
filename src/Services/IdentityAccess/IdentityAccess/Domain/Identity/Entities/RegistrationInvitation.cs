@@ -21,7 +21,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
     public class RegistrationInvitation
     {
         public RegistrationInvitation(
-            TenantId tenantId,
+            Guid tenantId,
             string invitationId,
             string description,
             DateTime startingOn,
@@ -34,7 +34,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             this.Until = until;
         }
 
-        public RegistrationInvitation(TenantId tenantId, string invitationId, string description)
+        public RegistrationInvitation(Guid tenantId, string invitationId, string description)
             : this(tenantId, invitationId, description, DateTime.MinValue, DateTime.MinValue)
         {
         }
@@ -53,7 +53,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 
         public DateTime StartingOn { get; private set; }
 
-        public TenantId TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public DateTime Until { get; private set; }
 

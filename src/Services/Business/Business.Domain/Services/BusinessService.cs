@@ -174,8 +174,15 @@ namespace SaaSEqt.eShop.Services.Business.Services
         }
 
         public async Task<IEnumerable<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText) {
-            var root = _businessDbContext.Locations;
-            return await root.Include(y=>y.AdditionalLocationImages).ToListAsync();
+            var root = await _businessDbContext.Locations.Include(y => y.AdditionalLocationImages).ToListAsync();
+            IList<Location> list = new List<Location>();
+            foreach (var item in root)
+            {
+                if (DistanceHelper.Distance(latitude, longitude, item.Geolocation.Latitude, item.Geolocation.Longitude, 'K')<= radius){
+                    list.Add(item);
+                }
+            }
+            return list;
         }
 
         #endregion

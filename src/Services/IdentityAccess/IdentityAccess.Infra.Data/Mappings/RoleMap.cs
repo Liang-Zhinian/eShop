@@ -31,6 +31,7 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
                 .HasForeignKey(_ => _.GroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //builder.OwnsOne(y => y.TenantId);
         }
     }
 }

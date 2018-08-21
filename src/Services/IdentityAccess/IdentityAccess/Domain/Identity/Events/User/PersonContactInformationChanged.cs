@@ -8,13 +8,13 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
     public class PersonContactInformationChanged : IDomainEvent
     {
         public PersonContactInformationChanged(
-                TenantId tenantId,
+            Guid tenantId,
             Guid userId,
                 String username,
                 ContactInformation contactInformation)
         {
             this.ContactInformation = contactInformation;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.UserId = userId;
             this.Username = username;
 
@@ -29,7 +29,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
 
         public Guid UserId { get; set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
     }

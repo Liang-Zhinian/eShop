@@ -9,9 +9,9 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Tenant
 {
     public class TenantActivated : IDomainEvent
     {
-        public TenantActivated(TenantId tenantId)
+        public TenantActivated(Guid tenantId)
         {
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
 
             this.Version = 1;
             this.TimeStamp = DateTimeOffset.Now;
@@ -20,6 +20,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Tenant
         public int Version { get; set; }
         public DateTimeOffset TimeStamp { get; set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
     }
 }

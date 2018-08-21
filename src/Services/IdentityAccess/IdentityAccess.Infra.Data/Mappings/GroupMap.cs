@@ -17,6 +17,8 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
             builder.Property<string>(_ => _.Description).HasColumnType(Constants.DbConstants.String2000);
 
             MapToTenant(builder);
+
+            //builder.OwnsOne(y => y.TenantId);
         }
     }
 }

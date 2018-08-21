@@ -18,7 +18,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Repositories
 	{
 		/// <summary>
 		/// Creates an identifier to use as the value of the
-		/// <see cref="Tenant.TenantId"/> property for
+		/// <see cref="Tenant.TenantGuidId"/> property for
 		/// a new instance of <see cref="Tenant"/>
 		/// before the entity is stored in the repository.
 		/// </summary>
@@ -26,7 +26,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Repositories
 		/// A <see cref="TenantId"/> value to use to identify
 		/// a new instance of <see cref="Tenant"/>.
 		/// </returns>
-		TenantId GetNextIdentity();
+        Guid GetNextIdentity();
 
 		/// <summary>
 		/// Removes a given <see cref="Tenant"/> from the repository.
@@ -62,7 +62,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Repositories
 		/// or a null reference if no matching entity exists
 		/// in the repository.
 		/// </returns>
-		Tenant Get(TenantId tenantId);
+        Tenant Get(Guid tenantId);
 
 		/// <summary>
 		/// Retrieves a <see cref="Tenant"/> from the repository

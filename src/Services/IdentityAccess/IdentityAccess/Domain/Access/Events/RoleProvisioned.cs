@@ -11,10 +11,10 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 {
     public class RoleProvisioned : IDomainEvent
     {
-        public RoleProvisioned(TenantId tenantId, string name)
+        public RoleProvisioned(Guid tenantId, string name)
         {
             this.Name = name;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
 
             this.Version = 1;
             this.TimeStamp = DateTimeOffset.Now;
@@ -25,6 +25,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 
         public string Name { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
     }
 }

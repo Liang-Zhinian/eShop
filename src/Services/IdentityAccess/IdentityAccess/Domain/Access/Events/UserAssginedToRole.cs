@@ -11,7 +11,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
     public class UserAssignedToRole : IDomainEvent
     {
         public UserAssignedToRole(
-            TenantId tenantId,
+            Guid tenantId,
             string roleName,
             string username,
             string firstName,
@@ -41,7 +41,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 
         public string RoleName { get; private set; }
 
-        public TenantId TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
     }

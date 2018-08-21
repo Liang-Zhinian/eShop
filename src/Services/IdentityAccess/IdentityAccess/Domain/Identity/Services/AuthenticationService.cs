@@ -65,7 +65,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Services
 		/// in the username and password do not match an enabled
 		/// <see cref="User"/> for an active <see cref="Tenant"/>.
 		/// </returns>
-		public UserDescriptor Authenticate(TenantId tenantId, string username, string password)
+        public UserDescriptor Authenticate(Guid tenantId, string username, string password)
 		{
 			AssertionConcern.AssertArgumentNotNull(tenantId, "TenantId must not be null.");
 			AssertionConcern.AssertArgumentNotEmpty(username, "Username must be provided.");

@@ -8,7 +8,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Tenant
     public class TenantAdministratorRegistered : IDomainEvent
     {
         public TenantAdministratorRegistered(
-            TenantId tenantId,
+            Guid tenantId,
             string name,
             FullName administorName,
             EmailAddress emailAddress,
@@ -19,7 +19,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Tenant
             this.EmailAddress = emailAddress;
             this.Name = username;
             this.TemporaryPassword = temporaryPassword;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
 
             this.Version = 1;
             this.TimeStamp = DateTimeOffset.Now;
@@ -38,6 +38,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Tenant
 
         public string TemporaryPassword { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
     }
 }

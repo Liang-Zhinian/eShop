@@ -66,7 +66,7 @@
 
         public UserDescriptor AuthenticateUser(AuthenticateUserCommand command)
         {
-            return this.authenticationService.Authenticate(new TenantId(command.TenantId), command.Username, command.Password);
+            return this.authenticationService.Authenticate(Guid.Parse(command.TenantId), command.Username, command.Password);
         }
 
         public void DeactivateTenant(DeactivateTenantCommand command)
@@ -152,7 +152,7 @@
 
         public Group GetGroup(string tenantId, string groupName)
         {
-            return this.groupRepository.GroupNamed(new TenantId(tenantId), groupName);
+            return this.groupRepository.GroupNamed(Guid.Parse(tenantId), groupName);
         }
 
         public bool IsGroupMember(string tenantId, string groupName, string userName)
@@ -200,7 +200,7 @@
                 command.Password,
                 new Enablement(command.Enabled, command.StartDate, command.EndDate),
                 new Person(
-                    new TenantId(command.TenantId),
+                    Guid.Parse(command.TenantId),
                     new FullName(command.FirstName, command.LastName),
                     new ContactInformation(
                         new EmailAddress(command.EmailAddress),
@@ -240,7 +240,7 @@
 
         public User GetUser(string tenantId, string userName)
         {
-            return this.userRepository.UserWithUsername(new TenantId(tenantId), userName);
+            return this.userRepository.UserWithUsername(Guid.Parse(tenantId), userName);
         }
 
         User GetExistingUser(string tenantId, string userName)
@@ -263,7 +263,7 @@
 
         public Tenant GetTenant(string tenantId)
         {
-            return this.tenantRepository.Get(new TenantId(tenantId));
+            return this.tenantRepository.Get(Guid.Parse(tenantId));
         }
 
         Tenant GetExistingTenant(string tenantId)

@@ -41,4 +41,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework\CqrsFramework.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework.Bus.RabbitMQ\CqrsFramework.Bus.RabbitMQ.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Infrastructure\Migrations\20180706185039_first.cs" />
+  </ItemGroup>
 </Project>

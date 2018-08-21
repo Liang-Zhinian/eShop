@@ -9,10 +9,10 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Group
 {
     public class GroupUserRemoved : IDomainEvent
     {
-        public GroupUserRemoved(TenantId tenantId, string groupName, string username)
+        public GroupUserRemoved(Guid tenantId, string groupName, string username)
         {
             this.GroupName = groupName;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.Username = username;
 
             this.Version = 1;
@@ -24,7 +24,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Group
 
         public string GroupName { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
     }

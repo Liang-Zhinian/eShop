@@ -52,7 +52,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 		/// or <see cref="Group.ToGroupMember"/> factory methods of
 		/// <see cref="User"/> or <see cref="Group"/>, respectively.
 		/// </remarks>
-		internal GroupMember(TenantId tenantId, string name, GroupMemberType type)
+        internal GroupMember(Guid tenantId, string name, GroupMemberType type)
         {
 			AssertionConcern.AssertArgumentNotNull(tenantId, "The tenantId must be provided.");
 			AssertionConcern.AssertArgumentNotEmpty(name, "Member name is required.");
@@ -80,8 +80,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         //[Key]
         //public Guid Id { get; private set; }
 
-        public string TenantId_Id { get { return TenantId.Id; } private set { } }
-		public TenantId TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
 		public string Name { get; private set; }
 
@@ -100,7 +99,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 			get { return this.Type == GroupMemberType.User; }
 		}
 
-        [NotMapped]
+        //[NotMapped]
         public virtual Tenant Tenant { get; set; }
 
 		#endregion

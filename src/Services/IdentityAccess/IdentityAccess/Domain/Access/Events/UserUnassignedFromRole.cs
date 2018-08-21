@@ -10,7 +10,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 {
     public class UserUnassignedFromRole : IDomainEvent
     {
-        public UserUnassignedFromRole(TenantId tenantId, string roleName, string username)
+        public UserUnassignedFromRole(Guid tenantId, string roleName, string username)
         {
             this.RoleName = roleName;
             this.TenantId = tenantId;
@@ -28,6 +28,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 
         public string RoleName { get; private set; }
 
-        public TenantId TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
     }
 }

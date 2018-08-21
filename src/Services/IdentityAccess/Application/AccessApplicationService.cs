@@ -35,7 +35,7 @@
 
 		public void AssignUserToRole(AssignUserToRoleCommand command)
 		{
-			var tenantId = new TenantId(command.TenantId);
+            var tenantId = Guid.Parse(command.TenantId);
 			var user = this.userRepository.UserWithUsername(tenantId, command.Username);
 			if (user != null)
 			{
@@ -55,7 +55,7 @@
 
 		public User UserInRole(string tenantId, string userName, string roleName)
 		{
-			var id = new TenantId(tenantId);
+            var id = Guid.Parse(tenantId);
 			var user = this.userRepository.UserWithUsername(id, userName);
 			if (user != null)
 			{
@@ -74,7 +74,7 @@
 
 		public void ProvisionRole(ProvisionRoleCommand command)
 		{
-			var tenantId = new TenantId(command.TenantId);
+            var tenantId = Guid.Parse(command.TenantId);
 			var tenant = this.tenantRepository.Get(tenantId);
 			var role = tenant.ProvisionRole(command.RoleName, command.Description, command.SupportsNesting);
             this.roleRepository.Add(role);

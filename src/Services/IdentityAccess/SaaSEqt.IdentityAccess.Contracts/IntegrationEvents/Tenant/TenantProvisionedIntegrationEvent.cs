@@ -11,10 +11,10 @@ namespace SaaSEqt.IdentityAccess.Contracts.IntegrationEvents.Tenant
 
         }
 
-        public TenantProvisionedIntegrationEvent(TenantId tenantId, string name, string description, bool active)
+        public TenantProvisionedIntegrationEvent(Guid tenantId, string name, string description, bool active)
         {
-			this.Id = Guid.Parse(tenantId.Id);
-            this.TenantId = tenantId.Id;
+            this.Id = tenantId;
+            this.TenantId = tenantId;
             Version = 1;
             TimeStamp = DateTimeOffset.Now;
             Name = name;
@@ -23,7 +23,7 @@ namespace SaaSEqt.IdentityAccess.Contracts.IntegrationEvents.Tenant
         }
 
         public Guid Id { get; set; }
-        public string TenantId { get; set; }
+        public Guid TenantId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Active { get; set; }

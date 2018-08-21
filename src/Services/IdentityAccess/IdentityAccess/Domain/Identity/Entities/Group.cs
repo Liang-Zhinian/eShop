@@ -41,7 +41,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 		/// <param name="description">
 		/// Initial value of the <see cref="Description"/> property.
 		/// </param>
-		public Group(TenantId tenantId, string name, string description)
+        public Group(Guid tenantId, string name, string description)
 			: this()
 		{
 			// Defer validation to the property setters.
@@ -67,8 +67,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         //[Key]
         //public Guid Id { get; private set; }
 
-        public string TenantId_Id { get { return TenantId.Id; } private set { } }
-		public TenantId TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
 		public string Name { get; private set; }
 
@@ -76,7 +75,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 
 		public ISet<GroupMember> GroupMembers { get; private set; }
 
-        [NotMapped]
+        //[NotMapped]
         public virtual Tenant Tenant { get; private set; }
 
 		/// <summary>

@@ -9,10 +9,10 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Group
 {
     public class GroupProvisioned : IDomainEvent
     {
-        public GroupProvisioned(TenantId tenantId, string name)
+        public GroupProvisioned(Guid tenantId, string name)
         {
             this.Name = name;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
 
             this.Version = 1;
             this.TimeStamp = DateTimeOffset.Now;
@@ -24,6 +24,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Group
 
         public string Name { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
     }
 }

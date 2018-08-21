@@ -40,6 +40,8 @@ namespace SaaSEqt.IdentityAccess.API.Controllers
 
             var user = _identityApplicationService.GetUser(tenantId, userName);
 
+            if (user == null) return NotFound();
+
             StaffViewModel staff = new StaffViewModel
             {
                 FirstName = user.Person.Name.FirstName,

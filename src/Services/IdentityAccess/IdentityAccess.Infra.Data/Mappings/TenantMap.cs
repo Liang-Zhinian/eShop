@@ -7,7 +7,7 @@ using SaaSEqt.IdentityAccess.Infra.Data.Mappings.Constants;
 
 namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
 {
-    public class TenantMap : EntityWithCompositeIdMap<Tenant>,  IEntityTypeConfiguration<Tenant>
+    public class TenantMap : BaseMap<Tenant>,  IEntityTypeConfiguration<Tenant>
     {
         public void Configure(EntityTypeBuilder<Tenant> builder)
         {
@@ -20,7 +20,10 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
             builder.Property<string>("Name").IsRequired().HasColumnType(Constants.DbConstants.String255);
             builder.Property<string>("Description").HasColumnType(Constants.DbConstants.String2000);
             builder.Property<bool>("Active").IsRequired();
-            builder.HasAlternateKey("TenantId_Id").HasName("TenantId_Id");
+
+            //builder.OwnsOne(y => y.TenantId);
+
+            //builder.HasAlternateKey("TenantId_Id").HasName("TenantId_Id");
             //OwnTenantId(builder);
             //builder.Property("TenantId_Id",
         }

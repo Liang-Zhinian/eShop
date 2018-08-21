@@ -1,6 +1,7 @@
 ﻿
 namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 {
+    using System;
     using System.ComponentModel.DataAnnotations.Schema;
     using SaaSEqt.Common.Domain.Model;
 
@@ -12,7 +13,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             return new UserDescriptor();
         }
 
-        public UserDescriptor(TenantId tenantId, string username, string emailAddress)
+        public UserDescriptor(Guid tenantId, string username, string emailAddress)
         {
             this.EmailAddress = emailAddress;
             this.TenantId = tenantId;
@@ -23,7 +24,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
 
         public string EmailAddress { get; private set; }
 
-        public TenantId TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
 

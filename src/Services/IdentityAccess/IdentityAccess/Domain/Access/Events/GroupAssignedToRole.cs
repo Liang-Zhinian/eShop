@@ -8,7 +8,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 
     public class GroupAssignedToRole : IDomainEvent
     {
-        public GroupAssignedToRole(TenantId tenantId, string roleName, string groupName)
+        public GroupAssignedToRole(Guid tenantId, string roleName, string groupName)
         {
             this.GroupName = groupName;
             this.RoleName = roleName;
@@ -24,6 +24,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Events
 
         public string RoleName { get; private set; }
 
-        public TenantId TenantId;
+        public Guid TenantId { get; private set; }
     }
 }

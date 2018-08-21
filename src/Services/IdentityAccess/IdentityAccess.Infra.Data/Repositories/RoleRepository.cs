@@ -37,9 +37,9 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
             //base.SaveChanges();
         }
 
-        public Role RoleNamed(TenantId tenantId, string roleName)
+        public Role RoleNamed(Guid tenantId, string roleName)
         {
-            Role role = Find(_ => _.TenantId.Equals(tenantId.Id)
+            Role role = Find(_ => _.TenantId.Equals(tenantId)
                         && _.Name.Equals(roleName)).First();
 
             return role; //new DomainModels.Role(tenantId, roleName, role.Description, role.SupportsNesting);

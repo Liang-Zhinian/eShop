@@ -7,7 +7,7 @@ namespace SaaSEqt.IdentityAccess.Contracts.IntegrationEvents.User
     public class UserRegisteredIntegrationEvent : IEvent
     {
         public UserRegisteredIntegrationEvent(
-                TenantId tenantId,
+                Guid tenantId,
                 Guid userId,
                 String username,
                 FullName name,
@@ -15,7 +15,7 @@ namespace SaaSEqt.IdentityAccess.Contracts.IntegrationEvents.User
         {
             this.EmailAddress = emailAddress;
             this.Name = name;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.Username = username;
             this.Id = userId;
             this.Version = 1;
@@ -30,7 +30,7 @@ namespace SaaSEqt.IdentityAccess.Contracts.IntegrationEvents.User
 
         public FullName Name { get; set; }
 
-        public string TenantId { get; set; }
+        public Guid TenantId { get; set; }
 
         public string Username { get; set; }
     }

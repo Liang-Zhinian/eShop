@@ -7,11 +7,11 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Group
 
     public class GroupGroupAdded : IDomainEvent
     {
-        public GroupGroupAdded(TenantId tenantId, string groupName, string nestedGroupName)
+        public GroupGroupAdded(Guid tenantId, string groupName, string nestedGroupName)
         {
             this.GroupName = groupName;
             this.NestedGroupName = nestedGroupName;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
 
             this.Version = 1;
             this.TimeStamp = DateTimeOffset.Now;
@@ -25,6 +25,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.Group
 
         public string NestedGroupName { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
     }
 }

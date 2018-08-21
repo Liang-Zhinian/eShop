@@ -10,13 +10,13 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
     public class UserEnablementChanged : IDomainEvent
     {
         public UserEnablementChanged(
-                TenantId tenantId,
+            Guid tenantId,
             Guid userId,
                 String username,
                 Enablement enablement)
         {
             this.Enablement = enablement;
-            this.TenantId = tenantId.Id;
+            this.TenantId = tenantId;
             this.UserId = userId;
             this.Username = username;
 
@@ -31,7 +31,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Events.User
 
         public Enablement Enablement { get; private set; }
 
-        public string TenantId { get; private set; }
+        public Guid TenantId { get; private set; }
 
         public string Username { get; private set; }
     }

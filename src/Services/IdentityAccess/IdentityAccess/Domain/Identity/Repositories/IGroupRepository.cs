@@ -48,6 +48,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Repositories
 		/// or a null reference if no matching entity exists
 		/// in the repository.
 		/// </returns>
-		Group GroupNamed(TenantId tenantId, string groupName);
+        Group GroupNamed(Guid tenantId, string groupName);
 	}
 }

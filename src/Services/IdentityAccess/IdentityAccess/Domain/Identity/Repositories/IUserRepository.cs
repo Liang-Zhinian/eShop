@@ -53,7 +53,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Repositories
 		/// or a null reference if no matching entity exists
 		/// in the repository.
 		/// </returns>
-		User UserFromAuthenticCredentials(TenantId tenantId, string username, string encryptedPassword);
+        User UserFromAuthenticCredentials(Guid tenantId, string username, string encryptedPassword);
 
 		/// <summary>
 		/// Retrieves a <see cref="User"/> from the repository
@@ -75,6 +75,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Repositories
 		/// or a null reference if no matching entity exists
 		/// in the repository.
 		/// </returns>
-		User UserWithUsername(TenantId tenantId, string username);
+        User UserWithUsername(Guid tenantId, string username);
 	}
 }

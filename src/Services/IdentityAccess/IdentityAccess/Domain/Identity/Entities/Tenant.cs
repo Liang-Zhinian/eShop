@@ -43,7 +43,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         /// <param name="active">
         /// Initial value of the <see cref="Active"/> property.
         /// </param>
-        public Tenant(TenantId tenantId, string name, string description, bool active)
+        public Tenant(Guid tenantId, string name, string description, bool active)
         {
             AssertionConcern.AssertArgumentNotNull(tenantId, "TenentId is required.");
             AssertionConcern.AssertArgumentNotEmpty(name, "The tenant name is required.");
@@ -51,8 +51,8 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             AssertionConcern.AssertArgumentNotEmpty(description, "The tenant description is required.");
             AssertionConcern.AssertArgumentLength(description, 1, 100, "The name description be 100 characters or less.");
 
-            //this.Id = Guid.Parse(tenantId.Id);
-            this.TenantId = tenantId;
+            this.Id = tenantId;
+            //this.TenantId = tenantId;
             this.Name = name;
             this.Description = description;
             this.Active = active;
@@ -77,8 +77,8 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         //[Key]
         //public Guid Id { get; private set; }
 
-        public string TenantId_Id { get { return TenantId.Id; } private set {} }
-        public TenantId TenantId { get; private set; }
+        //public string TenantId_Id { get { return TenantId.Id; } private set {} }
+        //public TenantId TenantId { get; private set; }
 
         public string Name { get; private set; }
 
@@ -95,7 +95,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             if (!this.Active)
             {
                 this.Active = true;
-                DomainEventPublisher.Instance.Publish(new TenantActivated(this.TenantId));
+                DomainEventPublisher.Instance.Publish(new TenantActivated(this.Id));
             }
         }
 
@@ -105,7 +105,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             {
                 this.Active = false;
 
-                DomainEventPublisher.Instance.Publish(new TenantDeactivated(this.TenantId));
+                DomainEventPublisher.Instance.Publish(new TenantDeactivated(this.Id));
             }
         }
 
@@ -123,7 +123,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             AssertionConcern.AssertStateTrue(this.Active, "Tenant is not active.");
             AssertionConcern.AssertArgumentFalse(this.IsRegistrationAvailableThrough(description), "Invitation already exists.");
 
-            RegistrationInvitation invitation = new RegistrationInvitation(this.TenantId, Guid.NewGuid().ToString(), description);
+            RegistrationInvitation invitation = new RegistrationInvitation(this.Id, Guid.NewGuid().ToString(), description);
 
             AssertionConcern.AssertStateTrue(this.registrationInvitations.Add(invitation), "The invitation should have been added.");
 
@@ -134,9 +134,9 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         {
             AssertionConcern.AssertStateTrue(this.Active, "Tenant is not active.");
 
-            Group group = new Group(this.TenantId, name, description);
+            Group group = new Group(this.Id, name, description);
 
-            DomainEventPublisher.Instance.Publish(new GroupProvisioned(this.TenantId, name));
+            DomainEventPublisher.Instance.Publish(new GroupProvisioned(this.Id, name));
 
             return group;
         }
@@ -145,9 +145,9 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         {
             AssertionConcern.AssertStateTrue(this.Active, "Tenant is not active.");
 
-            Role role = new Role(this.TenantId, name, description, supportsNesting);
+            Role role = new Role(this.Id, name, description, supportsNesting);
 
-            DomainEventPublisher.Instance.Publish(new RoleProvisioned(this.TenantId, name));
+            DomainEventPublisher.Instance.Publish(new RoleProvisioned(this.Id, name));
 
             return role;
         }
@@ -173,8 +173,8 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
             if (this.IsRegistrationAvailableThrough(invitationIdentifier))
             {
                 // ensure same tenant
-                person.TenantId = this.TenantId;
-                user = new User(this.TenantId, username, password, enablement, person);
+                person.TenantId = this.Id;
+                user = new User(this.Id, username, password, enablement, person);
             }
 
             return user;
@@ -216,7 +216,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         public override string ToString()
         {
             const string Format = "Tenant [tenantId={0}, name={1}, description={2}, active={3}]";
-            return string.Format(Format, this.TenantId, this.Name, this.Description, this.Active);
+            return string.Format(Format, this.Id, this.Name, this.Description, this.Active);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Entities
         /// </returns>
         protected override IEnumerable<object> GetIdentityComponents()
         {
-            yield return this.TenantId;
+            yield return this.Id;
             yield return this.Name;
         }
 

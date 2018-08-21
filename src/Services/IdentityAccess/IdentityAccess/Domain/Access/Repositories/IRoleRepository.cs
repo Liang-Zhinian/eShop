@@ -50,6 +50,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Repositories
 		/// or a null reference if no matching entity exists
 		/// in the repository.
 		/// </returns>
-		Role RoleNamed(TenantId tenantId, string roleName);
+        Role RoleNamed(Guid tenantId, string roleName);
 	}
 }

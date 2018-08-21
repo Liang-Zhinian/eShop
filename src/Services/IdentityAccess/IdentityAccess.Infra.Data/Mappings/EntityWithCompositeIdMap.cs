@@ -16,11 +16,11 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
             //builder.HasKey("Id");
             builder.ToTable(tableName);
             builder.Property<Guid>("Id")
-                   //.ValueGeneratedOnAdd()
+                   .ValueGeneratedOnAdd()
                    .HasColumnType(Constants.DbConstants.KeyType)
                    .ForMySQLHasCollation("utf8_general_ci");
 
-            builder.Ignore(typeof(TenantId).FullName);
+            //builder.Ignore(typeof(TenantId).FullName);
         }
 
         public virtual void MapToTenant(EntityTypeBuilder<TEntity> builder)
@@ -28,8 +28,7 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
             builder
                 .HasOne(typeof(Tenant).FullName, "Tenant")
                         .WithMany()
-                   .HasForeignKey("TenantId_Id")
-                .HasPrincipalKey("TenantId_Id")
+                   .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade);
         }
     }
@@ -47,13 +46,16 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
                    .ValueGeneratedOnAdd()
                    //.HasColumnType(Constants.DbConstants.KeyType)
                    .ForMySQLHasCollation("utf8_general_ci");
-            builder.Property<string>("TenantId_Id")
-            .IsRequired()
-                   .HasColumnType(Constants.DbConstants.String36)
-            .HasColumnName("TenantId_Id")
-            .ForMySQLHasCollation("utf8_general_ci");
 
-            builder.Ignore(typeof(TenantId).FullName);
+            builder.Property<Guid>("TenantId")
+                    .IsRequired()
+                    .HasColumnType(Constants.DbConstants.KeyType)
+                    .HasColumnName("TenantId")
+                    .ForMySQLHasCollation("utf8_general_ci");
+
+            //builder.Ignore(typeof(TenantId).FullName);
+
+            //builder.OwnsOne(typeof(TenantId).FullName, "TenantId");
         }
     }
 }

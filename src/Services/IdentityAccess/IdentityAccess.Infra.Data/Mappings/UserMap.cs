@@ -21,8 +21,15 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
                 et.Property<DateTime>("StartDate");
                 et.Property<DateTime>("EndDate");
             });
-            builder.Ignore(_ => _.UserDescriptor);
-            builder.Ignore(_ => _.Person);
+            //builder.OwnsOne(_ => _.UserDescriptor, cb=>{
+            //    cb.Property("UserId").HasColumnType(Constants.DbConstants.KeyType);
+            //    cb.Property(y => y.TenantId).HasColumnType(Constants.DbConstants.KeyType);
+            //    cb.Property(y => y.EmailAddress).HasColumnType(Constants.DbConstants.String255);
+            //    cb.Property(y => y.Username).HasColumnType(Constants.DbConstants.String255);
+            //    cb.ToTable("UserDescriptor");
+            //});
+            //builder.Ignore(_ => _.Person);
+            //builder.OwnsOne(y => y.TenantId);
 
             MapToTenant(builder);
         }

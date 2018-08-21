@@ -65,7 +65,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Access.Services
 		/// <c>true</c> if the <see cref="User"/> has the
 		/// <see cref="Role"/>; otherwise, <c>false</c>.
 		/// </returns>
-		public bool IsUserInRole(TenantId tenantId, string username, string roleName)
+        public bool IsUserInRole(Guid tenantId, string username, string roleName)
 		{
 			AssertionConcern.AssertArgumentNotNull(tenantId, "TenantId must not be null.");
 			AssertionConcern.AssertArgumentNotEmpty(username, "Username must not be provided.");

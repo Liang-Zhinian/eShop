@@ -50,6 +50,8 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Mappings
                   .HasForeignKey<Person>(_ => _.UserId);
 
             MapToTenant(builder);
+
+            //builder.OwnsOne(y => y.TenantId);
         }
     }
 }

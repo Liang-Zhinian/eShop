@@ -80,7 +80,7 @@ namespace WebMVCBackend.Infrastructure
                 return $"{baseUri}FindServiceCategoriesOf/siteId/{siteId}?pageIndex={page}&pageSize={take}";
             }
 
-            public static string AddCategory(string baseUri) => $"{baseUri}/servicecategories";
+            public static string AddCategory(string baseUri) => $"{baseUri}servicecategories";
         }
 
         public static class Marketing

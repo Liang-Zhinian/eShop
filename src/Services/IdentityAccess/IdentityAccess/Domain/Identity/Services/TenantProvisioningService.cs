@@ -145,7 +145,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Services
 				DomainEventPublisher
 					.Instance
 					.Publish(new TenantProvisioned(
-                        tenant.TenantId, tenantName, tenantDescription, true));
+                        tenant.Id, tenantName, tenantDescription, true));
 
 				return tenant;
 			}
@@ -178,7 +178,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Services
 				strongPassword,
 				Enablement.IndefiniteEnablement(),
 				new Person(
-					tenant.TenantId,
+					tenant.Id,
 					administorName,
 					new ContactInformation(
 						emailAddress,
@@ -215,7 +215,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Identity.Services
 			DomainEventPublisher
 				.Instance
 				.Publish(new TenantAdministratorRegistered(
-						tenant.TenantId,
+						tenant.Id,
                         admin.Username,
 						administorName,
 						emailAddress,

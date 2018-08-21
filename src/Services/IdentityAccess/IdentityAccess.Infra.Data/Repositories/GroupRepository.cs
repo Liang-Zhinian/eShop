@@ -65,9 +65,9 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
 		/// or a null reference if no matching entity exists
 		/// in the repository.
 		/// </returns>
-        DomainModels.Group IGroupRepository.GroupNamed(DomainModels.TenantId tenantId, string groupName)
+        DomainModels.Group IGroupRepository.GroupNamed(Guid tenantId, string groupName)
         {
-            DomainModels.Group group = Find(_ => _.TenantId.Equals(tenantId.Id)
+            DomainModels.Group group = Find(_ => _.TenantId.Equals(tenantId)
                                           && _.Name.Equals(groupName)).First();
 
             return group; //new DomainModels.Group(tenantId, groupName, group.Description);

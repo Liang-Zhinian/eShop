@@ -5,6 +5,7 @@ using SaaSEqt.IdentityAccess.Infra.Data.Context;
 //using ReadModels = SaaSEqt.IdentityAccess.Infra.Data.Models;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
 {
@@ -61,7 +62,7 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
             //base.SaveChanges();
         }
 
-        public DomainModels.User UserFromAuthenticCredentials(DomainModels.TenantId tenantId, string username, string encryptedPassword)
+        public DomainModels.User UserFromAuthenticCredentials(Guid tenantId, string username, string encryptedPassword)
         {
             DomainModels.User user = this.Find(_ => _.TenantId.Equals(tenantId)
                                                   && _.Username.Equals(username)
@@ -98,11 +99,28 @@ namespace SaaSEqt.IdentityAccess.Infra.Data.Repositories
 
         }
 
-        public DomainModels.User UserWithUsername(DomainModels.TenantId tenantId, string username)
+        public DomainModels.User UserWithUsername(Guid tenantId, string username)
         {
-            DomainModels.User user = this.Find(_ => _.TenantId_Id.Equals(tenantId.Id)
-                                                  && _.Username.Equals(username)
-                                              )
+            var root = this.Find(y => y.Username.Equals(username))
+                           .Include(y => y.Person)
+                                .ThenInclude(p => p.Name)
+                           .Include(y=>y.Person)
+                               .ThenInclude(p=>p.ContactInformation)
+                                    .ThenInclude(c=>c.EmailAddress)
+                           .Include(y => y.Person)
+                                .ThenInclude(p => p.ContactInformation)
+                                    .ThenInclude(c => c.PostalAddress)
+                           .Include(y => y.Person)
+                               .ThenInclude(p => p.ContactInformation)
+                                    .ThenInclude(c => c.PrimaryTelephone)
+                           .Include(y => y.Person)
+                               .ThenInclude(p => p.ContactInformation)
+                                    .ThenInclude(c => c.SecondaryTelephone)
+                           //.Include(y=>y.UserDescriptor)
+                           .Include(y => y.Tenant)
+                           .Include(y => y.Enablement);
+                           
+            DomainModels.User user = root.Where(_ => _.TenantId.Equals(tenantId))
                        .First();
             return user;
             

@@ -1,0 +1,18 @@
+﻿@using SaaSEqt.eShop.WebMVC.Services
+@using SaaSEqt.eShop.WebMVC.ViewModels
+
+@model SaaSEqt.eShop.WebMVC.ViewModels.Basket
+@inject IIdentityParser<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<form method="post" id="cartForm">
+    <div class="esh-basket">
+        @Html.Partial("_Header", new List<Header>() {
+            new Header() { Controller = "Catalog", Text = "Back to catalog" } })
+
+        @await Component.InvokeAsync("CartList", new { user = UserManager.Parse(User) })
+    </div>
+</form>
