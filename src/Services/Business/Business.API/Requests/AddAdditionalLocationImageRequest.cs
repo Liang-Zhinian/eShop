@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace SaaSEqt.eShop.Services.Business.API.Requests
+namespace SaaSEqt.eShop.Business.API.Requests
 {
     public class SetLocationImageRequest
     {

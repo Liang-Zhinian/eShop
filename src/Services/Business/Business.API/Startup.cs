@@ -15,13 +15,15 @@ using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using SaaSEqt.eShop.Services.Business.API.Infrastructure.Filters;
-using SaaSEqt.eShop.Services.Business.Infrastructure;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.Services.Business.API.Configurations;
-using SaaSEqt.eShop.Services.Business.Services;
+using SaaSEqt.eShop.Business.API.Infrastructure.Filters;
+using SaaSEqt.eShop.Business.Infrastructure.Data;
+//using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using SaaSEqt.eShop.Business.API.Configurations;
+using SaaSEqt.eShop.Business.Infrastructure.Services;
+using SaaSEqt.IdentityAccess.Infrastructure.Context;
+using SaaSEqt.eShop.Business.API.Infrastructure.AutofacModules;
 
-namespace SaaSEqt.eShop.Services.Business.API
+namespace SaaSEqt.eShop.Business.API
 {
     public class Startup
     {
@@ -82,7 +84,7 @@ namespace SaaSEqt.eShop.Services.Business.API
                 //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
             }, ServiceLifetime.Scoped);
 
-            services.AddDbContext<IntegrationEventLogContext>(options =>
+            services.AddDbContext<IdentityAccessDbContext>(options =>
             {
                 options.UseMySql(Configuration["ConnectionString"],
                                  mySqlOptionsAction: sqlOptions =>
@@ -93,6 +95,18 @@ namespace SaaSEqt.eShop.Services.Business.API
 
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }, ServiceLifetime.Scoped);
+
+            //services.AddDbContext<IntegrationEventLogContext>(options =>
+            //{
+            //    options.UseMySql(Configuration["ConnectionString"],
+            //                     mySqlOptionsAction: sqlOptions =>
+            //                     {
+            //                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+            //                         //sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            //                     });
+
+            //    options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            //}, ServiceLifetime.Scoped);
 
             services.Configure<BusinessSettings>(Configuration);
 
@@ -120,17 +134,17 @@ namespace SaaSEqt.eShop.Services.Business.API
 
             //services.AddEventStoreSetup();
 
-            //services.AddApplicationSetup();
+            services.AddApplicationSetup();
 
-            //services.AddRabbitMQEventBusSetup(Configuration);
+            services.AddRabbitMQEventBusSetup(Configuration);
 
             //services.AddIdentityAccessEventProcessorSetup();
 
             var container = new ContainerBuilder();
             container.Populate(services);
 
-            //container.RegisterModule(new ApplicationModule());
-            //container.RegisterModule(new MediatorModule());
+            container.RegisterModule(new ApplicationModule());
+            container.RegisterModule(new MediatorModule());
 
             return new AutofacServiceProvider(container.Build());
         }

@@ -7,18 +7,17 @@ using Business.API.Requests.Locations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Services.Business.API.Requests;
-using SaaSEqt.eShop.Services.Business.API.Infrastructure;
-using SaaSEqt.eShop.Services.Business.Infrastructure;
-using SaaSEqt.eShop.Services.Business.Model;
-using SaaSEqt.eShop.Services.Business.Services;
+using SaaSEqt.eShop.Business.API.Requests;
+using SaaSEqt.eShop.Business.API.Infrastructure;
+using SaaSEqt.eShop.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Business.Domain.Model.Security;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.Services.Business.API.Extensions;
-using SaaSEqt.eShop.Services.Business.API.ViewModel;
+using SaaSEqt.eShop.Business.API.Extensions;
+using SaaSEqt.eShop.Business.API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace SaaSEqt.eShop.Services.Business.API.Controllers
+namespace SaaSEqt.eShop.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class LocationsController : Controller

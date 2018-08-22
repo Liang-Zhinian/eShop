@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Business.API
+﻿namespace SaaSEqt.eShop.Business.API
 {
     public class BusinessSettings
     {

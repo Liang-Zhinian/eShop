@@ -82,7 +82,8 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
             // Adds IdentityServer
             services.AddIdentityServer(x => x.IssuerUri = "null")
-                .AddSigningCredential(Certificate.Get())
+                    .AddSigningCredential(Certificate.Get())
+                //.AddTestUsers(null)
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddConfigurationStore(options =>
                 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Services.Business.API.Requests
+namespace SaaSEqt.eShop.Business.API.Requests
 {
     public class BaseRequest
     {

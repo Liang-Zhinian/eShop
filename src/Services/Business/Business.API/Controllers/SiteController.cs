@@ -4,15 +4,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.Services.Business.API.Extensions;
-using SaaSEqt.eShop.Services.Business.API.Requests;
-using SaaSEqt.eShop.Services.Business.Infrastructure;
-using SaaSEqt.eShop.Services.Business.Model;
-using SaaSEqt.eShop.Services.Business.Services;
+using SaaSEqt.eShop.Business.API.Extensions;
+using SaaSEqt.eShop.Business.API.Requests;
+using SaaSEqt.eShop.Business.Infrastructure;
+using SaaSEqt.eShop.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Business.Domain.Model.Security;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SaaSEqt.eShop.Services.Business.API.Controllers
+namespace SaaSEqt.eShop.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class SiteController : Controller

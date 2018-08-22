@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace SaaSEqt.eShop.Services.Business.API.Configurations
+namespace SaaSEqt.eShop.Business.API.Configurations
 {
     public static class SwaggerSupport
     {

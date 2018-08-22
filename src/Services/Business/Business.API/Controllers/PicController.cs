@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Services.Business.Infrastructure;
-using SaaSEqt.eShop.Services.Business.Services;
+using SaaSEqt.eShop.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Business.Domain.Model.Security;
 using System;
 using System.IO;
 using System.Net;
@@ -12,7 +12,7 @@ using System.Linq;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SaaSEqt.eShop.Services.Business.API.Controllers
+namespace SaaSEqt.eShop.Business.API.Controllers
 {
     public class PicController : Controller
     {

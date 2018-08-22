@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SaaSEqt.eShop.Services.Business.API.Controllers
+namespace SaaSEqt.eShop.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class ValuesController : Controller
