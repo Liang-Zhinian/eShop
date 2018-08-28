@@ -170,6 +170,60 @@ namespace SaaSEqt.eShop.Services.Branding.API.Infrastructure
                     Height = 400,
                     Language = "EN"
                 },
+                new CategoryIcon
+                {
+                    Name = "Sports",
+                    IconFileName = "EN_Fitness_Sports_General_1.png",
+                    SubcategoryName = "General",
+                    CategoryName = "Sports",
+                    Type = "Fitness",
+                    Order = 1,
+                    VersionNumber = 1,
+                    Width = 400,
+                    Height = 400,
+                    Language = "EN"
+                },
+                new CategoryIcon
+                {
+                    Name = "Yoga",
+                    IconFileName = "EN_Fitness_Yoga_General_1.png",
+                    SubcategoryName = "General",
+                    CategoryName = "Yoga",
+                    Type = "Fitness",
+                    Order = 1,
+                    VersionNumber = 1,
+                    Width = 400,
+                    Height = 400,
+                    Language = "EN"
+                },
+
+                // Wellness
+                new CategoryIcon
+                {
+                    Name = "Acupuncture",
+                    IconFileName = "EN_Wellness_Acupuncture_General_1.png",
+                    SubcategoryName = "General",
+                    CategoryName = "Acupuncture",
+                    Type = "Wellness",
+                    Order = 1,
+                    VersionNumber = 1,
+                    Width = 400,
+                    Height = 400,
+                    Language = "EN"
+                },
+                new CategoryIcon
+                {
+                    Name = "Coaching",
+                    IconFileName = "EN_Wellness_Coaching_General_1.png",
+                    SubcategoryName = "General",
+                    CategoryName = "Coaching",
+                    Type = "Wellness",
+                    Order = 1,
+                    VersionNumber = 1,
+                    Width = 400,
+                    Height = 400,
+                    Language = "EN"
+                },
             };
         }
 

@@ -5,7 +5,7 @@
   <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>ServiceCatalog.API</AssemblyName>
+    <AssemblyName>Branding.API</AssemblyName>
     <PackageId>ServiceCatalog.API</PackageId>
     <UserSecretsId>aspnet-Catalog.API-20161122013618</UserSecretsId>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -13,19 +13,8 @@
 
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\ServiceCatalog.API.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.0\Branding.API.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Migrations\Catalog\20180714102828_init.cs" />
-    <Compile Remove="Migrations\Catalog\20180714103157_init.cs" />
-    <Compile Remove="Infrastructure\EntityConfigurations\CatalogBrandEntityTypeConfiguration.cs" />
-    <Compile Remove="Controllers\CatalogController.cs" />
-    <Compile Remove="Migrations\Catalog\20180714113211_init.cs" />
-    <Compile Remove="Migrations\Branding\20180808065913_init.cs" />
-    <Compile Remove="Migrations\Branding\20180808070922_init.cs" />
-    <Compile Remove="Migrations\Branding\20180808084916_init.cs" />
-    <Compile Remove="Migrations\Branding\20180808093017_init.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -102,13 +91,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\EntityConfigurations\Constants\" />
-    <Folder Include="IntegrationEvents\EventHandling\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Setup\" />
-    <Folder Include="Requests\" />
-    <Folder Include="Migrations\Branding\" />
-    <Folder Include="Infrastructure\BrandingMigrations\" />
-  </ItemGroup>
 </Project>
