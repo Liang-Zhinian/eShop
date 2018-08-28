@@ -4,15 +4,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.Business.API.Extensions;
-using SaaSEqt.eShop.Business.API.Requests;
-using SaaSEqt.eShop.Business.Infrastructure;
-using SaaSEqt.eShop.Business.Infrastructure.Services;
-using SaaSEqt.eShop.Business.Domain.Model.Security;
+using SaaSEqt.eShop.Services.Business.API.Application.Events;
+using SaaSEqt.eShop.Services.Business.API.Application.Events.Sites;
+using SaaSEqt.eShop.Services.Business.API.Extensions;
+using SaaSEqt.eShop.Services.Business.API.Requests;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SaaSEqt.eShop.Business.API.Controllers
+namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class SiteController : Controller
@@ -20,9 +21,14 @@ namespace SaaSEqt.eShop.Business.API.Controllers
         private readonly IHostingEnvironment _env;
         private BusinessService _businessService;
         private readonly BusinessSettings _settings;
+        private readonly IeShopIntegrationEventService _eShopIntegrationEventService;
 
-        public SiteController(IHostingEnvironment env, IOptionsSnapshot<BusinessSettings> settings, BusinessService businessService)
+        public SiteController(IeShopIntegrationEventService eShopIntegrationEventService,
+                              IHostingEnvironment env,
+                              IOptionsSnapshot<BusinessSettings> settings,
+                              BusinessService businessService)
         {
+            _eShopIntegrationEventService = eShopIntegrationEventService;
             _env = env;
             _settings = settings.Value;
             _businessService = businessService;
@@ -73,7 +79,20 @@ namespace SaaSEqt.eShop.Business.API.Controllers
 
             Site site = new Site(request.TenantId, request.Name, request.Description, false);
 
-            await _businessService.ProvisionSite(site);
+            var newSite = _businessService.ProvisionSite(site).Result;
+
+            SiteCreatedEvent siteCreatedEvent = new SiteCreatedEvent(newSite.TenantId,
+                                                                     newSite.Id,
+                                                                     newSite.Name,
+                                                                     newSite.Description,
+                                                                     newSite.Active,
+                                                                     newSite.ContactInformation.ContactName,
+                                                                     newSite.ContactInformation.PrimaryTelephone,
+                                                                     newSite.ContactInformation.SecondaryTelephone);
+
+
+            await _eShopIntegrationEventService.PublishThroughEventBusAsync(siteCreatedEvent);
+
 
             return CreatedAtAction(nameof(GetSiteById), new { id = site.Id }, null);
         }

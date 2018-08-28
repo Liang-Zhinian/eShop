@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Business.Seedwork
+﻿namespace SaaSEqt.eShop.Services.Business.Seedwork
 {
    
     public interface IAggregateRoot { }

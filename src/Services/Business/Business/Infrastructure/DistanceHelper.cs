@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.eShop.Business.Infrastructure
+namespace SaaSEqt.eShop.Services.Business.Infrastructure
 {
     public class DistanceHelper
     {

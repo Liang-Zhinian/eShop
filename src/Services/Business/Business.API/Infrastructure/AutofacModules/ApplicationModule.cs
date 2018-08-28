@@ -6,7 +6,7 @@ using SaaSEqt.IdentityAccess.Infrastructure.Repositories;
 using SaaSEqt.IdentityAccess.Infrastructure.UoW;
 using System;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.AutofacModules
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.AutofacModules
 {
     public class ApplicationModule
         : Autofac.Module

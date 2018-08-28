@@ -1,26 +1,27 @@
 ﻿using System;
 using CqrsFramework.Events;
-using SaaSEqt.eShop.Business.API.Application.Events;
+using SaaSEqt.eShop.Services.Business.API.Application.Events;
 using SaaSEqt.IdentityAccess.Application;
 using SaaSEqt.IdentityAccess.Application.Commands;
+using SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities;
 
-using SaaSEqt.eShop.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.Services
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.Services
 {
     public class TenantService: ITenantService
     {
-        private readonly IEventPublisher _eventPublisher;
+        //private readonly IEventPublisher _eventPublisher;
         private readonly IdentityApplicationService _identityApplicationService;
 
-        public TenantService(IEventPublisher eventPublisher,
+        public TenantService(//IEventPublisher eventPublisher,
                              IdentityApplicationService identityApplicationService)
         {
-            _eventPublisher = eventPublisher;
+            //_eventPublisher = eventPublisher;
             _identityApplicationService = identityApplicationService;
         }
 
-        public void ProvisionTenant(TenantViewModel tenant, StaffViewModel administrator)
+        public Tenant ProvisionTenant(TenantViewModel tenant, StaffViewModel administrator)
         {
             ProvisionTenantCommand command = new ProvisionTenantCommand(
                         tenant.Name,
@@ -38,14 +39,7 @@ namespace SaaSEqt.eShop.Business.API.Infrastructure.Services
                     );
 
             var _tenant = _identityApplicationService.ProvisionTenant(command).Result;
-
-            TenantCreatedEvent tenantCreatedEvent = new TenantCreatedEvent(
-                _tenant.Id,
-                _tenant.Name,
-                _tenant.Description
-            );
-
-            _eventPublisher.Publish<TenantCreatedEvent>(tenantCreatedEvent);
+            return _tenant;
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Catalog
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Catalog
 {
     public class Availability :ScheduleItem
     {

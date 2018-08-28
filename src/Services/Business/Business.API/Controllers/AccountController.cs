@@ -4,11 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
 using SaaSEqt.IdentityAccess.Application;
 using SaaSEqt.IdentityAccess.Application.Commands;
 
-namespace SaaSEqt.eShop.Business.API.Controllers
+namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class AccountController : Controller

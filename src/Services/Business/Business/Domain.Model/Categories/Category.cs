@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.eShop.Business.Domain.Model.Categories
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Categories
 {
     public class Category
     {

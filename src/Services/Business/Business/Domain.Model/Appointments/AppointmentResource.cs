@@ -1,7 +1,7 @@
 ﻿using System;
-using SaaSEqt.eShop.Business.Seedwork;
+using SaaSEqt.eShop.Services.Business.Seedwork;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Appointments
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Appointments
 {
     public class AppointmentResource
         : Entity

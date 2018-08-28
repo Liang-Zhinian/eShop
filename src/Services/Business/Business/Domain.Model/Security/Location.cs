@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Security
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Security
 {
     public class Location // : AggregateRoot
     {

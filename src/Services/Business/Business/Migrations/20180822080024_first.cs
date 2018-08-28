@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Business.Migrations
+namespace SaaSEqt.eShop.Services.Business.Migrations
 {
     public partial class first : Migration
     {

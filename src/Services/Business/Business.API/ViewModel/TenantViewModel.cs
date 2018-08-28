@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SaaSEqt.eShop.Business.API.ViewModel
+namespace SaaSEqt.eShop.Services.Business.API.ViewModel
 {
     public class TenantViewModel
     {

@@ -5,12 +5,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
 //using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.Business.API.Infrastructure;
-using SaaSEqt.eShop.Business.Infrastructure.Data;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;
 
-namespace SaaSEqt.eShop.Business.API
+namespace SaaSEqt.eShop.Services.Business.API
 {
     public class Program
     {
@@ -61,7 +62,7 @@ namespace SaaSEqt.eShop.Business.API
                     .Wait();
 
                 })
-                //.MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
+                .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
                 .Run();
         }
 

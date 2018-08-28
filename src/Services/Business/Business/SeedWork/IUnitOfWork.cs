@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Business.Seedwork
+namespace SaaSEqt.eShop.Services.Business.Seedwork
 {
     public interface IUnitOfWork : IDisposable
     {        

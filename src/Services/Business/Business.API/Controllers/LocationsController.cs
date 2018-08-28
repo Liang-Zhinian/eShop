@@ -1,23 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Business.API.Requests.Locations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Business.API.Requests;
-using SaaSEqt.eShop.Business.API.Infrastructure;
-using SaaSEqt.eShop.Business.Infrastructure.Services;
-using SaaSEqt.eShop.Business.Domain.Model.Security;
-using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.Business.API.Extensions;
-using SaaSEqt.eShop.Business.API.ViewModel;
-using Microsoft.EntityFrameworkCore;
+using SaaSEqt.eShop.Services.Business.API.Application.Events;
+using SaaSEqt.eShop.Services.Business.API.Application.Events.Locations;
+using SaaSEqt.eShop.Services.Business.API.Extensions;
+using SaaSEqt.eShop.Services.Business.API.Requests;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
 
-namespace SaaSEqt.eShop.Business.API.Controllers
+namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class LocationsController : Controller
@@ -25,9 +24,12 @@ namespace SaaSEqt.eShop.Business.API.Controllers
         private readonly IHostingEnvironment _env;
         private readonly BusinessService _businessService;
         private readonly BusinessSettings _settings;
+        private readonly IeShopIntegrationEventService _eShopIntegrationEventService;
 
-        public LocationsController(IHostingEnvironment env, IOptionsSnapshot<BusinessSettings> settings, BusinessService businessService)
+        public LocationsController(IeShopIntegrationEventService eShopIntegrationEventService,
+                              IHostingEnvironment env, IOptionsSnapshot<BusinessSettings> settings, BusinessService businessService)
         {
+            _eShopIntegrationEventService = eShopIntegrationEventService;
             _env = env;
             _settings = settings.Value;
             _businessService = businessService;
@@ -109,7 +111,15 @@ namespace SaaSEqt.eShop.Business.API.Controllers
                                          provisionLocationRequest.Description,
                                          true);
             
-            await _businessService.ProvisionLocation(location);
+            var newLocation = await _businessService.ProvisionLocation(location);
+
+            LocationCreatedEvent locationCreatedEvent = new LocationCreatedEvent(newLocation.SiteId,
+                                                                                 newLocation.Id,
+                                                                                 newLocation.Name,
+                                                                                 newLocation.Description);
+
+
+            await _eShopIntegrationEventService.PublishThroughEventBusAsync(locationCreatedEvent);
 
             return CreatedAtAction(nameof(GetLocationById), new { siteId = location.SiteId, locationId = location.Id }, null);
         }

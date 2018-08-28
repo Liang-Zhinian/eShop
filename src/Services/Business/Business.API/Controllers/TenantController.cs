@@ -4,19 +4,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
-using SaaSEqt.eShop.Business.API.ViewModel;
-using SaaSEqt.eShop.Business.API.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Application.Events;
+using System.Net;
+using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Business.API.Controllers
+namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
     //[Authorize]
     [Route("api/tenants")]
     public class TenantController: Controller
     {
         private readonly ITenantService _tenantService;
+        private readonly IIdentityAccessIntegrationEventService _identityAccessIntegrationEventService;
 
-        public TenantController(ITenantService tenantService)
+        public TenantController(IIdentityAccessIntegrationEventService identityAccessIntegrationEventService,
+            ITenantService tenantService)
         {
+            _identityAccessIntegrationEventService = identityAccessIntegrationEventService;
             _tenantService = tenantService;
         }
 
@@ -41,7 +47,8 @@ namespace SaaSEqt.eShop.Business.API.Controllers
         [HttpPost]
         //[Authorize(Policy = "CanWriteTenantData")]
         [Route("register")]
-        public ActionResult Create([FromBody]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> Create([FromBody]
                                    TenantViewModel tenant,
                                    StaffViewModel administrator
                                   )
@@ -53,7 +60,19 @@ namespace SaaSEqt.eShop.Business.API.Controllers
                 return Ok();
             }
 
-            _tenantService.ProvisionTenant(tenant, administrator);
+            var newTenant = _tenantService.ProvisionTenant(tenant, administrator);
+
+
+            TenantCreatedEvent tenantCreatedEvent = new TenantCreatedEvent(
+                newTenant.Id,
+                newTenant.Name,
+                newTenant.Description
+            );
+
+            await _identityAccessIntegrationEventService.SaveEventAndContextChangesAsync(tenantCreatedEvent);
+
+            // Publish through the Event Bus and mark the saved event as published
+            await _identityAccessIntegrationEventService.PublishThroughEventBusAsync(tenantCreatedEvent);
 
             return Ok();
         }

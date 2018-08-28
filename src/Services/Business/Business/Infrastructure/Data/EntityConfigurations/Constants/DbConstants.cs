@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace SaaSEqt.eShop.Business.Infrastructure.Data.Constants
+namespace SaaSEqt.eShop.Services.Business.Infrastructure.Data.Constants
 {
     public class DbConstants
     {

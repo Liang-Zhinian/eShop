@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Appointments.Events
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Appointments.Events
 {
     public class AppointmentReservationCompletedDomainEvent
         : INotification

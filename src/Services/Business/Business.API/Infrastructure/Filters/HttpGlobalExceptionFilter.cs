@@ -1,5 +1,5 @@
-﻿using SaaSEqt.eShop.Business.API.Infrastructure.ActionResults;
-using SaaSEqt.eShop.Business.Exceptions;
+﻿using SaaSEqt.eShop.Services.Business.API.Infrastructure.ActionResults;
+using SaaSEqt.eShop.Services.Business.Exceptions;
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.Filters
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {

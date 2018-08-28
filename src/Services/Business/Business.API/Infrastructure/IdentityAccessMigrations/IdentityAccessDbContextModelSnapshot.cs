@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;
 using System;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.IdentityAccessMigrations
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.IdentityAccessMigrations
 {
     [DbContext(typeof(IdentityAccessDbContext))]
     partial class IdentityAccessDbContextModelSnapshot : ModelSnapshot

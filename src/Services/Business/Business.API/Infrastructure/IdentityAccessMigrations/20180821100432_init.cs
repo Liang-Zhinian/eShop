@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.IdentityAccessMigrations
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.IdentityAccessMigrations
 {
     public partial class init : Migration
     {

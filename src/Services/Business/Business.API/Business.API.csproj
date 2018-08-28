@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RootNamespace>Business.API</RootNamespace>
+    <RootNamespace>SaaSEqt.eShop.Services.Business.API</RootNamespace>
+    <AssemblyName>Business.API</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>bin\Debug\netcoreapp2.0\Business.API.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.0\SaaSEqt.eShop.Services.Business.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
@@ -19,6 +20,14 @@
     <PackageReference Include="FluentValidation" Version="7.6.104" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="MediatR" Version="5.0.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.5.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" Version="1.0.0-beta6" />
+    <PackageReference Include="Microsoft.ApplicationInsights.ServiceFabric" Version="2.0.1-beta1" />
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
   </ItemGroup>
 
 
@@ -35,14 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework\CqrsFramework.csproj" />
-    <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework.Bus.RabbitMQ\CqrsFramework.Bus.RabbitMQ.csproj" />
-    <ProjectReference Include="..\IdentityAccess\IdentityAccess\SaaSEqt.IdentityAccess.csproj" />
-    <ProjectReference Include="..\IdentityAccess\IdentityAccess.Infrastrure\SaaSEqt.IdentityAccess.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\HealthChecks\src\Microsoft.Extensions.HealthChecks\Microsoft.Extensions.HealthChecks.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\HealthChecks\src\HealthChecks.MySQL\HealthChecks.MySQL.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\HealthChecks\src\Microsoft.AspNetCore.HealthChecks\Microsoft.AspNetCore.HealthChecks.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+    <ProjectReference Include="..\IdentityAccess\IdentityAccess\SaaSEqt.IdentityAccess.csproj" />
+    <ProjectReference Include="..\IdentityAccess\IdentityAccess.Infrastrure\SaaSEqt.IdentityAccess.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
   </ItemGroup>
   
   
@@ -87,15 +97,8 @@
     <None Update="Setup\*">
     </None>
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="ViewModel\" />
-    <Folder Include="Application\" />
-    <Folder Include="Application\Events\" />
-    <Folder Include="Infrastructure\IdentityAccessMigrations\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Infrastructure\IntegrationEventMigrations\20170322145434_IntegrationEventInitial.cs" />
-    <Compile Remove="Infrastructure\DistanceHelper.cs" />
+    <Folder Include="Infrastructure\IntegrationEventMigrations\" />
+    <Folder Include="Application\Events\Locations\" />
   </ItemGroup>
 </Project>

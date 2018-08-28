@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaaSEqt.eShop.Business.Domain.Model.Catalog;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Catalog;
 
-namespace SaaSEqt.eShop.Business.Infrastructure.Data
+namespace SaaSEqt.eShop.Services.Business.Infrastructure.Data
 {
     public class ScheduleTypeMap : IEntityTypeConfiguration<ScheduleType>
     {

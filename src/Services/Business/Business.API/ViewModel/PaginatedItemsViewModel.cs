@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Business.API.ViewModel
+﻿namespace SaaSEqt.eShop.Services.Business.API.ViewModel
 {
     using System.Collections.Generic;
 

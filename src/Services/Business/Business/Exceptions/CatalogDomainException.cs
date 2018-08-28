@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaaSEqt.eShop.Business.Exceptions
+namespace SaaSEqt.eShop.Services.Business.Exceptions
 {
     /// <summary>
     /// Exception type for app exceptions

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Catalog
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Catalog
 {
     public abstract class Enumeration : IComparable
     {

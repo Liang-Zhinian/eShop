@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using MediatR;
-using SaaSEqt.eShop.Business.Domain.Model.Appointments;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Appointments;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Appointments.Events
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Appointments.Events
 {
     internal class AppointmentStartedDomainEvent
         : INotification

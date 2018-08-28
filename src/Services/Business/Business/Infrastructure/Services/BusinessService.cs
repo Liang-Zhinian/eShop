@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Business.Infrastructure.Data;
-using SaaSEqt.eShop.Business.Domain.Model.Security;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
 
-namespace SaaSEqt.eShop.Business.Infrastructure.Services
+namespace SaaSEqt.eShop.Services.Business.Infrastructure.Services
 {
     public class BusinessService
     {

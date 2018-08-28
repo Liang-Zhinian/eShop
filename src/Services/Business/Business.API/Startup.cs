@@ -15,15 +15,19 @@ using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using SaaSEqt.eShop.Business.API.Infrastructure.Filters;
-using SaaSEqt.eShop.Business.Infrastructure.Data;
-//using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.Business.API.Configurations;
-using SaaSEqt.eShop.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.Filters;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
+using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using SaaSEqt.eShop.Services.Business.API.Configurations;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;
-using SaaSEqt.eShop.Business.API.Infrastructure.AutofacModules;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.AutofacModules;
+using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
+using SaaSEqt.eShop.Services.Business.API.Application.Events;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.ServiceFabric;
 
-namespace SaaSEqt.eShop.Business.API
+namespace SaaSEqt.eShop.Services.Business.API
 {
     public class Startup
     {
@@ -75,7 +79,7 @@ namespace SaaSEqt.eShop.Business.API
                                  {
                                      sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                                      //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                     //sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                  });
 
                 // Changing default behavior when client evaluation occurs to throw. 
@@ -90,23 +94,23 @@ namespace SaaSEqt.eShop.Business.API
                                  mySqlOptionsAction: sqlOptions =>
                                  {
                                      sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                     //sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                  });
 
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }, ServiceLifetime.Scoped);
 
-            //services.AddDbContext<IntegrationEventLogContext>(options =>
-            //{
-            //    options.UseMySql(Configuration["ConnectionString"],
-            //                     mySqlOptionsAction: sqlOptions =>
-            //                     {
-            //                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-            //                         //sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-            //                     });
+            services.AddDbContext<IntegrationEventLogContext>(options =>
+            {
+                options.UseMySql(Configuration["ConnectionString"],
+                                 mySqlOptionsAction: sqlOptions =>
+                                 {
+                                     sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                 });
 
-            //    options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            //}, ServiceLifetime.Scoped);
+                options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            }, ServiceLifetime.Scoped);
 
             services.Configure<BusinessSettings>(Configuration);
 
@@ -123,10 +127,11 @@ namespace SaaSEqt.eShop.Business.API
 
             // Add application services.
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-            //    sp => (DbConnection c) => new IntegrationEventLogService(c));
+            services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+                sp => (DbConnection c) => new IntegrationEventLogService(c));
             
-            //services.AddTransient<IIdentityAccessIntegrationEventService, IdentityAccessIntegrationEventService>();
+            services.AddTransient<IIdentityAccessIntegrationEventService, IdentityAccessIntegrationEventService>();
+            services.AddTransient<IeShopIntegrationEventService, eShopIntegrationEventService>();
             services.AddTransient<BusinessService>();
 
 
@@ -136,7 +141,8 @@ namespace SaaSEqt.eShop.Business.API
 
             services.AddApplicationSetup();
 
-            services.AddRabbitMQEventBusSetup(Configuration);
+            services.AddEventBusSetup(Configuration);
+            EventBusSetup.RegisterEventBus(services);
 
             //services.AddIdentityAccessEventProcessorSetup();
 
@@ -171,6 +177,10 @@ namespace SaaSEqt.eShop.Business.API
                 app.UsePathBase(pathBase);
             }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            app.Map("/liveness", lapp => lapp.Run(async ctx => ctx.Response.StatusCode = 200));
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
             app.UseCors("CorsPolicy");
 
             app.UseMvcWithDefaultRoute();
@@ -183,16 +193,8 @@ namespace SaaSEqt.eShop.Business.API
                 //c.ShowRequestHeaders();
             });
 
-            //app.UseMvc();
 
-            //ConfigureEventBus(app);
-
-        }
-
-        private void ConfigureEventBus(IApplicationBuilder app)
-        {
-            var services = app.ApplicationServices;
-            //services.GetService<IdentityAccessEventProcessor>().Listen();
+            EventBusSetup.ConfigureEventBus(app);
         }
 
         #region additional registration
@@ -202,17 +204,17 @@ namespace SaaSEqt.eShop.Business.API
             services.AddApplicationInsightsTelemetry(Configuration);
             var orchestratorType = Configuration.GetValue<string>("OrchestratorType");
 
-            //if (orchestratorType?.ToUpper() == "K8S")
-            //{
-            //    // Enable K8s telemetry initializer
-            //    services.EnableKubernetes();
-            //}
-            //if (orchestratorType?.ToUpper() == "SF")
-            //{
-            //    // Enable SF telemetry initializer
-            //    services.AddScoped<ITelemetryInitializer>((serviceProvider) =>
-            //        new FabricTelemetryInitializer());
-            //}
+            if (orchestratorType?.ToUpper() == "K8S")
+            {
+                // Enable K8s telemetry initializer
+                services.EnableKubernetes();
+            }
+            if (orchestratorType?.ToUpper() == "SF")
+            {
+                // Enable SF telemetry initializer
+                services.AddScoped<ITelemetryInitializer>((serviceProvider) =>
+                    new FabricTelemetryInitializer());
+            }
         }
 
         #endregion

@@ -1,9 +1,9 @@
-﻿using SaaSEqt.eShop.Business.Infrastructure.Data.Constants;
-using SaaSEqt.eShop.Business.Domain.Model.Security;
+﻿using SaaSEqt.eShop.Services.Business.Infrastructure.Data.Constants;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace SaaSEqt.eShop.Business.Infrastructure.Data
+namespace SaaSEqt.eShop.Services.Business.Infrastructure.Data
 {
     public class LocationMap : IEntityTypeConfiguration<Location>
     {

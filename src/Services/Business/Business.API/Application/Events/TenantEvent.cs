@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.eShop.Business.API.Application.Events
+namespace SaaSEqt.eShop.Services.Business.API.Application.Events
 {
     public class TenantEvent
     {

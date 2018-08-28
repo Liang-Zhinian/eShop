@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using CqrsFramework.Events;
 using MediatR;
-using SaaSEqt.eShop.Business.Domain.Model.Appointments;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Appointments;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Appointments.Events
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Appointments.Events
 {
     public class AppointmentPlacedDomainEvent
         : INotification, IEvent

@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SaaSEqt.Common.Domain.Model;
-using SaaSEqt.eShop.Business.API.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
 using SaaSEqt.IdentityAccess;
 using SaaSEqt.IdentityAccess.Application;
 using SaaSEqt.IdentityAccess.Domain.Model.Identity.Services;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;
 using SaaSEqt.IdentityAccess.Infrastructure.Services;
 
-namespace SaaSEqt.eShop.Business.API.Configurations
+namespace SaaSEqt.eShop.Services.Business.API.Configurations
 {
     public static class ApplicationSetup
     {

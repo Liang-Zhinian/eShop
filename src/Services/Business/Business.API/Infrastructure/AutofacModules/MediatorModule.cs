@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.AutofacModules
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.AutofacModules
 {
     public class MediatorModule : Autofac.Module
     {

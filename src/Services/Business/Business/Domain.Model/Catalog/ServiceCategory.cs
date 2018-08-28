@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Catalog
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Catalog
 {
     public class ServiceCategory // : CatalogType // : AggregateRoot
     {

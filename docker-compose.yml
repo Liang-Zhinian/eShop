@@ -38,6 +38,17 @@ services:
       - sql.data
       - rabbitmq
 
+  sites.api:
+    image: eshop/sites.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Site/Sites.API/Dockerfile    
+    depends_on:
+      - sql.data
+      - rabbitmq
+    volumes:
+      - ~/eShop/Pics:/app/Pics
+
   webmvcbackend:
     image: eshop/webmvcbackend:${TAG:-latest}
     build:

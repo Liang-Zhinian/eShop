@@ -1,6 +1,6 @@
 ﻿extern alias MySqlConnectorAlias;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
 {
     using System;
     using System.Collections.Generic;
@@ -14,8 +14,8 @@ namespace SaaSEqt.eShop.Business.API.Infrastructure
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Polly;
-    using SaaSEqt.eShop.Business.Infrastructure.Data;
-    using SaaSEqt.eShop.Business.Domain.Model.Security;
+    using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
+    using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
 
     public class BusinessDbContextSeed
     {

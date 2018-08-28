@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Business.Domain.Model.Categories;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Categories;
 
-namespace SaaSEqt.eShop.Business.Infrastructure.Data
+namespace SaaSEqt.eShop.Services.Business.Infrastructure.Data
 {
     class SubcategoryEntityTypeConfiguration
         : IEntityTypeConfiguration<Subcategory>

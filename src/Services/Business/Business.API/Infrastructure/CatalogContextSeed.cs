@@ -1,6 +1,6 @@
 ﻿extern alias MySqlConnectorAlias;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
 {
     using Microsoft.Extensions.Logging;
     using Microsoft.AspNetCore.Hosting;
@@ -10,8 +10,8 @@ namespace SaaSEqt.eShop.Business.API.Infrastructure
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using SaaSEqt.eShop.Business.Domain.Model.Catalog;
-    using SaaSEqt.eShop.Business.Infrastructure.Data;
+    using SaaSEqt.eShop.Services.Business.Domain.Model.Catalog;
+    using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 
     public class CatalogContextSeed
     {

@@ -1,11 +1,12 @@
 ﻿using System;
-using SaaSEqt.eShop.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
+using SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities;
 
-namespace SaaSEqt.eShop.Business.API.Infrastructure.Services
+namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.Services
 {
     public interface ITenantService
     {
-        void ProvisionTenant(TenantViewModel tenant, StaffViewModel administrator);
+        Tenant ProvisionTenant(TenantViewModel tenant, StaffViewModel administrator);
         //void ModifyTenantAddress(TenantAddressViewModel addressViewModel);
         //void AddTenantAddress(TenantAddressViewModel addressViewModel);
     }

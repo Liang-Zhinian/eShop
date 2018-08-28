@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Security
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Security
 {
     public class Site // : AggregateRoot
     {

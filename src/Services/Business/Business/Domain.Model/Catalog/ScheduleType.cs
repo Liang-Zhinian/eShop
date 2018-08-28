@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SaaSEqt.eShop.Business.Exceptions;
+using SaaSEqt.eShop.Services.Business.Exceptions;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Catalog
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Catalog
 {
     //public class ScheduleTypeTable
     //{

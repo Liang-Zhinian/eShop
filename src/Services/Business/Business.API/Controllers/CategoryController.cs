@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Business.API.Infrastructure;
-using SaaSEqt.eShop.Business.Domain.Model.Categories;
-using SaaSEqt.eShop.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Categories;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SaaSEqt.eShop.Business.Infrastructure.Data;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 
-namespace SaaSEqt.eShop.Business.API.Controllers
+namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class CategoryController : ControllerBase

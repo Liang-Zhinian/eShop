@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Security
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Security
 {
     public class Branding
     {

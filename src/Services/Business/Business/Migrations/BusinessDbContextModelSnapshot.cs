@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using SaaSEqt.eShop.Business.Infrastructure.Data;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 using System;
 
-namespace SaaSEqt.eShop.Business.Migrations
+namespace SaaSEqt.eShop.Services.Business.Migrations
 {
     [DbContext(typeof(BusinessDbContext))]
     partial class BusinessDbContextModelSnapshot : ModelSnapshot
@@ -20,7 +20,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026");
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.Availability", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.Availability", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +64,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Availability");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.ScheduleType", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ScheduleType", b =>
                 {
                     b.Property<int>("Id")
                         .HasDefaultValue(1);
@@ -78,7 +78,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("ScheduleType");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceCategory", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +105,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("ServiceCategory");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceItem", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,7 +148,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("ServiceItem");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.Unavailability", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.Unavailability", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -193,7 +193,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Unavailability");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Categories.Category", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Categories.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -207,7 +207,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Categories.Subcategory", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Categories.Subcategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -225,7 +225,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Subcategory");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Branding", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Branding", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -257,7 +257,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Branding");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Location", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -285,7 +285,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Location");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.LocationImage", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.LocationImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -309,7 +309,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("LocationImage");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Site", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -332,7 +332,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Site");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Staff", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Staff", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -358,7 +358,7 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("Staff");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.StaffLoginLocation", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.StaffLoginLocation", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("char(36)");
@@ -382,54 +382,54 @@ namespace SaaSEqt.eShop.Business.Migrations
                     b.ToTable("StaffLoginLocation");
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.Availability", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.Availability", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceItem", "ServiceItem")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceItem", "ServiceItem")
                         .WithMany("Availibilities")
                         .HasForeignKey("ServiceItemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceCategory", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceCategory", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Catalog.ScheduleType", "ScheduleType")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ScheduleType", "ScheduleType")
                         .WithMany()
                         .HasForeignKey("ScheduleTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceItem", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceItem", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceCategory", "ServiceCategory")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceCategory", "ServiceCategory")
                         .WithMany()
                         .HasForeignKey("ServiceCategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Catalog.Unavailability", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.Unavailability", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Catalog.ServiceItem", "ServiceItem")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Catalog.ServiceItem", "ServiceItem")
                         .WithMany("Unavailabilities")
                         .HasForeignKey("ServiceItemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Branding", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Branding", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Site", "Site")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", "Site")
                         .WithOne("Branding")
-                        .HasForeignKey("SaaSEqt.eShop.Business.Domain.Model.Security.Branding", "SiteId")
+                        .HasForeignKey("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Branding", "SiteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Location", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Site", "Site")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", "Site")
                         .WithMany("Locations")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("SaaSEqt.eShop.Business.Domain.Model.Security.Address", "Address", b1 =>
+                    b.OwnsOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("LocationId")
                                 .HasColumnType("char(36)");
@@ -451,13 +451,13 @@ namespace SaaSEqt.eShop.Business.Migrations
 
                             b1.ToTable("Location");
 
-                            b1.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Location")
+                            b1.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location")
                                 .WithOne("Address")
-                                .HasForeignKey("SaaSEqt.eShop.Business.Domain.Model.Security.Address", "LocationId")
+                                .HasForeignKey("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Address", "LocationId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
 
-                    b.OwnsOne("SaaSEqt.eShop.Business.Domain.Model.Security.ContactInformation", "ContactInformation", b1 =>
+                    b.OwnsOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.ContactInformation", "ContactInformation", b1 =>
                         {
                             b1.Property<Guid?>("LocationId")
                                 .HasColumnType("char(36)");
@@ -476,13 +476,13 @@ namespace SaaSEqt.eShop.Business.Migrations
 
                             b1.ToTable("Location");
 
-                            b1.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Location")
+                            b1.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location")
                                 .WithOne("ContactInformation")
-                                .HasForeignKey("SaaSEqt.eShop.Business.Domain.Model.Security.ContactInformation", "LocationId")
+                                .HasForeignKey("SaaSEqt.eShop.Services.Business.Domain.Model.Security.ContactInformation", "LocationId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
 
-                    b.OwnsOne("SaaSEqt.eShop.Business.Domain.Model.Security.Geolocation", "Geolocation", b1 =>
+                    b.OwnsOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Geolocation", "Geolocation", b1 =>
                         {
                             b1.Property<Guid>("LocationId")
                                 .HasColumnType("char(36)");
@@ -493,29 +493,29 @@ namespace SaaSEqt.eShop.Business.Migrations
 
                             b1.ToTable("Location");
 
-                            b1.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Location")
+                            b1.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location")
                                 .WithOne("Geolocation")
-                                .HasForeignKey("SaaSEqt.eShop.Business.Domain.Model.Security.Geolocation", "LocationId")
+                                .HasForeignKey("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Geolocation", "LocationId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.LocationImage", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.LocationImage", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Location", "Location")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location", "Location")
                         .WithMany("AdditionalLocationImages")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Site", "Site")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Site", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", b =>
                 {
-                    b.OwnsOne("SaaSEqt.eShop.Business.Domain.Model.Security.ContactInformation", "ContactInformation", b1 =>
+                    b.OwnsOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.ContactInformation", "ContactInformation", b1 =>
                         {
                             b1.Property<Guid>("SiteId")
                                 .HasColumnType("char(36)");
@@ -534,34 +534,34 @@ namespace SaaSEqt.eShop.Business.Migrations
 
                             b1.ToTable("Site");
 
-                            b1.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Site")
+                            b1.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site")
                                 .WithOne("ContactInformation")
-                                .HasForeignKey("SaaSEqt.eShop.Business.Domain.Model.Security.ContactInformation", "SiteId")
+                                .HasForeignKey("SaaSEqt.eShop.Services.Business.Domain.Model.Security.ContactInformation", "SiteId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.Staff", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Staff", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Site", "Site")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", "Site")
                         .WithMany("Staffs")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SaaSEqt.eShop.Business.Domain.Model.Security.StaffLoginLocation", b =>
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Business.Domain.Model.Security.StaffLoginLocation", b =>
                 {
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Location", "Location")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Site", "Site")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SaaSEqt.eShop.Business.Domain.Model.Security.Staff", "Staff")
+                    b.HasOne("SaaSEqt.eShop.Services.Business.Domain.Model.Security.Staff", "Staff")
                         .WithMany("StaffLoginLocations")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.Business.API.ViewModel;
-using SaaSEqt.eShop.Business.Domain.Model.Catalog;
-using SaaSEqt.eShop.Business.Infrastructure.Data;
+using SaaSEqt.eShop.Services.Business.API.ViewModel;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Catalog;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 
-namespace SaaSEqt.eShop.Business.API.Controllers
+namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class CatalogController : ControllerBase

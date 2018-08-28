@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.eShop.Business.API.Requests
+namespace SaaSEqt.eShop.Services.Business.API.Requests
 {
     public class ProvisionSiteRequest
     {

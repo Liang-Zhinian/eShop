@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SaaSEqt.eShop.Business.Seedwork
+namespace SaaSEqt.eShop.Services.Business.Seedwork
 {
     public abstract class ValueObject
     {

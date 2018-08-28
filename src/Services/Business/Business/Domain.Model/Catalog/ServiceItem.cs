@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace SaaSEqt.eShop.Business.Domain.Model.Catalog
+namespace SaaSEqt.eShop.Services.Business.Domain.Model.Catalog
 {
     public class ServiceItem //: CatalogItem // : AggregateRoot
     {

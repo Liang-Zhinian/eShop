@@ -1,12 +1,12 @@
-﻿using SaaSEqt.eShop.Business.Infrastructure.Data;
-using SaaSEqt.eShop.Business.Infrastructure.Data.Constants;
-using SaaSEqt.eShop.Business.Domain.Model.Security;
-using SaaSEqt.eShop.Business.Domain.Model.Catalog;
-using SaaSEqt.eShop.Business.Domain.Model.Categories;
+﻿using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data.Constants;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Catalog;
+using SaaSEqt.eShop.Services.Business.Domain.Model.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace SaaSEqt.eShop.Business.Infrastructure.Data
+namespace SaaSEqt.eShop.Services.Business.Infrastructure.Data
 {
     public class BusinessDbContext : DbContext
     {
