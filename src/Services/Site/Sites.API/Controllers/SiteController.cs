@@ -101,7 +101,7 @@ SiteService.ReserveResource
         }
 
         [HttpGet]
-        [Route("withSiteId/{siteId:guid}/LocationId/{id:guid}")]
+        [Route("withSiteId/{siteId:guid}/LocationId/{locationId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Location), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetLocaions(Guid siteId, Guid? locationId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)

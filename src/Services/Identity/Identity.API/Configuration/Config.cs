@@ -294,7 +294,26 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         "mobilereservationagg"
                     },
                 },
-
+                new Client
+                {
+                    ClientId = "native.code",
+                    ClientName = "Native Client (Code with PKCE)",
+                    RequireClientSecret = false,
+                    RedirectUris = new List<string>
+                    {
+                        $"{clientsUrl["NativeClient"]}:/oauthredirect"
+                    },
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "mobilereservationagg"
+                    },
+                    AllowOfflineAccess = true
+                }
             };
         }
     }
