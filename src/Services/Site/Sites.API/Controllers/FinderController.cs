@@ -49,7 +49,11 @@ FinderService.SendFinderUserNewPassword
         [ProducesResponseType(typeof(IEnumerable<Location>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            var root = await _siteDbContext.Locations.Include(y => y.AdditionalLocationImages).ToListAsync();
+            var root = await _siteDbContext.Locations
+                                           .Include(y => y.Site)
+                                           .Include(y => y.AdditionalLocationImages)
+                                           .ToListAsync();
+            
             IList<Location> list = new List<Location>();
             foreach (var item in root)
             {

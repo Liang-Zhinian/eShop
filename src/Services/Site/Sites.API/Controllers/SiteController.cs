@@ -61,6 +61,9 @@ SiteService.ReserveResource
                 .LongCountAsync();
 
             var itemsOnPage = root
+                .Include(y => y.Branding)
+                .Include(y => y.ContactInformation)
+                .Include(y => y.Locations)
                 .OrderBy(c => c.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
@@ -89,6 +92,9 @@ SiteService.ReserveResource
                 .LongCountAsync();
 
             var itemsOnPage = root
+                .Include(y=>y.Branding)
+                .Include(y=>y.ContactInformation)
+                .Include(y => y.Locations)
                 .OrderBy(c => c.Name)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
@@ -110,7 +116,9 @@ SiteService.ReserveResource
             {
                 return BadRequest();
             }
-            var root = (IQueryable<Location>)_siteDbContext.Locations.Where(y=>y.SiteId.Equals(siteId));
+            var root = (IQueryable<Location>)_siteDbContext.Locations.Where(y=>y.SiteId.Equals(siteId))
+                                                           .Include(y=>y.AdditionalLocationImages)
+                                                           .Include(y=>y.Site);
 
             if (locationId.HasValue)
             {
