@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -95,14 +96,20 @@ FinderService.SendFinderUserNewPassword
                 }
             }
 
-            IList<ServiceItem> root = await (from service in _siteDbContext.ServiceItems
-                                             join site in _siteDbContext.Sites on service.SiteId equals site.Id
-                                             join location in locations on site.Id equals location.SiteId
-                                             select service).ToListAsync();
+             IList<Guid> siteIds = (from loc in locations
+                                    select loc.SiteId).ToList();
+
+            var root = (IQueryable<ServiceItem>)_siteDbContext.ServiceItems.Where(y=>(!string.IsNullOrEmpty(searchText) && y.Name.Contains(searchText))
+                && siteIds.Contains(y.SiteId));
+
+            // IList<ServiceItem> root = await (from service in serviceItems
+            //                                 //  join site in _siteDbContext.Sites on service.SiteId equals site.Id
+            //                                  join location in locations on service.SiteId equals location.SiteId
+            //                                  select service).ToListAsync();
 
 
 
-            var totalItems = root.LongCount();
+            var totalItems = await root.LongCountAsync();
 
             var itemsOnPage = root
                 .OrderBy(c => c.Name)

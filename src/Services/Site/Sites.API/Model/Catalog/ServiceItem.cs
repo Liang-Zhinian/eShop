@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using SaaSEqt.eShop.Services.Sites.API.Model.Security;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Model.Catalog
 {
@@ -62,6 +63,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model.Catalog
         public double TaxAmount => Price * TaxRate;
 
         public Guid SiteId { get; set; }
+        public virtual Site Site { get; set; }
 
         public virtual ICollection<Availability> Availibilities { get; set; }
         public virtual ICollection<Unavailability> Unavailabilities { get; set; }
