@@ -99,14 +99,12 @@ FinderService.SendFinderUserNewPassword
              IList<Guid> siteIds = (from loc in locations
                                     select loc.SiteId).ToList();
 
-            var root = (IQueryable<ServiceItem>)_siteDbContext.ServiceItems.Where(y=>(!string.IsNullOrEmpty(searchText) && y.Name.Contains(searchText))
-                && siteIds.Contains(y.SiteId));
+            var root = (IQueryable<ServiceItem>)_siteDbContext.ServiceItems.Where(y=>siteIds.Contains(y.SiteId));
 
-            // IList<ServiceItem> root = await (from service in serviceItems
-            //                                 //  join site in _siteDbContext.Sites on service.SiteId equals site.Id
-            //                                  join location in locations on service.SiteId equals location.SiteId
-            //                                  select service).ToListAsync();
+            var num = await root.LongCountAsync();
 
+            if (!string.IsNullOrEmpty(searchText))
+                root = root.Where(y => y.Name.Contains(searchText));
 
 
             var totalItems = await root.LongCountAsync();

@@ -12,10 +12,11 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model.Catalog
             Id = Guid.NewGuid();
         }
 
-        public ServiceItem(Guid siteId, string name, string description, int defaultTimeLength, double price, Guid serviceCategoryId, string industryStandardCategoryName, string industryStandardSubcategoryName)
-            : this()
+        public ServiceItem(Guid siteId, Guid id, string name, string description, int defaultTimeLength, double price, Guid serviceCategoryId, string industryStandardCategoryName, string industryStandardSubcategoryName)
+           
         {
             SiteId = siteId;
+            Id = id;
             Name = name;
             Description = description;
             DefaultTimeLength = defaultTimeLength;

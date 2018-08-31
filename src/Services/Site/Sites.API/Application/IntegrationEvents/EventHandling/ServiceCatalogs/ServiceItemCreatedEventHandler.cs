@@ -17,6 +17,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHa
         public async Task Handle(ServiceItemCreatedEvent @event)
         {
             ServiceItem newServiceItem = new ServiceItem(@event.SiteId, 
+                                                         @event.ServiceItemId,
                                                          @event.Name, 
                                                          @event.Description, 
                                                          @event.DefaultTimeLength,

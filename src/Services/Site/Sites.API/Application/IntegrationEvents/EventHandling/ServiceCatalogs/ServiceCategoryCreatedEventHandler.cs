@@ -17,6 +17,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHa
         public async Task Handle(ServiceCategoryCreatedEvent @event)
         {
             ServiceCategory newServiceCategory = new ServiceCategory(@event.SiteId, 
+                                                                     @event.ServiceCategoryId,
                                                                      @event.Name, 
                                                                      @event.Description, 
                                                                      @event.AllowOnlineScheduling,
