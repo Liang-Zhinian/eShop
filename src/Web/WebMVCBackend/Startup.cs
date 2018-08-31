@@ -14,11 +14,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using WebMVCBackend.Infrastructure;
 using WebMVCBackend.Infrastructure.Middlewares;
+using IdentityModel;
 //using WebMVCBackend.Services;
 
 namespace SaaSEqt.eShop.WebMVCBackend
@@ -114,7 +116,8 @@ namespace SaaSEqt.eShop.WebMVCBackend
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
             .AddCookie()
-            .AddOpenIdConnect(options => {
+            .AddOpenIdConnect(options =>
+            {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.Authority = identityUrl.ToString();
                 options.SignedOutRedirectUri = callBackUrl.ToString();
@@ -124,6 +127,11 @@ namespace SaaSEqt.eShop.WebMVCBackend
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = JwtClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role,
+                };
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("mobilereservationagg");

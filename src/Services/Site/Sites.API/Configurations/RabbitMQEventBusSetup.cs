@@ -9,7 +9,11 @@ using SaaSEqt.eShop.BuildingBlocks.EventBus;
 using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
 using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
 using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling.Locations;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling.ServiceCatalogs;
 using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling.Sites;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.Locations;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.ServiceCatalogs;
 using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.Sites;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Configurations
@@ -100,14 +104,21 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             services.AddTransient<SiteCreatedEventHandler>();
-            //services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
+            services.AddTransient<LocationCreatedEventHandler>();
+            services.AddTransient<AdditionalLocationImageCreatedEventHandler>();
+            services.AddTransient<ServiceCategoryCreatedEventHandler>();
+            services.AddTransient<ServiceItemCreatedEventHandler>();
         }
 
         public static void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<SiteCreatedEvent, SiteCreatedEventHandler>();
-            //eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
+            eventBus.Subscribe<LocationCreatedEvent, LocationCreatedEventHandler>();
+            eventBus.Subscribe<AdditionalLocationImageCreatedEvent, AdditionalLocationImageCreatedEventHandler>();
+            eventBus.Subscribe<ServiceCategoryCreatedEvent, ServiceCategoryCreatedEventHandler>();
+            eventBus.Subscribe<ServiceItemCreatedEvent, ServiceItemCreatedEventHandler>();
+
         }
     }
 }

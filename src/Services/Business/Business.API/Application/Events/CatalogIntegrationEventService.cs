@@ -7,22 +7,21 @@ using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
 using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
 using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
 using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Utilities;
-using SaaSEqt.IdentityAccess.Infrastructure.Context;
+using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 
 namespace SaaSEqt.eShop.Services.Business.API.Application.Events
 {
-    public class IdentityAccessIntegrationEventService : IIdentityAccessIntegrationEventService
+    public class CatalogIntegrationEventService : ICatalogIntegrationEventService
     {
         private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
         private readonly IEventBus _eventBus;
-        private readonly IdentityAccessDbContext _context;
+        private readonly BusinessDbContext _context;
         private readonly IIntegrationEventLogService _eventLogService;
 
-        public IdentityAccessIntegrationEventService(IEventBus eventBus, 
-                                                     IdentityAccessDbContext context,
-                                       Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory)
+        public CatalogIntegrationEventService(IEventBus eventBus, BusinessDbContext catalogContext,
+        Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = catalogContext ?? throw new ArgumentNullException(nameof(catalogContext));
             _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
             _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
             _eventLogService = _integrationEventLogServiceFactory(_context.Database.GetDbConnection());
@@ -30,12 +29,15 @@ namespace SaaSEqt.eShop.Services.Business.API.Application.Events
 
         public async Task PublishThroughEventBusAsync(IntegrationEvent evt)
         {
+
+            await SaveEventAndCatalogContextChangesAsync(evt);
+
             _eventBus.Publish(evt);
 
             await _eventLogService.MarkEventAsPublishedAsync(evt);
         }
 
-        public async Task SaveEventAndContextChangesAsync(IntegrationEvent evt)
+        public async Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent evt)
         {
             //Use of an EF Core resiliency strategy when using multiple DbContexts within an explicit BeginTransaction():
             //See: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency            

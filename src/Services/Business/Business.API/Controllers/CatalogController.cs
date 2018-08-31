@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SaaSEqt.eShop.Services.Business.API.Application.Events;
+using SaaSEqt.eShop.Services.Business.API.Application.Events.ServiceCategory;
 using SaaSEqt.eShop.Services.Business.API.ViewModel;
 using SaaSEqt.eShop.Services.Business.Domain.Model.Catalog;
 using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
@@ -17,13 +19,14 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
     {
         private readonly BusinessDbContext _catalogContext;
         private readonly BusinessSettings _settings;
-        //private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
+        private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
 
         public CatalogController(BusinessDbContext context, 
-                                 IOptionsSnapshot<BusinessSettings> settings)
+                                 IOptionsSnapshot<BusinessSettings> settings,
+                                 ICatalogIntegrationEventService catalogIntegrationEventService)
         {
             _catalogContext = context ?? throw new ArgumentNullException(nameof(context));
-            //_catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
+            _catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
 
             _settings = settings.Value;
             ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
@@ -67,7 +70,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> AddServiceItem([FromBody]ServiceItem schedulableCatalogItem)
         {
-            var item = new ServiceItem(schedulableCatalogItem.SiteId,
+            var newItem = new ServiceItem(schedulableCatalogItem.SiteId,
                                         schedulableCatalogItem.Name,
                                         schedulableCatalogItem.Description,
                                         schedulableCatalogItem.DefaultTimeLength,
@@ -75,11 +78,24 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                                         schedulableCatalogItem.ServiceCategoryId,
                                         schedulableCatalogItem.IndustryStandardCategoryName,
                                         schedulableCatalogItem.IndustryStandardSubcategoryName);
-            _catalogContext.ServiceItems.Add(item);
+            _catalogContext.ServiceItems.Add(newItem);
 
-            await _catalogContext.SaveChangesAsync();
+            ServiceItemCreatedEvent serviceItemCreatedEvent = new ServiceItemCreatedEvent(newItem.SiteId,
+                                                                                          newItem.Id,
+                                                                                          newItem.Name,
+                                                                                          newItem.Description,
+                                                                                          newItem.DefaultTimeLength,
+                                                                                          newItem.Price,
+                                                                                          newItem.AllowOnlineScheduling,
+                                                                                          newItem.ServiceCategoryId,
+                                                                                          newItem.IndustryStandardCategoryName,
+                                                                                          newItem.IndustryStandardSubcategoryName);
 
-            return CreatedAtAction(nameof(FindServiceItemById), new { id = item.Id }, null);
+
+            await _catalogIntegrationEventService.PublishThroughEventBusAsync(serviceItemCreatedEvent);
+
+
+            return CreatedAtAction(nameof(FindServiceItemById), new { id = newItem.Id }, null);
         }
 
         [HttpGet]
@@ -109,16 +125,25 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> AddServiceCategory([FromBody]ServiceCategory schedulableCatalogType)
         {
-            var item = new ServiceCategory(schedulableCatalogType.SiteId,
+            var newCategory = new ServiceCategory(schedulableCatalogType.SiteId,
                                                   schedulableCatalogType.Name,
                                                   schedulableCatalogType.Description,
                                                   schedulableCatalogType.AllowOnlineScheduling,
                                                   schedulableCatalogType.ScheduleTypeId);
-            _catalogContext.ServiceCategories.Add(item);
+            _catalogContext.ServiceCategories.Add(newCategory);
 
-            await _catalogContext.SaveChangesAsync();
+            ServiceCategoryCreatedEvent serviceCategoryCreatedEvent = new ServiceCategoryCreatedEvent(newCategory.SiteId,
+                                                                                                      newCategory.Id,
+                                                                                                      newCategory.Name,
+                                                                                                      newCategory.Description,
+                                                                                                      newCategory.AllowOnlineScheduling,
+                                                                                                      newCategory.ScheduleTypeId);
 
-            return CreatedAtAction(nameof(FindServiceCategoryById), new { id = item.Id }, null);
+
+            await _catalogIntegrationEventService.PublishThroughEventBusAsync(serviceCategoryCreatedEvent);
+
+
+            return CreatedAtAction(nameof(FindServiceCategoryById), new { id = newCategory.Id }, null);
         }
 
         [HttpGet]

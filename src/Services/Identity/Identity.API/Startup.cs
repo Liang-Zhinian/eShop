@@ -20,6 +20,7 @@ using StackExchange.Redis;
 using System;
 using System.Reflection;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
+using System.Threading.Tasks;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -114,7 +115,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<IdentityRole> roleManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -130,6 +131,10 @@ namespace SaaSEqt.eShop.Services.Identity.API
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+
+            // Seed database
+            //InitializeRoles(roleManager).Wait();
 
             var pathBase = Configuration["PATH_BASE"];
             if (!string.IsNullOrEmpty(pathBase))
@@ -179,6 +184,22 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 // Enable SF telemetry initializer
                 services.AddSingleton<ITelemetryInitializer>((serviceProvider) =>
                     new FabricTelemetryInitializer());
+            }
+        }
+
+        // Initialize some test roles. In the real world, these would be setup explicitly by a role manager
+        private string[] roles = new[] { "User", "Manager", "Administrator" };
+        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager)
+        {
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    var newRole = new IdentityRole(role);
+                    await roleManager.CreateAsync(newRole);
+                    // In the real world, there might be claims associated with roles
+                    // await roleManager.AddClaimAsync(newRole, new Claim("foo", "bar"))
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -19,6 +20,9 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 new ApiResource("webshoppingagg", "Web Shopping Aggregator"),
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
                 new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator")
+                //, 
+                                //new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                //new ApiResource("","", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
         }
 
@@ -29,7 +33,12 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                //new IdentityResources.Email(),
+                //new IdentityResource {
+                //    Name = "role",
+                //    UserClaims = new List<string> {"role"}
+                //}
             };
         }
 

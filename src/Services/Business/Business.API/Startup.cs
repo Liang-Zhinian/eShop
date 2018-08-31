@@ -132,6 +132,8 @@ namespace SaaSEqt.eShop.Services.Business.API
             
             services.AddTransient<IIdentityAccessIntegrationEventService, IdentityAccessIntegrationEventService>();
             services.AddTransient<IeShopIntegrationEventService, eShopIntegrationEventService>();
+            services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
             services.AddTransient<BusinessService>();
 
 
