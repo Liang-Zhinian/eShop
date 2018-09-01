@@ -35,9 +35,9 @@ namespace SaaSEqt.eShop.Services.Business.API
                     var settings = services.GetService<IOptions<BusinessSettings>>();
                     var logger = services.GetService<ILogger<BusinessDbContextSeed>>();
 
-                    new BusinessDbContextSeed()
-                        .SeedAsync(context, env, settings, logger)
-                        .Wait();
+                    //new BusinessDbContextSeed()
+                        //.SeedAsync(context, env, settings, logger)
+                        //.Wait();
 
                 })
                 .MigrateDbContext<BusinessDbContext>((context, services) =>

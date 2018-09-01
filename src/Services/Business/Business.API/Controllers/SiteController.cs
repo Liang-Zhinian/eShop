@@ -19,7 +19,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
     public class SiteController : Controller
     {
         private readonly IHostingEnvironment _env;
-        private BusinessService _businessService;
+        private readonly BusinessService _businessService;
         private readonly BusinessSettings _settings;
         private readonly IeShopIntegrationEventService _eShopIntegrationEventService;
 

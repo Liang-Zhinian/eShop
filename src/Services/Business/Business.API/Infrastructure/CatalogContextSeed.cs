@@ -32,12 +32,12 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure
                     await context.SaveChangesAsync();
                 }
 
-                if (!context.ServiceCategories.Any())
-                {
-                    await context.ServiceCategories.AddRangeAsync(GetPreconfiguredServiceCategories());
+                //if (!context.ServiceCategories.Any())
+                //{
+                //    await context.ServiceCategories.AddRangeAsync(GetPreconfiguredServiceCategories());
 
-                    await context.SaveChangesAsync();
-                }
+                //    await context.SaveChangesAsync();
+                //}
             });
         }
 

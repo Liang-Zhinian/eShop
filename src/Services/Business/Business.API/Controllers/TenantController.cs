@@ -26,24 +26,6 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             _tenantService = tenantService;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public JsonResult Get()
-        {
-            //var list = _bizService.GetAll()
-            //                        .ToList();
-            //return Json(list);
-            throw new NotImplementedException();
-        }
-
-        [HttpGet]
-        //[Authorize(Policy = "CanWriteTenantData")]
-        [Route("test")]
-        public ActionResult Test()
-        {
-            return Ok("Success!");
-        }
-
         [HttpPost]
         //[Authorize(Policy = "CanWriteTenantData")]
         [Route("register")]

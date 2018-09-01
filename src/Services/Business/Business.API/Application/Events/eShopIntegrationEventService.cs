@@ -45,7 +45,8 @@ namespace SaaSEqt.eShop.Services.Business.API.Application.Events
                     // Achieving atomicity between original ordering database operation and the IntegrationEventLog thanks to a local transaction
                 await _context.SaveChangesAsync();
                 await _eventLogService.SaveEventAsync(evt, _context.Database.CurrentTransaction.GetDbTransaction());
-                });
+               
+            });
         }
     }
 }

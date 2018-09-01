@@ -101,4 +101,7 @@
     <Folder Include="Infrastructure\IntegrationEventMigrations\" />
     <Folder Include="Application\Events\Locations\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Application\Events\Locations\ImageAssignedToLocationEvent.cs" />
+  </ItemGroup>
 </Project>

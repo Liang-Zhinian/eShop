@@ -5,14 +5,14 @@ namespace SaaSEqt.eShop.Services.Business.API.Application.Events.Locations
 {
     public class LocationImageChangedEvent: IntegrationEvent
     {
-        public LocationImageChangedEvent(Guid siteId, Guid locationId, byte[] image)
+        public LocationImageChangedEvent(Guid siteId, Guid locationId, string fileName)
         {
             this.SiteId = siteId;
             this.LocationId = locationId;
-            this.Image = image;
+            this.FileName = fileName;
         }
 
-        public byte[] Image { get; set; }
+        public string FileName { get; set; }
 
         public Guid SiteId { get; set; }
 
