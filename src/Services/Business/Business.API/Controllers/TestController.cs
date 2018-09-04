@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Business.API.Requests.Locations;
 using global::Business.API.Extensions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,11 +21,11 @@ using SaaSEqt.eShop.Services.Business.API.Application.Events.Locations;
 using SaaSEqt.eShop.Services.Business.API.Application.Events.ServiceCategory;
 using SaaSEqt.eShop.Services.Business.API.Application.Events.Sites;
 using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Requests;
 using SaaSEqt.eShop.Services.Business.API.ViewModel;
 using SaaSEqt.eShop.Services.Business.Domain.Model.Catalog;
 using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
 using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
-using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
 
 namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
@@ -59,11 +64,61 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             _logger = logger;
         }
 
+        //POST api/v1/[controller]/image
+        [HttpPost]
+        [Route("UpdateLocationImage")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> UpdateLocationImage([FromBody]SetLocationImageRequest_Test request)
+        {
+            if (!ModelState.IsValid)
+            {
+                //NotifyModelStateErrors();
+                return Ok(false);
+            }
+
+            //string imageFileExtension = Path.GetExtension(request.FileName);
+            //var webRoot = _env.WebRootPath;
+
+            //string dir = Path.Combine(webRoot, request.SiteId.ToString(), request.LocationId.ToString());
+            //if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            //var path = Path.Combine(request.SiteId.ToString(), request.LocationId.ToString(), request.FileName);
+
+            await _businessService.UpdateLocationImage(request.SiteId, request.LocationId, request.FileName);
+
+            return Ok();
+        }
+
+        //POST api/v1/[controller]/image
+        [HttpPost]
+        [Route("AddLocationAdditionalImage")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> AddLocationAdditionalImage([FromBody]AddAdditionalLocationImageRequest_Test request)
+        {
+            if (!ModelState.IsValid)
+            {
+                //NotifyModelStateErrors();
+                return Ok(false);
+            }
+
+            //string imageFileExtension = Path.GetExtension(request.FileName);
+            //var webRoot = _env.WebRootPath;
+
+            //string dir = Path.Combine(webRoot, request.SiteId.ToString(), request.LocationId.ToString());
+            //if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            //var path = Path.Combine(request.SiteId.ToString(), request.LocationId.ToString(), request.FileName);
+
+            await _businessService.AddAdditionalLocationImage(request.SiteId, request.LocationId, request.FileName);
+
+            return Ok();
+        }
+
         [HttpPost]
         //[Authorize(Policy = "CanWriteTenantData")]
-        [Route("GenerateTestingData")]
+        [Route("GenerateTestingTenantData")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<IActionResult> GenerateTestingData()
+        public async Task<IActionResult> GenerateTestingTenantData()
         {
             TenantViewModel tenant = new TenantViewModel(Guid.NewGuid(),
                                                         "Chanel",
@@ -106,9 +161,26 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             // Publish through the Event Bus and mark the saved event as published
             await _identityAccessIntegrationEventService.PublishThroughEventBusAsync(tenantCreatedEvent);
 
-            var newSite = await CreateSite(newTenant.Id);
+            return Ok(newTenant.Id);
+        }
 
-            await CreateLocations(newSite.Id);
+        [HttpPost]
+        //[Authorize(Policy = "CanWriteTenantData")]
+        [Route("GenerateTestingSiteData")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> GenerateTestingSiteData(Guid tenantId)
+        {
+            var newSite = await CreateSite(tenantId);
+            return Ok(newSite.Id);
+        }
+
+        [HttpPost]
+        //[Authorize(Policy = "CanWriteTenantData")]
+        [Route("GenerateTestingLocationsData")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> GenerateTestingLocationsData(Guid siteId)
+        {
+            await CreateLocations(siteId);
 
             //Guid serviceCategoryId = await CreateServiceCategory(newSite.Id);
             //await CreateServiceItems(newSite.Id, serviceCategoryId);
@@ -121,17 +193,17 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             var newSite = _businessService.ProvisionSite(site).Result;
 
-            SiteCreatedEvent siteCreatedEvent = new SiteCreatedEvent(newSite.TenantId,
-                                                                     newSite.Id,
-                                                                     newSite.Name,
-                                                                     newSite.Description,
-                                                                     newSite.Active,
-                                                                     newSite.ContactInformation.ContactName,
-                                                                     newSite.ContactInformation.PrimaryTelephone,
-                                                                     newSite.ContactInformation.SecondaryTelephone);
+            //SiteCreatedEvent siteCreatedEvent = new SiteCreatedEvent(newSite.TenantId,
+            //                                                         newSite.Id,
+            //                                                         newSite.Name,
+            //                                                         newSite.Description,
+            //                                                         newSite.Active,
+            //                                                         newSite.ContactInformation.ContactName,
+            //                                                         newSite.ContactInformation.PrimaryTelephone,
+            //                                                         newSite.ContactInformation.SecondaryTelephone);
 
 
-            await _eShopIntegrationEventService.PublishThroughEventBusAsync(siteCreatedEvent);
+            //await _eShopIntegrationEventService.PublishThroughEventBusAsync(siteCreatedEvent);
 
             return newSite;
         }
@@ -144,50 +216,70 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             var locations = GetLocationsFromFile(siteId, contentRootPath, _context, _logger);
 
+            IList<Location> newLocations = new List<Location>();
+
+            var client = new HttpClient();
+
             foreach (var location in locations)
             {
 
-                var newLocation = await _businessService.ProvisionLocation(location);
+                //var newLocation = await _businessService.ProvisionLocation(location);
+                //newLocations.Add(newLocation);
 
-                LocationCreatedEvent locationCreatedEvent = new LocationCreatedEvent(newLocation.SiteId,
-                                                                                     newLocation.Id,
-                                                                                     newLocation.Name,
-                                                                                     newLocation.Description);
+                ProvisionLocationRequest provisionLocationRequest = new ProvisionLocationRequest() { 
+                    Name = location.Name,
+                    Description = location.Description,
+                    SiteId = siteId
+                };
+                string jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(provisionLocationRequest);
+                await client.PostAsync("http://localhost:5130/api/v1/locations", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
-
-                await _eShopIntegrationEventService.PublishThroughEventBusAsync(locationCreatedEvent);
 
             }
 
             var locations2 = GetLocationsFromFile2(siteId, contentRootPath, _context, _logger);
             foreach (var location in locations2)
             {
-                
-                LocationAddressChangedEvent locationAddressChangedEvent = new LocationAddressChangedEvent(location.SiteId,
+                SetLocationAddressRequest setLocationAddressRequest = new SetLocationAddressRequest(location.SiteId,
                                                                                                           location.Id,
                                                                                                           location.Address.Street,
                                                                                                           location.Address.City,
                                                                                                           location.Address.StateProvince,
                                                                                                           location.Address.ZipCode,
                                                                                                           location.Address.Country);
-                await _eShopIntegrationEventService.PublishThroughEventBusAsync(locationAddressChangedEvent);
+                string jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationAddressRequest);
+                await client.PostAsync("http://localhost:5130/api/v1/locations/address", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
-                LocationImageChangedEvent locationImageChangedEvent = new LocationImageChangedEvent(location.SiteId,
-                                                                                                    location.Id,
-                                                                                                    location.Image);
-                await _eShopIntegrationEventService.PublishThroughEventBusAsync(locationImageChangedEvent);
+                SetLocationGeolocationRequest setLocationGeolocationRequest = new SetLocationGeolocationRequest(location.SiteId,
+                                                                                                         location.Id,
+                                                                                                                location.Geolocation.Latitude,
+                                                                                                                location.Geolocation.Longitude);
+                jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationGeolocationRequest);
+                await client.PostAsync("http://localhost:5130/api/v1/locations/geolocation", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
-                AdditionalLocationImageCreatedEvent additionalLocationImageCreatedEvent  = new AdditionalLocationImageCreatedEvent(location.SiteId,
-                                                                                                    location.Id,
-                                                                                                    location.Image);
-                await _eShopIntegrationEventService.PublishThroughEventBusAsync(additionalLocationImageCreatedEvent);
+                SetLocationInformationRequest setLocationInformationRequest = new SetLocationInformationRequest(location.SiteId,
+                                                                                                                location.Id,
+                                                                                                                location.ContactInformation.ContactName,
+                                                                                                                location.ContactInformation.EmailAddress,
+                                                                                                                location.ContactInformation.PrimaryTelephone,
+                                                                                                                location.ContactInformation.SecondaryTelephone);
+                jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationInformationRequest);
+                await client.PostAsync("http://localhost:5130/api/v1/locations/contactinformation", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
 
-                LocationGeolocationChangedEvent locationGeolocationChangedEvent = new LocationGeolocationChangedEvent(location.SiteId,
-                                                                                                                      location.Id,
-                                                                                                                      location.Geolocation.Latitude,
-                                                                                                                      location.Geolocation.Longitude);
-                await _eShopIntegrationEventService.PublishThroughEventBusAsync(locationGeolocationChangedEvent);
+                //IFormFile formFile = new FormFile()
+                SetLocationImageRequest_Test setLocationImageRequest = new SetLocationImageRequest_Test(location.SiteId,
+                                                                                              location.Id,
+                                                                                              location.Image);
+                jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationImageRequest);
+                await client.PostAsync("http://localhost:5130/api/v1/Test/UpdateLocationImage", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+
+                AddAdditionalLocationImageRequest_Test addAdditionalLocationImageRequest = new AddAdditionalLocationImageRequest_Test(location.SiteId,
+                                                                                                                            location.Id,
+                                                                                                                            location.AdditionalLocationImages.ElementAtOrDefault(0).Image);
+                jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(addAdditionalLocationImageRequest);
+                await client.PostAsync("http://localhost:5130/api/v1/Test/AddLocationAdditionalImage", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+
             }
 
         }

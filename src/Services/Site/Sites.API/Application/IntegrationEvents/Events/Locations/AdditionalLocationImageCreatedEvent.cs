@@ -5,6 +5,11 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.
 {
     public class AdditionalLocationImageCreatedEvent : IntegrationEvent
     {
+        public AdditionalLocationImageCreatedEvent()
+        {
+
+        }
+
         public AdditionalLocationImageCreatedEvent(Guid siteId, Guid locationId, Guid imageId, string fileName)
         {
             SiteId = siteId;

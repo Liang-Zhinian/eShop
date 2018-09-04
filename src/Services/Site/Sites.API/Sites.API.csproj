@@ -97,4 +97,8 @@
     <None Update="Setup\*">
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Application\IntegrationEvents\Events\Locations\ImageAssignedToLocationEvent.cs" />
+    <Compile Remove="Application\IntegrationEvents\Events\Locations\LocationPostalAddressChangedEvent.cs" />
+  </ItemGroup>
 </Project>

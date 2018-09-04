@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
 using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
 using System;
 using System.IO;

@@ -9,7 +9,7 @@ using SaaSEqt.eShop.Services.Business.API.Application.Events.Sites;
 using SaaSEqt.eShop.Services.Business.API.Extensions;
 using SaaSEqt.eShop.Services.Business.API.Requests;
 using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
-using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -79,20 +79,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             Site site = new Site(request.TenantId, request.Name, request.Description, false);
 
-            var newSite = _businessService.ProvisionSite(site).Result;
-
-            SiteCreatedEvent siteCreatedEvent = new SiteCreatedEvent(newSite.TenantId,
-                                                                     newSite.Id,
-                                                                     newSite.Name,
-                                                                     newSite.Description,
-                                                                     newSite.Active,
-                                                                     newSite.ContactInformation.ContactName,
-                                                                     newSite.ContactInformation.PrimaryTelephone,
-                                                                     newSite.ContactInformation.SecondaryTelephone);
-
-
-            await _eShopIntegrationEventService.PublishThroughEventBusAsync(siteCreatedEvent);
-
+            var newSite = await _businessService.ProvisionSite(site);
 
             return CreatedAtAction(nameof(GetSiteById), new { id = site.Id }, null);
         }

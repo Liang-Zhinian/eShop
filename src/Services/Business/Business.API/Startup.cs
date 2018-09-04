@@ -19,7 +19,7 @@ using SaaSEqt.eShop.Services.Business.API.Infrastructure.Filters;
 using SaaSEqt.eShop.Services.Business.Infrastructure.Data;
 using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
 using SaaSEqt.eShop.Services.Business.API.Configurations;
-using SaaSEqt.eShop.Services.Business.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;
 using SaaSEqt.eShop.Services.Business.API.Infrastructure.AutofacModules;
 using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;

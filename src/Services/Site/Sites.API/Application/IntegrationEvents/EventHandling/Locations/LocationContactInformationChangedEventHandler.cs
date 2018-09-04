@@ -11,24 +11,27 @@ using SaaSEqt.eShop.Services.Sites.API.Model.Security;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling.Locations
 {
-    public class AdditionalLocationImageCreatedEventHandler : IIntegrationEventHandler<AdditionalLocationImageCreatedEvent>
+    public class LocationContactInformationChangedEventHandler : IIntegrationEventHandler<LocationContactInformationChangedEvent>
     {
         private readonly IHostingEnvironment _env;
         private readonly SitesDbContext _siteDbContext;
 
-        public AdditionalLocationImageCreatedEventHandler(IHostingEnvironment env, SitesDbContext siteDbContext)
+        public LocationContactInformationChangedEventHandler(IHostingEnvironment env, SitesDbContext siteDbContext)
         {
             _env = env;
             _siteDbContext = siteDbContext;
         }
 
-        public async Task Handle(AdditionalLocationImageCreatedEvent @event)
+        public async Task Handle(LocationContactInformationChangedEvent @event)
         {
             Location existingLocation = await _siteDbContext.Locations.SingleOrDefaultAsync(y => y.Id.Equals(@event.LocationId));
 
-            LocationImage locationImage = new LocationImage(@event.SiteId, @event.LocationId, @event.ImageId, @event.FileName);
+            ContactInformation contactInformation = new ContactInformation(@event.ContactName,
+                                                                           @event.PrimaryTelephone,
+                                                                           @event.SecondaryTelephone,
+                                                                           @event.EmailAddress);
 
-            existingLocation.AddAdditionalImage(locationImage);
+            existingLocation.ChangeContactInformation(contactInformation);
 
             _siteDbContext.Locations.Update(existingLocation);
             await _siteDbContext.SaveChangesAsync();

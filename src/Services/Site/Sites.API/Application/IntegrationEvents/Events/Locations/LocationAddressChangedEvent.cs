@@ -5,6 +5,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.
 {
     public class LocationAddressChangedEvent : IntegrationEvent
     {
+
+        public Guid LocationId { get; set; }
+
         public string City { get; set; }
 
         public string CountryCode { get; set; }
@@ -24,6 +27,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.
 
         public LocationAddressChangedEvent(
             Guid siteId,
+            Guid locationId,
             string streetAddress,
             string city,
             string stateProvince,
@@ -31,6 +35,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.
             string countryCode)
         {
             this.SiteId = siteId;
+            this.LocationId = locationId;
             this.StreetAddress = streetAddress;
             this.City = city;
             this.StateProvince = stateProvince;

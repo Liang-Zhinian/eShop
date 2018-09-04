@@ -11,24 +11,27 @@ using SaaSEqt.eShop.Services.Sites.API.Model.Security;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling.Locations
 {
-    public class AdditionalLocationImageCreatedEventHandler : IIntegrationEventHandler<AdditionalLocationImageCreatedEvent>
+    public class LocationGeolocationChangedEventHandler : IIntegrationEventHandler<LocationGeolocationChangedEvent>
     {
         private readonly IHostingEnvironment _env;
         private readonly SitesDbContext _siteDbContext;
 
-        public AdditionalLocationImageCreatedEventHandler(IHostingEnvironment env, SitesDbContext siteDbContext)
+        public LocationGeolocationChangedEventHandler(IHostingEnvironment env, SitesDbContext siteDbContext)
         {
             _env = env;
             _siteDbContext = siteDbContext;
         }
 
-        public async Task Handle(AdditionalLocationImageCreatedEvent @event)
+        public async Task Handle(LocationGeolocationChangedEvent @event)
         {
             Location existingLocation = await _siteDbContext.Locations.SingleOrDefaultAsync(y => y.Id.Equals(@event.LocationId));
 
-            LocationImage locationImage = new LocationImage(@event.SiteId, @event.LocationId, @event.ImageId, @event.FileName);
+            double latitude = @event.Latitude.HasValue ? @event.Latitude.Value : 0;
+            double longitude = @event.Longitude.HasValue ? @event.Longitude.Value : 0;
 
-            existingLocation.AddAdditionalImage(locationImage);
+            Geolocation geolocation = new Geolocation(latitude, longitude);
+
+            existingLocation.ChangeGeolocation(geolocation);
 
             _siteDbContext.Locations.Update(existingLocation);
             await _siteDbContext.SaveChangesAsync();

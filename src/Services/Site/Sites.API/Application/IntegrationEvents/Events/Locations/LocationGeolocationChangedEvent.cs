@@ -5,15 +5,14 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.
 {
     public class LocationGeolocationChangedEvent : IntegrationEvent
     {
-        private Guid SiteId { get; set; }
-        private double? Latitude { get; set; }
-        private double? Longitude { get; set; }
+        public Guid SiteId { get; set; }
+        public Guid LocationId { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
-        public LocationGeolocationChangedEvent(Guid siteId, double? latitude, double? longitude)
+        public LocationGeolocationChangedEvent()
         {
-            this.SiteId = siteId;
-            this.Latitude = latitude;
-            this.Longitude = longitude;
+
         }
     }
 }

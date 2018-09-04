@@ -11,24 +11,22 @@ using SaaSEqt.eShop.Services.Sites.API.Model.Security;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling.Locations
 {
-    public class AdditionalLocationImageCreatedEventHandler : IIntegrationEventHandler<AdditionalLocationImageCreatedEvent>
+    public class LocationImageChangedEventHandler : IIntegrationEventHandler<LocationImageChangedEvent>
     {
         private readonly IHostingEnvironment _env;
         private readonly SitesDbContext _siteDbContext;
 
-        public AdditionalLocationImageCreatedEventHandler(IHostingEnvironment env, SitesDbContext siteDbContext)
+        public LocationImageChangedEventHandler(IHostingEnvironment env, SitesDbContext siteDbContext)
         {
             _env = env;
             _siteDbContext = siteDbContext;
         }
 
-        public async Task Handle(AdditionalLocationImageCreatedEvent @event)
+        public async Task Handle(LocationImageChangedEvent @event)
         {
             Location existingLocation = await _siteDbContext.Locations.SingleOrDefaultAsync(y => y.Id.Equals(@event.LocationId));
 
-            LocationImage locationImage = new LocationImage(@event.SiteId, @event.LocationId, @event.ImageId, @event.FileName);
-
-            existingLocation.AddAdditionalImage(locationImage);
+            existingLocation.ChangeImage(@event.FileName);
 
             _siteDbContext.Locations.Update(existingLocation);
             await _siteDbContext.SaveChangesAsync();

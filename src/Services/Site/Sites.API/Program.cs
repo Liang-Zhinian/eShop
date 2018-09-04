@@ -23,9 +23,9 @@ namespace SaaSEqt.eShop.Services.Sites.API
                     var settings = services.GetService<IOptions<BusinessSettings>>();
                     var logger = services.GetService<ILogger<BusinessDbContextSeed>>();
 
-                    new BusinessDbContextSeed()
-                        .SeedAsync(context, env, settings, logger)
-                        .Wait();
+                    //new BusinessDbContextSeed()
+                        //.SeedAsync(context, env, settings, logger)
+                        //.Wait();
 
                 })
                 .MigrateDbContext<SitesDbContext>((context, services) =>
@@ -45,9 +45,9 @@ namespace SaaSEqt.eShop.Services.Sites.API
                     var settings = services.GetService<IOptions<BusinessSettings>>();
                     var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
-                    new CatalogContextSeed()
-                    .SeedAsync(context, env, settings, logger)
-                    .Wait();
+                    //new CatalogContextSeed()
+                    //.SeedAsync(context, env, settings, logger)
+                    //.Wait();
 
                 })
                 .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })

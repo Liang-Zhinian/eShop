@@ -104,8 +104,15 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             services.AddTransient<SiteCreatedEventHandler>();
+            // locations
             services.AddTransient<LocationCreatedEventHandler>();
             services.AddTransient<AdditionalLocationImageCreatedEventHandler>();
+            services.AddTransient<LocationPostalAddressChangedEventHandler>();
+            services.AddTransient<LocationGeolocationChangedEventHandler>();
+            services.AddTransient<LocationImageChangedEventHandler>();
+            services.AddTransient<LocationContactInformationChangedEventHandler>();
+
+            // catalogs
             services.AddTransient<ServiceCategoryCreatedEventHandler>();
             services.AddTransient<ServiceItemCreatedEventHandler>();
         }
@@ -114,8 +121,17 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<SiteCreatedEvent, SiteCreatedEventHandler>();
+
+            // locations
             eventBus.Subscribe<LocationCreatedEvent, LocationCreatedEventHandler>();
             eventBus.Subscribe<AdditionalLocationImageCreatedEvent, AdditionalLocationImageCreatedEventHandler>();
+            eventBus.Subscribe<LocationAddressChangedEvent, LocationPostalAddressChangedEventHandler>();
+            eventBus.Subscribe<LocationGeolocationChangedEvent, LocationGeolocationChangedEventHandler>();
+            eventBus.Subscribe<LocationImageChangedEvent, LocationImageChangedEventHandler>();
+            eventBus.Subscribe<LocationContactInformationChangedEvent, LocationContactInformationChangedEventHandler>();
+
+
+            // catalogs
             eventBus.Subscribe<ServiceCategoryCreatedEvent, ServiceCategoryCreatedEventHandler>();
             eventBus.Subscribe<ServiceItemCreatedEvent, ServiceItemCreatedEventHandler>();
 
