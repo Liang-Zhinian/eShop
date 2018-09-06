@@ -30,6 +30,7 @@
     using System.Data.Common;
     using System.Reflection;
     using SaaSEqt.Infrastructure.HealthChecks.MySQL;
+    using SaaSEqt.eShop.Services.ServiceCatalog.API.Application.IntegrationEvents.EventHandling;
 
     public class Startup
     {
@@ -265,14 +266,16 @@
             }
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            //services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-            //services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
+
+            // catalogs
+            services.AddTransient<ServiceCategoryCreatedEventHandler>();
+            services.AddTransient<ServiceItemCreatedEventHandler>();
         }
         protected virtual void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-            //eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
+            eventBus.Subscribe<ServiceCategoryCreatedEvent, ServiceCategoryCreatedEventHandler>();
+            eventBus.Subscribe<ServiceItemCreatedEvent, ServiceItemCreatedEventHandler>();
         }
     }
 }

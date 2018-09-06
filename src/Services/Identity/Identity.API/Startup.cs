@@ -134,7 +134,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
 
             // Seed database
-            //InitializeRoles(roleManager).Wait();
+            InitializeRoles(roleManager).Wait();
 
             var pathBase = Configuration["PATH_BASE"];
             if (!string.IsNullOrEmpty(pathBase))

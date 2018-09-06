@@ -11,10 +11,11 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
             Id = Guid.NewGuid();
         }
 
-        public ServiceItem(Guid siteId, string name, string description, int defaultTimeLength, double price, Guid serviceCategoryId, string industryStandardCategoryName, string industryStandardSubcategoryName)
-            : this()
+        public ServiceItem(Guid siteId, Guid id, string name, string description, int defaultTimeLength, double price, Guid serviceCategoryId, string industryStandardCategoryName, string industryStandardSubcategoryName)
+
         {
             SiteId = siteId;
+            Id = id;
             Name = name;
             Description = description;
             DefaultTimeLength = defaultTimeLength;
@@ -23,17 +24,6 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
             IndustryStandardCategoryName = industryStandardCategoryName;
             IndustryStandardSubcategoryName = industryStandardSubcategoryName;
 
-
-            //var serviceItemCreatedEvent = new ServiceItemCreatedEvent(Id,
-            // name,
-            // description,
-            // defaultTimeLength,
-            // price,
-            // serviceCategoryId,
-            // siteId,
-            // industryStandardCategoryId
-            //);
-            //ApplyChange(serviceItemCreatedEvent);
         }
 
         #region public properties

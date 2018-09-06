@@ -20,6 +20,8 @@
     <Compile Remove="Migrations\Catalog\20180714103157_init.cs" />
     <Compile Remove="Infrastructure\EntityConfigurations\CatalogBrandEntityTypeConfiguration.cs" />
     <Compile Remove="Controllers\CategoryIconController.cs" />
+    <Compile Remove="Application\IntegrationEvents\Events\Locations\AdditionalLocationImageCreatedEvent.cs" />
+    <Compile Remove="Application\IntegrationEvents\EventHandling\Locations\AdditionalLocationImageCreatedEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
@@ -102,5 +104,8 @@
     <Folder Include="Setup\" />
     <Folder Include="Requests\" />
     <Folder Include="Migrations\Catalog\" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\IntegrationEvents\" />
+    <Folder Include="Configurations\" />
   </ItemGroup>
 </Project>

@@ -63,27 +63,6 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
             return Ok(model);
         }
 
-        //POST api/v1/[controller]/serviceitems
-        [HttpPost]
-        [Route("serviceitems")]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<IActionResult> AddServiceItem([FromBody]ServiceItem schedulableCatalogItem)
-        {
-            var item = new ServiceItem(schedulableCatalogItem.SiteId,
-                                        schedulableCatalogItem.Name,
-                                        schedulableCatalogItem.Description,
-                                        schedulableCatalogItem.DefaultTimeLength,
-                                        schedulableCatalogItem.Price,
-                                        schedulableCatalogItem.ServiceCategoryId,
-                                        schedulableCatalogItem.IndustryStandardCategoryName,
-                                        schedulableCatalogItem.IndustryStandardSubcategoryName);
-            _catalogContext.ServiceItems.Add(item);
-
-            await _catalogContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(FindServiceItemById), new { id = item.Id }, null);
-        }
-
         [HttpGet]
         [Route("serviceitems/{id:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -103,24 +82,6 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
             }
 
             return NotFound();
-        }
-
-        //POST api/v1/[controller]/servicecategories
-        [HttpPost]
-        [Route("servicecategories")]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<IActionResult> AddServiceCategory([FromBody]ServiceCategory schedulableCatalogType)
-        {
-            var item = new ServiceCategory(schedulableCatalogType.SiteId,
-                                                  schedulableCatalogType.Name,
-                                                  schedulableCatalogType.Description,
-                                                  schedulableCatalogType.AllowOnlineScheduling,
-                                                  schedulableCatalogType.ScheduleTypeId);
-            _catalogContext.ServiceCategories.Add(item);
-
-            await _catalogContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(FindServiceCategoryById), new { id = item.Id }, null);
         }
 
         [HttpGet]

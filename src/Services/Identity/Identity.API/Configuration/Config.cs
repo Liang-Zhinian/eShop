@@ -12,16 +12,14 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
         {
             return new List<ApiResource>
             {
-                new ApiResource("orders", "Orders Service"),
+                new ApiResource("orders", "Orders Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
                 new ApiResource("basket", "Basket Service"),
                 new ApiResource("marketing", "Marketing Service"),
                 new ApiResource("locations", "Locations Service"),
                 new ApiResource("mobileshoppingagg", "Mobile Shopping Aggregator"),
                 new ApiResource("webshoppingagg", "Web Shopping Aggregator"),
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
-                new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator")
-                //, 
-                                //new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator"),
                 //new ApiResource("","", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
         }

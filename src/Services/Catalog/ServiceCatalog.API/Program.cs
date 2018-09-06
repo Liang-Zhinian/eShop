@@ -20,9 +20,9 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API
                     var settings = services.GetService<IOptions<ServiceCatalogSettings>>();
                     var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
-                    new CatalogContextSeed()
-                    .SeedAsync(context,env,settings,logger)
-                    .Wait();
+                    //new CatalogContextSeed()
+                    //.SeedAsync(context,env,settings,logger)
+                    //.Wait();
 
                 })
                 .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })

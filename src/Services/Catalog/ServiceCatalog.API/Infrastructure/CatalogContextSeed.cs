@@ -62,7 +62,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure
         {
             return new List<ServiceCategory>()
             {
-                new ServiceCategory(Guid.Empty,"Appointment","Appointment",true,ScheduleType.Appointment.Id)
+                new ServiceCategory(Guid.Empty,Guid.NewGuid(),"Appointment","Appointment",true,ScheduleType.Appointment.Id)
             };
         }
 
