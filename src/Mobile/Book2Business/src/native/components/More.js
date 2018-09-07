@@ -12,7 +12,7 @@ const More = ({ member, logout }) => (
         <Content>
             <List>
 
-                <ListItem onPress={Actions.appointments} icon>
+                <ListItem onPress={Actions.appointment_categories} icon>
                     <Left>
                         <Icon name="ios-flag" />
                     </Left>

@@ -8,7 +8,7 @@ import { Actions } from 'react-native-router-flux';
 
 // import { getRecipes, getMeals, setError } from '../actions/recipes';
 
-class ServiceCategoryListing extends Component {
+class AppointmentCategory extends Component {
   static propTypes = {
     Layout: PropTypes.func.isRequired,
     // recipes: PropTypes.shape({
@@ -31,7 +31,9 @@ class ServiceCategoryListing extends Component {
   static renderRightButton = (props) => {
     return (
       <TouchableOpacity
-        onPress={() => { Actions.appointment_category({ match: { params: { action: 'ADD' } } }) }}
+        onPress={() => { 
+          Actions.appointment_category({ match: { params: { action: 'ADD' } } })
+        }}
         style={{marginRight: 10}}>
         <Icon name='add' />
       </TouchableOpacity>
@@ -79,4 +81,4 @@ const mapDispatchToProps = {
   // showError: setError,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServiceCategoryListing);
+export default connect(mapStateToProps, mapDispatchToProps)(AppointmentCategory);

@@ -40,6 +40,9 @@ import MoreComponent from '../components/More';
 import ServiceCategiesComponent from '../components/service_categories/ServiceCategories';
 import AppointmentCategiesContainer from '../../containers/appointments/ServiceCategories';
 
+import ServiceCategoryComponent from '../components/service_categories/ServiceCategory';
+import AppointmentCategoryContainer from '../../containers/appointments/AppointmentCategory';
+
 import ClassesComponent from '../components/classes/Classes';
 
 import ContactInformationComponent from '../components/business/ContactInformation';
@@ -96,13 +99,23 @@ const Index = (
           <Scene key="more" component={MoreComponent} />
           <Scene
             back
-            key="appointments"
-            title="APPOINTMENTS"
+            key="appointment_categories"
+            title="APPOINTMENT CATEGORIES"
             hideNavBar={false}
             component={AppointmentCategiesContainer}
             Layout={ServiceCategiesComponent}
             {...DefaultProps.navbarProps}
           />
+          <Scene
+            back
+            key="appointment_category"
+            title="APPOINTMENT"
+            hideNavBar={false}
+            component={AppointmentCategoryContainer}
+            Layout={ServiceCategoryComponent}
+            {...DefaultProps.navbarProps}
+          />
+          
           <Scene back key="classes" title="CLASSES" component={ClassesComponent} />
           <Scene back key="businessInformation" title="BUSINESS INFORMATION" component={BusinessInformationComponent} />
           <Scene back key="location" title="BUSINESS LOCATION" component={UpdateLocationComponent} />
