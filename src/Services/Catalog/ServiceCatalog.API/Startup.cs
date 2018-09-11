@@ -31,6 +31,7 @@
     using System.Reflection;
     using SaaSEqt.Infrastructure.HealthChecks.MySQL;
     using SaaSEqt.eShop.Services.ServiceCatalog.API.Application.IntegrationEvents.EventHandling;
+    using SaaSEqt.eShop.Services.ServiceCatalog.API.Application.IntegrationEvents.Events;
 
     public class Startup
     {

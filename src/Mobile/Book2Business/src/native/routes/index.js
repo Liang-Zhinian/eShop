@@ -53,6 +53,11 @@ import BusinessInformationComponent from '../components/business/BusinessInforma
 
 import ChangeLocationComponent from '../components/business/ChangeLocation';
 
+import LocationMenusComponent from '../components/business/LocationMenus';
+
+import UpdateLocationInformationComponent from '../components/business/UpdateLocationInformation';
+import UpdateLocationInformationContainer from '../../containers/locations/UpdateLocationInfo';
+
 const Index = (
   <Stack hideNavBar>
     <Scene hideNavBar>
@@ -119,6 +124,8 @@ const Index = (
           <Scene back key="classes" title="CLASSES" component={ClassesComponent} />
           <Scene back key="businessInformation" title="BUSINESS INFORMATION" component={BusinessInformationComponent} />
           <Scene back key="location" title="BUSINESS LOCATION" component={UpdateLocationComponent} />
+          <Scene back key="locationMenus" title="BUSINESS LOCATION" component={LocationMenusComponent} />
+          <Scene back key="locationInfo" title="BUSINESS LOCATION" Layout={UpdateLocationInformationComponent} component={UpdateLocationInformationContainer} />
           
           {/*<Stack
             key="businessInformation"

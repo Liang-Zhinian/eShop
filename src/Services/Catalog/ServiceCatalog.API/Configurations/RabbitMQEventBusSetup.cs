@@ -32,7 +32,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Configurations
         {
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
-                var settings = sp.GetRequiredService<IOptions<BusinessSettings>>().Value;
+                var settings = sp.GetRequiredService<IOptions<ServiceCatalogSettings>>().Value;
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
                 var factory = new ConnectionFactory()

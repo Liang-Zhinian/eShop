@@ -12,7 +12,7 @@ const BusinessInformation = ({ member, logout }) => (
         <Content>
             <List>
 
-                <ListItem onPress={Actions.location} icon>
+                <ListItem onPress={Actions.locationMenus} icon>
                     <Left>
                         <Icon name="pin" />
                     </Left>

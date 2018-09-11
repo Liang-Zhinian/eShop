@@ -232,7 +232,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                     SiteId = siteId
                 };
                 string jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(provisionLocationRequest);
-                await client.PostAsync("http://localhost:5130/api/v1/locations", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                await client.PostAsync("http://localhost/api/v1/locations", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
 
             }
@@ -248,14 +248,14 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                                                                                                           location.Address.ZipCode,
                                                                                                           location.Address.Country);
                 string jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationAddressRequest);
-                await client.PostAsync("http://localhost:5130/api/v1/locations/address", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                await client.PostAsync("http://localhost/api/v1/locations/address", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
                 SetLocationGeolocationRequest setLocationGeolocationRequest = new SetLocationGeolocationRequest(location.SiteId,
                                                                                                          location.Id,
                                                                                                                 location.Geolocation.Latitude,
                                                                                                                 location.Geolocation.Longitude);
                 jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationGeolocationRequest);
-                await client.PostAsync("http://localhost:5130/api/v1/locations/geolocation", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                await client.PostAsync("http://localhost/api/v1/locations/geolocation", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
                 SetLocationInformationRequest setLocationInformationRequest = new SetLocationInformationRequest(location.SiteId,
                                                                                                                 location.Id,
@@ -264,7 +264,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                                                                                                                 location.ContactInformation.PrimaryTelephone,
                                                                                                                 location.ContactInformation.SecondaryTelephone);
                 jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationInformationRequest);
-                await client.PostAsync("http://localhost:5130/api/v1/locations/contactinformation", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                await client.PostAsync("http://localhost/api/v1/locations/contactinformation", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
 
                 //IFormFile formFile = new FormFile()
@@ -272,13 +272,13 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                                                                                               location.Id,
                                                                                               location.Image);
                 jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(setLocationImageRequest);
-                await client.PostAsync("http://localhost:5130/api/v1/Test/UpdateLocationImage", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                await client.PostAsync("http://localhost/api/v1/Test/UpdateLocationImage", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
                 AddAdditionalLocationImageRequest_Test addAdditionalLocationImageRequest = new AddAdditionalLocationImageRequest_Test(location.SiteId,
                                                                                                                             location.Id,
                                                                                                                             location.AdditionalLocationImages.ElementAtOrDefault(0).Image);
                 jsonInString = Newtonsoft.Json.JsonConvert.SerializeObject(addAdditionalLocationImageRequest);
-                await client.PostAsync("http://localhost:5130/api/v1/Test/AddLocationAdditionalImage", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                await client.PostAsync("http://localhost/api/v1/Test/AddLocationAdditionalImage", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
 
             }
 

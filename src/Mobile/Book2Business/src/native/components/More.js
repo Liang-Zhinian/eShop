@@ -34,7 +34,7 @@ const More = ({ member, logout }) => (
                     </Body>
                 </ListItem>
                 
-                <ListItem onPress={Actions.businessInformation} icon>
+                <ListItem onPress={Actions.locationMenus} icon>
                     <Left>
                         <Icon name="briefcase" />
                     </Left>
