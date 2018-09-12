@@ -14,7 +14,7 @@ const LocationMenus = ({ member, logout }) => (
 
                 <ListItem onPress={Actions.locationInfo} icon>
                     <Left>
-                        <Icon name="pin" />
+                        <Icon name="ios-information-circle-outline" />
                     </Left>
                     <Body>
                         <Text>
@@ -23,7 +23,7 @@ const LocationMenus = ({ member, logout }) => (
                     </Body>
                 </ListItem>
 
-                <ListItem onPress={Actions.contactInformation} icon>
+                <ListItem onPress={Actions.locationContact} icon>
                     <Left>
                         <Icon name="contacts" />
                     </Left>
@@ -34,9 +34,9 @@ const LocationMenus = ({ member, logout }) => (
                     </Body>
                 </ListItem>
 
-                <ListItem onPress={Actions.contactInformation} icon>
+                <ListItem onPress={Actions.locationGeolocation} icon>
                     <Left>
-                        <Icon name="contacts" />
+                        <Icon name="pin" />
                     </Left>
                     <Body>
                         <Text>
@@ -45,20 +45,9 @@ const LocationMenus = ({ member, logout }) => (
                     </Body>
                 </ListItem>
 
-                <ListItem onPress={Actions.contactInformation} icon>
+                <ListItem onPress={Actions.locationAddress} icon>
                     <Left>
-                        <Icon name="contacts" />
-                    </Left>
-                    <Body>
-                        <Text>
-                            Contact information
-                        </Text>
-                    </Body>
-                </ListItem>
-
-                <ListItem onPress={Actions.contactInformation} icon>
-                    <Left>
-                        <Icon name="contacts" />
+                        <Icon name="map" />
                     </Left>
                     <Body>
                         <Text>
@@ -67,9 +56,9 @@ const LocationMenus = ({ member, logout }) => (
                     </Body>
                 </ListItem>
 
-                <ListItem onPress={Actions.contactInformation} icon>
+                <ListItem onPress={Actions.locationImage} icon>
                     <Left>
-                        <Icon name="contacts" />
+                        <Icon name="image" />
                     </Left>
                     <Body>
                         <Text>
@@ -78,7 +67,7 @@ const LocationMenus = ({ member, logout }) => (
                     </Body>
                 </ListItem>
 
-                <ListItem onPress={Actions.contactInformation} icon>
+                {/* <ListItem onPress={Actions.contactInformation} icon>
                     <Left>
                         <Icon name="contacts" />
                     </Left>
@@ -87,7 +76,7 @@ const LocationMenus = ({ member, logout }) => (
                             Additional images
                         </Text>
                     </Body>
-                </ListItem>
+                </ListItem> */}
 
             </List>
         </Content>

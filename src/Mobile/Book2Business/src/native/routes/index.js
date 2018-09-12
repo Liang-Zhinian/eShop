@@ -45,18 +45,24 @@ import AppointmentCategoryContainer from '../../containers/appointments/Appointm
 
 import ClassesComponent from '../components/classes/Classes';
 
-import ContactInformationComponent from '../components/business/ContactInformation';
+import ChangeLocationComponent from '../components/locations/ChangeLocation';
 
-import UpdateLocationComponent from '../components/business/UpdateLocation';
+import LocationMenusComponent from '../components/locations/LocationMenus';
 
-import BusinessInformationComponent from '../components/business/BusinessInformation';
+import UpdateLocationInfoComponent from '../components/locations/UpdateLocationInfo';
+import UpdateLocationInfoContainer from '../../containers/locations/UpdateLocationInfo';
 
-import ChangeLocationComponent from '../components/business/ChangeLocation';
+import UpdateLocationContactComponent from '../components/locations/UpdateContact';
+import UpdateLocationContactContainer from '../../containers/locations/UpdateContact';
 
-import LocationMenusComponent from '../components/business/LocationMenus';
+import UpdateLocationAddressComponent from '../components/locations/UpdateAddress';
+import UpdateLocationAddressContainer from '../../containers/locations/UpdateAddress';
 
-import UpdateLocationInformationComponent from '../components/business/UpdateLocationInformation';
-import UpdateLocationInformationContainer from '../../containers/locations/UpdateLocationInfo';
+import UpdateLocationGeolocationComponent from '../components/locations/UpdateGeolocation';
+import UpdateLocationGeolocationContainer from '../../containers/locations/UpdateGeolocation';
+
+import UpdateLocationImageComponent from '../components/locations/UpdateImage';
+import UpdateLocationImageContainer from '../../containers/locations/UpdateImage';
 
 const Index = (
   <Stack hideNavBar>
@@ -122,20 +128,15 @@ const Index = (
           />
           
           <Scene back key="classes" title="CLASSES" component={ClassesComponent} />
-          <Scene back key="businessInformation" title="BUSINESS INFORMATION" component={BusinessInformationComponent} />
-          <Scene back key="location" title="BUSINESS LOCATION" component={UpdateLocationComponent} />
-          <Scene back key="locationMenus" title="BUSINESS LOCATION" component={LocationMenusComponent} />
-          <Scene back key="locationInfo" title="BUSINESS LOCATION" Layout={UpdateLocationInformationComponent} component={UpdateLocationInformationContainer} />
-          
-          {/*<Stack
-            key="businessInformation"
-            title="BUSINESS INFORMATION"
-            {...DefaultProps.navbarProps}
-          >
-            <Scene back key="businessInformation" title="BUSINESS INFORMATION" component={BusinessInformationComponent} />
-          </Stack>*/}
 
-          <Scene back key="contactInformation" title="CONTACT INFORMATION" component={ContactInformationComponent} />
+
+          <Scene back key="locationMenus" title="BUSINESS LOCATION" component={LocationMenusComponent} />
+          <Scene back key="locationInfo" title="Information" Layout={UpdateLocationInfoComponent} component={UpdateLocationInfoContainer} />
+          <Scene back key="locationAddress" title="Address" Layout={UpdateLocationAddressComponent} component={UpdateLocationAddressContainer} />
+          <Scene back key="locationContact" title="Contact" Layout={UpdateLocationContactComponent} component={UpdateLocationContactContainer} />
+          <Scene back key="locationGeolocation" title="Geolocation" Layout={UpdateLocationGeolocationComponent} component={UpdateLocationGeolocationContainer} />
+          <Scene back key="locationImage" title="Image" Layout={UpdateLocationImageComponent} component={UpdateLocationImageContainer} />
+          
           <Scene
             back
             key="profile"

@@ -9,7 +9,7 @@ import { Actions } from 'react-native-router-flux';
 import site from '../../constants/site';
 import { getLocation } from '../../actions/locations';
 
-class UpdateLocationInfo extends Component {
+class UpdateAddress extends Component {
     static propTypes = {
         Layout: PropTypes.func.isRequired,
         locations: PropTypes.shape({}).isRequired,
@@ -85,4 +85,4 @@ const mapDispatchToProps = {
     onFormSubmit: function () { },
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateLocationInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateAddress);

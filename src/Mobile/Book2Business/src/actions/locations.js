@@ -14,7 +14,7 @@ export function getLocation(siteId, locationId) {
         return fetch(`${api}locations/ofsiteid/${siteId}/locationid/${locationId}`)
             .then(res=>res.json())
           .then((json) => {
-            await statusMessage(dispatch, 'loading', false);
+            statusMessage(dispatch, 'loading', false);
             return resolve(dispatch({
                 type: 'LOCATION',
                 data: json,
@@ -22,7 +22,7 @@ export function getLocation(siteId, locationId) {
           }).catch(reject);
         
     }).catch(async (err) => {
-        statusMessage(dispatch, 'loading', false);
+        await statusMessage(dispatch, 'loading', false);
         throw err.message;
     });
 }

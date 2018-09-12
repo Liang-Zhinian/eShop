@@ -12,7 +12,7 @@ import Spacer from '../Spacer';
 import site from '../../../constants/site';
 import { getLocation } from '../../../actions/locations';
 
-class UpdateLocationInformation extends React.Component {
+class UpdateContact extends React.Component {
     static propTypes = {
         error: PropTypes.string,
         success: PropTypes.string,
@@ -21,6 +21,9 @@ class UpdateLocationInformation extends React.Component {
         location: PropTypes.shape({
             name: PropTypes.string,
             description: PropTypes.string,
+            primaryTelephone: PropTypes.string,
+            secondaryTelephone: PropTypes.string,
+            contactName: PropTypes.string,
         }).isRequired,
     }
 
@@ -32,8 +35,9 @@ class UpdateLocationInformation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
-            description: '',
+            primaryTelephone: props.location.ContactInformation.PrimaryTelephone,
+            secondaryTelephone: props.location.ContactInformation.SecondaryTelephone,
+            contactName: props.location.ContactInformation.ContactName,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -66,20 +70,13 @@ class UpdateLocationInformation extends React.Component {
             .catch(e => console.log(`Error: ${e}`));
     }
 
-    onFormSubmit = (data) => {
-    //   const { onFormSubmit } = this.props;
-    //   return onFormSubmit(data)
-    //     .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
-    //     .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err; });
-    }
-
     render() {
         const { loading, error, success } = this.props;
 
-        console.log(this)
         const {
-            name,
-            description,
+            primaryTelephone,
+            secondaryTelephone,
+            contactName,
         } = this.state;
 
         // Loading
@@ -89,8 +86,8 @@ class UpdateLocationInformation extends React.Component {
             <Container>
                 <Content padder>
                     <Header
-                        title="Business location"
-                        content="Thanks for keeping your business location up to date!"
+                        title="Contact"
+                        content="Thanks for keeping your contact up to date!"
                     />
 
                     {error && <Messages message={error} />}
@@ -99,21 +96,31 @@ class UpdateLocationInformation extends React.Component {
                     <Form>
                         <Item stackedLabel>
                             <Label>
-                                Name
-                </Label>
+                                Contact name
+                            </Label>
                             <Input
-                                value={name}
-                                onChangeText={v => this.handleChange('name', v)}
+                                value={contactName}
+                                onChangeText={v => this.handleChange('contactName', v)}
                             />
                         </Item>
 
                         <Item stackedLabel>
                             <Label>
-                                Description
-            </Label>
+                                Primary telephone
+                            </Label>
                             <Input
-                                value={description}
-                                onChangeText={v => this.handleChange('description', v)}
+                                value={primaryTelephone}
+                                onChangeText={v => this.handleChange('primaryTelephone', v)}
+                            />
+                        </Item>
+
+                        <Item stackedLabel>
+                            <Label>
+                                Secondary telephone
+                            </Label>
+                            <Input
+                                value={secondaryTelephone}
+                                onChangeText={v => this.handleChange('secondaryTelephone', v)}
                             />
                         </Item>
 
@@ -131,5 +138,5 @@ class UpdateLocationInformation extends React.Component {
     }
 }
 
-export default UpdateLocationInformation;
+export default UpdateContact;
 
