@@ -209,6 +209,14 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.Services
 
         }
 
+        public IQueryable<Location> FindLocations(Guid siteId)
+        {
+            var locations = _businessDbContext.Locations
+                                                   .Include(y => y.AdditionalLocationImages)
+                                                   .Where(y => y.SiteId.Equals(siteId));
+            return locations;
+        }
+
         public async Task<Location> FindExistingLocation(Guid siteId, Guid locationId)
         {
             var location = await _businessDbContext.Locations

@@ -4,68 +4,106 @@ import { ListView, TouchableOpacity } from 'react-native';
 import { Container, Header, Content, Left, Body, Right, Button, Icon, List, ListItem, Text } from 'native-base';
 
 const dataArray = [
-  { title: "Single", content: "Lorem ipsum dolor sit amet" },
-  { title: "Complimentary", content: "Lorem ipsum dolor sit amet" },
-  { title: "Redeemable", content: "Lorem ipsum dolor sit amet" },
-  { title: "Package", content: "Lorem ipsum dolor sit amet" },
-  { title: "Personal Training", content: "Lorem ipsum dolor sit amet" }
+    { title: "Single", content: "Lorem ipsum dolor sit amet" },
+    { title: "Complimentary", content: "Lorem ipsum dolor sit amet" },
+    { title: "Redeemable", content: "Lorem ipsum dolor sit amet" },
+    { title: "Package", content: "Lorem ipsum dolor sit amet" },
+    { title: "Personal Training", content: "Lorem ipsum dolor sit amet" }
 ];
 
-export default class ServiceCategories extends Component {
+const ServiceCategoryListing = ({
+    error,
+    loading,
+    serviceCategories,
+    reFetch,
+}) => {
 
-  constructor(props) {
-    super(props);
-    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    this.state = {
-      basic: true,
-      listViewData: dataArray,
-    };
-  }
+    // Loading
+    if (loading) return <Loading />;
 
-  render() {
+    // Error
+    if (error) return <Error content={error} />;
+
+    const keyExtractor = item => item.id;
+
+    //   const onPress = item => Actions.recipe({ match: { params: { id: String(item.id) } } });
+
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+    console.log('ServiceCategoryListing', serviceCategories);
+
     return (
-      <Container>
-        <Content>
-          <List
-            // leftOpenValue={75}
-            rightOpenValue={-75}
-            dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-            renderRow={this._renderRow}
-            renderLeftHiddenRow={data =>
-              <Button full onPress={() => alert(data)}>
-                <Icon active name="information-circle" />
-              </Button>}
-            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-              <Button full danger onPress={_ => this._deleteRow(secId, rowId, rowMap)}>
-                <Icon active name="trash" />
-              </Button>}
-          />
+        <Container>
+            <Content>
+                <List
+                    // leftOpenValue={75}
+                    rightOpenValue={-75}
+                    dataSource={ds.cloneWithRows(serviceCategories)}
+                    renderRow={(item) => {
+                        return <ListItem thumbnail>
+                            <Body>
+                                <Text>{item.title}</Text>
+                                <Text note numberOfLines={1}>{item.content}</Text>
+                            </Body>
+                            <Right>
+                                <Button transparent>
+                                    <Text>Rename</Text>
+                                </Button>
+                            </Right>
+                        </ListItem>
+                    }}
+                    renderLeftHiddenRow={data =>
+                        <Button full onPress={() => alert(data)}>
+                            <Icon active name="information-circle" />
+                        </Button>}
+                    renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                        <Button full danger onPress={_ => {
+                            rowMap[`${secId}${rowId}`].props.closeRow();
+                            const newData = [...this.state.listViewData];
+                            newData.splice(rowId, 1);
+                            this.setState({ listViewData: newData });
+                        }}>
+                            <Icon active name="trash" />
+                        </Button>}
+                />
 
-        </Content>
-      </Container>
+            </Content>
+        </Container>
     );
-  }
+};
 
-  _renderRow(item) {
-    return <ListItem thumbnail>
-      <Body>
-        <Text>{item.title}</Text>
-        <Text note numberOfLines={1}>{item.content}</Text>
-      </Body>
-      <Right>
-        <Button transparent>
-          <Text>Rename</Text>
-        </Button>
-      </Right>
-    </ListItem>
-  }
+ServiceCategoryListing.propTypes = {
+    error: PropTypes.string,
+    loading: PropTypes.bool.isRequired,
+    serviceCategories: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    reFetch: PropTypes.func,
+};
 
-  _deleteRow(secId, rowId, rowMap) {
-    rowMap[`${secId}${rowId}`].props.closeRow();
-    const newData = [...this.state.listViewData];
-    newData.splice(rowId, 1);
-    this.setState({ listViewData: newData });
-  }
-}
+ServiceCategoryListing.defaultProps = {
+    error: null,
+    reFetch: null,
+    ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
+    renderRow: (item) => {
+        return <ListItem thumbnail>
+            <Body>
+                <Text>{item.title}</Text>
+                <Text note numberOfLines={1}>{item.content}</Text>
+            </Body>
+            <Right>
+                <Button transparent>
+                    <Text>Rename</Text>
+                </Button>
+            </Right>
+        </ListItem>
+    },
+    deleteRow: (secId, rowId, rowMap) => {
+        rowMap[`${secId}${rowId}`].props.closeRow();
+        const newData = [...this.state.listViewData];
+        newData.splice(rowId, 1);
+        this.setState({ listViewData: newData });
+    }
+};
+
+export default ServiceCategoryListing;
+
+

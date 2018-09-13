@@ -22,6 +22,18 @@ export default class ServiceCategories extends Component {
     };
   }
 
+  componentDidMount(){
+      console.log(this.props.serviceCategories);
+      if (this.props.serviceCategories && this.props.serviceCategories.Data){
+        let listViewData = this.props.serviceCategories.Data.map(item=>({
+            id: item.Id,
+            title: item.Name,
+            content: item.Description
+        }));
+        this.setState({listViewData});
+      }
+  }
+
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 

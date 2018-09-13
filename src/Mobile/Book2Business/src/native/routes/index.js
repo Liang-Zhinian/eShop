@@ -37,11 +37,11 @@ import ReportsComponent from '../components/reports/Reports';
 
 import MoreComponent from '../components/More';
 
-import ServiceCategiesComponent from '../components/service_categories/ServiceCategories';
-import AppointmentCategiesContainer from '../../containers/appointments/ServiceCategories';
+import ServiceCategoriesComponent from '../components/service_categories/ServiceCategories';
+import AppointmentCategoriesContainer from '../../containers/appointments/ServiceCategories';
 
-import ServiceCategoryComponent from '../components/service_categories/ServiceCategory';
-import AppointmentCategoryContainer from '../../containers/appointments/AppointmentCategory';
+// import ServiceCategoryComponent from '../components/service_categories/ServiceCategory';
+// import AppointmentCategoryContainer from '../../containers/appointments/ServiceCategory';
 
 import ClassesComponent from '../components/classes/Classes';
 
@@ -113,11 +113,11 @@ const Index = (
             key="appointment_categories"
             title="APPOINTMENT CATEGORIES"
             hideNavBar={false}
-            component={AppointmentCategiesContainer}
-            Layout={ServiceCategiesComponent}
+            component={AppointmentCategoriesContainer}
+            Layout={ServiceCategoriesComponent}
             {...DefaultProps.navbarProps}
           />
-          <Scene
+          {/* <Scene
             back
             key="appointment_category"
             title="APPOINTMENT"
@@ -125,7 +125,7 @@ const Index = (
             component={AppointmentCategoryContainer}
             Layout={ServiceCategoryComponent}
             {...DefaultProps.navbarProps}
-          />
+          /> */}
           
           <Scene back key="classes" title="CLASSES" component={ClassesComponent} />
 

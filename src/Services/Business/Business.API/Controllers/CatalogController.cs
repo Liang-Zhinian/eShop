@@ -36,17 +36,25 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
         //GET api/v1/[controller]/FindServiceItemsBy/siteId/sampleguid
         [HttpGet]
-        [Route("[action]/siteId/{siteId:guid}")]
+        [Route("sites/{siteId:guid}/serviceitems/{serviceItemId:guid}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceItem>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<ServiceItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FindServiceItemsOf(Guid? siteId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> ServiceItems(Guid siteId, Guid? serviceItemId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var root = (IQueryable<ServiceItem>)_catalogContext.ServiceItems
+                                                               .Where(y=>y.SiteId.Equals(siteId))
                                                                .Include(y=>y.ServiceCategory);
 
-            if (siteId.HasValue)
+            if (serviceItemId.HasValue)
             {
-                root = root.Where(ci => ci.SiteId == siteId);
+                var item = await root.SingleOrDefaultAsync(ci => ci.Id == serviceItemId);
+
+                if (item != null)
+                {
+                    return Ok(item);
+                }
+
+                return BadRequest();
             }
 
             var totalItems = await root
@@ -95,28 +103,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             await _catalogIntegrationEventService.PublishThroughEventBusAsync(serviceItemCreatedEvent);
 
 
-            return CreatedAtAction(nameof(FindServiceItemById), new { id = newItem.Id }, null);
-        }
-
-        [HttpGet]
-        [Route("serviceitems/{id:guid}")]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ServiceItem), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FindServiceItemById(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                return BadRequest();
-            }
-
-            var item = await _catalogContext.ServiceItems.SingleOrDefaultAsync(ci => ci.Id == id);
-
-            if (item != null)
-            {
-                return Ok(item);
-            }
-
-            return NotFound();
+            return CreatedAtAction(nameof(ServiceItems), new { siteId =newItem.SiteId,  serviceItemId = newItem.Id }, null);
         }
 
         //POST api/v1/[controller]/servicecategories
@@ -143,45 +130,31 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             await _catalogIntegrationEventService.PublishThroughEventBusAsync(serviceCategoryCreatedEvent);
 
 
-            return CreatedAtAction(nameof(FindServiceCategoryById), new { id = newCategory.Id }, null);
-        }
-
-        [HttpGet]
-        [Route("servicecategories/{id:guid}")]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ServiceCategory), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FindServiceCategoryById(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                return BadRequest();
-            }
-
-            var item = await _catalogContext.ServiceCategories
-                                            .Include(y=>y.ScheduleType)
-                                            .SingleOrDefaultAsync(ci => ci.Id == id);
-
-            if (item != null)
-            {
-                return Ok(item);
-            }
-
-            return NotFound();
+            return CreatedAtAction(nameof(ServiceCategories), new { siteId = newCategory.SiteId, serviceCategoryId = newCategory.Id }, null);
         }
 
         //GET api/v1/[controller]/[action]/siteId/{siteId:guid}
         [HttpGet]
-        [Route("[action]/siteId/{siteId:guid}")]
+        [Route("sites/{siteId:guid}/servicecategories")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceCategory>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<ServiceCategory>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FindServiceCategoriesOf(Guid? siteId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> ServiceCategories(Guid siteId, Guid? serviceCategoryId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var root = (IQueryable<ServiceCategory>)_catalogContext.ServiceCategories
+                                                                   .Where(y=>y.SiteId.Equals(siteId))
                                                                    .Include(y=>y.ScheduleType);
 
-            if (siteId.HasValue)
+            if (serviceCategoryId.HasValue)
             {
                 root = root.Where(ci => ci.SiteId == siteId);
+                var item = await root.SingleOrDefaultAsync(ci => ci.Id == serviceCategoryId);
+
+                if (item != null)
+                {
+                    return Ok(item);
+                }
+
+                return NotFound();
             }
 
             var totalItems = await root
@@ -227,28 +200,42 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             await _catalogContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAvailabilityById), new { id = item.Id }, null);
+            return CreatedAtAction(nameof(Availabilities), new { siteId = item.SiteId, availabilityId = item.Id }, null);
         }
 
+        //GET api/v1/[controller]/sites/{siteId:guid}/availabilities/{availabilityId:guid}
         [HttpGet]
-        [Route("availabilities/{id:guid}")]
+        [Route("sites/{siteId:guid}/availabilities/{availabilityId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(Availability), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAvailabilityById(Guid id)
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<Availability>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<Availability>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Availabilities(Guid siteId, Guid? availabilityId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            if (id == Guid.Empty)
+            var root = (IQueryable<Availability>)_catalogContext.Availabilities
+                                                                    .Where(y => y.SiteId.Equals(siteId));
+                                            
+
+            if (availabilityId.HasValue)
             {
+                var item = await root.SingleOrDefaultAsync(ci => ci.Id == availabilityId);
+                if (item != null)
+                    return Ok(item);
                 return BadRequest();
             }
 
-            var item = await _catalogContext.Availabilities.SingleOrDefaultAsync(ci => ci.Id == id);
+            var totalItems = await root
+                .LongCountAsync();
 
-            if (item != null)
-            {
-                return Ok(item);
-            }
+            var itemsOnPage = await root
+                .OrderBy(c => c.StartDateTime)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
 
-            return NotFound();
+            var model = new PaginatedItemsViewModel<Availability>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
         }
 
         //POST api/v1/[controller]/unavailabilities
@@ -275,28 +262,42 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             await _catalogContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUnavailabilityById), new { id = item.Id }, null);
+            return CreatedAtAction(nameof(Unavailabilities), new { siteId=item.SiteId, unavailabilityId = item.Id }, null);
         }
 
+        //GET api/v1/[controller]/sites/{siteId:guid}/unavailabilities/{unavailabilityId:guid}
         [HttpGet]
-        [Route("unavailabilities/{id:guid}")]
+        [Route("sites/{siteId:guid}/unavailabilities/{unavailabilityId:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(Unavailability), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetUnavailabilityById(Guid id)
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<Unavailability>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<Unavailability>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Unavailabilities(Guid siteId, Guid? unavailabilityId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            if (id == Guid.Empty)
+            var root = (IQueryable<Unavailability>)_catalogContext.Availabilities
+                                                                    .Where(y => y.SiteId.Equals(siteId));
+
+
+            if (unavailabilityId.HasValue)
             {
+                var item = await root.SingleOrDefaultAsync(ci => ci.Id == unavailabilityId);
+                if (item != null)
+                    return Ok(item);
                 return BadRequest();
             }
 
-            var item = await _catalogContext.Unavailabilities.SingleOrDefaultAsync(ci => ci.Id == id);
+            var totalItems = await root
+                .LongCountAsync();
 
-            if (item != null)
-            {
-                return Ok(item);
-            }
+            var itemsOnPage = await root
+                .OrderBy(c => c.StartDateTime)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
 
-            return NotFound();
+            var model = new PaginatedItemsViewModel<Unavailability>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
         }
 
         #endregion

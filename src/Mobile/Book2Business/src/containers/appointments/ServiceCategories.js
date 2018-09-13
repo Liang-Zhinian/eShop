@@ -5,23 +5,23 @@ import { connect } from 'react-redux';
 import { Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
-
-// import { getRecipes, getMeals, setError } from '../actions/recipes';
+import site from '../../constants/site';
+import { getServiceCategories, setError } from '../../actions/serviceCategories';
 
 class ServiceCategoryListing extends Component {
   static propTypes = {
     Layout: PropTypes.func.isRequired,
-    // recipes: PropTypes.shape({
-    //   loading: PropTypes.bool.isRequired,
-    //   error: PropTypes.string,
-    //   recipes: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-    // }).isRequired,
+    serviceCategories: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+      error: PropTypes.string,
+      serviceCategories: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({}),
     }),
-    // fetchRecipes: PropTypes.func.isRequired,
+    fetchServiceCategories: PropTypes.func.isRequired,
     // fetchMeals: PropTypes.func.isRequired,
-    // showError: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -38,45 +38,56 @@ class ServiceCategoryListing extends Component {
     );
   }
 
-  componentDidMount = () => this.fetchRecipes();
+  componentDidMount = () => this.fetchServiceCategories();
 
   /**
     * Fetch Data from API, saving to Redux
     */
-  fetchRecipes = () => {
-    // const { fetchRecipes, fetchMeals, showError } = this.props;
-    // return fetchRecipes()
+  fetchServiceCategories = () => {
+    const { fetchServiceCategories, showError } = this.props;
+    return fetchServiceCategories(site.siteId, 10, 0)
     //   .then(() => fetchMeals())
-    //   .catch((err) => {
-    //     console.log(`Error: ${err}`);
-    //     return showError(err);
-    //   });
+      .catch((err) => {
+        console.log(`Error: ${err}`);
+        return showError(err);
+      });
   }
 
   render = () => {
-    const { Layout, /*recipes, */match } = this.props;
-    // const id = (match && match.params && match.params.id) ? match.params.id : null;
+    const { Layout, serviceCategories, match } = this.props;
+    const id = (match && match.params && match.params.id) ? match.params.id : null;
+
+
+    debugger;
+    let listViewData = [];
+    if (serviceCategories.serviceCategories && serviceCategories.serviceCategories.Data){
+      listViewData = serviceCategories.serviceCategories.Data.map(item=>({
+          id: item.Id,
+          title: item.Name,
+          content: item.Description
+      }));
+    }
+    console.log(listViewData);
 
     return (
       <Layout
-        // recipeId={id}
-        // error={recipes.error}
-        // loading={recipes.loading}
-        // recipes={recipes.recipes}
-        reFetch={() => this.fetchRecipes()}
+        serviceCategoryId={id}
+        error={serviceCategories.error}
+        loading={serviceCategories.loading}
+        serviceCategories={listViewData}
+        reFetch={() => this.fetchServiceCategories()}
       />
     );
   }
 }
 
 const mapStateToProps = state => ({
-  // recipes: state.recipes || {},
+    serviceCategories: state.serviceCategories || {},
 });
 
 const mapDispatchToProps = {
-  // fetchRecipes: getRecipes,
-  // fetchMeals: getMeals,
-  // showError: setError,
+  fetchServiceCategories: getServiceCategories,
+  showError: setError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceCategoryListing);

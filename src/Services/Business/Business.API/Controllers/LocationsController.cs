@@ -15,6 +15,7 @@ using SaaSEqt.eShop.Services.Business.API.Requests;
 using SaaSEqt.eShop.Services.Business.API.ViewModel;
 using SaaSEqt.eShop.Services.Business.Domain.Model.Security;
 using SaaSEqt.eShop.Services.Business.API.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace SaaSEqt.eShop.Services.Business.API.Controllers
 {
@@ -36,29 +37,43 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             _businessService = businessService;
         }
 
-        //GET api/v1/[controller]/ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}
+        //GET api/v1/[controller]/sites/{siteId:Guid}/locations/{locationId:Guid}
         [HttpGet]
-        [Route("ofSiteId/{siteId:Guid}/locationId/{locationId:Guid}")]
+        [Route("sites/{siteId:Guid}/locations")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(Location), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetLocationById(Guid siteId, Guid locationId)
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<Location>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<Location>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetLocationById(Guid siteId, Guid? locationId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            if (siteId == Guid.Empty || locationId == Guid.Empty)
+            var root = _businessService.FindLocations(siteId);
+
+            if (locationId.HasValue)
             {
-                return BadRequest();
+                var item = await root.SingleOrDefaultAsync(ci => ci.Id == locationId);
+
+                if (item != null)
+                {
+                    return Ok(item);
+                }
+
+                return NotFound();
             }
 
-            var location = await _businessService.FindExistingLocation(siteId, locationId);
-            var baseUri = _settings.LocationPicBaseUrl;
-            var azureStorageEnabled = _settings.AzureStorageEnabled;
-            location.FillLocationUrl(baseUri, azureStorageEnabled: azureStorageEnabled);
+            var totalItems = await root
+                .LongCountAsync();
 
-            if (location != null)
-            {
-                return Ok(location);
-            }
+            var itemsOnPage = await root
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
 
-            return NotFound();
+            itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+
+            var model = new PaginatedItemsViewModel<Location>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
         }
 
         //POST api/v1/[controller]
