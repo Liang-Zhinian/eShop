@@ -11,7 +11,7 @@ export function getLocation(siteId, locationId) {
         await statusMessage(dispatch, 'loading', true);
 
         // Go to Firebase
-        return fetch(`${api}locations/ofsiteid/${siteId}/locationid/${locationId}`)
+        return fetch(`${api}locations/sites/${siteId}/locations/${locationId}`)
             .then(res=>res.json())
           .then((json) => {
             statusMessage(dispatch, 'loading', false);

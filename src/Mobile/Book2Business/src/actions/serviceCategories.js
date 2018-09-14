@@ -21,7 +21,7 @@ export function getServiceCategories(siteId, pageSize, pageIndex) {
     return dispatch => new Promise(async (resolve, reject) => {
 
         await statusMessage(dispatch, 'loading', true);
-        const url = `${api}Catalog/FindServiceCategoriesOf/siteId/${siteId}?pageSize=${pageSize}&pageIndex=${pageIndex}`;
+        const url = `${api}Catalog/sites/${siteId}?pageSize=${pageSize}&pageIndex=${pageIndex}`;
         console.log(url);
         return fetch(url)
             .then(res => res.json())
