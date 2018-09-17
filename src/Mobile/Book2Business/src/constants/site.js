@@ -9,5 +9,5 @@ export default {
         'c7bc6a50-807a-4489-960b-7cea364ddfd0',
         'dadf3be6-ef77-44ab-8265-989da96adc36'
     ],
-    api: 'http://book2.atpath.com:5216/api/v1/biz/'
+    api: 'http://isd4u.com:5216/api/v1/biz/'
 }

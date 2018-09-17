@@ -72,6 +72,53 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return Ok(model);
         }
 
+		//GET api/v1/[controller]/[action]/siteId/{siteId:guid}
+        [HttpGet]
+		[Route("sites/{siteId:guid}/servicecategories/{serviceCategoryId:guid}/serviceitems")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceItem>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<ServiceItem>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> ServiceItems(Guid siteId, Guid? serviceCategoryId, Guid? serviceItemId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        {
+            var root = (IQueryable<ServiceItem>)_catalogContext.ServiceItems
+                                                               .Where(y => y.SiteId.Equals(siteId))
+                                                               .Include(y => y.ServiceCategory);
+            
+            if (serviceCategoryId.HasValue) {
+                root = root.Where(ci => ci.ServiceCategoryId == serviceCategoryId);
+
+                if (root == null)
+                {
+                    return BadRequest();
+                }
+            }
+
+            if (serviceItemId.HasValue)
+            {
+                var item = await root.SingleOrDefaultAsync(ci => ci.Id == serviceItemId);
+
+                if (item != null)
+                {
+                    return Ok(item);
+                }
+
+                return BadRequest();
+            }
+
+            var totalItems = await root
+                .LongCountAsync();
+
+            var itemsOnPage = await root
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var model = new PaginatedItemsViewModel<ServiceItem>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
+        }
+
         //POST api/v1/[controller]/serviceitems
         [HttpPost]
         [Route("serviceitems")]
