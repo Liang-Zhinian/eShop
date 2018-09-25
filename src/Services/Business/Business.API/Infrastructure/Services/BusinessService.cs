@@ -188,22 +188,34 @@ namespace SaaSEqt.eShop.Services.Business.API.Infrastructure.Services
 
         }
 
-        public async Task<LocationImage> AddAdditionalLocationImage(Guid siteId, Guid locationId, string image)
+        public async Task<LocationImage> AddOrUpdateAdditionalLocationImage(Guid siteId, Guid locationId, Guid? imageId, string image)
         {
             var location = await FindExistingLocation(siteId, locationId);
 
             var locationImage = new LocationImage(siteId, locationId, image);
-            location.AddAdditionalImage(locationImage);
+            if (!imageId.HasValue)
+            {
+                location.AddAdditionalImage(locationImage);
 
-            //await _businessDbContext.SaveChangesAsync();
+                AdditionalLocationImageCreatedEvent additionalLocationImageCreatedEvent =
+                    new AdditionalLocationImageCreatedEvent(location.SiteId,
+                                                          location.Id,
+                                                          locationImage.Id,
+                                                            location.Image);
+                await _eShopIntegrationEventService.PublishThroughEventBusAsync(additionalLocationImageCreatedEvent);
+            } else{
+                var imageModel = location.AdditionalLocationImages.SingleOrDefault(y => y.Id.Equals(imageId));
+                if (imageModel == null) throw new Exception("AdditionalLocationImage not found.");
 
-            AdditionalLocationImageCreatedEvent additionalLocationImageCreatedEvent =
-                new AdditionalLocationImageCreatedEvent(location.SiteId,
-                                                      location.Id,
-                                                      locationImage.Id,
-                                                        location.Image);
-            await _eShopIntegrationEventService.PublishThroughEventBusAsync(additionalLocationImageCreatedEvent);
+                imageModel.SetImage(image);
 
+                AdditionalLocationImageUpdatedEvent additionalLocationImageUpdatedEvent =
+                    new AdditionalLocationImageUpdatedEvent(location.SiteId,
+                                                          location.Id,
+                                                          locationImage.Id,
+                                                            location.Image);
+                await _eShopIntegrationEventService.PublishThroughEventBusAsync(additionalLocationImageUpdatedEvent);
+            }
 
             return locationImage;
 

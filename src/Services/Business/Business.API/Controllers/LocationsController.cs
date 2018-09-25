@@ -107,8 +107,8 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return CreatedAtAction(nameof(GetLocationById), new { siteId = location.SiteId, locationId = location.Id }, null);
         }
 
-        //POST api/v1/[controller]/address
-        [HttpPost]
+        //PUT api/v1/[controller]/address
+        [HttpPut]
         [Route("contactinformation")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -133,8 +133,8 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return Ok();
         }
 
-        //POST api/v1/[controller]/address
-        [HttpPost]
+        //PUT api/v1/[controller]/address
+        [HttpPut]
         [Route("address")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -161,8 +161,8 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return Ok();
         }
 
-        //POST api/v1/[controller]/image
-        [HttpPost]
+        //PUT api/v1/[controller]/image
+        [HttpPut]
         [Route("image")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -199,8 +199,8 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             return Ok();
         }
 
-        //POST api/v1/[controller]/location
-        [HttpPost]
+        //PUT api/v1/[controller]/location
+        [HttpPut]
         [Route("geolocation")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -249,13 +249,45 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
                 await request.Image.CopyToAsync(stream);
             }
 
-            LocationImage newLocationImage = await _businessService.AddAdditionalLocationImage(siteId, locationId, path);
+            LocationImage newLocationImage = await _businessService.AddOrUpdateAdditionalLocationImage(siteId, locationId, null, path);
 
             //AdditionalLocationImageCreatedEvent additionalLocationImageCreatedEvent = new AdditionalLocationImageCreatedEvent(newLocationImage.SiteId,
             //                                                                                                                    newLocationImage.LocationId,
             //                                                                                                                  newLocationImage.Image);
             
             //await _eShopIntegrationEventService.PublishThroughEventBusAsync(additionalLocationImageCreatedEvent);
+
+
+            return Ok(newLocationImage);
+        }
+
+        //PUT api/v1/[controller]/additionalimages
+        [HttpPut]
+        [Route("additionalimage")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> UpdateAdditionalLocationImage([FromForm]UpdateAdditionalLocationImageRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                //NotifyModelStateErrors();
+                return Ok(false);
+            }
+
+            Guid siteId = request.SiteId;
+            Guid locationId = request.LocationId;
+
+
+            string imageFileExtension = Path.GetExtension(request.Image.FileName);
+            var webRoot = _env.WebRootPath;
+            var path = Path.Combine(webRoot, siteId.ToString(), locationId.ToString() + imageFileExtension);
+
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await request.Image.CopyToAsync(stream);
+            }
+
+            LocationImage newLocationImage = await _businessService.AddOrUpdateAdditionalLocationImage(siteId, locationId,request.ImageId path);
 
 
             return Ok(newLocationImage);

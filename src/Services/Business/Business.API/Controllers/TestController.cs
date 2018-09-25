@@ -109,7 +109,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
             //if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             //var path = Path.Combine(request.SiteId.ToString(), request.LocationId.ToString(), request.FileName);
 
-            await _businessService.AddAdditionalLocationImage(request.SiteId, request.LocationId, request.FileName);
+            await _businessService.AddOrUpdateAdditionalLocationImage(request.SiteId, request.LocationId, request.FileName);
 
             return Ok();
         }

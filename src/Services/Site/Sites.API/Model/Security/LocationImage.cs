@@ -27,5 +27,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model.Security
 
             SiteId = siteId;
         }
+
+        public void SetImage(string image){
+            Image = image;
+        }
     }
 }
