@@ -39,7 +39,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
         //GET api/v1/[controller]/sites/{siteId:Guid}/locations/{locationId:Guid}
         [HttpGet]
-        [Route("sites/{siteId:Guid}/locations")]
+        [Route("sites/{siteId:Guid}/locations/{locationId:Guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<Location>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IEnumerable<Location>), (int)HttpStatusCode.OK)]

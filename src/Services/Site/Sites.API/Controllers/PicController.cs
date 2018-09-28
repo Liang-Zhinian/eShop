@@ -106,7 +106,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
                 return BadRequest();
             }
 
-            var item = await _siteDbContext.Locations.SingleOrDefaultAsync(y => y.Id.Equals(locationId));
+            var item = await _siteDbContext.Locations
+                                            .Include(y=>y.AdditionalLocationImages)
+                                            .SingleOrDefaultAsync(y => y.Id.Equals(locationId));
 
             if (item != null && item.AdditionalLocationImages != null)
             {

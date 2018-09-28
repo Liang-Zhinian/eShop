@@ -92,6 +92,7 @@
     <Content Remove="Pics\6.png" />
     <Content Remove="Pics\7.png" />
     <Content Remove="Pics\9.png" />
+    <Content Remove="Pics\23a73e7d-13dc-429d-af27-df1bba793b7f\0eb8fab6-decd-41c6-af30-7934938ff45f\1.png" />
   </ItemGroup>
 
   <ItemGroup>

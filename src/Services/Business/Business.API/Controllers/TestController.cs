@@ -387,6 +387,7 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
         private IEnumerable<Location> GetLocationsFromFile2(Guid siteId, string contentRootPath, BusinessDbContext context, ILogger<TestController> logger)
         {
             string csvFileLocations = Path.Combine(contentRootPath, "Setup", "locations.csv");
+            _logger.LogDebug("Reading locations file: " + csvFileLocations);
 
             if (!System.IO.File.Exists(csvFileLocations))
             {
@@ -448,41 +449,31 @@ namespace SaaSEqt.eShop.Services.Business.API.Controllers
 
             string picFileLogo = Path.Combine(contentRootPath, "Setup", "ChanelLogoMini.png");
             string picFileLocation = Path.Combine(contentRootPath, "Setup", "ChanelLogo@2x.png");
-
-
-            //byte[] logo;
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    (new StreamReader(picFileLogo)).BaseStream.CopyTo(memoryStream);
-            //    logo = memoryStream.ToArray();
-            //}
+            _logger.LogDebug("Reading file: " + picFileLogo);
+            if (!System.IO.File.Exists(picFileLogo)) throw new FileNotFoundException("File not found.", picFileLogo);
 
             var dir = siteId.ToString() + "/" + location.Id.ToString();
             var abs_dir = Path.Combine(contentRootPath + "/Pics/", dir);
             if (!Directory.Exists(abs_dir)) Directory.CreateDirectory(abs_dir);
 
+            if (!Directory.Exists(abs_dir)) throw new FileNotFoundException("Directory not found.", abs_dir);
+
+
             var fileName = "1.png";
             var path = Path.Combine(abs_dir, fileName);
-
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //(new StreamReader(picFileLogo)).BaseStream.CopyTo(memoryStream);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 (new StreamReader(picFileLogo)).BaseStream.CopyTo(stream);
                 stream.Flush();
             }
-            //}
+            if (!System.IO.File.Exists(path)) throw new FileNotFoundException("File not found.", path);
+
 
             location.ChangeImage(dir + "/" + fileName);
 
             fileName = "2.png";
             path = Path.Combine(abs_dir, fileName);
-
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //(new StreamReader(picFileLocation)).BaseStream.CopyTo(memoryStream);
 
             using (var stream = new FileStream(path, FileMode.Create))
             {
