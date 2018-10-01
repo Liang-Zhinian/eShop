@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using IdentityServer4.Services;
+using IdentityServer4.Models;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,9 @@ using System;
 using System.Reflection;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using IdentityModel;
+using System.Linq;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -115,7 +119,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -134,7 +138,8 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
 
             // Seed database
-            InitializeRoles(roleManager).Wait();
+            //InitializeRoles(roleManager).Wait();
+            //InitializeUserRoles(userManager).Wait();
 
             var pathBase = Configuration["PATH_BASE"];
             if (!string.IsNullOrEmpty(pathBase))
@@ -154,7 +159,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
             // Make work identity server redirections in Edge and lastest versions of browers. WARN: Not valid in a production environment.
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
+                //context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
                 await next();
             });
 
@@ -200,6 +205,15 @@ namespace SaaSEqt.eShop.Services.Identity.API
                     // In the real world, there might be claims associated with roles
                     // await roleManager.AddClaimAsync(newRole, new Claim("foo", "bar"))
                 }
+            }
+        }
+
+        private async Task InitializeUserRoles(UserManager<ApplicationUser> userManager)
+        {
+            foreach (var user in userManager.Users)
+            {
+                await userManager.AddToRolesAsync(user, roles);
+                await userManager.AddClaimsAsync(user, roles.Select(y => new Claim(JwtClaimTypes.Role, y)));
             }
         }
     }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure;
 using System;
 
-namespace ServiceCatalog.API.Infrastructure.Migrations
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
     partial class CatalogContextModelSnapshot : ModelSnapshot

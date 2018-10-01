@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using Appointment.API.CommandHandlers;
 using Appointment.API.Configurations;
@@ -8,6 +9,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CqrsFramework.EventSourcing;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SaaSEqt.eShop.Services.Appointment.API.Infrastructure.Middlewares;
 using SaaSEqt.eShop.Services.Appointment.Infrastructure;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 
@@ -38,6 +41,8 @@ namespace Appointment.API
             //services.AddMemoryCache();
 
             RegisterAppInsights(services);
+
+            ConfigureAuthService(services);
 
             services.AddMvc(options =>
             {
@@ -96,7 +101,7 @@ namespace Appointment.API
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }, ServiceLifetime.Scoped);
 
-            services.AddSwaggerSupport();
+            services.AddSwaggerSupport(Configuration);
 
             services.AddCors(options =>
             {
@@ -150,6 +155,8 @@ namespace Appointment.API
 
             app.UseCors("CorsPolicy");
 
+            ConfigureAuth(app);
+
             app.UseMvcWithDefaultRoute();
 
             app.UseSwagger()
@@ -158,6 +165,8 @@ namespace Appointment.API
             {
                 //c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book2 Public API V1");
                 c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Appointment.API V1");
+                c.OAuthClientId("appointmentswaggerui");
+                c.OAuthAppName("Appointment Swagger UI");
             });
 
             //app.UseMvc();
@@ -165,6 +174,36 @@ namespace Appointment.API
             ConfigureEventBus(app);
             ConfigureCommandBus(app);
 
+        }
+
+        private void ConfigureAuthService(IServiceCollection services)
+        {
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "appointment";
+            });
+        }
+
+        protected virtual void ConfigureAuth(IApplicationBuilder app)
+        {
+            if (Configuration.GetValue<bool>("UseLoadTest"))
+            {
+                app.UseMiddleware<ByPassAuthMiddleware>();
+            }
+
+            app.UseAuthentication();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)

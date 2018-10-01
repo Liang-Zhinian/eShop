@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure;
 using System;
 
-namespace ServiceCatalog.API.Migrations.Catalog
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Migrations.Catalog
 {
     [DbContext(typeof(CatalogContext))]
     [Migration("20180810074649_init")]

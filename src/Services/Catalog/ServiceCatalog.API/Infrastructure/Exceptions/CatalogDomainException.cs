@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ServiceCatalog.API.Infrastructure.Exceptions
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.Exceptions
 {
     /// <summary>
     /// Exception type for app exceptions

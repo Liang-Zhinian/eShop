@@ -22,6 +22,9 @@
     <Compile Remove="Controllers\CategoryIconController.cs" />
     <Compile Remove="Application\IntegrationEvents\Events\Locations\AdditionalLocationImageCreatedEvent.cs" />
     <Compile Remove="Application\IntegrationEvents\EventHandling\Locations\AdditionalLocationImageCreatedEventHandler.cs" />
+    <Compile Remove="Extensions\CategoryIconExtensions.cs" />
+    <Compile Remove="Infrastructure\EntityConfigurations\CategoryIconMap.cs" />
+    <Compile Remove="Controllers\ServiceCatalogController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
@@ -107,5 +110,6 @@
     <Folder Include="Application\" />
     <Folder Include="Application\IntegrationEvents\" />
     <Folder Include="Configurations\" />
+    <Folder Include="Model\" />
   </ItemGroup>
 </Project>

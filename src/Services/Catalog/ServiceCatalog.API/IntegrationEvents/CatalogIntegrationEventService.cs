@@ -9,7 +9,7 @@ using System;
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace ServiceCatalog.API.IntegrationEvents
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.IntegrationEvents
 {
     public class CatalogIntegrationEventService : ICatalogIntegrationEventService
     {

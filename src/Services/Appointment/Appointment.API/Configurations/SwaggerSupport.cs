@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
+using SaaSEqt.eShop.Services.Appointment.API.Infrastructure.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Appointment.API.Configurations
 {
     public static class SwaggerSupport
     {
-        public static void AddSwaggerSupport(this IServiceCollection services)
+        public static void AddSwaggerSupport(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(c =>
             {
@@ -18,15 +21,21 @@ namespace Appointment.API.Configurations
                     Title = "Book2 Appointment Interface Document",
                     Description = "RESTful Appointment API for Book2",
                     TermsOfService = "None",
-                    //Contact = new Contact { Name = "Jack Leung", Email = "jackl@atpath.com", Url = "" }
                 });
 
-                //Set the comments path for the swagger json and ui.
-                //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                //var xmlPath = Path.Combine(basePath, "Appointment.API.xml");
-                //c.IncludeXmlComments(xmlPath);
+                c.AddSecurityDefinition("oauth2", new OAuth2Scheme
+                {
+                    Type = "oauth2",
+                    Flow = "implicit",
+                    AuthorizationUrl = $"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize",
+                    TokenUrl = $"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
+                    Scopes = new Dictionary<string, string>()
+                    {
+                        { "locations", "Locations API" }
+                    }
+                });
 
-                //  c.OperationFilter<HttpHeaderOperation>(); // 添加httpHeader参数
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
         }
     }

@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config;
-using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Filters.Basket.API.Infrastructure.Filters;
+using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Filters;
 using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -128,8 +128,8 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
 
             app.UseSwagger().UseSwaggerUI(c =>
            {
-                c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Reservation BFF V1");
-                c.ConfigureOAuth2("SaaSEqt.eShop.Mobile.Reservation.HttpAggregatorwaggerui", "", "", "Reservation BFF Swagger UI");
+               c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Reservation BFF V1");
+               c.ConfigureOAuth2("SaaSEqt.eShop.Mobile.Reservation.HttpAggregatorwaggerui", "", "", "Reservation BFF Swagger UI");
            });
 
 

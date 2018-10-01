@@ -1,30 +1,41 @@
-﻿using System;
-using System.Data.Common;
-using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.ApplicationInsights.ServiceFabric;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
-using SaaSEqt.eShop.Services.Sites.API.Configurations;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.AutofacModules;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Data;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters;
-using SaaSEqt.Infrastructure.HealthChecks.MySQL;
-
-namespace SaaSEqt.eShop.Services.Sites.API
+﻿namespace SaaSEqt.eShop.Services.Sites.API
 {
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+    using global::Sites.API.Infrastructure.Filters;
+    using global::Sites.API.IntegrationEvents;
+    using Microsoft.ApplicationInsights.Extensibility;
+    using Microsoft.ApplicationInsights.ServiceFabric;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Azure.ServiceBus;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Diagnostics;
+    using SaaSEqt.eShop.BuildingBlocks.EventBus;
+    using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
+    using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
+    using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
+    using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+    using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
+    using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
+    using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.HealthChecks;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using RabbitMQ.Client;
+    using System;
+    using System.Data.Common;
+    using System.Reflection;
+    using SaaSEqt.Infrastructure.HealthChecks.MySQL;
+    using SaaSEqt.IdentityAccess.Infrastructure.Context;
+    using System.IdentityModel.Tokens.Jwt;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Middlewares;
+    using Swashbuckle.AspNetCore.Swagger;
+    using System.Collections.Generic;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -34,27 +45,11 @@ namespace SaaSEqt.eShop.Services.Sites.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //services.AddMemoryCache();
+            // Add framework services.
 
             RegisterAppInsights(services);
-
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-            }).AddControllersAsServices() //Injecting Controllers themselves thru DI
-            //全局配置Json序列化处理
-            .AddJsonOptions(options =>
-            {
-                //忽略循环引用
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                //不使用驼峰样式的key
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                //设置时间格式
-                options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
-            });
 
             services.AddHealthChecks(checks =>
             {
@@ -63,42 +58,95 @@ namespace SaaSEqt.eShop.Services.Sites.API
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddMySQLCheck("book2businessdb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
-                //checks.AddUrlCheck("http://localhost:60000/", TimeSpan.FromMinutes(minutes));
+                checks.AddMySQLCheck("SitesDb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
 
+                var accountName = Configuration.GetValue<string>("AzureStorageAccountName");
+                var accountKey = Configuration.GetValue<string>("AzureStorageAccountKey");
+                if (!string.IsNullOrEmpty(accountName) && !string.IsNullOrEmpty(accountKey))
+                {
+                    checks.AddAzureBlobStorageCheck(accountName, accountKey);
+                }
             });
 
-            services.AddDbContext<SitesDbContext>(options =>
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            }).AddControllersAsServices();
+
+            ConfigureAuthService(services);
+
+            services.AddDbContext<SitesContext>(options =>
             {
                 options.UseMySql(Configuration["ConnectionString"],
-                                 mySqlOptionsAction: sqlOptions =>
-                                 {
-                                     sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                     //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                 });
+                                     mySqlOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
 
                 // Changing default behavior when client evaluation occurs to throw. 
                 // Default in EF Core would be to log a warning when client evaluation is performed.
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
                 //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
-            }, ServiceLifetime.Scoped);
+            });
+
+            services.AddDbContext<IdentityAccessDbContext>(options =>
+            {
+                options.UseMySql(Configuration["ConnectionString"],
+                                     mySqlOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
+
+                // Changing default behavior when client evaluation occurs to throw. 
+                // Default in EF Core would be to log a warning when client evaluation is performed.
+                options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
+            });
 
             services.AddDbContext<IntegrationEventLogContext>(options =>
             {
                 options.UseMySql(Configuration["ConnectionString"],
-                                 mySqlOptionsAction: sqlOptions =>
-                                 {
-                                     sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                 });
+                                     mySqlOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
+            });
 
-                options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }, ServiceLifetime.Scoped);
+            services.Configure<SitesSettings>(Configuration);
 
-            services.Configure<BusinessSettings>(Configuration);
+            // Add framework services.
+            services.AddSwaggerGen(options =>
+            {
+                options.DescribeAllEnumsAsStrings();
+                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Title = "eShop - Sites HTTP API",
+                    Version = "v1",
+                    Description = "The Sites Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
+                    TermsOfService = "Terms Of Service"
+                });
 
-            services.AddSwaggerSupport();
+                options.AddSecurityDefinition("oauth2", new OAuth2Scheme
+                {
+                    Type = "oauth2",
+                    Flow = "implicit",
+                    AuthorizationUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize",
+                    TokenUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
+                    Scopes = new Dictionary<string, string>()
+                    {
+                        { "sites", "Sites API" }
+                    }
+                });
+
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
+
+            });
 
             services.AddCors(options =>
             {
@@ -109,31 +157,65 @@ namespace SaaSEqt.eShop.Services.Sites.API
                     .AllowCredentials());
             });
 
-            // Add application services.
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
                 sp => (DbConnection c) => new IntegrationEventLogService(c));
-            
-            services.AddEventBusSetup(Configuration);
-            EventBusSetup.RegisterEventBus(services);
+
+            services.AddTransient<ISitesIntegrationEventService, SitesIntegrationEventService>();
+
+            if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
+            {
+                services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+                {
+                    var settings = sp.GetRequiredService<IOptions<SitesSettings>>().Value;
+                    var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
+
+                    return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
+                });
+            }
+            else
+            {
+                services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+                {
+                    var settings = sp.GetRequiredService<IOptions<SitesSettings>>().Value;
+                    var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                    var factory = new ConnectionFactory()
+                    {
+                        HostName = Configuration["EventBusConnection"]
+                    };
+
+                    if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
+                    {
+                        factory.UserName = Configuration["EventBusUserName"];
+                    }
+
+                    if (!string.IsNullOrEmpty(Configuration["EventBusPassword"]))
+                    {
+                        factory.Password = Configuration["EventBusPassword"];
+                    }
+
+                    var retryCount = 5;
+                    if (!string.IsNullOrEmpty(Configuration["EventBusRetryCount"]))
+                    {
+                        retryCount = int.Parse(Configuration["EventBusRetryCount"]);
+                    }
+
+                    return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+                });
+            }
+
+            RegisterEventBus(services);
 
             var container = new ContainerBuilder();
             container.Populate(services);
-
-            container.RegisterModule(new ApplicationModule());
-            container.RegisterModule(new MediatorModule());
-
             return new AutofacServiceProvider(container.Build());
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             //Configure logs
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -154,21 +236,50 @@ namespace SaaSEqt.eShop.Services.Sites.API
 
             app.UseCors("CorsPolicy");
 
+            ConfigureAuth(app);
+
             app.UseMvcWithDefaultRoute();
 
             app.UseSwagger()
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS etc.), specifying the Swagger JSON endpoint.
-            .UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Book2 Business API V1"); 
-                //c.ShowRequestHeaders();
-            });
+              .UseSwaggerUI(c =>
+              {
+                  c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Sites.API V1");                  
+                    c.OAuthClientId("sitesswaggerui");
+                  c.OAuthAppName("Sites Swagger UI");
+                });
 
-
-            EventBusSetup.ConfigureEventBus(app);
+            ConfigureEventBus(app);
         }
 
-        #region additional registration
+        private void ConfigureAuthService(IServiceCollection services)
+        {
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "sites";
+            });
+        }
+
+        protected virtual void ConfigureAuth(IApplicationBuilder app)
+        {
+            if (Configuration.GetValue<bool>("UseLoadTest"))
+            {
+                app.UseMiddleware<ByPassAuthMiddleware>();
+            }
+
+            app.UseAuthentication();
+        }
 
         private void RegisterAppInsights(IServiceCollection services)
         {
@@ -183,11 +294,57 @@ namespace SaaSEqt.eShop.Services.Sites.API
             if (orchestratorType?.ToUpper() == "SF")
             {
                 // Enable SF telemetry initializer
-                services.AddScoped<ITelemetryInitializer>((serviceProvider) =>
+                services.AddSingleton<ITelemetryInitializer>((serviceProvider) =>
                     new FabricTelemetryInitializer());
             }
         }
 
-        #endregion
+        private void RegisterEventBus(IServiceCollection services)
+        {
+            var subscriptionClientName = Configuration["SubscriptionClientName"];
+
+            if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
+            {
+                services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
+                {
+                    var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
+                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                    var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                    return new EventBusServiceBus(serviceBusPersisterConnection, logger,
+                        eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);
+                });
+
+            }
+            else
+            {
+                services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+                {
+                    var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                    var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                    var retryCount = 5;
+                    if (!string.IsNullOrEmpty(Configuration["EventBusRetryCount"]))
+                    {
+                        retryCount = int.Parse(Configuration["EventBusRetryCount"]);
+                    }
+
+                    return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
+                });
+            }
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+            //services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+            //services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
+        }
+        protected virtual void ConfigureEventBus(IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            //eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+            //eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
+        }
     }
 }

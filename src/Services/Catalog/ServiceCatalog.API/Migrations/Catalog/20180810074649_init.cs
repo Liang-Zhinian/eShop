@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ServiceCatalog.API.Migrations.Catalog
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Migrations.Catalog
 {
     public partial class init : Migration
     {

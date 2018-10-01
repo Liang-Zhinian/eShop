@@ -317,6 +317,14 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> FindByUsername(string username)
+        {
+            var user = await _loginService.FindByUsername(username);
+
+            return Ok(user);
+        }
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -324,5 +332,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
+
+
     }
 }

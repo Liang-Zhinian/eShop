@@ -21,14 +21,23 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
             Id = Guid.NewGuid();
         }
 
-        public ServiceCategory(Guid siteId, Guid id, string name, string description, bool allowOnlineScheduling, int scheduleType)
+        public ServiceCategory(Guid siteId, Guid serviceCategoryId, string name, string description, bool allowOnlineScheduling, int scheduleType) : this()
         {
             SiteId = siteId;
-            Id = id;
+            Id = serviceCategoryId;
             Name = name;
             Description = description;
             AllowOnlineScheduling = allowOnlineScheduling;
             ScheduleTypeId = scheduleType;
+
+            //var serviceCategoryCreatedEvent = new ServiceCategoryCreatedEvent(Id,
+            //                                                                  name,
+            //                                                                  description,
+            //                                                                  cancelOffset,
+            //                                                                  scheduleType,
+            //                                                                  siteId
+            //                                                                 );
+            //ApplyChange(serviceCategoryCreatedEvent);
         }
     }
 }

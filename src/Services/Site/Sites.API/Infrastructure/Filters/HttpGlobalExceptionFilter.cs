@@ -1,13 +1,12 @@
-﻿using SaaSEqt.eShop.Services.Sites.API.Infrastructure.ActionResults;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Exceptions;
-using System;
+﻿using Sites.API.Infrastructure.ActionResults;
+using Sites.API.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters
+namespace Sites.API.Infrastructure.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {
@@ -26,7 +25,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters
                 context.Exception,
                 context.Exception.Message);
 
-			if (context.Exception.GetType() == typeof(BusinessDomainException))
+            if (context.Exception.GetType() == typeof(SitesDomainException))
             {
                 var json = new JsonErrorResponse
                 {
@@ -40,7 +39,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters
             {
                 var json = new JsonErrorResponse
                 {
-                    Messages = new[] { "An error ocurr.Try it again." }
+                    Messages = new[] { "An error ocurred." }
                 };
 
                 if (env.IsDevelopment())

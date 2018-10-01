@@ -1,15 +1,12 @@
-﻿using System.IO;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-//using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Data;
-
+using System.IO;
 namespace SaaSEqt.eShop.Services.Sites.API
 {
     public class Program
@@ -17,48 +14,25 @@ namespace SaaSEqt.eShop.Services.Sites.API
         public static void Main(string[] args)
         {
             BuildWebHost(args)
-                .MigrateDbContext<SitesDbContext>((context, services) =>
+                .MigrateDbContext<SitesContext>((context,services)=>
                 {
                     var env = services.GetService<IHostingEnvironment>();
-                    var settings = services.GetService<IOptions<BusinessSettings>>();
-                    var logger = services.GetService<ILogger<BusinessDbContextSeed>>();
+                    var settings = services.GetService<IOptions<SitesSettings>>();
+                    var logger = services.GetService<ILogger<SitesContextSeed>>();
 
-                    //new BusinessDbContextSeed()
-                        //.SeedAsync(context, env, settings, logger)
-                        //.Wait();
-
-                })
-                .MigrateDbContext<SitesDbContext>((context, services) =>
-                {
-                    var env = services.GetService<IHostingEnvironment>();
-                    var settings = services.GetService<IOptions<BusinessSettings>>();
-                    var logger = services.GetService<ILogger<CategoryContextSeed>>();
-
-                    new CategoryContextSeed()
+                new SitesContextSeed()
                     .SeedAsync(context, env, settings, logger)
                     .Wait();
-
-                })
-                .MigrateDbContext<SitesDbContext>((context, services) =>
-                {
-                    var env = services.GetService<IHostingEnvironment>();
-                    var settings = services.GetService<IOptions<BusinessSettings>>();
-                    var logger = services.GetService<ILogger<CatalogContextSeed>>();
-
-                    //new CatalogContextSeed()
-                    //.SeedAsync(context, env, settings, logger)
-                    //.Wait();
-
                 })
                 .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
                 .Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                   //.UseUrls("http://*:8081")
-                   .UseStartup<Startup>()
-                   .UseApplicationInsights()
+        WebHost.CreateDefaultBuilder(args)
+                   //.UseUrls("http://*:8082")
+             .UseStartup<Startup>()
+                .UseApplicationInsights()
                 .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseWebRoot("Pics")
@@ -71,7 +45,7 @@ namespace SaaSEqt.eShop.Services.Sites.API
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                })
-                .Build();
+                })                
+                .Build();    
     }
 }

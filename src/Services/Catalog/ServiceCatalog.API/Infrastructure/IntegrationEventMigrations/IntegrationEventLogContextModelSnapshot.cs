@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
 
-namespace ServiceCatalog.API.Migrations
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Migrations
 {
     [DbContext(typeof(IntegrationEventLogContext))]
     partial class IntegrationEventLogContextModelSnapshot : ModelSnapshot

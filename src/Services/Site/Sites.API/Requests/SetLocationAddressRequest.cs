@@ -3,8 +3,20 @@ namespace Business.API.Requests.Locations
 {
     public class SetLocationAddressRequest
     {
+
         public SetLocationAddressRequest()
         {
+        }
+
+        public SetLocationAddressRequest(Guid siteId, Guid id, string street, string city, string stateProvince, string zipCode, string country)
+        {
+            SiteId = siteId;
+            Id = id;
+            StreetAddress = street;
+            City = city;
+            StateProvince = stateProvince;
+            PostalCode = zipCode;
+            CountryCode = country;
         }
 
         public Guid Id { get; set; }
@@ -21,6 +33,6 @@ namespace Business.API.Requests.Locations
 
         public string StreetAddress { get; set; }
 
-        public string StreetAddress2 { get; set; }
+        //public string StreetAddress2 { get; set; }
     }
 }

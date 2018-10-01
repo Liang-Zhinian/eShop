@@ -96,4 +96,7 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\EntityConfigurations\Constants\" />
+  </ItemGroup>
 </Project>

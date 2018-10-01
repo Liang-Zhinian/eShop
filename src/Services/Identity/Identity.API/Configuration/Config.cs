@@ -12,15 +12,21 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
         {
             return new List<ApiResource>
             {
-                new ApiResource("orders", "Orders Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("orders", "Orders Service"),
                 new ApiResource("basket", "Basket Service"),
                 new ApiResource("marketing", "Marketing Service"),
                 new ApiResource("locations", "Locations Service"),
                 new ApiResource("mobileshoppingagg", "Mobile Shopping Aggregator"),
                 new ApiResource("webshoppingagg", "Web Shopping Aggregator"),
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
-                new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator"),
-                //new ApiResource("","", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role })
+                // test
+                new ApiResource("api1","Testing API Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                // new api resources
+                new ApiResource("catalog", "Catalog Aggregator", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("appointment","Appointment Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("schedules","Schedules Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("sites","Sites Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
         }
 
@@ -32,16 +38,21 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                //new IdentityResources.Email(),
-                //new IdentityResource {
-                //    Name = "role",
-                //    UserClaims = new List<string> {"role"}
-                //}
+                new IdentityResources.Email(),
+                new IdentityResources.Address(),
+                new IdentityResources.Phone(),
+                new IdentityResource {
+                    Name = JwtClaimTypes.Role,
+                    DisplayName = "Your role(s)",
+                    Description = "Your role(s)",
+                    ShowInDiscoveryDocument=true,
+                    UserClaims = new List<string> {JwtClaimTypes.Role}
+                }
             };
         }
 
         // client want to access resources (aka scopes)
-        public static IEnumerable<Client> GetClients(Dictionary<string,string> clientsUrl)
+        public static IEnumerable<Client> GetClients(Dictionary<string, string> clientsUrl)
         {
             return new List<Client>
             {
@@ -258,21 +269,6 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 },
                 new Client
                 {
-                    ClientId = "mobilereservationaggswaggerui",
-                    ClientName = "Mobile Reservation Aggregattor Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-
-                    RedirectUris = { $"{clientsUrl["MobileReservationAgg"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{clientsUrl["MobileReservationAgg"]}/swagger/" },
-
-                    AllowedScopes =
-                    {
-                        "mobilereservationagg"
-                    }
-                },
-                new Client
-                {
                     ClientId = "mvceshop",
                     ClientName = "MVC eShop",
                     ClientSecrets = new List<Secret>
@@ -301,6 +297,88 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         "mobilereservationagg"
                     },
                 },
+
+                // for new services
+                new Client
+                {
+                    ClientId = "catalogswaggerui",
+                    ClientName = "Catalog Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["CatalogApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["CatalogApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "catalog"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "appointmentswaggerui",
+                    ClientName = "Appointment Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["AppointmentApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["AppointmentApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "appointment"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "sitesswaggerui",
+                    ClientName = "Sites Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["SitesApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["SitesApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "sites"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "schedulesswaggerui",
+                    ClientName = "Schedules Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["SchedulesApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["SchedulesApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "schedules"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "mobilereservationaggswaggerui",
+                    ClientName = "Mobile Reservation Aggregattor Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["MobileReservationAgg"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["MobileReservationAgg"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "mobilereservationagg"
+                    }
+                },
                 new Client
                 {
                     ClientId = "native.code",
@@ -308,7 +386,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                     RequireClientSecret = false,
                     RedirectUris = new List<string>
                     {
-                        $"{clientsUrl["NativeClient"]}:/oauthredirect"
+                        $"{clientsUrl["NativeAppClient"]}:/oauthredirect"
                     },
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
@@ -317,10 +395,31 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        //"mobilereservationagg"
+                        JwtClaimTypes.Role,
+                        "mobilereservationagg"
                     },
                     AllowOfflineAccess = true
-                }
+                },
+                // resource owner password grant client
+                new Client
+                {
+                    ClientId = "ro.client",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        JwtClaimTypes.Role,
+                        "mobilereservationagg",
+                        "api1"
+                    }
+                },
             };
         }
     }

@@ -2,8 +2,8 @@
 {
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
-    using global::ServiceCatalog.API.Infrastructure.Filters;
-    using global::ServiceCatalog.API.IntegrationEvents;
+    using global::SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.Filters;
+    using global::SaaSEqt.eShop.Services.ServiceCatalog.API.IntegrationEvents;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.ApplicationInsights.ServiceFabric;
     using Microsoft.AspNetCore.Builder;

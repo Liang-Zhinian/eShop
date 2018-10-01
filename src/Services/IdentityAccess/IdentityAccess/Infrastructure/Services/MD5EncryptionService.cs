@@ -6,7 +6,7 @@ namespace SaaSEqt.IdentityAccess.Infrastructure.Services
 	using System.Text;
 
     using SaaSEqt.Common.Domain.Model;
-    using SaaSEqt.IdentityAccess.Domain.Identity.Entities;
+    using SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities;
 
 	/// <summary>
 	/// Implementation of <see cref="IEncryptionService"/>

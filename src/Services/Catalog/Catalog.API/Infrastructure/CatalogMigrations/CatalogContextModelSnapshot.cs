@@ -84,6 +84,90 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.ToTable("CatalogType");
                 });
 
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.ScheduleType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScheduleType");
+                });
+
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.ServiceCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("AllowOnlineScheduling");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("ScheduleTypeId");
+
+                    b.Property<Guid>("SiteId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleTypeId");
+
+                    b.ToTable("ServiceCategory");
+                });
+
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.ServiceItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("AllowOnlineScheduling");
+
+                    b.Property<int>("DefaultTimeLength");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("IndustryStandardCategoryName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("IndustryStandardSubcategoryName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<double>("Price");
+
+                    b.Property<Guid>("ServiceCategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SiteId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<double>("TaxRate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceCategoryId");
+
+                    b.ToTable("ServiceItem");
+                });
+
             modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.CatalogItem", b =>
                 {
                     b.HasOne("SaaSEqt.eShop.Services.Catalog.API.Model.CatalogBrand", "CatalogBrand")
@@ -94,6 +178,22 @@ namespace Catalog.API.Infrastructure.Migrations
                     b.HasOne("SaaSEqt.eShop.Services.Catalog.API.Model.CatalogType", "CatalogType")
                         .WithMany()
                         .HasForeignKey("CatalogTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.ServiceCategory", b =>
+                {
+                    b.HasOne("SaaSEqt.eShop.Services.Catalog.API.Model.ScheduleType", "ScheduleType")
+                        .WithMany()
+                        .HasForeignKey("ScheduleTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.ServiceItem", b =>
+                {
+                    b.HasOne("SaaSEqt.eShop.Services.Catalog.API.Model.ServiceCategory", "ServiceCategory")
+                        .WithMany()
+                        .HasForeignKey("ServiceCategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

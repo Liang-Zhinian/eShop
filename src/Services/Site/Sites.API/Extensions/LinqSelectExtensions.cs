@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Business.API.Extensions
+namespace Sites.API.Extensions
 {
     public static class LinqSelectExtensions
     {

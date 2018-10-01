@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ServiceCatalog.API.Infrastructure.ActionResults
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.ActionResults
 {
     public class InternalServerErrorObjectResult : ObjectResult
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ServiceCatalog.API.Infrastructure.Exceptions;
+using SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.Exceptions;
 
 namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Model
 {

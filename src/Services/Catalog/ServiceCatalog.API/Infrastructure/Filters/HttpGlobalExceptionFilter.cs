@@ -1,12 +1,12 @@
-﻿using ServiceCatalog.API.Infrastructure.ActionResults;
-using ServiceCatalog.API.Infrastructure.Exceptions;
+﻿using SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.ActionResults;
+using SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace ServiceCatalog.API.Infrastructure.Filters
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure.Filters
 {
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {

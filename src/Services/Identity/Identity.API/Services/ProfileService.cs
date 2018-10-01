@@ -124,6 +124,10 @@ namespace SaaSEqt.eShop.Services.Identity.API.Services
                 });
             }
 
+            if (_userManager.SupportsUserRole){
+                claims.AddRange(_userManager.GetRolesAsync(user).Result.Select(y=>new Claim(JwtClaimTypes.Role, y)));
+            }
+
             return claims;
         }
     }

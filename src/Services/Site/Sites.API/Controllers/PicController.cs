@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services;
+using SaaSEqt.eShop.Services.Sites.API.Model;
 using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Data;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,14 +17,14 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
     public class PicController : Controller
     {
         private readonly IHostingEnvironment _env;
-        private readonly SitesDbContext _siteDbContext;
+        private readonly BusinessService _businessService;
         private readonly ILogger<PicController> _logger;
 
         public PicController(IHostingEnvironment env,
-                             SitesDbContext siteDbContext,
+                             BusinessService businessService,
                              ILogger<PicController> logger)
         {
-            _siteDbContext = siteDbContext;
+            _businessService = businessService;
             _env = env;
             _logger = logger;
         }
@@ -40,7 +41,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
                 return BadRequest();
             }
 
-            var item = await _siteDbContext.Sites.SingleOrDefaultAsync(y=>y.Id.Equals(siteId));
+            var item = await _businessService.FindExistingSite(siteId);
 
             if (item != null)
             {
@@ -73,7 +74,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
                 return BadRequest();
             }
 
-            var item = await _siteDbContext.Locations.SingleOrDefaultAsync(y => y.Id.Equals(locationId));
+            var item = await _businessService.FindExistingLocation(siteId, locationId);
 
             if (item != null)
             {
@@ -106,9 +107,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
                 return BadRequest();
             }
 
-            var item = await _siteDbContext.Locations
-                                            .Include(y=>y.AdditionalLocationImages)
-                                            .SingleOrDefaultAsync(y => y.Id.Equals(locationId));
+            var item = await _businessService.FindExistingLocation(siteId, locationId);
 
             if (item != null && item.AdditionalLocationImages != null)
             {

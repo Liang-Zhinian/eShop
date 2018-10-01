@@ -5,6 +5,30 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
+            "Host": "catalog.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/{version}/c/{everything}",
+        "UpstreamHttpMethod": [ "GET" ]
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "catalog.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/catalog-api/{everything}",
+        "UpstreamHttpMethod": []
+      },
+      {
+        "DownstreamPathTemplate": "/api/{version}/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
             "Host": "sites.api",
             "Port": 80
           }
@@ -53,39 +77,11 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "servicecatalog.api",
+            "Host": "schedule.api",
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/api/{version}/sc/{everything}",
-        "UpstreamHttpMethod": [],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
-      },
-      {
-        "DownstreamPathTemplate": "/{everything}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "servicecatalog.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/servicecatalog-api/{everything}",
-        "UpstreamHttpMethod": []
-      },
-      {
-        "DownstreamPathTemplate": "/api/{version}/{everything}",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          {
-            "Host": "business.api",
-            "Port": 80
-          }
-        ],
-        "UpstreamPathTemplate": "/api/{version}/biz/{everything}",
+        "UpstreamPathTemplate": "/api/{version}/sch/{everything}",
         "UpstreamHttpMethod": [ "GET" ]
       },
       {
@@ -93,11 +89,11 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
-            "Host": "business.api",
+            "Host": "schedule.api",
             "Port": 80
           }
         ],
-        "UpstreamPathTemplate": "/business-api/{everything}",
+        "UpstreamPathTemplate": "/schedule-api/{everything}",
         "UpstreamHttpMethod": []
       },
       {

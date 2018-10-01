@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ServiceCatalog.API.Migrations
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Migrations
 {
     public partial class IntegrationEventInitial : Migration
     {

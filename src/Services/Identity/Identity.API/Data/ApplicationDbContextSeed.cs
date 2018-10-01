@@ -11,6 +11,8 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using IdentityServer4.EntityFramework.Entities;
+using IdentityModel;
 
 namespace SaaSEqt.eShop.Services.Identity.API.Data
 {
@@ -18,10 +20,14 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
 
     public class ApplicationDbContextSeed
     {
+        private string[] roles = new[] { "User", "Manager", "Administrator" };
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
-        public async Task SeedAsync(ApplicationDbContext context,IHostingEnvironment env,
-            ILogger<ApplicationDbContextSeed> logger, IOptions<AppSettings> settings,int? retry = 0)
+        public async Task SeedAsync(ApplicationDbContext context,
+                                    IHostingEnvironment env,
+            ILogger<ApplicationDbContextSeed> logger, 
+                                    IOptions<AppSettings> settings,
+                                    int? retry = 0)
         {
             int retryForAvaiability = retry.Value;
 
@@ -43,6 +49,35 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
                 if (useCustomizationData)
                 {
                     GetPreconfiguredImages(contentRootPath, webroot, logger);
+                }
+
+                if (!context.Roles.Any())
+                {
+                    context.Roles.AddRange(roles.Select(y => new IdentityRole(y)));
+
+                    await context.SaveChangesAsync();
+                }
+
+                if (!context.UserRoles.Any())
+                {
+                    foreach (var user in context.Users)
+                    {
+                        await context.UserRoles.AddRangeAsync(context.Roles.Select(y => new IdentityUserRole<string>()
+                        {
+                            UserId = user.Id,
+                            RoleId = y.Id
+                        }));
+
+                        await context.UserClaims.AddRangeAsync(roles.Select(y => new IdentityUserClaim<string>()
+                        {
+                            UserId = user.Id,
+                            ClaimType = JwtClaimTypes.Role,
+                            ClaimValue = y
+                        }));
+
+                    }
+
+                    await context.SaveChangesAsync();
                 }
             }
             catch (Exception ex)

@@ -3,7 +3,7 @@
 namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Infrastructure
 {
     using Microsoft.Extensions.Logging;
-    using global::ServiceCatalog.API.Extensions;
+    using global::SaaSEqt.eShop.Services.ServiceCatalog.API.Extensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Options;
     using Model;

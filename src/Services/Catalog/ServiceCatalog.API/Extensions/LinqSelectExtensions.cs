@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ServiceCatalog.API.Extensions
+namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Extensions
 {
     public static class LinqSelectExtensions
     {
