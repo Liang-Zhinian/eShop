@@ -20,7 +20,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
 
     public class ApplicationDbContextSeed
     {
-        private string[] roles = new[] { "User", "Manager", "Administrator" };
+        private string[] roles = new[] { "User", "Manager", "Administrator", "SuperAdmins" };
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
         public async Task SeedAsync(ApplicationDbContext context,

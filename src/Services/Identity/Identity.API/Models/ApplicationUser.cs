@@ -3,6 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SaaSEqt.eShop.Services.Identity.API.Models
 {
+
+    public enum Continents
+    {
+        None, Africa, Asia, Australia, Europe, America
+    }
+
+    public enum ExperienceLevels
+    {
+        None, Novice, Intermediate, Advanced, Expert, Master
+    }
+
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {

@@ -25,9 +25,28 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using IdentityModel;
 using System.Linq;
+using UserManagement.Utilities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
+    class ClaimsTransformer : IClaimsTransformation
+    {
+        public Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
+        {
+            var id = ((ClaimsIdentity)principal.Identity);
+
+            var ci = new ClaimsIdentity(id.Claims, id.AuthenticationType, id.NameClaimType, id.RoleClaimType);
+            ci.AddClaim(new Claim("now", DateTime.Now.ToString()));
+
+            var cp = new ClaimsPrincipal(ci);
+
+            return Task.FromResult(cp);
+        }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -57,6 +76,30 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 .AddDefaultTokenProviders();
 
             services.Configure<AppSettings>(Configuration);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            }).AddCookie();
+
+            services.AddAuthorization(options =>
+            {
+                //options.DefaultPolicy = new AuthorizationPolicyBuilder("Cookie")
+                    //.RequireAuthenticatedUser().Build();
+                
+                options.AddPolicy("Schedule", policy =>
+                {
+                    policy.AddRequirements(new ScheduleAuthorizationRequirement
+                    {
+                        AllowManager = true,
+                        AllowAssistant = true
+                    })
+;
+                });
+            });
+
+            services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
 
             services.AddMvc();
 
@@ -165,6 +208,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
             // Adds IdentityServer
             app.UseIdentityServer();
+
 
             app.UseMvc(routes =>
             {
