@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: Verifying fastlane version" time="0.022686">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.024859">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: ascii_art" time="0.521938">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: number_of_commits" time="0.075065">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: appicon" time="1.850374">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

@@ -25,7 +25,16 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.EntityConfigurations
             builder.HasOne(p => p.Location)
                    .WithMany(p => p.AdditionalLocationImages)
                    .HasForeignKey(f => f.LocationId);
-            
+
+            /*
+             * builder.HasOne(typeof(Site).FullName)
+                   .WithMany()
+                   .HasForeignKey("SiteId");
+
+            builder.HasOne(typeof(Location).FullName)
+                   .WithMany()
+                   .HasForeignKey("LocationId");
+            */
         }
     }
 }

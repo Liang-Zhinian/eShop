@@ -48,6 +48,13 @@ namespace WebStatus
                 checks.AddUrlCheckIfNotNull(Configuration["PaymentUrl"], TimeSpan.FromMinutes(minutes)); 
                 checks.AddUrlCheckIfNotNull(Configuration["mvc"], TimeSpan.Zero); //No cache for this HealthCheck, better just for demos 
                 checks.AddUrlCheckIfNotNull(Configuration["spa"], TimeSpan.Zero); //No cache for this HealthCheck, better just for demos 
+
+                checks.AddUrlCheckIfNotNull(Configuration["AppointmentUrl"], TimeSpan.FromMinutes(minutes)); 
+                checks.AddUrlCheckIfNotNull(Configuration["ScheduleUrl"], TimeSpan.FromMinutes(minutes)); 
+                checks.AddUrlCheckIfNotNull(Configuration["BrandingUrl"], TimeSpan.FromMinutes(minutes)); 
+                checks.AddUrlCheckIfNotNull(Configuration["SiteUrl"], TimeSpan.FromMinutes(minutes)); 
+                checks.AddUrlCheckIfNotNull(Configuration["CategoryUrl"], TimeSpan.FromMinutes(minutes)); 
+                checks.AddUrlCheckIfNotNull(Configuration["TestApiUrl"], TimeSpan.FromMinutes(minutes)); 
             });
 
             services.AddMvc();

@@ -13,7 +13,7 @@ using SaaSEqt.eShop.Services.Identity.API.Models;
 
 namespace UserManagement.Controllers
 {
-    [Authorize(Roles = "SuperAdmins")]
+    [Authorize(Roles = "PowerUser")]
     public class SuperAdminController : Controller
     {
         private UserManager<ApplicationUser> userManager;

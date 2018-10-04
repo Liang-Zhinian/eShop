@@ -29,7 +29,7 @@
     <Compile Remove="Migrations\20180821093630_init.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IdentityAccess\SaaSEqt.IdentityAccess.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Common\SaaSEqt.Common.csproj" />
+    <ProjectReference Include="..\IdentityAccess\SaaSEqt.IdentityAccess.csproj" />
   </ItemGroup>
 </Project>

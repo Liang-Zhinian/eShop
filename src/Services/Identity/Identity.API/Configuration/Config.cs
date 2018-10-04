@@ -38,14 +38,11 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Email(),
-                new IdentityResources.Address(),
-                new IdentityResources.Phone(),
                 new IdentityResource {
                     Name = JwtClaimTypes.Role,
-                    DisplayName = "Your role(s)",
-                    Description = "Your role(s)",
-                    ShowInDiscoveryDocument=true,
+                    //DisplayName = "Your role(s)",
+                    //Description = "Your role(s)",
+                    //ShowInDiscoveryDocument=true,
                     UserClaims = new List<string> {JwtClaimTypes.Role}
                 }
             };
@@ -267,36 +264,6 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         "webshoppingagg"
                     }
                 },
-                new Client
-                {
-                    ClientId = "mvceshop",
-                    ClientName = "MVC eShop",
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    ClientUri = $"{clientsUrl["MvceShop"]}",                             // public uri of the client
-                    AllowedGrantTypes = GrantTypes.Hybrid,
-                    AllowAccessTokensViaBrowser = false,
-                    RequireConsent = false,
-                    AllowOfflineAccess = true,
-                    AlwaysIncludeUserClaimsInIdToken = true,
-                    RedirectUris = new List<string>
-                    {
-                        $"{clientsUrl["MvceShop"]}/signin-oidc"
-                    },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{clientsUrl["MvceShop"]}/signout-callback-oidc"
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "mobilereservationagg"
-                    },
-                },
 
                 // for new services
                 new Client
@@ -396,7 +363,12 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         JwtClaimTypes.Role,
-                        "mobilereservationagg"
+                        "api1",
+                        "appointment",
+                        "catalog",
+                        "mobilereservationagg",
+                        "schedules",
+                        "sites"
                     },
                     AllowOfflineAccess = true
                 },
@@ -416,8 +388,12 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         JwtClaimTypes.Role,
+                        "api1",
+                        "appointment",
+                        "catalog",
                         "mobilereservationagg",
-                        "api1"
+                        "schedules",
+                        "sites"
                     }
                 },
             };

@@ -8,8 +8,19 @@ using Microsoft.AspNetCore.Authorization;
 namespace Api.Controllers
 {
     [Route("[controller]")]
-    [Authorize(Roles = "Manager,Administrator")]
-    public class IdentityController : ControllerBase
+    [Authorize]
+    public class IdentityController : Controller
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
+    }
+
+    [Route("[controller]")]
+    [Authorize(Roles = "Administrator")]
+    public class IdentityAdminController : Controller
     {
         [HttpGet]
         public IActionResult Get()

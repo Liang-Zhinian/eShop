@@ -18,13 +18,13 @@ using Catalog.API.IntegrationEvents;
 namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
 {
     [Route("api/v1/[controller]")]
-    public class CatalogController : ControllerBase
+    public class ServiceCatalogController : ControllerBase
     {
         private readonly CatalogContext _catalogContext;
         private readonly CatalogSettings _settings;
         private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
 
-        public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICatalogIntegrationEventService catalogIntegrationEventService)
+        public ServiceCatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICatalogIntegrationEventService catalogIntegrationEventService)
         {
             _catalogContext = context ?? throw new ArgumentNullException(nameof(context));
             _catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
@@ -105,6 +105,94 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
                 pageIndex, pageSize, totalItems, itemsOnPage);
 
             return Ok(model);
+        }
+
+        [HttpGet]
+        [Route("serviceitems")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceItem>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<ServiceItem>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> ServiceItems([FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0, [FromQuery] string siteIds = null)
+        {
+            if (!string.IsNullOrEmpty(siteIds))
+            {
+                return GetItemsBySiteIds(siteIds);
+            }
+
+            var root = (IQueryable<ServiceItem>)_catalogContext.ServiceItems;
+
+            var totalItems = await root.LongCountAsync();
+
+            var itemsOnPage = root
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToList();
+
+            var model = new PaginatedItemsViewModel<ServiceItem>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
+        }
+       
+        [HttpGet]
+        [Route("sites/{siteId:guid}/serviceitems")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceItem>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<ServiceItem>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> SeriviceItems(Guid siteId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
+        {
+            if (!string.IsNullOrEmpty(ids))
+            {
+                return GetItemsByIds(siteId, ids);
+            }
+
+            var root = (IQueryable<ServiceItem>)_catalogContext.ServiceItems.Where(y => y.SiteId.Equals(siteId));
+
+            var totalItems = await root.LongCountAsync();
+
+            var itemsOnPage = root
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToList();
+
+            var model = new PaginatedItemsViewModel<ServiceItem>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
+        }
+
+        private IActionResult GetItemsBySiteIds(string siteIds)
+        {
+            var guidIds = siteIds.Split(',')
+                            .Select(id => (Ok: Guid.TryParse(id, out Guid x), Value: x));
+            if (!guidIds.All(nid => nid.Ok))
+            {
+                return BadRequest("siteids value invalid. Must be comma-separated list of guids (uuids)");
+            }
+
+            var idsToSelect = guidIds.Select(id => id.Value);
+            var items = _catalogContext.ServiceItems
+                                      .Where(ci => idsToSelect.Contains(ci.SiteId)).ToList();
+
+            return Ok(items);
+
+        }
+
+        private IActionResult GetItemsByIds(Guid siteId, string ids)
+        {
+            var numIds = ids.Split(',')
+                            .Select(id => (Ok: Guid.TryParse(id, out Guid x), Value: x));
+            if (!numIds.All(nid => nid.Ok))
+            {
+                return BadRequest("ids value invalid. Must be comma-separated list of numbers");
+            }
+
+            var idsToSelect = numIds.Select(id => id.Value);
+            var items = _catalogContext.ServiceItems
+                                      .Where(ci => ci.SiteId.Equals(siteId) && idsToSelect.Contains(ci.Id)).ToList();
+
+            return Ok(items);
+
         }
 
         //PUT api/v1/[controller]/serviceitems
@@ -224,7 +312,7 @@ namespace SaaSEqt.eShop.Services.ServiceCatalog.API.Controllers
         [HttpGet]
         [Route("sites/{siteId:guid}/servicecategories")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<ServiceCategory>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(IEnumerable<ServiceCategory>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ServiceCategory), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ServiceCategories(Guid siteId, Guid? serviceCategoryId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var root = (IQueryable<ServiceCategory>)_catalogContext.ServiceCategories

@@ -16,6 +16,7 @@ using SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Config;
 using SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Filters.Basket.API.Infrastructure.Filters;
 using SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SaaSEqt.eShop.Mobile.Shopping.HttpAggregator
 {
@@ -100,6 +101,11 @@ namespace SaaSEqt.eShop.Mobile.Shopping.HttpAggregator
                     {
                         int i = 0;
                     }
+                };
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
                 };
             });
         }

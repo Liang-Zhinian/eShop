@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.Entities;
 using IdentityModel;
+using System.Security.Claims;
 
 namespace SaaSEqt.eShop.Services.Identity.API.Data
 {
@@ -20,10 +21,12 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
 
     public class ApplicationDbContextSeed
     {
-        private string[] roles = new[] { "User", "Manager", "Administrator", "SuperAdmins" };
+        private string[] roles = new[] { "User", "Manager", "Administrator", "PowerUser" };
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
         public async Task SeedAsync(ApplicationDbContext context,
+                                    RoleManager<IdentityRole> roleManager,
+                                    UserManager<ApplicationUser> userManager,
                                     IHostingEnvironment env,
             ILogger<ApplicationDbContextSeed> logger, 
                                     IOptions<AppSettings> settings,
@@ -51,34 +54,38 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
                     GetPreconfiguredImages(contentRootPath, webroot, logger);
                 }
 
-                if (!context.Roles.Any())
-                {
-                    context.Roles.AddRange(roles.Select(y => new IdentityRole(y)));
 
-                    await context.SaveChangesAsync();
-                }
+                InitializeRoles(roleManager).Wait();
+                InitializeUserRoles(userManager).Wait();
 
-                if (!context.UserRoles.Any())
-                {
-                    foreach (var user in context.Users)
-                    {
-                        await context.UserRoles.AddRangeAsync(context.Roles.Select(y => new IdentityUserRole<string>()
-                        {
-                            UserId = user.Id,
-                            RoleId = y.Id
-                        }));
+                //if (!context.Roles.Any())
+                //{
+                //    context.Roles.AddRange(roles.Select(y => new IdentityRole(y)));
 
-                        await context.UserClaims.AddRangeAsync(roles.Select(y => new IdentityUserClaim<string>()
-                        {
-                            UserId = user.Id,
-                            ClaimType = JwtClaimTypes.Role,
-                            ClaimValue = y
-                        }));
+                //    await context.SaveChangesAsync();
+                //}
 
-                    }
+                //if (!context.UserRoles.Any())
+                //{
+                //    foreach (var user in context.Users)
+                //    {
+                //        await context.UserRoles.AddRangeAsync(context.Roles.Select(y => new IdentityUserRole<string>()
+                //        {
+                //            UserId = user.Id,
+                //            RoleId = y.Id
+                //        }));
 
-                    await context.SaveChangesAsync();
-                }
+                //        await context.UserClaims.AddRangeAsync(roles.Select(y => new IdentityUserClaim<string>()
+                //        {
+                //            UserId = user.Id,
+                //            ClaimType = JwtClaimTypes.Role,
+                //            ClaimValue = y
+                //        }));
+
+                //    }
+
+                //    await context.SaveChangesAsync();
+                //}
             }
             catch (Exception ex)
             {
@@ -88,8 +95,31 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
                     
                     logger.LogError(ex.Message,$"There is an error migrating data for ApplicationDbContext");
 
-                    await SeedAsync(context,env,logger,settings, retryForAvaiability);
+                    await SeedAsync(context,roleManager,userManager, env,logger,settings, retryForAvaiability);
                 }
+            }
+        }
+
+        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager)
+        {
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    var newRole = new IdentityRole(role);
+                    await roleManager.CreateAsync(newRole);
+                    // In the real world, there might be claims associated with roles
+                    // await roleManager.AddClaimAsync(newRole, new Claim("foo", "bar"))
+                }
+            }
+        }
+
+        private async Task InitializeUserRoles(UserManager<ApplicationUser> userManager)
+        {
+            foreach (var user in userManager.Users)
+            {
+                await userManager.AddToRolesAsync(user, roles);
+                await userManager.AddClaimsAsync(user, roles.Select(y => new Claim(JwtClaimTypes.Role, y)));
             }
         }
 

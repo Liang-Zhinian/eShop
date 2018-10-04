@@ -23,6 +23,7 @@ using SaaSEqt.eShop.Services.Sites.API.Model;
 using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
 using SaaSEqt.IdentityAccess.Application;
 using Sites.API.IntegrationEvents;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 {

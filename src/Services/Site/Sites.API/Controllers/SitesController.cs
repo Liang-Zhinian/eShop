@@ -16,25 +16,25 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [Authorize]
-    public class SitesController : ControllerBase
+    //[Route("api/v1/business-information")]
+    //[Authorize]
+    public partial class BusinessController // : ControllerBase
     {
-        private readonly SitesContext _sitesContext;
-        private readonly SitesSettings _settings;
-        private readonly ISitesIntegrationEventService _sitesIntegrationEventService;
+        //private readonly SitesContext _sitesContext;
+        //private readonly SitesSettings _settings;
+        //private readonly ISitesIntegrationEventService _sitesIntegrationEventService;
 
-        public SitesController(SitesContext context, IOptionsSnapshot<SitesSettings> settings, ISitesIntegrationEventService sitesIntegrationEventService)
-        {
-            _sitesContext = context ?? throw new ArgumentNullException(nameof(context));
-            _sitesIntegrationEventService = sitesIntegrationEventService ?? throw new ArgumentNullException(nameof(sitesIntegrationEventService));
+        //public SitesController(SitesContext context, IOptionsSnapshot<SitesSettings> settings, ISitesIntegrationEventService sitesIntegrationEventService)
+        //{
+        //    _sitesContext = context ?? throw new ArgumentNullException(nameof(context));
+        //    _sitesIntegrationEventService = sitesIntegrationEventService ?? throw new ArgumentNullException(nameof(sitesIntegrationEventService));
 
-            _settings = settings.Value;
-            ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        }
+        //    _settings = settings.Value;
+        //    ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        //}
 
         [HttpGet]
-        //[Route("sites/{id:Guid}")]
+        [Route("sites/{id:Guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Site), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSiteById(Guid id)
@@ -59,7 +59,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 
         // POST api/v1/[controller]
         [HttpPost]
-        //[Route("ProvisionSite")]
+        [Route("sites")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ProvisionSite([FromBody]Site site)

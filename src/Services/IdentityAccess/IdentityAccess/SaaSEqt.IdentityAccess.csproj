@@ -21,4 +21,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework.EventStore.MySqlDB\CqrsFramework.EventStore.MySqlDB.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\CqrsFramework\CqrsFramework\CqrsFramework.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Application\IdentityAccessIntegrationEventService.cs" />
+  </ItemGroup>
 </Project>

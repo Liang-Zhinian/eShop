@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
+using SaaSEqt.eShop.Services.Identity.API.Models;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -21,9 +23,11 @@ namespace SaaSEqt.eShop.Services.Identity.API
                     var env = services.GetService<IHostingEnvironment>();
                     var logger = services.GetService<ILogger<ApplicationDbContextSeed>>();
                     var settings = services.GetService<IOptions<AppSettings>>();
+                    var roleManager = services.GetService<RoleManager<IdentityRole>>();
+                    var userManager = services.GetService<UserManager<ApplicationUser>>();
 
                     new ApplicationDbContextSeed()
-                        .SeedAsync(context, env, logger, settings)
+                    .SeedAsync(context, roleManager, userManager, env, logger, settings)
                         .Wait();
                 })
                 .MigrateDbContext<ConfigurationDbContext>((context,services)=> 

@@ -14,7 +14,7 @@ namespace SaaSEqt.IdentityAccess.Application
     public class IdentityAccessEventProcessor
     {
         //private readonly ILifetimeScope _autofac;
-        readonly IIdentityAccessIntegrationEventService _identityAccessIntegrationEventService;
+        //readonly IIdentityAccessIntegrationEventService _identityAccessIntegrationEventService;
         //readonly IEventPublisher _eventPublisher;
         //readonly IGroupRepository groupRepository;
         //readonly ITenantRepository tenantRepository;
@@ -24,7 +24,7 @@ namespace SaaSEqt.IdentityAccess.Application
         public IdentityAccessEventProcessor(
                                             //Common.Events.IEventStore eventStore,
                                             //IEventPublisher eventPublisher,
-                                            IIdentityAccessIntegrationEventService identityAccessIntegrationEventService
+                                            //IIdentityAccessIntegrationEventService identityAccessIntegrationEventService
                                             //IGroupRepository groupRepository,
                                             //ITenantRepository tenantRepository,
                                             //IUserRepository userRepository
@@ -33,7 +33,7 @@ namespace SaaSEqt.IdentityAccess.Application
             //this.eventStore = eventStore;
             //_autofac = autofac;
             //_eventPublisher = eventPublisher;
-            _identityAccessIntegrationEventService = identityAccessIntegrationEventService;
+            //_identityAccessIntegrationEventService = identityAccessIntegrationEventService;
             //this.groupRepository = groupRepository;
             //this.tenantRepository = tenantRepository;
             //this.userRepository = userRepository;

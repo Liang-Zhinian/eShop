@@ -16,6 +16,7 @@ using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config;
 using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Filters;
 using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
 {
@@ -34,7 +35,7 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IHttpClient, StandardHttpClient>();
             services.AddTransient<IServiceCatalogService, ServiceCatalogService>();
-            //services.AddTransient<IBasketService, BasketService>();
+            services.AddTransient<IBusinessLocationService, BusinessLocationService>();
             //services.AddTransient<IOrderApiClient, OrderApiClient>();
 
             services.AddOptions();
@@ -100,6 +101,11 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
                     {
                         int i = 0;
                     }
+                };
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
                 };
             });
         }

@@ -7,8 +7,19 @@ using Microsoft.AspNetCore.Authorization;
 namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Controllers
 {
     [Route("api/v1/[controller]")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize]
     public class IdentityController : Controller
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
+    }
+
+    [Route("api/v1/[controller]")]
+    [Authorize(Roles = "Administrator")]
+    public class IdentityAdminController : Controller
     {
         [HttpGet]
         public IActionResult Get()

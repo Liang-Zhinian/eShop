@@ -11,16 +11,16 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [Authorize]
-    public class AccountController : Controller
+    //[Route("api/v1/[controller]")]
+    //[Authorize]
+    public partial class IdentityAccessController // : Controller
     {
-        private readonly IdentityApplicationService _identityApplicationService;
+        //private readonly IdentityApplicationService _identityApplicationService;
 
-        public AccountController(IdentityApplicationService identityApplicationService)
-        {
-            _identityApplicationService = identityApplicationService;
-        }
+        //public IdentityAccessController(IdentityApplicationService identityApplicationService)
+        //{
+        //    _identityApplicationService = identityApplicationService;
+        //}
 
         // GET api/v1/account
         [HttpGet]
@@ -29,18 +29,18 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/v1/account?tenantId={tenantId:guid}&userName={userName:minlength(1)}
+        // GET api/v1/[controller]/tenants/guid/staffs?userName={userName:minlength(1)}
         [HttpGet]
-        [Route("[action]")]
+        [Route("tenants/{tenantId:Guid}/staffs")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(StaffViewModel), (int)HttpStatusCode.OK)]
-        public IActionResult GetUser([FromQuery]string tenantId, [FromQuery]string userName)
+        public IActionResult Staffs(Guid tenantId, [FromQuery]string userName)
         {
-            if (string.IsNullOrEmpty(tenantId) || string.IsNullOrEmpty(userName)){
+            if (tenantId == Guid.Empty || string.IsNullOrEmpty(userName)){
                 return BadRequest();
             }
 
-            var user = _identityApplicationService.GetUser(tenantId, userName);
+            var user = _identityApplicationService.GetUser(tenantId.ToString(), userName);
 
             if (user == null) return NotFound();
 
@@ -61,24 +61,25 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
             return Ok(staff);
         }
 
-        // POST api/v1/account
+        // POST api/v1/[controller]/tenants/guid/staffs
         [HttpPost]
+        [Route("tenants/{tenantId:Guid}/staffs")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public IActionResult Post([FromBody]RegisterUserCommand registerUserCommand)
+        public IActionResult Staffs(Guid tenantId, [FromBody]RegisterUserCommand registerUserCommand)
         {
             var newUser = _identityApplicationService.RegisterUser(registerUserCommand);
             return CreatedAtAction(nameof(Get), new { tenantId = registerUserCommand.TenantId, userName = registerUserCommand.Username }, null);
         }
 
-        // PUT api/v1/account/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // PUT api/v1/[controller]/tenants/guid/staffs/guid
+        [HttpPut("tenants/{tenantId:Guid}/staffs/{staffId:Guid}")]
+        public void Put(Guid tenantId, Guid staffId, [FromBody]string value)
         {
         }
 
-        // DELETE api/v1/account/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/v1/[controller]/tenants/guid/staffs/guid
+        [HttpDelete("tenants/{tenantId:Guid}/staffs/{staffId:Guid}")]
+        public void Delete(Guid tenantId, Guid staffId)
         {
         }
     }

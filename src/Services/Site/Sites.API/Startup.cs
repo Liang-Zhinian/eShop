@@ -1,40 +1,33 @@
 ﻿namespace SaaSEqt.eShop.Services.Sites.API
 {
+    using System;
+    using System.Data.Common;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Reflection;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using global::Sites.API.Infrastructure.Filters;
-    using global::Sites.API.IntegrationEvents;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.ApplicationInsights.ServiceFabric;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Azure.ServiceBus;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Diagnostics;
-    using SaaSEqt.eShop.BuildingBlocks.EventBus;
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-    using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
-    using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
-    using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-    using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
-    using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
-    using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.HealthChecks;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
-    using RabbitMQ.Client;
-    using System;
-    using System.Data.Common;
-    using System.Reflection;
-    using SaaSEqt.Infrastructure.HealthChecks.MySQL;
-    using SaaSEqt.IdentityAccess.Infrastructure.Context;
-    using System.IdentityModel.Tokens.Jwt;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.IdentityModel.Tokens;
+    using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+    using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
+    using SaaSEqt.eShop.Services.Sites.API.Configurations;
+    using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
+    using SaaSEqt.eShop.Services.Sites.API.Infrastructure.AutofacModules;
     using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Middlewares;
-    using Swashbuckle.AspNetCore.Swagger;
-    using System.Collections.Generic;
+    using SaaSEqt.IdentityAccess.Infrastructure.Context;
+    using SaaSEqt.Infrastructure.HealthChecks.MySQL;
 
     public class Startup
     {
@@ -48,6 +41,7 @@
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+
 
             RegisterAppInsights(services);
 
@@ -69,9 +63,14 @@
             });
 
             services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-            }).AddControllersAsServices();
+                {
+                    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+                })
+                    .AddControllersAsServices()
+                    .AddJsonOptions(opts =>
+                    {
+                        opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    });
 
             ConfigureAuthService(services);
 
@@ -121,32 +120,7 @@
             services.Configure<SitesSettings>(Configuration);
 
             // Add framework services.
-            services.AddSwaggerGen(options =>
-            {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
-                {
-                    Title = "eShop - Sites HTTP API",
-                    Version = "v1",
-                    Description = "The Sites Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
-                    TermsOfService = "Terms Of Service"
-                });
-
-                options.AddSecurityDefinition("oauth2", new OAuth2Scheme
-                {
-                    Type = "oauth2",
-                    Flow = "implicit",
-                    AuthorizationUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize",
-                    TokenUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
-                    Scopes = new Dictionary<string, string>()
-                    {
-                        { "sites", "Sites API" }
-                    }
-                });
-
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-
-            });
+            services.AddSwaggerSupport(Configuration);
 
             services.AddCors(options =>
             {
@@ -157,59 +131,24 @@
                     .AllowCredentials());
             });
 
+
+            // Add application services.
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
                 sp => (DbConnection c) => new IntegrationEventLogService(c));
 
-            services.AddTransient<ISitesIntegrationEventService, SitesIntegrationEventService>();
+            services.AddApplicationSetup();
 
-            if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
-            {
-                services.AddSingleton<IServiceBusPersisterConnection>(sp =>
-                {
-                    var settings = sp.GetRequiredService<IOptions<SitesSettings>>().Value;
-                    var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+            services.AddIdentityAccessSetup();
 
-                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
+            services.AddEventBusSetup(Configuration);
 
-                    return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
-                });
-            }
-            else
-            {
-                services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
-                {
-                    var settings = sp.GetRequiredService<IOptions<SitesSettings>>().Value;
-                    var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
-                    var factory = new ConnectionFactory()
-                    {
-                        HostName = Configuration["EventBusConnection"]
-                    };
-
-                    if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
-                    {
-                        factory.UserName = Configuration["EventBusUserName"];
-                    }
-
-                    if (!string.IsNullOrEmpty(Configuration["EventBusPassword"]))
-                    {
-                        factory.Password = Configuration["EventBusPassword"];
-                    }
-
-                    var retryCount = 5;
-                    if (!string.IsNullOrEmpty(Configuration["EventBusRetryCount"]))
-                    {
-                        retryCount = int.Parse(Configuration["EventBusRetryCount"]);
-                    }
-
-                    return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
-                });
-            }
-
-            RegisterEventBus(services);
+            services.RegisterEventBus();
 
             var container = new ContainerBuilder();
             container.Populate(services);
+            container.RegisterModule(new ApplicationModule());
+            container.RegisterModule(new MediatorModule());
             return new AutofacServiceProvider(container.Build());
 
         }
@@ -240,15 +179,9 @@
 
             app.UseMvcWithDefaultRoute();
 
-            app.UseSwagger()
-              .UseSwaggerUI(c =>
-              {
-                  c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Sites.API V1");                  
-                    c.OAuthClientId("sitesswaggerui");
-                  c.OAuthAppName("Sites Swagger UI");
-                });
+            SwaggerSupport.ConfigureSwaggerUI(app, Configuration);
 
-            ConfigureEventBus(app);
+            EventBusSetup.ConfigureEventBus(app);
         }
 
         private void ConfigureAuthService(IServiceCollection services)
@@ -268,6 +201,12 @@
                 options.Authority = identityUrl;
                 options.RequireHttpsMetadata = false;
                 options.Audience = "sites";
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
             });
         }
 
@@ -299,52 +238,5 @@
             }
         }
 
-        private void RegisterEventBus(IServiceCollection services)
-        {
-            var subscriptionClientName = Configuration["SubscriptionClientName"];
-
-            if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
-            {
-                services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
-                {
-                    var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
-                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                    var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                    return new EventBusServiceBus(serviceBusPersisterConnection, logger,
-                        eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);
-                });
-
-            }
-            else
-            {
-                services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
-                {
-                    var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-                    var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                    var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                    var retryCount = 5;
-                    if (!string.IsNullOrEmpty(Configuration["EventBusRetryCount"]))
-                    {
-                        retryCount = int.Parse(Configuration["EventBusRetryCount"]);
-                    }
-
-                    return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
-                });
-            }
-
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            //services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-            //services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
-        }
-        protected virtual void ConfigureEventBus(IApplicationBuilder app)
-        {
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-            //eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
-        }
     }
 }

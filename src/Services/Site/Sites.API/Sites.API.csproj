@@ -40,6 +40,7 @@
     <Content Include="Setup\locations.csv">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Remove="Pics\1bf83c0c-4a61-48b0-b86e-9ae95888268f\2ffe65d7-2fdd-4c1e-85d9-8b40b22a4f99\1.png" />
   </ItemGroup>
 
 
@@ -84,8 +85,4 @@
     <ProjectReference Include="..\..\IdentityAccess\IdentityAccess.Infrastrure\SaaSEqt.IdentityAccess.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\IdentityAccessMigrations\" />
-    <Folder Include="Migrations\IntegrationEventMigrations\" />
-  </ItemGroup>
 </Project>

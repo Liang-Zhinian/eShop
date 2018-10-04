@@ -10,26 +10,30 @@ using System.Net;
 using System.Threading.Tasks;
 using SaaSEqt.eShop.Services.Sites.API.Application.Events;
 using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents;
+using SaaSEqt.IdentityAccess.Application;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 {
     [Authorize]
-    [Route("api/tenants")]
-    public class TenantController: Controller
+    [Route("api/v1/[controller]")]
+    public partial class IdentityAccessController: Controller
     {
         private readonly ITenantService _tenantService;
         private readonly IIdentityAccessIntegrationEventService _identityAccessIntegrationEventService;
+        private readonly IdentityApplicationService _identityApplicationService;
 
-        public TenantController(IIdentityAccessIntegrationEventService identityAccessIntegrationEventService,
-            ITenantService tenantService)
+        public IdentityAccessController(IIdentityAccessIntegrationEventService identityAccessIntegrationEventService,
+                                        ITenantService tenantService,
+                                        IdentityApplicationService identityApplicationService)
         {
             _identityAccessIntegrationEventService = identityAccessIntegrationEventService;
             _tenantService = tenantService;
+            _identityApplicationService = identityApplicationService;
         }
 
         [HttpPost]
         //[Authorize(Policy = "CanWriteTenantData")]
-        [Route("register")]
+        [Route("tenants")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> Create([FromBody]
                                    TenantViewModel tenant,

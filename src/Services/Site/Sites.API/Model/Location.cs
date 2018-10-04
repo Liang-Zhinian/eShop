@@ -60,6 +60,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
         [NotMapped]
         public string ImageUri { get; set; }
 
+        [NotMapped]
+        public double Distance { get; set; }
+
         public ContactInformation ContactInformation { get; private set; }
 
         public Address Address { get; private set; }
@@ -71,7 +74,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
         public Guid SiteId { get; private set; }
         public Site Site { get; private set; }
 
-        public ICollection<LocationImage> AdditionalLocationImages { get; private set; }
+        public virtual ICollection<LocationImage> AdditionalLocationImages { get; private set; }
 
         #endregion
 

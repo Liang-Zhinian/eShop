@@ -7,12 +7,26 @@
 # An external IP or DNS name has to be used (instead localhost and the 10.0.75.1 IP) when testing the Web apps and the Xamarin apps from remote machines/devices using the same WiFi, for instance.
 
 services:
+  test.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    ports:
+      - "5139:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
+                    # The API Gateway redirects and access through the internal port (80).
+
 
   appointment.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_AppointmentDb;uid=book2;pwd=P@ssword}
+      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -34,6 +48,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_ScheduleDb;uid=book2;pwd=P@ssword}
+      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -74,7 +90,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_Book2Db;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_SitesDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
+      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - SiteLogoBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/s/sites/[0]/pic/}
       - LocationPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic/}
@@ -141,6 +159,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_CatalogDb;uid=book2;pwd=P@ssword}
+      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5101/api/v1/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -179,7 +199,7 @@ services:
       - MobileReservationAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5216
       - NativeAppClient=io.identityserver.book2
 
-      - UseCustomizationData=True  
+      - UseCustomizationData=True
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
     ports:
@@ -289,6 +309,15 @@ services:
       - PaymentUrl=http://payment.api/hc
       - mvc=http://webmvc/hc
       - spa=http://webspa/hc
+
+      - AppointmentUrl=http://appointment.api/hc
+      - ScheduleUrl=http://schedule.api/hc
+      - BrandingUrl=http://branding.api/hc
+      - SiteUrl=http://sites.api/hc
+      - CategoryUrl=http://category.api/hc
+      - TestApiUrl=http://test.api/hc
+
+
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
     ports:
@@ -347,9 +376,10 @@ services:
     restart: always
     volumes:
       - ~/mysql/data:/var/lib/mysql
-      - ~/mysql/conf.d:/etc/mysql/conf.d
-      - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
-      - ~/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./mysql/config/my.cnf:/etc/my.cnf
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     ports:
       - "3306:3306"    # Important: In a production environment your should remove the external port
 

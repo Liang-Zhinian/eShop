@@ -2,6 +2,12 @@ version: '3.4'
 
 services:
 
+  test.api:
+    image: eshop/test.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Identity/Api/Dockerfile
+
   branding.api:
     image: eshop/branding.api:${TAG:-latest}
     build:
@@ -10,6 +16,8 @@ services:
     depends_on:
       - sql.data
       - rabbitmq
+    volumes:
+      - ~/eShop/Pics:/app/Pics
 
   appointment.api:
     image: eshop/appointment.api:${TAG:-latest}
