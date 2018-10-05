@@ -10,13 +10,24 @@ export default function locationReducer (state = initialState, action) {
         error: action.data
       }
     }
-    case 'LOCATION': {
+    case 'CURRENT_LOCATION': {
       if (action.data) {
         return {
           ...state,
           loading: false,
           error: null,
-          location: action.data
+          currentLocation: action.data
+        }
+      }
+      return initialState
+    }
+    case 'SIBLING_LOCATIONS': {
+      if (action.data) {
+        return {
+          ...state,
+          loading: false,
+          error: null,
+          siblingLocations: action.data
         }
       }
       return initialState

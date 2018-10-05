@@ -118,8 +118,14 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
         {
             foreach (var user in userManager.Users)
             {
-                await userManager.AddToRolesAsync(user, roles);
-                await userManager.AddClaimsAsync(user, roles.Select(y => new Claim(JwtClaimTypes.Role, y)));
+                if (!(await userManager.GetRolesAsync(user)).Any())
+                {
+                    await userManager.AddToRolesAsync(user, roles);
+                }
+                if (!(await userManager.GetClaimsAsync(user)).Any())
+                {
+                    await userManager.AddClaimsAsync(user, roles.Select(y => new Claim(JwtClaimTypes.Role, y)));
+                }
             }
         }
 

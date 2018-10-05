@@ -10,6 +10,8 @@ using SaaSEqt.eShop.BuildingBlocks.EventBus;
 using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
 using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
 using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHandling;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.Staffs;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Configurations
 {
@@ -113,14 +115,14 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
             }
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            //services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+            services.AddTransient<StaffCreatedEventHandler>();
             //services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
         }
 
         public static void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+            eventBus.Subscribe<StaffCreatedEvent, StaffCreatedEventHandler>();
             //eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
         }
     }

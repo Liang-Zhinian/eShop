@@ -54,6 +54,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
         public DateTime StartingOn { get; private set; }
 
         public Guid TenantId { get; private set; }
+        public virtual Tenant Tenant { get; set; }
 
         public DateTime Until { get; private set; }
 

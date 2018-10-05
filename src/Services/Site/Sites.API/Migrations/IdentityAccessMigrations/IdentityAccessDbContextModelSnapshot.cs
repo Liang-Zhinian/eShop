@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;
 using System;
 
-namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.IdentityAccessMigrations
+namespace SaaSEqt.IdentityAccess.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityAccessDbContext))]
     partial class IdentityAccessDbContextModelSnapshot : ModelSnapshot
@@ -135,6 +135,37 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.IdentityAccessMigratio
                         .IsUnique();
 
                     b.ToTable("Person");
+
+                    b.HasAnnotation("MySQL:Charset", "utf8");
+
+                    b.HasAnnotation("MySQL:Collation", "utf8_general_ci");
+                });
+
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.RegistrationInvitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .HasAnnotation("MySQL:Collation", "utf8_general_ci");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("InvitationId")
+                        .IsRequired()
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<DateTime>("StartingOn");
+
+                    b.Property<Guid>("TenantId");
+
+                    b.Property<DateTime>("Until");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("RegistrationInvitation");
 
                     b.HasAnnotation("MySQL:Charset", "utf8");
 
@@ -324,21 +355,6 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.IdentityAccessMigratio
                                 });
                         });
 
-                    b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.EmailAddress", "EmailAddress", b1 =>
-                        {
-                            b1.Property<Guid>("PersonId");
-
-                            b1.Property<string>("Address")
-                                .HasColumnType("varchar(255)");
-
-                            b1.ToTable("Person");
-
-                            b1.HasOne("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.Person")
-                                .WithOne("EmailAddress")
-                                .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.EmailAddress", "PersonId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
-
                     b.OwnsOne("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.FullName", "Name", b1 =>
                         {
                             b1.Property<Guid>("PersonId");
@@ -356,6 +372,14 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.IdentityAccessMigratio
                                 .HasForeignKey("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.FullName", "PersonId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
+                });
+
+            modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.RegistrationInvitation", b =>
+                {
+                    b.HasOne("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities.User", b =>

@@ -74,5 +74,24 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 
             return CreatedAtAction(nameof(GetSiteById), new { id = site.Id }, null);
         }
+
+        // POST api/v1/[controller]
+        [HttpPost]
+        [Route("sites/{siteId:Guid}/locations/{locationId:Guid}/staffs/{staffId:Guid}/asign")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> AsignStaffToLocation(Guid siteId, Guid staffId, Guid locationId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return (IActionResult)BadRequest();
+            }
+            StaffLoginLocation staffLoginLocation = new StaffLoginLocation(siteId, staffId, locationId);
+
+            _sitesContext.StaffLoginLocations.Add(staffLoginLocation);
+            await _sitesContext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

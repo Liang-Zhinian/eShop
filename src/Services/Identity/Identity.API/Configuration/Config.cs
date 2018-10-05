@@ -22,11 +22,13 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 // test
                 new ApiResource("api1","Testing API Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
                 // new api resources
+                new ApiResource("identity", "Identity API Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
                 new ApiResource("catalog", "Catalog Aggregator", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
                 new ApiResource("mobilereservationagg", "Mobile Reservation Aggregator", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
                 new ApiResource("appointment","Appointment Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
                 new ApiResource("schedules","Schedules Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
-                new ApiResource("sites","Sites Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role })
+                new ApiResource("sites","Sites Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
+                new ApiResource("identityaccess", "Identity Access API Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role })
             };
         }
 
@@ -348,6 +350,22 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 },
                 new Client
                 {
+                    ClientId = "identityaccessswaggerui",
+                    ClientName = "Identity Access API Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["IdentityAccessApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["IdentityAccessApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "identityaccess"
+                    }
+                },
+                new Client
+                {
                     ClientId = "native.code",
                     ClientName = "Native Client (Code with PKCE)",
                     RequireClientSecret = false,
@@ -366,9 +384,11 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         "api1",
                         "appointment",
                         "catalog",
+                        "identity",
                         "mobilereservationagg",
                         "schedules",
-                        "sites"
+                        "sites",
+                        "identityaccess"
                     },
                     AllowOfflineAccess = true
                 },
@@ -391,9 +411,11 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         "api1",
                         "appointment",
                         "catalog",
+                        "identity",
                         "mobilereservationagg",
                         "schedules",
-                        "sites"
+                        "sites",
+                        "identityaccess"
                     }
                 },
             };

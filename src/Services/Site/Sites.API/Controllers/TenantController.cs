@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using SaaSEqt.eShop.Services.Sites.API.Application.Events;
 using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents;
 using SaaSEqt.IdentityAccess.Application;
+using SaaSEqt.IdentityAccess.Infrastructure.Context;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 {
@@ -21,11 +22,15 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
         private readonly ITenantService _tenantService;
         private readonly IIdentityAccessIntegrationEventService _identityAccessIntegrationEventService;
         private readonly IdentityApplicationService _identityApplicationService;
+        private readonly IdentityAccessDbContext _identityAccessContext;
 
-        public IdentityAccessController(IIdentityAccessIntegrationEventService identityAccessIntegrationEventService,
+        public IdentityAccessController(
+            IdentityAccessDbContext identityAccessContext,
+            IIdentityAccessIntegrationEventService identityAccessIntegrationEventService,
                                         ITenantService tenantService,
                                         IdentityApplicationService identityApplicationService)
         {
+            _identityAccessContext = identityAccessContext;
             _identityAccessIntegrationEventService = identityAccessIntegrationEventService;
             _tenantService = tenantService;
             _identityApplicationService = identityApplicationService;
@@ -62,6 +67,26 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
             await _identityAccessIntegrationEventService.PublishThroughEventBusAsync(tenantCreatedEvent);
 
             return Ok();
+        }
+
+        [HttpPost]
+        //[Authorize(Policy = "CanWriteTenantData")]
+        [Route("tenants/{tenantId:Guid}/registration-invitations")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<IActionResult> OfferRegistrationInvitation(Guid tenantId, string description)
+        {
+            //throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                //NotifyModelStateErrors();
+                return BadRequest();
+            }
+
+            var newInvitation = _tenantService.OfferRegistrationInvitation(tenantId, description);
+
+            await _identityAccessContext.SaveChangesAsync();
+
+            return Ok(newInvitation);
         }
     }
 }

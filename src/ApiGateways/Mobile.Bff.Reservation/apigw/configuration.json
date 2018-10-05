@@ -5,6 +5,34 @@
         "DownstreamScheme": "http",
         "DownstreamHostAndPorts": [
           {
+            "Host": "identityaccess.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/api/{version}/ia/{everything}",
+        "UpstreamHttpMethod": [],
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "IdentityApiKey",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
+            "Host": "identityaccess.api",
+            "Port": 80
+          }
+        ],
+        "UpstreamPathTemplate": "/identityaccess-api/{everything}",
+        "UpstreamHttpMethod": []
+      },
+      {
+        "DownstreamPathTemplate": "/api/{version}/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          {
             "Host": "test.api",
             "Port": 80
           }

@@ -29,6 +29,8 @@ using UserManagement.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -62,98 +64,10 @@ namespace SaaSEqt.eShop.Services.Identity.API
             RegisterAppInsights(services);
 
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseMySql(Configuration["ConnectionString"],
-                                     mySqlOptionsAction: sqlOptions =>
-                                     {
-                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                     }));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.Configure<AppSettings>(Configuration);
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-            }).AddCookie();
-
-            services.AddAuthorization(options =>
-            {
-                //options.DefaultPolicy = new AuthorizationPolicyBuilder("Cookie")
-                    //.RequireAuthenticatedUser().Build();
-                
-                options.AddPolicy("Schedule", policy =>
-                {
-                    policy.AddRequirements(new ScheduleAuthorizationRequirement
-                    {
-                        AllowManager = true,
-                        AllowAssistant = true
-                    })
-;
-                });
-            });
-
-            services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
-
-            services.AddMvc();
-
-            if (Configuration.GetValue<string>("IsClusterEnv") == bool.TrueString)
-            {
-                services.AddDataProtection(opts =>
-                {
-                    opts.ApplicationDiscriminator = "eshop.identity";
-                })
-                .PersistKeysToRedis(ConnectionMultiplexer.Connect(Configuration["DPConnectionString"]), "DataProtection-Keys");
-            }
-
-            services.AddHealthChecks(checks =>
-            {
-                var minutes = 1;
-                if (int.TryParse(Configuration["HealthCheck:Timeout"], out var minutesParsed))
-                {
-                    minutes = minutesParsed;
-                }
-                checks.AddMySQLCheck("Identity_Db", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
-            });
-
-            services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
-            services.AddTransient<IRedirectService, RedirectService>();
-
-            var connectionString = Configuration["ConnectionString"];
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
-            // Adds IdentityServer
-            services.AddIdentityServer(x => x.IssuerUri = "null")
-                    .AddSigningCredential(Certificate.Get())
-                //.AddTestUsers(null)
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = builder => builder.UseMySql(connectionString,
-                                     mySqlOptionsAction: sqlOptions =>
-                                     {
-                                         sqlOptions.MigrationsAssembly(migrationsAssembly);
-                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                     });
-                })
-                .AddOperationalStore(options =>
-                 {
-                     options.ConfigureDbContext = builder => builder.UseMySql(connectionString,
-                                     mySqlOptionsAction: sqlOptions =>
-                                     {
-                                         sqlOptions.MigrationsAssembly(migrationsAssembly);
-                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                     });
-                 })
-                .Services.AddTransient<IProfileService, ProfileService>();
+            services.AddCustomMvc(Configuration)
+                    .AddCustomAuthentication(Configuration)
+                    .AddHttpServices()
+                    .AddIdentityServer4Authentication(Configuration);
 
             var container = new ContainerBuilder();
             container.Populate(services);
@@ -209,6 +123,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
             // Adds IdentityServer
             app.UseIdentityServer();
 
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -236,29 +151,155 @@ namespace SaaSEqt.eShop.Services.Identity.API
             }
         }
 
-        // Initialize some test roles. In the real world, these would be setup explicitly by a role manager
-        private string[] roles = new[] { "User", "Manager", "Administrator" };
-        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager)
+    }
+
+
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
         {
-            foreach (var role in roles)
+
+            // Add framework services.
+            services.AddDbContext<ApplicationDbContext>(options =>
+                                                        options.UseMySql(configuration["ConnectionString"],
+                                     mySqlOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     }));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<AppSettings>(configuration);
+
+            services.AddMvc();
+
+            if (configuration.GetValue<string>("IsClusterEnv") == bool.TrueString)
             {
-                if (!await roleManager.RoleExistsAsync(role))
+                services.AddDataProtection(opts =>
                 {
-                    var newRole = new IdentityRole(role);
-                    await roleManager.CreateAsync(newRole);
-                    // In the real world, there might be claims associated with roles
-                    // await roleManager.AddClaimAsync(newRole, new Claim("foo", "bar"))
-                }
+                    opts.ApplicationDiscriminator = "eshop.identity";
+                })
+                        .PersistKeysToRedis(ConnectionMultiplexer.Connect(configuration["DPConnectionString"]), "DataProtection-Keys");
             }
+
+            services.AddHealthChecks(checks =>
+            {
+                var minutes = 1;
+                if (int.TryParse(configuration["HealthCheck:Timeout"], out var minutesParsed))
+                {
+                    minutes = minutesParsed;
+                }
+                checks.AddMySQLCheck("Identity_Db", configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+            });
+
+            return services;
         }
 
-        private async Task InitializeUserRoles(UserManager<ApplicationUser> userManager)
+        public static IServiceCollection AddIdentityServer4Authentication(this IServiceCollection services, IConfiguration configuration)
         {
-            foreach (var user in userManager.Users)
+
+            services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
+            services.AddTransient<IRedirectService, RedirectService>();
+
+            var connectionString = configuration["ConnectionString"];
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+            // Adds IdentityServer
+            services.AddIdentityServer(x => x.IssuerUri = "null")
+                    .AddSigningCredential(Certificate.Get())
+                //.AddTestUsers(null)
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder.UseMySql(connectionString,
+                                     mySqlOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(migrationsAssembly);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder.UseMySql(connectionString,
+                                    mySqlOptionsAction: sqlOptions =>
+                                    {
+                                        sqlOptions.MigrationsAssembly(migrationsAssembly);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                    });
+                })
+                .Services.AddTransient<IProfileService, ProfileService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var identityUrl = configuration.GetValue<string>("IdentityUrl");
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                })
+                .AddCookie()
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = identityUrl;
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = "identity";
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnAuthenticationFailed = async ctx =>
+                        {
+                            int i = 0;
+                        },
+                        OnTokenValidated = async ctx =>
+                        {
+                            int i = 0;
+                        }
+                    };
+                    // if using JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()
+                    // then must set the TokenValidationParameters like below
+                    //options.TokenValidationParameters = new TokenValidationParameters
+                    //{
+                    //    NameClaimType = "name",
+                    //    RoleClaimType = "role"
+                    //};
+                });
+
+
+            services.AddAuthorization(options =>
             {
-                await userManager.AddToRolesAsync(user, roles);
-                await userManager.AddClaimsAsync(user, roles.Select(y => new Claim(JwtClaimTypes.Role, y)));
-            }
+                //options.DefaultPolicy = new AuthorizationPolicyBuilder("Cookie")
+                //.RequireAuthenticatedUser().Build();
+
+                options.AddPolicy("Schedule", policy =>
+                {
+                    policy.AddRequirements(new ScheduleAuthorizationRequirement
+                    {
+                        AllowManager = true,
+                        AllowAssistant = true
+                    });
+                });
+            });
+
+            services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddHttpServices(this IServiceCollection services)
+        {
+            
+            return services;
         }
     }
 }

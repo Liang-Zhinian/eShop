@@ -8,7 +8,7 @@ using SaaSEqt.eShop.Services.Sites.API.ViewModel;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
 {
-    public class TenantService: ITenantService
+    public class TenantService : ITenantService
     {
         //private readonly IEventPublisher _eventPublisher;
         private readonly IdentityApplicationService _identityApplicationService;
@@ -18,6 +18,11 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
         {
             //_eventPublisher = eventPublisher;
             _identityApplicationService = identityApplicationService;
+        }
+
+        public RegistrationInvitation OfferRegistrationInvitation(Guid tenantId, string description)
+        {
+            return _identityApplicationService.OfferRegistrationInvitation(tenantId.ToString(), description);
         }
 
         public Tenant ProvisionTenant(TenantViewModel tenant, StaffViewModel administrator)

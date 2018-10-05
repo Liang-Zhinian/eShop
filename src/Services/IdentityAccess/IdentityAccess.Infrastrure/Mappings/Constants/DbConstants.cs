@@ -30,13 +30,14 @@ namespace SaaSEqt.IdentityAccess.Infrastructure.Mappings.Constants
         public static string GroupMemberTable { get; private set; }
         public static string UserTable { get; private set; }
 
-        public static string TimeZoneTable { get; set; }
-        public static string RegionTable { get; set; }
-
+        public static string TimeZoneTable { get; private set; }
+        public static string RegionTable { get; private set; }
+        public static string RegistrationInvitationTable { get; private set; }
 
         static DbConstants()
         {
             TenantTable = "Tenant";
+            RegistrationInvitationTable = "RegistrationInvitation";
             RoleTable = "Role";
             RoleMemberTable = "RoleMember";
 

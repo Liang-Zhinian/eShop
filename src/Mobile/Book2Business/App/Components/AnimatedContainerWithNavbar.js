@@ -163,10 +163,10 @@ export default class AnimatedContainerWithNavbar extends Component {
                         : <NavBar icon="bars" pressMenu={this.showMenu.bind(this)} />
             */}
 
-          {this.state.isMenuOpen ? this.props.content
-                        : (<TouchableWithoutFeedback>
+          {/* {this.state.isMenuOpen ? this.props.content
+                        : (<TouchableWithoutFeedback> */}
                           {this.props.content}
-                        </TouchableWithoutFeedback>)}
+                        {/* </TouchableWithoutFeedback>)} */}
         </Animated.View>
         <Animated.View style={{ opacity: this.state.menuAnimate, position: 'absolute', width: 200, right: 0, top: 120, backgroundColor: 'transparent' }}>
           {/* <Text style={[styles.textFooter, styles.menutext]}>Home</Text>

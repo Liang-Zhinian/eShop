@@ -43,6 +43,11 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.AutofacModules
                    .As<ITenantRepository>()
                    .InstancePerLifetimeScope();
             
+            builder.RegisterType<RegistrationInvitationRepository>()
+                   .As<IRegistrationInvitationRepository>()
+                   .InstancePerLifetimeScope();
+            
+            
             builder.RegisterType<UnitOfWork>()
                    .As<IUnitOfWork>()
                 .InstancePerLifetimeScope();

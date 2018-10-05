@@ -5,6 +5,7 @@ export const initialState = Store
 export default function userReducer (state = initialState, action) {
   switch (action.type) {
     case 'USER_LOGIN': {
+      console.log(action.type)
       if (action.data) {
         return {
           ...state,
@@ -18,6 +19,7 @@ export default function userReducer (state = initialState, action) {
       return initialState
     }
     case 'USER_DETAILS_UPDATE': {
+      console.log(action.type)
       if (action.data) {
         return {
           ...state,

@@ -36,6 +36,8 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
             clientUrls.Add("SchedulesApi", configuration.GetValue<string>("SchedulesApiClient"));
             clientUrls.Add("MobileReservationAgg", configuration.GetValue<string>("MobileReservationAggClient"));
             clientUrls.Add("NativeAppClient", configuration.GetValue<string>("NativeAppClient"));
+            clientUrls.Add("IdentityAccessApi", configuration.GetValue<string>("IdentityAccessApiClient"));
+
 
 
             if (!context.Clients.Any())

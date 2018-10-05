@@ -8,6 +8,7 @@
     using SaaSEqt.IdentityAccess.Domain.Model.Identity.Repositories;
     using SaaSEqt.Common.Domain.Model;
     using System.Threading.Tasks;
+    using System.Linq;
 
     /// <summary>
     /// Coordinates interactions among entities in the "Domain.Model.Identity" namespace.
@@ -22,6 +23,7 @@
         readonly TenantProvisioningService tenantProvisioningService;
         readonly ITenantRepository tenantRepository;
         readonly IUserRepository userRepository;
+        readonly IRegistrationInvitationRepository registrationInvitationRepository;
 
 		public IdentityApplicationService (
             //IUnitOfWork unitOfWork,
@@ -30,7 +32,8 @@
 			IGroupRepository groupRepository,
 			TenantProvisioningService tenantProvisioningService,
 			ITenantRepository tenantRepository,
-			IUserRepository userRepository
+			IUserRepository userRepository,
+            IRegistrationInvitationRepository registrationInvitationRepository
 		){
             //this.unitOfWork = unitOfWork;
 			this.authenticationService = authenticationService;
@@ -39,6 +42,7 @@
 			this.tenantProvisioningService= tenantProvisioningService;
 			this.tenantRepository =tenantRepository;
 			this.userRepository= userRepository;
+            this.registrationInvitationRepository = registrationInvitationRepository;
 		}
 
         public void ActivateTenant(ActivateTenantCommand command)
@@ -194,6 +198,7 @@
         public User RegisterUser(RegisterUserCommand command)
         {
             var tenant = GetExistingTenant(command.TenantId);
+            //RegistrationInvitation invitation = tenant.OfferRegistrationInvitation(command.InvitationIdentifier).OpenEnded();
             var user = tenant.RegisterUser(
                 command.InvitationIdentifier,
                 command.Username,
@@ -216,6 +221,7 @@
             if (user == null)
                 throw new InvalidOperationException("User not registered.");
 
+            //tenant.WithdrawInvitation(invitation.InvitationId);
             this.userRepository.Add(user);
             //this.unitOfWork.Commit();
 
@@ -269,6 +275,8 @@
         Tenant GetExistingTenant(string tenantId)
         {
             var tenant = GetTenant(tenantId);
+            var registrationInvitations = GetRegistrationInvitationByTenantId(tenantId);
+            tenant.RegistrationInvitations = registrationInvitations.ToHashSet();
             if (tenant == null)
                 throw new ArgumentException(
                     string.Format("Tenant does not exist for: {0}", tenantId));
@@ -286,6 +294,17 @@
             {
                 return null;
             }
+        }
+
+        public IQueryable<RegistrationInvitation> GetRegistrationInvitationByTenantId(string tenantId){
+            return this.registrationInvitationRepository.GetByTenantId(Guid.Parse(tenantId));
+        }
+
+        public RegistrationInvitation OfferRegistrationInvitation(string tenantId, string description){
+            var tenant = GetExistingTenant(tenantId);
+            RegistrationInvitation invitation = tenant.OfferRegistrationInvitation(description);
+            this.registrationInvitationRepository.Add(invitation);
+            return invitation;
         }
     }
 }

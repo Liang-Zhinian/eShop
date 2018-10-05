@@ -8,6 +8,7 @@ using SaaSEqt.eShop.Services.Sites.API.ViewModel;
 using SaaSEqt.IdentityAccess.Application;
 using SaaSEqt.IdentityAccess.Application.Commands;
 using Microsoft.AspNetCore.Authorization;
+using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.Staffs;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Controllers
 {
@@ -34,9 +35,10 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
         [Route("tenants/{tenantId:Guid}/staffs")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(StaffViewModel), (int)HttpStatusCode.OK)]
-        public IActionResult Staffs(Guid tenantId, [FromQuery]string userName)
+        public async Task<IActionResult> Staffs(Guid tenantId, [FromQuery]string userName)
         {
-            if (tenantId == Guid.Empty || string.IsNullOrEmpty(userName)){
+            if (tenantId == Guid.Empty || string.IsNullOrEmpty(userName))
+            {
                 return BadRequest();
             }
 
@@ -65,10 +67,30 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
         [HttpPost]
         [Route("tenants/{tenantId:Guid}/staffs")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public IActionResult Staffs(Guid tenantId, [FromBody]RegisterUserCommand registerUserCommand)
+        public async Task<IActionResult> Staffs(Guid tenantId, Guid siteId, [FromBody]RegisterUserCommand registerUserCommand)
         {
             var newUser = _identityApplicationService.RegisterUser(registerUserCommand);
-            return CreatedAtAction(nameof(Get), new { tenantId = registerUserCommand.TenantId, userName = registerUserCommand.Username }, null);
+            await _identityAccessContext.SaveChangesAsync();
+
+            StaffCreatedEvent staffCreatedEvent = new StaffCreatedEvent(newUser.Id, siteId, newUser.TenantId,
+                                                                        newUser.Username, newUser.Password,
+                                                                        newUser.Person.Name.FirstName, newUser.Person.Name.LastName, newUser.IsEnabled,
+                                                                        newUser.Enablement.StartDate, newUser.Enablement.EndDate,
+                                                                        newUser.Person.EmailAddress.Address, newUser.Person.ContactInformation.PrimaryTelephone.Number, 
+                                                                        newUser.Person.ContactInformation.SecondaryTelephone.Number,
+                                                                        newUser.Person.ContactInformation.PostalAddress.StreetAddress, 
+                                                                        newUser.Person.ContactInformation.PostalAddress.City, 
+                                                                        newUser.Person.ContactInformation.PostalAddress.StateProvince,
+                                                                        newUser.Person.ContactInformation.PostalAddress.PostalCode, 
+                                                                        newUser.Person.ContactInformation.PostalAddress.CountryCode
+            );
+
+            await _identityAccessIntegrationEventService.SaveEventAndContextChangesAsync(staffCreatedEvent);
+
+            // Publish through the Event Bus and mark the saved event as published
+            await _identityAccessIntegrationEventService.PublishThroughEventBusAsync(staffCreatedEvent);
+
+            return CreatedAtAction(nameof(Staffs), new { tenantId = registerUserCommand.TenantId, userName = registerUserCommand.Username }, null);
         }
 
         // PUT api/v1/[controller]/tenants/guid/staffs/guid

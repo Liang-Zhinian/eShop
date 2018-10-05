@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.IO;
+using SaaSEqt.IdentityAccess.Infrastructure.Context;
+
 namespace SaaSEqt.eShop.Services.Sites.API
 {
     public class Program
@@ -14,23 +16,33 @@ namespace SaaSEqt.eShop.Services.Sites.API
         public static void Main(string[] args)
         {
             BuildWebHost(args)
-                .MigrateDbContext<SitesContext>((context,services)=>
+                .MigrateDbContext<IdentityAccessDbContext>((context, services) =>
+                {
+                    var env = services.GetService<IHostingEnvironment>();
+                    var settings = services.GetService<IOptions<SitesSettings>>();
+                    var logger = services.GetService<ILogger<IdentityAccessContextSeed>>();
+
+                    new IdentityAccessContextSeed()
+                            .SeedAsync(context, env, settings, logger)
+                            .Wait();
+                })
+                .MigrateDbContext<SitesContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();
                     var settings = services.GetService<IOptions<SitesSettings>>();
                     var logger = services.GetService<ILogger<SitesContextSeed>>();
 
-                new SitesContextSeed()
-                    .SeedAsync(context, env, settings, logger)
-                    .Wait();
+                    new SitesContextSeed()
+                        .SeedAsync(context, env, settings, logger)
+                        .Wait();
                 })
-                .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
+                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
                 .Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
         WebHost.CreateDefaultBuilder(args)
-                   //.UseUrls("http://*:8082")
+             //.UseUrls("http://*:8082")
              .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .UseHealthChecks("/hc")
@@ -45,7 +57,7 @@ namespace SaaSEqt.eShop.Services.Sites.API
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                })                
-                .Build();    
+                })
+                .Build();
     }
 }

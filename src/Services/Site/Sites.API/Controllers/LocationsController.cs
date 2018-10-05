@@ -110,6 +110,39 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
             return Ok(model);
         }
 
+        // GET api/v1/[controller]
+        [HttpGet]
+        [Route("sites/{siteId:Guid}/staffs/{staffId:Guid}/login-locations")]
+        [ProducesResponseType(typeof(IEnumerable<Location>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> getLocationsStaffCanSignIn(Guid siteId, Guid staffId)
+        {
+            var staffLoginLocation_LocationIds = _sitesContext.StaffLoginLocations
+                                                                    .Where(y => y.SiteId.Equals(siteId)
+                                                                           && y.StaffId.Equals(staffId))
+                                                              .Select(y => y.LocationId);
+
+            var root = await _sitesContext.Locations
+                                          //.Include(y=>y.AdditionalLocationImages)
+                                          .Where(y => staffLoginLocation_LocationIds.Contains(y.Id))
+                                          .ToListAsync();
+
+            root = ChangeLocationUriPlaceholder(root);
+
+            //var totalItems = await root.LongCountAsync();
+
+            //var itemsOnPage = await root.OrderBy(c => c.Distance)
+            //                    .Skip(pageSize * pageIndex)
+            //                    .Take(pageSize)
+            //                      .ToListAsync();
+
+            //itemsOnPage = ChangeLocationUriPlaceholder(itemsOnPage);
+
+            //var model = new PaginatedItemsViewModel<Location>(
+                //pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(root);
+        }
+
         //POST api/v1/[controller]
         [HttpPost]
         //[Authorize(Policy = "CanWriteTenantData")]

@@ -4,24 +4,28 @@ import Config from '../Config/DebugConfig'
 import createSagaMiddleware from 'redux-saga'
 import RehydrationServices from '../Services/RehydrationServices'
 import ReduxPersist from '../Config/ReduxPersist'
-// import ScreenTracking from './ScreenTrackingMiddleware'
-// import thunk from 'redux-thunk'
+import ScreenTracking from './ScreenTrackingMiddleware'
+import thunk from 'redux-thunk'
+import authMiddleware from '../Middlewares/AuthMiddleware'
 
 // creates the store
 export default (rootReducer, rootSaga) => {
   /* ------------- Redux Configuration ------------- */
 
-  const middleware = [] //[thunk]
+  const middleware = [thunk]
   const enhancers = []
 
   /* ------------- Analytics Middleware ------------- */
-  // middleware.push(ScreenTracking)
+  middleware.push(ScreenTracking)
 
   /* ------------- Saga Middleware ------------- */
 
   const sagaMonitor = Config.useReactotron ? console.tron.createSagaMonitor() : null
   const sagaMiddleware = createSagaMiddleware({ sagaMonitor })
   middleware.push(sagaMiddleware)
+
+  /* ------------- authMiddleware -------------- */
+  middleware.push(authMiddleware)
 
   /* ------------- Assemble Middleware ------------- */
 

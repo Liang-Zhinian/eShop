@@ -3,6 +3,8 @@ import { authorize, refresh, revoke } from 'react-native-app-auth';
 
 import ErrorMessages from '../Constants/errors'
 import statusMessage from './status'
+import book2 from '../Services/Auth'
+import { getLocationsStaffCanSignIn } from './locations'
 
 /**
   * Sign Up to Firebase
@@ -52,25 +54,26 @@ export function signUp(formData) {
   */
 function getUserData(dispatch) {
   const UID = (
-    FirebaseRef &&
-    Firebase &&
-    Firebase.auth() &&
-    Firebase.auth().currentUser &&
-    Firebase.auth().currentUser.uid
-  ) ? Firebase.auth().currentUser.uid : null
+    book2 &&
+    book2.auth() &&
+    book2.auth().currentUser &&
+    book2.auth().currentUser.uid
+  ) ? book2.auth().currentUser.uid : null
 
   if (!UID) return false
 
   // const ref = FirebaseRef.child(`users/${UID}`)
 
-  // return ref.on('value', (snapshot) => {
-  //   const userData = snapshot.val() || []
+  return book2.getUserData(UID)
+    .then((userData) => {
+      
+      dispatch(getLocationsStaffCanSignIn(userData.SiteId, userData.Id))
 
-  //   return dispatch({
-  //     type: 'USER_DETAILS_UPDATE',
-  //     data: userData
-  //   })
-  // })
+      return dispatch({
+        type: 'USER_DETAILS_UPDATE',
+        data: userData
+      })
+    })
 }
 
 export function getMemberData() {
@@ -106,13 +109,15 @@ export function login(formData) {
     if (!username) return reject({ message: ErrorMessages.missingUserName })
     if (!password) return reject({ message: ErrorMessages.missingPassword })
 
-    // Go to Firebase
-    return auth(username, password)
+    // 
+
+    return book2.auth().signInWithEmailAndPassword(username, password)
       .then(async (res) => {
-        console.log('auth returns', res)
+
         const userDetails = res && res.user ? res.user : null
 
         if (userDetails.uid) {
+          // await 
           // Update last logged in data
           // FirebaseRef.child(`users/${userDetails.uid}`).update({
           //   lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP
@@ -126,7 +131,7 @@ export function login(formData) {
           // }
 
           // Get User Data
-          // getUserData(dispatch)
+          getUserData(dispatch)
         }
 
         await statusMessage(dispatch, 'loading', false)
@@ -137,7 +142,10 @@ export function login(formData) {
           data: userDetails
         }))
       })
-      .catch(reject)
+      .catch(err => {
+        console.log(err)
+        reject(err)
+      })
   })
     .catch(async (err) => {
       await statusMessage(dispatch, 'loading', false)
@@ -241,7 +249,7 @@ export function logout() {
 
 
 
-authorize = async () => {
+const aauthorize = async () => {
   try {
     const authState = await authorize(config);
 
@@ -259,7 +267,7 @@ authorize = async () => {
   }
 };
 
-refresh = async () => {
+const rrefresh = async () => {
   try {
     const authState = await refresh(config, {
       refreshToken: this.state.refreshToken
@@ -276,7 +284,7 @@ refresh = async () => {
   }
 };
 
-revoke = async () => {
+const rrevoke = async () => {
   try {
     await revoke(config, {
       tokenToRevoke: this.state.accessToken,
@@ -291,36 +299,3 @@ revoke = async () => {
     Alert.alert('Failed to revoke token', error.message);
   }
 };
-
-/////
-auth(username, password) {
-  return new Promise((resolve, reject) => {
-    var data = `grant_type=password&scope=mobilereservationagg+role&username=${username}&password=${password}&client_id=ro.client&client_secret=secret`;
-
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState !== 4) {
-        return;
-      }
-      if (this.status === 200) {
-        try {
-          const responseJson = this.response.json();
-          resolve(responseJson)
-        } catch (reason) {
-          reject(reason);
-        }
-      } else {
-        reject(Error(this.response));
-      }
-    });
-
-    xhr.open("POST", "http://localhost:5105/connect/token");
-    xhr.setRequestHeader("cache-control", "no-cache");
-    xhr.setRequestHeader("postman-token", "c8d6f4c0-adf8-145c-00a3-099e668a1623");
-    xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-
-    xhr.send(data);
-  });
-}

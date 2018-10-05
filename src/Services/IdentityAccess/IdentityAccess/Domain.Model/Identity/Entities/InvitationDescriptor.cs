@@ -5,7 +5,6 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using SaaSEqt.Common.Domain.Model;
 
-    [NotMapped]
     public class InvitationDescriptor
     {
         public InvitationDescriptor(Guid tenantId, string invitationId, string description, DateTime startingOn, DateTime until)

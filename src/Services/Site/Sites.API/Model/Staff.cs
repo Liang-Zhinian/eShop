@@ -19,6 +19,41 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
             this.CanLoginAllLocations = canLoginAllLocations;
         }
 
+        public Staff(Guid staffId,
+                     Guid siteId,
+                     Guid tenantId,
+                     string firstName,
+                     string lastName,
+                     bool enabled,
+                     string emailAddress,
+                     string primaryTelephone,
+                     string secondaryTelephone,
+                     string addressStreetAddress,
+                     string addressCity,
+                     string addressStateProvince,
+                     string addressPostalCode,
+                     string addressCountryCode)
+        {
+            this.Id = staffId;
+            this.SiteId = siteId;
+            this.TenantId = tenantId;
+            //this.Username = username;
+            //this.Password = password;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.IsEnabled = enabled;
+            //this.StartDate = startDate;
+            //this.EndDate = endDate;
+            this.EmailAddress = emailAddress;
+            this.PrimaryTelephone = primaryTelephone;
+            this.SecondaryTelephone = secondaryTelephone;
+            this.StreetAddress = addressStreetAddress;
+            this.City = addressCity;
+            this.StateProvince = addressStateProvince;
+            this.PostalCode = addressPostalCode;
+            this.CountryCode = addressCountryCode;
+        }
+
         public Guid Id { get; private set; }
 
         public string FirstName { get; private set; }

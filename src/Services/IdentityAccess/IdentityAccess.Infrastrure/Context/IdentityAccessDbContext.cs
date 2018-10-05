@@ -26,6 +26,7 @@ namespace SaaSEqt.IdentityAccess.Infrastructure.Context
             //modelBuilder.HasDefaultSchema(DbConstants.Schema);
             
             modelBuilder.ApplyConfiguration(new TenantMap());
+            modelBuilder.ApplyConfiguration(new RegistrationInvitationMap());
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new PersonMap());
             modelBuilder.ApplyConfiguration(new RoleMap());

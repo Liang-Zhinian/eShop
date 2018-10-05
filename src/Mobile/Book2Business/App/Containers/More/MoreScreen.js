@@ -48,6 +48,12 @@ const data = [
     target: 'BizInfo'
   },
   {
+    id: 10,
+    title: 'Staffs',
+    image: Images.chevronRight,
+    target: 'Staffs'
+  },
+  {
     id: 3,
     title: 'Profile',
     image: Images.chevronRight,

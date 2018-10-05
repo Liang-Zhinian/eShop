@@ -85,4 +85,8 @@
     <ProjectReference Include="..\..\IdentityAccess\IdentityAccess.Infrastrure\SaaSEqt.IdentityAccess.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\IntegrationEvents\Events\Staffs\" />
+    <Folder Include="Application\IntegrationEvents\EventHandling\" />
+  </ItemGroup>
 </Project>

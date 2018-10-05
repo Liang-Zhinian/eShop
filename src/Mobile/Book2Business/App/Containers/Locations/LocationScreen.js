@@ -73,13 +73,13 @@ class LocationScreen extends Component {
       pressMenu: this.toggleMenu.bind(this)
     })
 
-    const { siteId, locationId } = site
-    const { getLocation, showError } = this.props
-    this.props.getLocation(siteId, locationId)
-      .catch((err) => {
-        console.log(`Error: ${err}`)
-        return showError(err)
-      })
+    // const { siteId, locationId } = site
+    // const { getLocation, showError } = this.props
+    // this.props.getLocation(siteId, locationId)
+    //   .catch((err) => {
+    //     console.log(`Error: ${err}`)
+    //     return showError(err)
+    //   })
   }
 
   toggleMenu () {

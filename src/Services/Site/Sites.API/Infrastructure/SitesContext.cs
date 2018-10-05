@@ -14,6 +14,7 @@
         public DbSet<Site> Sites { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Staff> Staffs { get; set; }
+        public DbSet<StaffLoginLocation> StaffLoginLocations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

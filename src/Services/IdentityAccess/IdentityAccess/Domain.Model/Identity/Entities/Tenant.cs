@@ -1,12 +1,12 @@
 ﻿
 namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.ComponentModel.DataAnnotations.Schema;
 
-	using SaaSEqt.Common.Domain.Model;
+    using SaaSEqt.Common.Domain.Model;
     using SaaSEqt.IdentityAccess.Domain.Model.Identity.Events.Tenant;
     using SaaSEqt.IdentityAccess.Domain.Model.Identity.Events.Group;
     using SaaSEqt.IdentityAccess.Domain.Model.Access.Events;
@@ -26,7 +26,19 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
     {
         #region [ Fields and Constructor Overloads ]
 
-        private readonly ISet<RegistrationInvitation> registrationInvitations;
+        private ISet<RegistrationInvitation> registrationInvitations;
+
+        [NotMapped]
+        public ISet<RegistrationInvitation> RegistrationInvitations
+        {
+            get
+            {
+                return registrationInvitations;
+            }
+            set {
+                registrationInvitations = value;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tenant"/> class.
@@ -85,6 +97,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
         public bool Active { get; private set; }
 
         public string Description { get; private set; }
+
 
         #endregion
 
@@ -193,18 +206,18 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
 
         #region [ Additional Methods ]
 
-        public ICollection<InvitationDescriptor> AllAvailableRegistrationInvitations()
+        public ICollection<InvitationDescriptor> AllAvailableregistrationInvitations()
         {
             AssertionConcern.AssertStateTrue(this.Active, "Tenant is not active.");
 
-            return this.AllRegistrationInvitationsFor(true);
+            return this.AllregistrationInvitationsFor(true);
         }
 
-        public ICollection<InvitationDescriptor> AllUnavailableRegistrationInvitations()
+        public ICollection<InvitationDescriptor> AllUnavailableregistrationInvitations()
         {
             AssertionConcern.AssertStateTrue(this.Active, "Tenant is not active.");
 
-            return this.AllRegistrationInvitationsFor(false);
+            return this.AllregistrationInvitationsFor(false);
         }
 
         /// <summary>
@@ -232,7 +245,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
             yield return this.Name;
         }
 
-        private List<InvitationDescriptor> AllRegistrationInvitationsFor(bool isAvailable)
+        private List<InvitationDescriptor> AllregistrationInvitationsFor(bool isAvailable)
         {
             return this.registrationInvitations
                 .Where(x => (x.IsAvailable() == isAvailable))
@@ -242,7 +255,7 @@ namespace SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities
 
         private RegistrationInvitation GetInvitation(string invitationIdentifier)
         {
-            return this.registrationInvitations.FirstOrDefault(x => x.IsIdentifiedBy(invitationIdentifier));
+            return this.registrationInvitations != null ? this.registrationInvitations.FirstOrDefault(x => x != null && x.IsIdentifiedBy(invitationIdentifier)) : null;
         }
 
         #endregion

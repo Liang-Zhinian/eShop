@@ -63,7 +63,7 @@ class UpdateImage extends Component {
 
     return (
       <Layout
-        location={locations.location}
+        location={locations.currentLocation}
         loading={isLoading}
         error={errorMessage}
         success={successMessage}

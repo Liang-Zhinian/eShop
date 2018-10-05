@@ -59,11 +59,13 @@ class UpdateLocationInfo extends Component {
       isLoading
     } = this.props
 
+    console.log(locations)
+
     const { successMessage, errorMessage } = this.state
 
     return (
       <Layout
-        location={locations.location}
+        location={locations.currentLocation}
         loading={isLoading}
         error={errorMessage}
         success={successMessage}

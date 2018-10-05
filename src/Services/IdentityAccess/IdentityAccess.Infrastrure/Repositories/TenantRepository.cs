@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SaaSEqt.IdentityAccess.Domain.Model.Identity.Entities;
 using SaaSEqt.IdentityAccess.Domain.Model.Identity.Repositories;
 using SaaSEqt.IdentityAccess.Infrastructure.Context;

@@ -2,6 +2,7 @@ import MoreScreen from '../../Containers/More/MoreScreen'
 import AppointmentsStack from './AppointmentsStack'
 import ClassesStack from './ClassesStack'
 import BizInfoStack from './BizInfoStack'
+import StaffsStack from './StaffsStack'
 import ProfileStack from './ProfileStack'
 import LocationScreen from '../../Containers/LocationScreen'
 import AboutScreen from '../../Containers/AboutScreen'
@@ -14,6 +15,7 @@ export default CreateStackNavigator({
   Appointments: { screen: AppointmentsStack },
   Classes: { screen: ClassesStack },
   BizInfo: { screen: BizInfoStack },
+  Staffs: { screen: StaffsStack },
   Profile: { screen: ProfileStack },
   ChangeLocation: { screen: ProfileStack },
   Location: { screen: LocationScreen },

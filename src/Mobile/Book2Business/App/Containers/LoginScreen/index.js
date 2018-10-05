@@ -17,7 +17,8 @@ import { connect } from 'react-redux'
 import styles from './Styles/LoginScreenStyles'
 import { Images, Metrics } from '../../Themes'
 import LoginActions from '../../Redux/LoginRedux'
-import {login} from '../../Actions/member'
+import { login } from '../../Actions/member'
+import { getLocation } from '../../Actions/locations'
 import { Logo, Form, Wallpaper, ButtonSubmit, SignupSection } from './components'
 import config from './AuthConfig'
 
@@ -38,8 +39,8 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: 'reactnative@infinite.red',
-      password: 'password',
+      username: 'demouser@microsoft.com',
+      password: 'Pass@word1',
       visibleHeight: Metrics.screenHeight,
       topLogo: { width: Metrics.screenWidth },
       hasLoggedInOnce: false,
@@ -57,9 +58,20 @@ class LoginScreen extends React.Component {
       this.props.navigation.goBack()
     }
 
-    if (newProps.username) {
-      this.props.navigation.navigate('App')
+    const { member, locations, getLocation } = newProps
+
+    if (member) {
+      if (locations.currentLocation) {
+        this.props.navigation.navigate('App')
+      } else if (!locations.currentLocation && locations.siblingLocations && locations.siblingLocations.length > 0) {
+        getLocation(locations.siblingLocations[0].SiteId, locations.siblingLocations[0].Id)
+      }
     }
+
+    // if (!!newProps.member) {
+    //   if (!!newProps.location)
+    //     this.props.navigation.navigate('App')
+    // }
   }
 
   componentWillMount() {
@@ -97,7 +109,7 @@ class LoginScreen extends React.Component {
     const { username, password } = this.state
     this.isAttempting = true
     // attempt a login - a saga is listening to pick it up from here.
-    this.props.login({username, password})
+    this.props.login({ username, password })
   }
 
   handleChangeUsername = (text) => {
@@ -109,7 +121,6 @@ class LoginScreen extends React.Component {
   }
 
   render() {
-    console.log(this)
     const { username, password } = this.state
     const { fetching } = this.props
     const editable = !fetching
@@ -165,8 +176,8 @@ class LoginScreen extends React.Component {
               </View>
             </TouchableOpacity>
           </View>
-          <Button onPress={this.authorize} title="Authorize" color="#DA2536" />
-          <Button onPress={this.requestToken} title="Request token" color="#DA2536" />
+          {/* <Button onPress={this.authorize} title="Authorize" color="#DA2536" />
+          <Button onPress={this.requestToken} title="Request token" color="#DA2536" /> */}
         </View>
 
       </ScrollView>
@@ -183,19 +194,17 @@ class LoginScreen extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    username: state.login.username,
-    fetching: state.login.fetching,
-    member: state.member
-  }
-}
+const mapStateToProps = (state, props) => ({
+  username: state.login.username,
+  fetching: state.login.fetching,
+  member: state.member,
+  locations: state.locations
+})
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password))
-    login: login
-  }
+const mapDispatchToProps = {
+  // attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password))
+  login: login,
+  getLocation: getLocation,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)

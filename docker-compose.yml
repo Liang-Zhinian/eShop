@@ -48,6 +48,15 @@ services:
     volumes:
       - ~/eShop/Pics:/app/Pics
 
+  identityaccess.api:
+    image: eshop/identityaccess.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/IdentityAccess/IdentityAccess.API/Dockerfile    
+    depends_on:
+      - sql.data
+      - rabbitmq
+
   mobilereservationagg:
     image: eshop/mobilereservationagg:${TAG:-latest}
     build:
