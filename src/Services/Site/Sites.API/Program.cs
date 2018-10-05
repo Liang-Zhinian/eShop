@@ -16,16 +16,16 @@ namespace SaaSEqt.eShop.Services.Sites.API
         public static void Main(string[] args)
         {
             BuildWebHost(args)
-                .MigrateDbContext<IdentityAccessDbContext>((context, services) =>
-                {
-                    var env = services.GetService<IHostingEnvironment>();
-                    var settings = services.GetService<IOptions<SitesSettings>>();
-                    var logger = services.GetService<ILogger<IdentityAccessContextSeed>>();
+                //.MigrateDbContext<IdentityAccessDbContext>((context, services) =>
+                //{
+                //    var env = services.GetService<IHostingEnvironment>();
+                //    var settings = services.GetService<IOptions<SitesSettings>>();
+                //    var logger = services.GetService<ILogger<IdentityAccessContextSeed>>();
 
-                    new IdentityAccessContextSeed()
-                            .SeedAsync(context, env, settings, logger)
-                            .Wait();
-                })
+                //    new IdentityAccessContextSeed()
+                //            .SeedAsync(context, env, settings, logger)
+                //            .Wait();
+                //})
                 .MigrateDbContext<SitesContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();

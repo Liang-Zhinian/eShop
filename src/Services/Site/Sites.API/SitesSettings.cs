@@ -8,6 +8,8 @@
 
         public string LocationAdditionalPicBaseUrl { get; set; }
 
+        public string StaffPicBaseUrl { get; set; }
+
         public string ConnectionString { get; set; }
 
         public string EventBusConnection { get; set; }

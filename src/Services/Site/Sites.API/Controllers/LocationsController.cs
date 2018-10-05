@@ -257,10 +257,11 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
                 await request.Image.CopyToAsync(stream);
             }
 
+            string img = Path.Combine(siteId.ToString(), request.LocationId.ToString() + imageFileExtension);
             await _businessService.UpdateLocationImage(
-                request.LocationId,
                 request.SiteId,
-                path
+                request.LocationId,
+                img
             );
 
 

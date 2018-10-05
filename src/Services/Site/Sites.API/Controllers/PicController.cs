@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using SaaSEqt.eShop.Services.Sites.API.Extensions;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -130,6 +131,36 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
             }
 
             return NotFound();
+        }
+
+        // GET api/v1/staffs/ofSiteId/[0]/staffId/[1]/pic
+        [HttpGet]
+        [Route("api/v1/staff/ofSiteId/{siteId:Guid}/staffId/{staffId:Guid}/pic")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetStaffAvatar(Guid siteId, Guid staffId)
+        {
+            if (siteId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var item = await _businessService.FindExistingStaff(siteId, staffId);
+
+            if (item == null) return NotFound();
+
+            var webRoot = _env.WebRootPath;
+            _logger.LogDebug("webRoot: " + webRoot);
+
+            var path = Path.Combine(webRoot, item.Image);
+            _logger.LogDebug("path: " + path);
+
+            string imageFileExtension = Path.GetExtension(item.Image);
+            string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
+
+            var buffer = System.IO.File.ReadAllBytes(path);
+
+            return File(buffer, mimetype);
         }
 
 

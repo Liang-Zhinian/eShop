@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SaaSEqt.eShop.Services.Sites.API.Model
 {
@@ -22,6 +23,8 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
         public Staff(Guid staffId,
                      Guid siteId,
                      Guid tenantId,
+                     string userName,
+                     string password,
                      string firstName,
                      string lastName,
                      bool enabled,
@@ -37,8 +40,8 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
             this.Id = staffId;
             this.SiteId = siteId;
             this.TenantId = tenantId;
-            //this.Username = username;
-            //this.Password = password;
+            this.UserName = userName;
+            this.Password = password;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.IsEnabled = enabled;
@@ -55,6 +58,10 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
         }
 
         public Guid Id { get; private set; }
+
+        public string UserName { get; private set; }
+
+        public string Password { get; private set; }
 
         public string FirstName { get; private set; }
 
@@ -76,45 +83,72 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
 
         public string SecondaryTelephone { get; private set; }
 
-        public bool IsMale { get; private set; }
+        public bool IsMale { get; private set; } = true;
 
         public string Bio { get; private set; }
 
         public string Image { get; private set; }
 
-        public bool CanLoginAllLocations { get; private set; }
+        [NotMapped]
+        public string ImageUri { get; set; }
+
+        public bool CanLoginAllLocations { get; private set; } = false;
 
         public Guid SiteId { get; private set; }
         public virtual Site Site { get; private set; }
 
         public Guid TenantId { get; private set; }
 
-        public bool IsEnabled { get; private set; }
+        public bool IsEnabled { get; private set; } = true;
 
         public virtual ICollection<StaffLoginLocation> StaffLoginLocations { get; private set; }
-        //public virtual ICollection<Availability> Availibilities { get; private set; }
-        //public virtual ICollection<Unavailability> Unavailabilities { get; private set; }
 
-        //public Availability AddAvailability(Guid serviceItemId, Guid locationId, DateTime startTime, DateTime endTime, bool Sunday, bool Monday, bool Tuesday, bool Wednesday, bool Thursday, bool Friday, bool Saturday, DateTime bookableEndTime) {
-        //    Availability availability = new Availability(this.SiteId, this.Id, serviceItemId, locationId, startTime, endTime, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, bookableEndTime);
 
-        //    if (Availibilities == null) Availibilities = new ObservableCollection<Availability>();
+        #region setter methods
 
-        //    Availibilities.Add(availability);
+        public void UpdateImage(string image){
+            this.Image = image;
+        }
 
-        //    return availability;
-        //}
+        public void Activate(){
+            this.IsEnabled = true;
+        }
 
-        //public Unavailability AddUnavailability(Guid serviceItemId, Guid locationId, DateTime startTime, DateTime endTime, bool Sunday, bool Monday, bool Tuesday, bool Wednesday, bool Thursday, bool Friday, bool Saturday, string description)
-        //{
-        //    Unavailability unavailability = new Unavailability(this.SiteId, this.Id, serviceItemId, locationId, startTime, endTime, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, description);
+        public void Deactivate()
+        {
+            this.IsEnabled = false;
+        }
 
-        //    if (Unavailabilities == null) Unavailabilities = new ObservableCollection<Unavailability>();
+        public void UpdateBriefInfo(string firstName, 
+                                    string lastName,
+                                    string bio,
+                                    bool isMale, 
+                                    string emailAddress, 
+                                    string primaryTelephone, 
+                                    string secondaryTelephone){
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Bio = bio;
+            this.IsMale = isMale;
+            this.EmailAddress = emailAddress;
+            this.PrimaryTelephone = primaryTelephone;
+            this.SecondaryTelephone = secondaryTelephone;
+        }
 
-        //    Unavailabilities.Add(unavailability);
+        public void UpdateAddress(
+                     string addressStreetAddress,
+                     string addressCity,
+                     string addressStateProvince,
+                     string addressPostalCode,
+                     string addressCountryCode)
+        {
+            this.StreetAddress = addressStreetAddress;
+            this.City = addressCity;
+            this.StateProvince = addressStateProvince;
+            this.PostalCode = addressPostalCode;
+            this.CountryCode = addressCountryCode;
+        }
 
-        //    return unavailability;
-        //}
-
+        #endregion
     }
 }

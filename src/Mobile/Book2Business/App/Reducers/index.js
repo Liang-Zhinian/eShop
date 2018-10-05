@@ -4,6 +4,7 @@ import locale from './locale'
 import locations from './locations'
 import serviceCategories from './serviceCategories'
 import serviceItems from './serviceItems'
+import staffs from './staffs'
 import nearby from './nearby'
 import theme from './theme'
 
@@ -25,5 +26,6 @@ export default {
   locale,
   locations,
   serviceCategories,
-  serviceItems
+  serviceItems,
+  staffs
 }

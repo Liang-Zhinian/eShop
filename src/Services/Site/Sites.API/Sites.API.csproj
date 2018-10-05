@@ -41,6 +41,8 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Remove="Pics\1bf83c0c-4a61-48b0-b86e-9ae95888268f\2ffe65d7-2fdd-4c1e-85d9-8b40b22a4f99\1.png" />
+    <None Remove="Application\.DS_Store" />
+    <None Remove="Application\IntegrationEvents\.DS_Store" />
   </ItemGroup>
 
 

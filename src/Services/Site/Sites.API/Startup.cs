@@ -94,21 +94,17 @@
                 //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
             });
 
-            services.AddDbContext<IdentityAccessDbContext>(options =>
-            {
-                options.UseMySql(Configuration["ConnectionString"],
-                                     mySqlOptionsAction: sqlOptions =>
-                                     {
-                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                     });
+            //services.AddDbContext<IdentityAccessDbContext>(options =>
+            //{
+            //    options.UseMySql(Configuration["ConnectionString"],
+            //                         mySqlOptionsAction: sqlOptions =>
+            //                         {
+            //                             sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+            //                             sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            //                         });
 
-                // Changing default behavior when client evaluation occurs to throw. 
-                // Default in EF Core would be to log a warning when client evaluation is performed.
-                options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-                //Check Client vs. Server evaluation: https://docs.microsoft.com/en-us/ef/core/querying/client-eval
-            });
+            //    options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+            //});
 
             services.AddDbContext<IntegrationEventLogContext>(options =>
             {
@@ -143,7 +139,7 @@
 
             services.AddApplicationSetup();
 
-            services.AddIdentityAccessSetup();
+            //services.AddIdentityAccessSetup();
 
             services.AddEventBusSetup(Configuration);
 

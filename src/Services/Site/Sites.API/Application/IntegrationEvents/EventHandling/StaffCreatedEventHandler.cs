@@ -17,6 +17,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHa
 		public async Task Handle(StaffCreatedEvent @event)
         {
             Staff newStaff = new Staff(@event.Id, @event.SiteId, @event.TenantId, 
+                                       @event.Username, @event.Password,
                                        @event.FirstName, @event.LastName, @event.Enabled, 
                                        @event.EmailAddress, @event.PrimaryTelephone, @event.SecondaryTelephone, 
                                        @event.AddressStreetAddress, @event.AddressCity, @event.AddressStateProvince, 

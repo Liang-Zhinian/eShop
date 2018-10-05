@@ -55,8 +55,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Site> FindExistingSite(Guid siteId){
-            return await _sitesContext.Sites.SingleOrDefaultAsync(y=>y.Id.Equals(siteId));
+        public async Task<Site> FindExistingSite(Guid siteId)
+        {
+            return await _sitesContext.Sites.SingleOrDefaultAsync(y => y.Id.Equals(siteId));
         }
 
         #endregion
@@ -89,7 +90,8 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
                                                               string emailAddress,
                                                               string primaryTelephone,
                                                               string secondaryTelephone
-                                                             ){
+                                                             )
+        {
             var location = await FindExistingLocation(siteId, locationId); //await _eventStoreSession.Get<Location>(locationId);
 
             ContactInformation contactInformation = new ContactInformation(contactName,
@@ -200,7 +202,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
                 //                                          locationImage.Id,
                 //                                            location.Image);
                 //await _sitesIntegrationEventService.PublishThroughEventBusAsync(additionalLocationImageCreatedEvent);
-            } else{
+            }
+            else
+            {
                 locationImage = location.AdditionalLocationImages.SingleOrDefault(y => y.Id.Equals(imageId));
                 if (locationImage == null) throw new Exception("AdditionalLocationImage not found.");
 
@@ -230,18 +234,20 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
         public async Task<Location> FindExistingLocation(Guid siteId, Guid locationId)
         {
             var location = await _sitesContext.Locations
-                                                   .Include(y=>y.AdditionalLocationImages)
+                                                   .Include(y => y.AdditionalLocationImages)
                                                    .SingleOrDefaultAsync(y => y.SiteId.Equals(siteId) &&
                                                                                y.Id.Equals(locationId));
             return location;
         }
 
-        public async Task<IEnumerable<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText) {
+        public async Task<IEnumerable<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText)
+        {
             var root = await _sitesContext.Locations.Include(y => y.AdditionalLocationImages).ToListAsync();
             IList<Location> list = new List<Location>();
             foreach (var item in root)
             {
-                if (DistanceHelper.Distance(latitude, longitude, item.Geolocation.Latitude, item.Geolocation.Longitude, 'K')<= radius){
+                if (DistanceHelper.Distance(latitude, longitude, item.Geolocation.Latitude, item.Geolocation.Longitude, 'K') <= radius)
+                {
                     list.Add(item);
                 }
             }
@@ -249,5 +255,17 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.Services
         }
 
         #endregion
+
+        #region staffs
+
+        public async Task<Staff> FindExistingStaff(Guid siteId, Guid staffId)
+        {
+            var staff = await _sitesContext.Staffs
+                                                   .SingleOrDefaultAsync(y => y.SiteId.Equals(siteId) &&
+                                                                         y.Id.Equals(staffId));
+            return staff;
+        }
+
+        #endregion staffs
     }
 }

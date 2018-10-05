@@ -23,7 +23,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
 
         private static void AddIntegrationEventServices(IServiceCollection services)
         {
-            services.AddTransient<IIdentityAccessIntegrationEventService, IdentityAccessIntegrationEventService>();
+            //services.AddTransient<IIdentityAccessIntegrationEventService, IdentityAccessIntegrationEventService>();
 
             services.AddTransient<ISitesIntegrationEventService, SitesIntegrationEventService>();
         }

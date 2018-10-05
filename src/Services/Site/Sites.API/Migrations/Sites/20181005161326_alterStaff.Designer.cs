@@ -10,9 +10,10 @@ using System;
 namespace Sites.API.Migrations.Sites
 {
     [DbContext(typeof(SitesContext))]
-    partial class SitesContextModelSnapshot : ModelSnapshot
+    [Migration("20181005161326_alterStaff")]
+    partial class alterStaff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
