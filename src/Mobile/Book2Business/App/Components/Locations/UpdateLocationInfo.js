@@ -10,7 +10,6 @@ import Header from '../Header'
 import Spacer from '../Spacer'
 import { Colors, Fonts, Metrics } from '../../Themes/'
 
-import site from '../../Constants/site'
 import { getLocation } from '../../Actions/locations'
 
 class UpdateLocationInfo extends React.Component {
@@ -44,9 +43,8 @@ class UpdateLocationInfo extends React.Component {
   }
 
   init = () => {
-    const {siteId, locationId} = site
 
-    this.props.getLocation(siteId, locationId)
+    this.props.getLocation('', '')
         .then(res => {
         })
   }

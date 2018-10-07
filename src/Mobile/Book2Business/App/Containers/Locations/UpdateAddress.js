@@ -3,10 +3,8 @@ import { TouchableOpacity, Text, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Icon } from 'native-base'
-// import { Actions } from 'react-native-router-flux';
 
 import { Images } from '../../Themes'
-import site from '../../Constants/site'
 import { getLocation } from '../../Actions/locations'
 import Layout from '../../Components/Locations/UpdateAddress'
 

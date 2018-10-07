@@ -23,7 +23,7 @@ class LoginScreen extends Component {
   keyboardDidShowListener = {}
   keyboardDidHideListener = {}
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       username: '',
@@ -34,7 +34,7 @@ class LoginScreen extends Component {
     this.isAttempting = false
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps (newProps) {
     this.forceUpdate()
     // Did the login attempt complete?
     if (this.isAttempting && !newProps.fetching) {
@@ -42,14 +42,14 @@ class LoginScreen extends Component {
     }
   }
 
-  componentWillMount() {
+  componentWillMount () {
     // Using keyboardWillShow/Hide looks 1,000 times better, but doesn't work on Android
     // TODO: Revisit this if Android begins to support - https://github.com/facebook/react-native/issues/3468
     // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
     // this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     // this.keyboardDidShowListener.remove()
     // this.keyboardDidHideListener.remove()
   }
@@ -88,7 +88,7 @@ class LoginScreen extends Component {
     this.setState({ password: text })
   }
 
-  render() {
+  render () {
     return (
       <Wallpaper>
         <Logo />
@@ -108,14 +108,13 @@ class LoginScreen extends Component {
     )
   }
 
-  onChangeUsername(value) {
+  onChangeUsername (value) {
     this.setState({ username: value })
   }
 
-  onChangePassword(value) {
+  onChangePassword (value) {
     this.setState({ password: value })
   }
-
 }
 
 const mapStateToProps = (state) => {

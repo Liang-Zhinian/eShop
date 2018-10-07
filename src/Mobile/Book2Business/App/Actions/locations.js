@@ -1,26 +1,25 @@
 import ErrorMessages from '../Constants/errors'
 import statusMessage from './status'
 // import { Firebase, FirebaseRef } from '../lib/firebase';
-import site from '../Constants/site'
+import {SitesApiUrl} from '../Constants/api'
 
 /**
   * Set an Error Message
   */
-export function setError(message) {
+export function setError (message) {
   return dispatch => new Promise(resolve => resolve(dispatch({
     type: 'LOCATIONS_ERROR',
     data: message
   })))
 }
 
-export function getLocation(siteId, locationId) {
-  const { api } = site
-  
+export function getLocation (siteId, locationId) {
+
   return dispatch => new Promise(async (resolve, reject) => {
     await statusMessage(dispatch, 'loading', true)
 
-    // Go to 
-    const url = `${api}business-information/sites/${siteId}/locations/${locationId}`
+    // Go to
+    const url = `${SitesApiUrl}/business-information/sites/${siteId}/locations/${locationId}`
     console.log(url)
     return fetch(url)
       .then(res => res.json())
@@ -37,14 +36,13 @@ export function getLocation(siteId, locationId) {
   })
 }
 
-export function getLocationsStaffCanSignIn(siteId, staffId) {
-  const { api } = site
-  
+export function getLocationsStaffCanSignIn (siteId, staffId) {
+
   return dispatch => new Promise(async (resolve, reject) => {
     await statusMessage(dispatch, 'loading', true)
 
-    // Go to 
-    const url = `${api}business-information/sites/${siteId}/staffs/${staffId}/login-locations`
+    // Go to
+    const url = `${SitesApiUrl}/business-information/sites/${siteId}/staffs/${staffId}/login-locations`
     return fetch(url)
       .then(res => res.json())
       .then((json) => {
@@ -63,7 +61,7 @@ export function getLocationsStaffCanSignIn(siteId, staffId) {
 /**
   * Update Profile
   */
-export function updateLocation(formData) {
+export function updateLocation (formData) {
   const {
     latitude,
     longitude,

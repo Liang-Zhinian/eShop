@@ -25,21 +25,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
-    <!--
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version= "1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version= "1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Tools" Version= "1.1.0-preview4-final" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink.Loader" Version= "14.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version= "1.1.0-preview4-final" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version= "1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration.Tools" Version= "1.1.0-preview4-final" />
-    -->
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.0.3" />
+    <PackageReference Include="IdentityServer4" Version="2.1.2" />
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
@@ -71,16 +62,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Migrations\ConfigurationDb\" />
-    <Folder Include="Migrations\PersistedGrantDb\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20170912114036_Initial.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.css.map" />
-  </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ import {
   LayoutAnimation
 } from 'react-native'
 import { Button, Icon } from 'native-base'
-import PurpleGradient from '../PurpleGradient'
+import GradientView from '../GradientView'
 
 import VenueMap from '../VenueMap'
 import Gallery from '../Gallery'
@@ -27,7 +27,7 @@ const { UBER_CLIENT_ID } = Secrets
 const MAP_TAP_THRESHOLD = 100
 
 export default class LocationInfo extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     const appState = AppState.currentState
@@ -45,7 +45,7 @@ export default class LocationInfo extends React.Component {
     this.activeMapHeight = Metrics.screenHeight - this.scrollSpot
   }
 
-  componentWillMount () {
+  componentWillMount() {
     // Get the map tap check
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -54,11 +54,11 @@ export default class LocationInfo extends React.Component {
     })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange)
   }
 
@@ -79,7 +79,7 @@ export default class LocationInfo extends React.Component {
     this.setState({ mapTouchStart: '' })
   }
 
-  openMaps (daddr = '128+NW+Eleventh+Ave+Portland,+OR+97209') {
+  openMaps(daddr = '128+NW+Eleventh+Ave+Portland,+OR+97209') {
     const googleMaps = `comgooglemaps://?daddr=${daddr}`
     const appleMaps = `http://maps.apple.com?daddr=${daddr}`
 
@@ -96,7 +96,7 @@ export default class LocationInfo extends React.Component {
     })
   }
 
-  openLink (url) {
+  openLink(url) {
     Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url)
@@ -106,7 +106,7 @@ export default class LocationInfo extends React.Component {
     })
   }
 
-  openLyft () {
+  openLyft() {
     const lat = `destination[latitude]=${VENUE_LATITUDE}`
     const lng = `destination[longitude]=${VENUE_LONGITUDE}`
     const lyft = `lyft://ridetype?${lat}&${lng}`
@@ -120,7 +120,7 @@ export default class LocationInfo extends React.Component {
     })
   }
 
-  openUber () {
+  openUber() {
     const pickup = 'action=setPickup&pickup=my_location'
     const client = `client_id=${UBER_CLIENT_ID}`
     const lat = `dropoff[latitude]=${VENUE_LATITUDE}`
@@ -155,6 +155,7 @@ export default class LocationInfo extends React.Component {
   }
 
   renderBackground = () => {
+    const { ImageUri } = this.props.locationData
     const height = Metrics.locationBackgroundHeight
     const { scrollY } = this.state
     return (
@@ -174,13 +175,14 @@ export default class LocationInfo extends React.Component {
             })
           }]
         }]}
-        source={Images.theArmory}
+        source={ImageUri}
         resizeMode='cover'
       />
     )
   }
 
   renderHeader = () => {
+    const { Name, Address: { Street } } = this.props.locationData
     const height = Metrics.locationBackgroundHeight - 24
     const { scrollY } = this.state
     return (
@@ -200,10 +202,9 @@ export default class LocationInfo extends React.Component {
         }]
       }}>
         <View style={styles.headingContainer}>
-          <Text style={styles.mainHeading}>The Armory</Text>
+          <Text style={styles.mainHeading}>{Name}</Text>
           <Text style={styles.address}>
-            128 NW Eleventh Ave{'\n'}
-            Portland, OR 97209
+            {Street}
           </Text>
         </View>
         <View style={styles.headingContainer}>
@@ -222,11 +223,21 @@ export default class LocationInfo extends React.Component {
     )
   }
 
-  renderMap () {
+  renderMap() {
+    const {
+      Name,
+      Geolocation
+    } = this.props.locationData
     const { mapViewMode } = this.state
     return (
       <View ref='mapContainer' {...this._panResponder.panHandlers}>
-        <VenueMap mapViewMode={mapViewMode} onCloseMap={this.onCloseMap} scrollEnabled={mapViewMode} style={[styles.map, mapViewMode && { height: this.activeMapHeight }]} />
+        <VenueMap 
+        locations={[{ title: Name, latitude: Geolocation.Latitude, longitude: Geolocation.Longitude }]}
+        mapViewMode={mapViewMode} 
+        onCloseMap={this.onCloseMap} 
+        scrollEnabled={mapViewMode} 
+        style={[styles.map, mapViewMode && { height: this.activeMapHeight }]} 
+        />
       </View>
     )
   }
@@ -237,16 +248,25 @@ export default class LocationInfo extends React.Component {
   }
 
   updateAddress = () => {
-    this.openMaps()
+    const { Street } = this.props.locationData.Address
+    this.openMaps(Street)
   }
 
-  render () {
+  render() {
     const { showRideOptions, showGalleryOptions } = this.state
     const { nearbyData } = this.props
     const { event } = Animated
+    const {
+      Name,
+      Address: { Street },
+      ContactInformation: {
+        ContactName, EmailAddress, PrimaryTelephone, SecondaryTelephone
+      }
+    } = this.props.locationData
+
 
     return (
-      <PurpleGradient style={[styles.linearGradient, { flex: 1 }]}>
+      <GradientView style={[styles.linearGradient, { flex: 1 }]}>
         <ScrollView
           ref='scrolly'
           onScroll={event([{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }])}
@@ -261,10 +281,10 @@ export default class LocationInfo extends React.Component {
                 <View style={styles.getDirections}>
                   <View style={styles.addressContainer}>
                     <Text style={styles.venueName}>
-                      The Armory
+                      {Name}
                     </Text>
                     <Text style={styles.venueAddress}>
-                      128 NW Eleventh Ave.{'\n'}Portland, OR 97209
+                      {Street}
                     </Text>
                   </View>
                   <View style={styles.directionsIcon}>
@@ -291,11 +311,11 @@ export default class LocationInfo extends React.Component {
               </TouchableOpacity> */}
               <View style={styles.liveHelp}>
                 <Text style={styles.liveHelpPhone}>
-                  (360) 562-0450
+                  {PrimaryTelephone}
       </Text>
                 <Text style={styles.liveHelpText}>
-                  Text or call Jack Leung at anytime for directions, suspicious activity or any other concern,
-        or email us via <Text style={styles.link} onPress={() => Linking.openURL('http://confcodeofconduct.com')}>test@test.com</Text>.
+                  Text or call {ContactName} at anytime for directions, suspicious activity or any other concern,
+        or email us via <Text style={styles.link} onPress={() => Linking.openURL('http://confcodeofconduct.com')}>{EmailAddress}</Text>.
       </Text>
                 <RoundedButton
                   text='Update contact information'
@@ -329,7 +349,7 @@ export default class LocationInfo extends React.Component {
             />
           </View>
         </ScrollView>
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

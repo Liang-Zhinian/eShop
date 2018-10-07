@@ -20,7 +20,7 @@ const DEVICE_HEIGHT = Dimensions.get('window').height
 const MARGIN = 40
 
 export default class ButtonSubmit extends Component {
-  constructor() {
+  constructor () {
     super()
 
     this.state = {
@@ -39,7 +39,7 @@ export default class ButtonSubmit extends Component {
     }))
   }
 
-  _onPress() {
+  _onPress () {
     if (this.state.isLoading) return
 
     this.setState({ isLoading: true })
@@ -62,7 +62,7 @@ export default class ButtonSubmit extends Component {
     }, 2300)
   }
 
-  _onGrow() {
+  _onGrow () {
     Animated.timing(this.growAnimated, {
       toValue: 1,
       duration: 200,
@@ -70,7 +70,7 @@ export default class ButtonSubmit extends Component {
     }).start()
   }
 
-  componentWillReceiveProps(nextPorps) {
+  componentWillReceiveProps (nextPorps) {
     this.setState({ isLoading: nextPorps.loading })
     if (!nextPorps.loading) {
       this.buttonAnimated.setValue(0)
@@ -78,7 +78,7 @@ export default class ButtonSubmit extends Component {
     }
   }
 
-  render() {
+  render () {
     const changeWidth = this.buttonAnimated.interpolate({
       inputRange: [0, 1],
       outputRange: [DEVICE_WIDTH - MARGIN, MARGIN]
@@ -98,7 +98,7 @@ export default class ButtonSubmit extends Component {
             {this.state.isLoading ? (
               <Image source={spinner} style={styles.image} />
             ) : (
-                <Text style={styles.text}>LOGIN</Text>
+              <Text style={styles.text}>LOGIN</Text>
               )}
           </TouchableOpacity>
           <Animated.View

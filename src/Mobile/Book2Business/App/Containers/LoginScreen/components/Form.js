@@ -23,7 +23,7 @@ export default class Form extends Component {
     super(props)
     this.state = {
       showPass: true,
-      press: false,
+      press: false
     }
     this.showPass = this.showPass.bind(this)
   }

@@ -1,5 +1,5 @@
 
-import { authorize, refresh, revoke } from 'react-native-app-auth';
+import { authorize, refresh, revoke } from 'react-native-app-auth'
 
 import ErrorMessages from '../Constants/errors'
 import statusMessage from './status'
@@ -62,17 +62,25 @@ function getUserData(dispatch) {
 
   if (!UID) return false
 
-  // const ref = FirebaseRef.child(`users/${UID}`)
-
   return book2.getUserData(UID)
     .then((userData) => {
-      
-      dispatch(getLocationsStaffCanSignIn(userData.SiteId, userData.Id))
+      // dispatch(getLocationsStaffCanSignIn(userData.SiteId, userData.Id))
+      console.log('staff returns', userData)
+      dispatch({
+        type: 'USER_LOGIN_LOCATIONS',
+        data: {
+          siblingLocations: userData.StaffLoginLocations,
+        }
+      })
 
       return dispatch({
         type: 'USER_DETAILS_UPDATE',
         data: userData
       })
+    })
+    .catch(err => {
+      console.log('err returns', err)
+      throw err.message
     })
 }
 
@@ -109,27 +117,22 @@ export function login(formData) {
     if (!username) return reject({ message: ErrorMessages.missingUserName })
     if (!password) return reject({ message: ErrorMessages.missingPassword })
 
-    // 
+    //
 
-    return book2.auth().signInWithEmailAndPassword(username, password)
+    return book2.auth()
+      .signInWithEmailAndPassword(username, password)
       .then(async (res) => {
+        const token = res && res.token ? res.token : null
+        if (token) {
+          dispatch({
+            type: 'AUTH',
+            data: token
+          })
+        }
 
         const userDetails = res && res.user ? res.user : null
 
         if (userDetails.uid) {
-          // await 
-          // Update last logged in data
-          // FirebaseRef.child(`users/${userDetails.uid}`).update({
-          //   lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP
-          // })
-
-          // Send verification Email when email hasn't been verified
-          // if (userDetails.emailVerified === false) {
-          //   Firebase.auth().currentUser
-          //     .sendEmailVerification()
-          //     .catch(() => console.log('Verification email failed to send'))
-          // }
-
           // Get User Data
           getUserData(dispatch)
         }
@@ -141,11 +144,7 @@ export function login(formData) {
           type: 'USER_LOGIN',
           data: userDetails
         }))
-      })
-      .catch(err => {
-        console.log(err)
-        reject(err)
-      })
+      }).catch(reject);
   })
     .catch(async (err) => {
       await statusMessage(dispatch, 'loading', false)
@@ -246,56 +245,39 @@ export function logout() {
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message })
 }
 
+// export function refreshToken(dispatch) {
+
+//   var freshTokenPromise = fetchJWTToken()
+//       .then(t => {
+//           dispatch({
+//               type: DONE_REFRESHING_TOKEN
+//           });
+
+//           dispatch(saveAppToken(t.token));
+
+//           return t.token ? Promise.resolve(t.token) : Promise.reject({
+//               message: 'could not refresh token'
+//           });
+//       })
+//       .catch(e => {
+
+//           console.log('error refreshing token', e);
+
+//           dispatch({
+//               type: DONE_REFRESHING_TOKEN
+//           });
+//           return Promise.reject(e);
+//       });
 
 
 
-const aauthorize = async () => {
-  try {
-    const authState = await authorize(config);
+//   dispatch({
+//       type: REFRESHING_TOKEN,
 
-    this.animateState(
-      {
-        hasLoggedInOnce: true,
-        accessToken: authState.accessToken,
-        accessTokenExpirationDate: authState.accessTokenExpirationDate,
-        refreshToken: authState.refreshToken
-      },
-      500
-    );
-  } catch (error) {
-    Alert.alert('Failed to log in', error.message);
-  }
-};
+//       // we want to keep track of token promise in the state so that we don't try to refresh
+//       // the token again while refreshing is in process
+//       freshTokenPromise
+//   });
 
-const rrefresh = async () => {
-  try {
-    const authState = await refresh(config, {
-      refreshToken: this.state.refreshToken
-    });
-
-    this.animateState({
-      accessToken: authState.accessToken || this.state.accessToken,
-      accessTokenExpirationDate:
-        authState.accessTokenExpirationDate || this.state.accessTokenExpirationDate,
-      refreshToken: authState.refreshToken || this.state.refreshToken
-    });
-  } catch (error) {
-    Alert.alert('Failed to refresh token', error.message);
-  }
-};
-
-const rrevoke = async () => {
-  try {
-    await revoke(config, {
-      tokenToRevoke: this.state.accessToken,
-      sendClientId: true
-    });
-    this.animateState({
-      accessToken: '',
-      accessTokenExpirationDate: '',
-      refreshToken: ''
-    });
-  } catch (error) {
-    Alert.alert('Failed to revoke token', error.message);
-  }
-};
+//   return freshTokenPromise;
+// }

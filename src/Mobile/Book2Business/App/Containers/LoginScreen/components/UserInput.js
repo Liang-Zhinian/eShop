@@ -4,7 +4,6 @@ import Dimensions from 'Dimensions'
 import {StyleSheet, View, TextInput, Image} from 'react-native'
 
 export default class UserInput extends Component {
-  
   render () {
     return (
       <View style={styles.inputWrapper}>

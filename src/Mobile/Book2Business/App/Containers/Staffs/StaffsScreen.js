@@ -15,7 +15,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback
 } from 'react-native'
-import PurpleGradient from '../../Components/PurpleGradient'
+import GradientView from '../../Components/GradientView'
 import DayToggle from '../../Components/DayToggle'
 import Staff from '../../Components/Staffs/Staff'
 import Break from '../../Components/Break'
@@ -52,12 +52,12 @@ const addSpecials = (specialTalksList, talks) =>
   map((talk) => assoc('special', contains(talk.title, specialTalksList), talk), talks)
 
 class StaffsScreen extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     const appState = AppState.currentState
 
-    this.state = { data: [], appState, isMenuOpen: false, }
+    this.state = { data: [], appState, isMenuOpen: false }
   }
 
   animatedContainerWithNavbar = null;
@@ -86,7 +86,6 @@ class StaffsScreen extends Component {
     }
   };
 
-
   onEventPress = (item) => {
     const { navigation, setSelectedEvent } = this.props
     setSelectedEvent(item)
@@ -96,7 +95,7 @@ class StaffsScreen extends Component {
     //   : navigation.navigate('BreakDetail')
   }
 
-  toggleMenu() {
+  toggleMenu () {
     let icon = 'times'
     // let pressMenu = this.showMenu.bind(this);
     if (this.state.isMenuOpen) {
@@ -115,7 +114,7 @@ class StaffsScreen extends Component {
     })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     AppState.addEventListener('change', this._handleAppStateChange)
 
     const { member, getStaffs, locations } = this.props
@@ -128,7 +127,7 @@ class StaffsScreen extends Component {
     })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     AppState.removeEventListener('change', this._handleAppStateChange)
   }
 
@@ -140,7 +139,7 @@ class StaffsScreen extends Component {
     this.setState({ appState: nextAppState })
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps (newProps) {
     const { staffs } = newProps
     console.log(staffs)
 
@@ -168,22 +167,22 @@ class StaffsScreen extends Component {
   renderItem = ({ item }) => {
     console.log('FlatList renderItem', item)
     // if (!item) return null;
-    
-      return (
-        <Staff
-          type={'talk'}
-          name={item.FirstName+' ' + item.LastName}
-          avatarURL={item.ImageUri}
-          title={item.Bio}
-          onPress={() => this.onEventPress(item)}
+
+    return (
+      <Staff
+        type={'talk'}
+        name={item.FirstName + ' ' + item.LastName}
+        avatarURL={item.ImageUri}
+        title={item.Bio}
+        onPress={() => this.onEventPress(item)}
         />
-      )
+    )
   }
 
-  renderContent() {
+  renderContent () {
     const { isCurrentDay, activeDay, data } = this.state
     return (
-      <PurpleGradient style={styles.linearGradient}>
+      <GradientView style={styles.linearGradient}>
         <DayToggle
           activeDay={activeDay}
           onPressIn={this.setActiveDay}
@@ -198,11 +197,11 @@ class StaffsScreen extends Component {
           getItemLayout={this.getItemLayout}
           showsVerticalScrollIndicator={false}
         />
-      </PurpleGradient>
+      </GradientView>
     )
   }
 
-  render() {
+  render () {
     const { data } = this.state
     const { navigation } = this.props
     console.log(this.props)
@@ -212,7 +211,7 @@ class StaffsScreen extends Component {
         ref={ref => this.animatedContainerWithNavbar = ref}
         menuPosition='right'
         content={(
-          <PurpleGradient style={[styles.linearGradient, { flex: 1 }]}>
+          <GradientView style={[styles.linearGradient, { flex: 1 }]}>
             <FlatList
               ref='scheduleList'
               data={data}
@@ -223,7 +222,7 @@ class StaffsScreen extends Component {
               getItemLayout={this.getItemLayout}
               showsVerticalScrollIndicator={false}
             />
-          </PurpleGradient>
+          </GradientView>
         )}
         // content={(<View />)}
         menu={(
@@ -241,7 +240,6 @@ class StaffsScreen extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
     // currentTime: new Date(state.schedule.currentTime),
@@ -249,7 +247,7 @@ const mapStateToProps = (state) => {
     // specialTalks: state.notifications.specialTalks,
     staffs: state.staffs,
     member: state.member,
-    locations: state.locations,
+    locations: state.locations
   }
 }
 
@@ -266,4 +264,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(StaffsScreen)
-

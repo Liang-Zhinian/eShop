@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using UserManagement.Models;
 using SaaSEqt.eShop.Services.Identity.API.Models;
 
-namespace UserManagement.Utilities
+namespace Identity.Utilities
 {
     public class NoNamePasswordValidator : IPasswordValidator<ApplicationUser>
     {

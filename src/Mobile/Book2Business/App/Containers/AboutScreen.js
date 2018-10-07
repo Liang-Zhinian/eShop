@@ -7,7 +7,7 @@ import {
   Text,
   LayoutAnimation
 } from 'react-native'
-import PurpleGradient from '../Components/PurpleGradient'
+import GradientView from '../Components/GradientView'
 import InfiniteRed from '../Components/InfiniteRed'
 import SeeProcess from '../Components/SeeProcess'
 import Twitter from '../Components/Twitter'
@@ -84,7 +84,7 @@ class AboutScreen extends React.Component {
 
   render () {
     return (
-      <PurpleGradient style={[styles.linearGradient, {flex: 1}]}>
+      <GradientView style={[styles.linearGradient, {flex: 1}]}>
         <ScrollView>
           <View style={styles.container}>
             <InfiniteRed />
@@ -94,7 +94,7 @@ class AboutScreen extends React.Component {
             {this.renderTabs()}
           </View>
         </ScrollView>
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

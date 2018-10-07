@@ -23,7 +23,6 @@ import { Images } from '../../Themes'
 import recipes from './data'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
 import Layout from '../../Components/Locations/LocationInfo'
-import site from '../../Constants/site'
 import { getLocation, setError } from '../../Actions/locations'
 
 class LocationScreen extends Component {
@@ -73,13 +72,13 @@ class LocationScreen extends Component {
       pressMenu: this.toggleMenu.bind(this)
     })
 
-    // const { siteId, locationId } = site
-    // const { getLocation, showError } = this.props
-    // this.props.getLocation(siteId, locationId)
-    //   .catch((err) => {
-    //     console.log(`Error: ${err}`)
-    //     return showError(err)
-    //   })
+    const { SiteId, LocationId } = this.props.member.currentLocation
+    const { getLocation, showError } = this.props
+    this.props.getLocation(SiteId, LocationId)
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
   }
 
   toggleMenu () {
@@ -139,13 +138,13 @@ class LocationScreen extends Component {
   }
 
   render () {
-    const { nearbyData, navigation } = this.props
-
+    const { locations, member, nearbyData, navigation } = this.props
+console.log(locations)
     return (
       <AnimatedContainerWithNavbar
         ref={ref => this.animatedContainerWithNavbar = ref}
         menuPosition='right'
-        content={(<Layout nearbyData={nearbyData} navigation={navigation} />)}
+        content={(<Layout nearbyData={nearbyData} locationData={locations.currentLocation} navigation={navigation} />)}
         // content={(<View />)}
         menu={(
           <View>
@@ -254,6 +253,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
+    member: state.member || {},
     locations: state.locations || {},
     isLoading: state.status.loading || false,
     nearbyData: state.location.nearby

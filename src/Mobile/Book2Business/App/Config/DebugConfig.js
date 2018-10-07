@@ -7,7 +7,7 @@ export default {
   codepushStaging: false,
   hotwireDate: true,     // force today to be the day of the conf
   hotwirePush: true,     // force push notifications to happen in 5 seconds
-  getAPI: true ,            // should app hit API server for data? (Turn off if we're using codepush)
+  getAPI: true,            // should app hit API server for data? (Turn off if we're using codepush)
   ezLogin: false,
-  reduxLogginer: __DEV__,
+  reduxLogginer: __DEV__
 }

@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
-namespace UserManagement.Utilities
+namespace Identity.Utilities
 {
     public static class ClaimsProvider
     {

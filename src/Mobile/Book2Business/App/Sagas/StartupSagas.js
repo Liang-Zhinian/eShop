@@ -4,7 +4,6 @@ import LocationActions from '../Redux/LocationRedux'
 import LoggedInActions, { isLoggedIn } from '../Redux/LoginRedux'
 import AppStateActions from '../Redux/AppStateRedux'
 
-
 export const selectLoggedInStatus = (state) => isLoggedIn(state.login)
 
 // process STARTUP actions

@@ -4,12 +4,13 @@ import Metrics from './Metrics'
 import Images from './Images'
 import Videos from './Videos'
 import ApplicationStyles, {ScreenStylesType} from './ApplicationStyles'
+import ComponentStyles from './ComponentStyles'
 
-export { Colors, Fonts, Images, Videos, Metrics, ApplicationStyles, ScreenStylesType }
+export { Colors, Fonts, Images, Videos, Metrics, ApplicationStyles, ScreenStylesType, ComponentStyles }
 
 import * as Lite from './Lite'
 
-const Purple = { Colors, Fonts, Images, Videos, Metrics, ApplicationStyles, ScreenStylesType }
+const Purple = { Colors, Fonts, Images, Videos, Metrics, ApplicationStyles, ScreenStylesType, ComponentStyles }
 
 export default themes = {
   Lite,

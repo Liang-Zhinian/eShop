@@ -5,11 +5,11 @@ import LinearGradient from 'react-native-linear-gradient'
 
 import styles from './Styles/NavigationStyles'
 import BackButton from '../Components/BackButton'
+import { ComponentStyles } from '../Themes/'
 
 export default (routes, headerMode) => {
   return StackNavigator(routes, {
     headerMode: headerMode || 'none',
-        // initialRouteName: 'MoreMenu',
     cardStyle: styles.card,
     navigationOptions: ({navigation}) => ({
       headerStyle: {
@@ -27,7 +27,7 @@ export default (routes, headerMode) => {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             locations={[0.0, 0.38, 1.0]}
-            colors={['#46114E', '#521655', '#571757']}
+            colors={ComponentStyles.navBar.colors}
             style={styles.headerGradient}
                     >
             <View>

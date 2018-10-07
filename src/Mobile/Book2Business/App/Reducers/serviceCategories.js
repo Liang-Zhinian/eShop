@@ -7,6 +7,7 @@ export default function serviceCategoryReducer (state = initialState, action) {
     case 'SERVICE_CATEGORIES_ERROR': {
       return {
         ...state,
+        loading: false,
         error: action.data
       }
     }
@@ -25,11 +26,10 @@ export default function serviceCategoryReducer (state = initialState, action) {
         serviceCategories
       }
     }
-    case 'SERVICE_CATEGORY_SELECTED': {
-      debugger
+    case 'SET_SELECTED_CATEGORY': {
       return {
         ...state,
-        error: action.data
+        selectedCategory: action.data
       }
     }
     default:

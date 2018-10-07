@@ -7,11 +7,12 @@ export default function serviceItemReducer (state = initialState, action) {
     case 'SERVICE_ITEMS_ERROR': {
       return {
         ...state,
+        loading: false,
         error: action.data
       }
     }
     case 'SERVICE_ITEMS_REPLACE': {
-      let serviceItems = []
+      let serviceItems = {}
 
       // Pick out the props I need
       if (action.data && typeof action.data === 'object') {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace UserManagement.Utilities
+namespace Identity.Utilities
 {
     public class CustomIdentityErrorDescriber : IdentityErrorDescriber
     {

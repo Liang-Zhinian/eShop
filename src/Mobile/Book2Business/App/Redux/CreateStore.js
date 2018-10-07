@@ -12,7 +12,7 @@ import authMiddleware from '../Middlewares/AuthMiddleware'
 export default (rootReducer, rootSaga) => {
   /* ------------- Redux Configuration ------------- */
 
-  const middleware = [thunk]
+  const middleware = [authMiddleware, thunk]
   const enhancers = []
 
   /* ------------- Analytics Middleware ------------- */
@@ -23,9 +23,6 @@ export default (rootReducer, rootSaga) => {
   const sagaMonitor = Config.useReactotron ? console.tron.createSagaMonitor() : null
   const sagaMiddleware = createSagaMiddleware({ sagaMonitor })
   middleware.push(sagaMiddleware)
-
-  /* ------------- authMiddleware -------------- */
-  middleware.push(authMiddleware)
 
   /* ------------- Assemble Middleware ------------- */
 

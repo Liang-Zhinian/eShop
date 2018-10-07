@@ -11,7 +11,7 @@ import { Images, Colors } from '../../Themes'
 import styles from '../Styles/ImageCropperStyles'
 // import Icon from 'react-native-vector-icons/FontAwesome'
 // import AnimatedButton from '../AnimatedButton'
-import PurpleGradient from '../PurpleGradient'
+import GradientView from '../GradientView'
 import GradientHeader from '../GradientHeader'
 import MainContainer from '../../Containers/MainContainer'
 

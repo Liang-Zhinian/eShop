@@ -17,5 +17,3 @@ export const AppNavigation = SwitchNavigator({
     headerStyle: styles.header
   }
 })
-
-

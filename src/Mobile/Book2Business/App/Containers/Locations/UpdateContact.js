@@ -6,8 +6,6 @@ import { Icon } from 'native-base'
 // import { Actions } from 'react-native-router-flux';
 
 import { Images } from '../../Themes'
-import site from '../../Constants/site'
-import { getLocation } from '../../Actions/locations'
 import Layout from '../../Components/Locations/UpdateContact'
 
 class UpdateContact extends Component {

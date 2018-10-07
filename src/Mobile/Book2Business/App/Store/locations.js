@@ -1,5 +1,5 @@
 export default {
   loading: false,
-  error: null,
-  
+  error: null
+
 }

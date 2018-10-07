@@ -22,7 +22,7 @@ target 'ChainReactApp' do
   pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
 
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+# pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   pod 'AppAuth', '>= 0.94'
 

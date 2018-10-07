@@ -4,6 +4,20 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
 {
     public class StaffLoginLocation
     {
+        private StaffLoginLocation()
+        {
+
+        }
+
+        public StaffLoginLocation(Guid siteId, Guid staffId, Guid locationId)
+        {
+            Id = Guid.NewGuid();
+            StaffId = staffId;
+            LocationId = locationId;
+
+            this.SiteId = siteId;
+        }
+
         public Guid Id { get; private set; }
 
         public Guid StaffId { get; private set; }
@@ -14,14 +28,5 @@ namespace SaaSEqt.eShop.Services.Sites.API.Model
 
         public Guid SiteId { get; private set; }
         public virtual Site Site { get; private set; }
-
-        public StaffLoginLocation(Guid siteId, Guid staffId, Guid locationId)
-        {
-            Id = Guid.NewGuid();
-            StaffId = staffId;
-            LocationId = locationId;
-
-            this.SiteId = siteId;
-        }
     }
 }

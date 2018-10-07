@@ -5,6 +5,6 @@ import StaffListingScreen from '../../Containers/Staffs/StaffsScreen'
 import CreateStackNavigator from '../CreateStackNavigator'
 
 export default CreateStackNavigator({
-  StaffListing: { screen: StaffListingScreen },
+  StaffListing: { screen: StaffListingScreen }
   // AppointmentListing: { screen: AppointmentListingScreen }
 }, 'screen')

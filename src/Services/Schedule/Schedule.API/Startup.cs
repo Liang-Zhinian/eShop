@@ -80,7 +80,7 @@
                 opts.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
                 opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 //设置时间格式
-                opts.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+                //opts.SerializerSettings.DateFormatString = "yyyy-MM-dd";
             });
 
             services.AddDbContext<ScheduleContext>(options =>

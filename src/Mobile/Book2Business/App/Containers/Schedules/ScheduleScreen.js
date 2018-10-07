@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AppState, View, Image, FlatList } from 'react-native'
-import PurpleGradient from '../../Components/PurpleGradient'
+import GradientView from '../../Components/GradientView'
 import DayToggle from '../../Components/DayToggle'
 import Talk from '../../Components/Talk'
 import Break from '../../Components/Break'
@@ -227,7 +227,7 @@ class ScheduleScreen extends Component {
   render () {
     const { isCurrentDay, activeDay, data } = this.state
     return (
-      <PurpleGradient style={styles.linearGradient}>
+      <GradientView style={styles.linearGradient}>
         <DayToggle
           activeDay={activeDay}
           onPressIn={this.setActiveDay}
@@ -238,18 +238,19 @@ class ScheduleScreen extends Component {
           data={data}
           extraData={this.props}
           renderItem={this.renderItem}
-          keyExtractor={(item, idx) => item.eventStart}
+          keyExtractor={(item, idx) => item.eventStart.toString()}
           contentContainerStyle={styles.listContent}
           getItemLayout={this.getItemLayout}
           showsVerticalScrollIndicator={false}
         />
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }
 
 const mapStateToProps = (state) => {
   return {
+    member: state.member || {},
     currentTime: new Date(state.schedule.currentTime),
     schedule: state.schedule.speakerSchedule,
     specialTalks: state.notifications.specialTalks

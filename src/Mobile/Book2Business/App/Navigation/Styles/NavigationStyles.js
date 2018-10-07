@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { Colors } from '../../Themes/'
+import { Colors, ComponentStyles } from '../../Themes/'
 
 export default StyleSheet.create({
   headerGradient: {
@@ -20,7 +20,7 @@ export default StyleSheet.create({
     paddingHorizontal: 28,
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.3)',
-    backgroundColor: Colors.darkPurple
+    backgroundColor: ComponentStyles.tabBar.backgroundColor // Colors.darkPurple
   },
   tabBarLabel: {
     fontFamily: 'Montserrat-Medium',
@@ -30,7 +30,7 @@ export default StyleSheet.create({
   },
   card: {
     opacity: 1,
-    backgroundColor: Colors.darkPurple
+    backgroundColor: ComponentStyles.card.backgroundColor // Colors.darkPurple
   },
   header: {
     backgroundColor: Colors.background

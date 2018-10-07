@@ -18,10 +18,10 @@ const ScheduleStack = StackNavigator({
   TalkDetail: { screen: TalkDetailScreen },
   BreakDetail: { screen: BreakDetailScreen }
 }, {
-    headerMode: 'none',
-    initialRouteName: 'Home',
-    cardStyle: styles.card
-  })
+  headerMode: 'none',
+  initialRouteName: 'Home',
+  cardStyle: styles.card
+})
 
 const TabNav = TabNavigator(
   {

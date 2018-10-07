@@ -1,6 +1,6 @@
 import ErrorMessages from '../Constants/errors'
 import statusMessage from './status'
-import site from '../Constants/site'
+import { SitesApiUrl } from '../Constants/api'
 import * as Storage from '../Services/StorageService'
 
 /**
@@ -17,11 +17,10 @@ export function setError(message) {
   * Get ServiceCategories
   */
 export function getStaffs(siteId) {
-  const { api } = site
 
   return dispatch => new Promise(async (resolve, reject) => {
     await statusMessage(dispatch, 'loading', true)
-    const url = `${api}Staffs/sites/${siteId}/staffs`
+    const url = `${SitesApiUrl}/Staffs/sites/${siteId}/staffs`
     console.log(url)
     var identity = await Storage.getItem('identity')
     console.log(identity)

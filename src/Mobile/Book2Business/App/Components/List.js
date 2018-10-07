@@ -13,7 +13,7 @@ import {
   // findIndex
 } from 'ramda'
 
-// import PurpleGradient from './PurpleGradient'
+// import GradientView from './GradientView'
 import styles from './Styles/ListStyle'
 // import Header from './GradientHeader'
 import ListItem from './ListItem'

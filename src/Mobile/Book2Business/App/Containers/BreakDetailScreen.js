@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native'
-import PurpleGradient from '../Components/PurpleGradient'
+import GradientView from '../Components/GradientView'
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 import { format, addMinutes } from 'date-fns'
@@ -101,7 +101,7 @@ class BreakDetail extends React.Component {
     const { options, veganOptions } = this.props
 
     return (
-      <PurpleGradient style={styles.linearGradient}>
+      <GradientView style={styles.linearGradient}>
         <ScrollView>
           <View style={styles.container}>
             <TouchableOpacity style={styles.backButton} onPress={this.goBack}>
@@ -124,7 +124,7 @@ class BreakDetail extends React.Component {
             </View>
           </View>
         </ScrollView>
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

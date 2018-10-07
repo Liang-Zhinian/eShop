@@ -10,9 +10,6 @@ import Header from '../Header'
 import Spacer from '../Spacer'
 import { Colors, Fonts, Metrics } from '../../Themes/'
 
-import site from '../../Constants/site'
-import { getLocation } from '../../Actions/locations'
-
 class UpdateAddress extends React.Component {
   static propTypes = {
     error: PropTypes.string,

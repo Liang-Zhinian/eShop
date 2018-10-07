@@ -23,7 +23,7 @@ import { fetchNearby, setError } from '../../Actions/nearby'
 // You must have Ramda as a dev dependency to use this.
 import { calculateRegion } from '../../Lib/MapHelpers'
 import AnimatedButton from '../AnimatedButton'
-import PurpleGradient from '../PurpleGradient'
+import GradientView from '../GradientView'
 import GradientHeader from '../GradientHeader'
 import ThemeScreen from '../../../ignite/DevScreens/ThemeScreen'
 
@@ -340,11 +340,11 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
 
   render () {
     return (
-      <PurpleGradient style={[styles.linearGradient]}>
+      <GradientView style={[styles.linearGradient]}>
         {this.renderHeader()}
         {this.renderMapView()}
         {this.renderLocationList()}
-      </PurpleGradient>
+      </GradientView>
 
     )
   }

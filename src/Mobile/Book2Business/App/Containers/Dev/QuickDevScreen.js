@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import { AppState, View, Image, FlatList, ScrollView, Button } from 'react-native'
-import PurpleGradient from '../../Components/PurpleGradient'
+import GradientView from '../../Components/GradientView'
 import {
   compareAsc,
   isSameDay,

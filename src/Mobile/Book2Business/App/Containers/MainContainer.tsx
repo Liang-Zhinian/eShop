@@ -5,7 +5,7 @@ import {
 } from 'native-base'
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
-import PurpleGradient from '../Components/PurpleGradient'
+import GradientView from '../Components/GradientView'
 import LiteGradient from '../Components/LiteGradient'
 import styles from './Styles/MainContainerStyle'
 import themes, { Images, Colors } from '../Themes'
@@ -43,9 +43,9 @@ function LinearContainer(props) {
 
     case 'Purple':
       return (
-        <PurpleGradient style={style}>
+        <GradientView style={style}>
           {children}
-        </PurpleGradient>
+        </GradientView>
       )
 
     default:

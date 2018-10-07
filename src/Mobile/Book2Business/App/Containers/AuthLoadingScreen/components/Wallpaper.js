@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   picture: {
     flex: 1,
     width: null,
-    height: null,
+    height: null
     // resizeMode: 'cover'
   }
 })

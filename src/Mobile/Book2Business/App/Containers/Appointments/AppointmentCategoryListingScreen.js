@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { AppState, View, Image, FlatList } from 'react-native'
-import PurpleGradient from '../../Components/PurpleGradient'
+import GradientView from '../../Components/GradientView'
 import DayToggle from '../../Components/DayToggle'
 import Talk from '../../Components/Talk'
 import Break from '../../Components/Break'
@@ -224,7 +224,7 @@ class AppointmentCategoryListingScreen extends Component {
   render () {
     const { isCurrentDay, activeDay, data } = this.state
     return (
-      <PurpleGradient style={styles.linearGradient}>
+      <GradientView style={styles.linearGradient}>
         <DayToggle
           activeDay={activeDay}
           onPressIn={this.setActiveDay}
@@ -240,7 +240,7 @@ class AppointmentCategoryListingScreen extends Component {
           getItemLayout={this.getItemLayout}
           showsVerticalScrollIndicator={false}
         />
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

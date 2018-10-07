@@ -3,15 +3,14 @@ import { TouchableOpacity, Text } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Icon } from 'native-base'
-// import { Actions } from 'react-native-router-flux';
 
-import site from '../../Constants/site'
+import Layout from '../../Components/Appointments/ServiceItem'
 import { getAppointment } from '../../Actions/serviceItems'
 
 class Appointment extends Component {
   static propTypes = {
-    Layout: PropTypes.func.isRequired,
-    appointment: PropTypes.shape({}).isRequired,
+    appointmentTypes: PropTypes.shape({}).isRequired,
+    serviceCategories: PropTypes.shape({}).isRequired,
     onFormSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired
   }
@@ -20,22 +19,19 @@ class Appointment extends Component {
     match: null
   }
 
-    // static renderRightButton = (props) => {
-    //     return (
-    //         <TouchableOpacity
-    //             onPress={() => {
-    //                 Actions.appointment_category({ match: { params: { action: 'ADD' } } })
-    //             }}
-    //             style={{ marginRight: 10 }}>
-    //             <Icon name='add' />
-    //         </TouchableOpacity>
-    //     );
-    // }
+  // static renderRightButton = (props) => {
+  //     return (
+  //         <TouchableOpacity
+  //             onPress={() => {
+  //                 Actions.appointment_category({ match: { params: { action: 'ADD' } } })
+  //             }}
+  //             style={{ marginRight: 10 }}>
+  //             <Icon name='add' />
+  //         </TouchableOpacity>
+  //     );
+  // }
 
   componentDidMount = () => {
-    const { siteId } = site
-
-        // this.props.getAppointment(siteId, locationId);
   }
 
   state = {
@@ -44,37 +40,47 @@ class Appointment extends Component {
   }
 
   onFormSubmit = (data) => {
-        // const { onFormSubmit } = this.props;
-        // return onFormSubmit(data)
-        //   .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
-        //   .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err; });
+    // const { onFormSubmit } = this.props;
+    // return onFormSubmit(data)
+    //   .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
+    //   .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err; });
   }
 
   render = () => {
     const {
-            appointments,
-            Layout,
-            isLoading
-        } = this.props
+      appointmentTypes,
+      serviceCategories,
+      isLoading,
+      navigation
+    } = this.props
 
-    console.log('UpdateLocationInfo', this)
+    console.log('UpdateAppointmentType', this.props)
+    let appointmentType = appointmentTypes.selectedAppointmentType
+    if (!appointmentType) {
+      appointmentType = { ServiceCategoryId: serviceCategories.selectedCategory.id }
+    }
+
+    let passedInAppointmentType = navigation.getParam('AppointmentType');
+    if (passedInAppointmentType)
+      appointmentType = passedInAppointmentType
 
     const { successMessage, errorMessage } = this.state
 
     return (
       <Layout
-        appointment={appointments.appointment}
+        appointmentType={appointmentType}
         loading={isLoading}
         error={errorMessage}
         success={successMessage}
         onFormSubmit={this.onFormSubmit}
-            />
+      />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  locations: state.locations || {},
+  appointmentTypes: state.serviceItems || {},
+  serviceCategories: state.serviceCategories || {},
   isLoading: state.status.loading || false
 })
 
@@ -83,4 +89,4 @@ const mapDispatchToProps = {
   onFormSubmit: function () { }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateAddress)
+export default connect(mapStateToProps, mapDispatchToProps)(Appointment)

@@ -13,27 +13,24 @@ import { connect } from 'react-redux'
 import Wallpaper from './components/Wallpaper'
 import { getLocation } from '../../Actions/locations'
 import statusMessage from '../../Actions/status'
-import { getItem } from '../../Services/StorageService'
+import book2, { retrieveToken } from '../../Services/Auth'
+import { Api } from '../../Services/api'
 
 function isExpired(token) {
-  let currentTime = new Date();
-  let auth_time = new Date(token.auth_time);
-  let expires_date = auth_time.setSeconds(auth_time.getSeconds() + token.expires_in);
-  return currentTime > expires_date;
+  let currentTime = new Date()
+  let auth_time = new Date(token.auth_time)
+  let expires_date = auth_time.setSeconds(auth_time.getSeconds() + token.expires_in)
+  return currentTime > expires_date
 }
 
 class AuthLoadingScreen extends React.Component {
   static defaultProps = {
-    // isLoading: true
   }
 
   constructor(props) {
     super(props)
     this._bootstrapAsync()
     this.state = {
-      accessChecked: false,
-      locationChecked: false,
-      // isLoading: true
     }
   }
 
@@ -41,39 +38,27 @@ class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
-    // await this.props.statusMessage(true)
+    var api = new Api({
+      url: "http://localhost:55105",
+      timeout: 10000,
+    });
+    api.setup();
+    var response = await api.apisauce.get(`/api/v1/values`)
+    console.log(response)
 
     // check if token was expired
-    this.userToken = await getItem('identity')
+    this.userToken = await retrieveToken()
     if (!this.userToken) {
-      console.log('userToken', this.userToken)
       this.props.navigation.navigate('Auth')
       return
     }
 
-    let expired = isExpired(this.userToken);
-    if (expired) {
-      // refresh token
-      console.log('token expired')
-      setTimeout(() => {
-        // this.props.isLoading = false
-        console.log('token refreshed')
-        this.props.navigation.navigate('App')
-
-      }, 3000)
+    let expired = book2.auth().isExpired()
+    if (expired === true) {
+      book2.auth().refreshToken().then(async (identity) => {
+        this.userToken = await retrieveToken()
+      })
     }
-
-
-    setTimeout(() => {
-      // this.setState({ isLoading: false })
-      console.log('token refreshed')
-      if (this.props.locations.error) {
-        // re-fetch locations
-        this.props.navigation.navigate('Auth')
-        return
-      }
-      this.props.navigation.navigate('App')
-    }, 4000)
   }
 
   _resetRouteStack = (routeName) => {
@@ -81,6 +66,17 @@ class AuthLoadingScreen extends React.Component {
       index: 0,
       actions: [NavigationActions.navigate({ routeName: routeName })]
     }))
+  }
+
+  printProps(title = 'auth loading ...') {
+    const { member } = this.props
+    console.log('printProps ' + title, this.userToken, member)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { member } = nextProps
+    if (this.userToken && member.uid && member.currentLocation) this.props.navigation.navigate('App')
+    else this.props.navigation.navigate('Auth')
   }
 
   // Render any loading content that you like here
@@ -97,10 +93,7 @@ class AuthLoadingScreen extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  // isLoading: state.status.loading,
-  // tokenCheck: state.member.tokenCheck || false,
   member: state.member,
-  locations: state.locations
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -113,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   logo: {
     fontSize: 40

@@ -25,29 +25,21 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using IdentityModel;
 using System.Linq;
-using UserManagement.Utilities;
+using Identity.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using IdentityServer4.Validation;
+using Identity.API.Validators;
+using System.IdentityModel.Tokens.Jwt;
+using Identity.API.Infrastructure.Middlewares;
+using IdentityServer4.AccessTokenValidation;
+using Identity.API.Infrastructure.Filters;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
-    class ClaimsTransformer : IClaimsTransformation
-    {
-        public Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
-        {
-            var id = ((ClaimsIdentity)principal.Identity);
-
-            var ci = new ClaimsIdentity(id.Claims, id.AuthenticationType, id.NameClaimType, id.RoleClaimType);
-            ci.AddClaim(new Claim("now", DateTime.Now.ToString()));
-
-            var cp = new ClaimsPrincipal(ci);
-
-            return Task.FromResult(cp);
-        }
-    }
 
     public class Startup
     {
@@ -93,11 +85,6 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 app.UseExceptionHandler("/Home/Error");
             }
 
-
-            // Seed database
-            //InitializeRoles(roleManager).Wait();
-            //InitializeUserRoles(userManager).Wait();
-
             var pathBase = Configuration["PATH_BASE"];
             if (!string.IsNullOrEmpty(pathBase))
             {
@@ -105,6 +92,9 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 app.UsePathBase(pathBase);
             }
 
+            app.UseCors("identity");
+
+            app.UseMiddleware<SerilogMiddleware>();
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             app.Map("/liveness", lapp => lapp.Run(async ctx => ctx.Response.StatusCode = 200));
@@ -116,7 +106,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
             // Make work identity server redirections in Edge and lastest versions of browers. WARN: Not valid in a production environment.
             app.Use(async (context, next) =>
             {
-                //context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
+                context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
                 await next();
             });
 
@@ -175,7 +165,18 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
             services.Configure<AppSettings>(configuration);
 
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            })
+                    .AddControllersAsServices()
+                    .AddJsonOptions(opts =>
+                    {
+                        opts.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+                        opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                        //设置时间格式
+                        //opts.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+                    });
 
             if (configuration.GetValue<string>("IsClusterEnv") == bool.TrueString)
             {
@@ -229,11 +230,12 @@ namespace SaaSEqt.eShop.Services.Identity.API
                                     mySqlOptionsAction: sqlOptions =>
                                     {
                                         sqlOptions.MigrationsAssembly(migrationsAssembly);
-                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                        //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                     });
                 })
-                .Services.AddTransient<IProfileService, ProfileService>();
+                    .Services.AddTransient<IProfileService, ProfileService>();
+                         //.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
 
             return services;
         }
@@ -241,57 +243,43 @@ namespace SaaSEqt.eShop.Services.Identity.API
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var identityUrl = configuration.GetValue<string>("IdentityUrl");
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //services
+                //.AddAuthentication()
+                //.AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, options =>
+                //{
+                //    options.Authority = identityUrl;
 
-                })
-                .AddCookie()
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = identityUrl;
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = "identity";
-                    options.Events = new JwtBearerEvents()
-                    {
-                        OnAuthenticationFailed = async ctx =>
-                        {
-                            int i = 0;
-                        },
-                        OnTokenValidated = async ctx =>
-                        {
-                            int i = 0;
-                        }
-                    };
-                    // if using JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()
-                    // then must set the TokenValidationParameters like below
-                    //options.TokenValidationParameters = new TokenValidationParameters
-                    //{
-                    //    NameClaimType = "name",
-                    //    RoleClaimType = "role"
-                    //};
-                });
+                //    options.ApiName = "identity";
+                //    options.ApiSecret = "secret";
+                //    options.RequireHttpsMetadata = false;
+                //    options.SupportedTokens = SupportedTokens.Both;
+                //});
 
-
-            services.AddAuthorization(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                //options.DefaultPolicy = new AuthorizationPolicyBuilder("Cookie")
-                //.RequireAuthenticatedUser().Build();
-
-                options.AddPolicy("Schedule", policy =>
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    policy.AddRequirements(new ScheduleAuthorizationRequirement
-                    {
-                        AllowManager = true,
-                        AllowAssistant = true
-                    });
-                });
+                    ValidateIssuer = true,
+                    ValidIssuer = identityUrl,
+                    ValidateAudience = false,
+                    ValidAudience = "identity",
+                    ValidateLifetime = true,
+
+                };
             });
 
-            services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
+
+            // add CORS policy for non-IdentityServer endpoints
+            services.AddCors(options =>
+            {
+                options.AddPolicy("identity", policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
 
             return services;
         }

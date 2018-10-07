@@ -23,7 +23,7 @@ import { Logo, Form, Wallpaper, ButtonSubmit, SignupSection } from './components
 import config from './AuthConfig'
 
 UIManager.setLayoutAnimationEnabledExperimental &&
-  UIManager.setLayoutAnimationEnabledExperimental(true);
+  UIManager.setLayoutAnimationEnabledExperimental(true)
 
 class LoginScreen extends React.Component {
   static propTypes = {
@@ -36,7 +36,7 @@ class LoginScreen extends React.Component {
   keyboardDidShowListener = {}
   keyboardDidHideListener = {}
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       username: 'demouser@microsoft.com',
@@ -51,37 +51,36 @@ class LoginScreen extends React.Component {
     this.isAttempting = false
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps (newProps) {
     this.forceUpdate()
     // Did the login attempt complete?
     if (this.isAttempting && !newProps.fetching) {
       this.props.navigation.goBack()
     }
 
-    const { member, locations, getLocation } = newProps
+//     const { member, locations, getLocation } = newProps
+// console.log(member, locations)
+//     if (member) {
+//       if (locations.currentLocation) {
+//         this.props.navigation.navigate('App')
+//       } else if (!locations.currentLocation && locations.siblingLocations && locations.siblingLocations.length > 0) {
+//         getLocation(locations.siblingLocations[0].SiteId, locations.siblingLocations[0].Id)
+//       }
+//     }
 
-    if (member) {
-      if (locations.currentLocation) {
-        this.props.navigation.navigate('App')
-      } else if (!locations.currentLocation && locations.siblingLocations && locations.siblingLocations.length > 0) {
-        getLocation(locations.siblingLocations[0].SiteId, locations.siblingLocations[0].Id)
-      }
-    }
-
-    // if (!!newProps.member) {
-    //   if (!!newProps.location)
+    // if (newProps.member && newProps.member.currentLocation) {
     //     this.props.navigation.navigate('App')
     // }
   }
 
-  componentWillMount() {
+  componentWillMount () {
     // Using keyboardWillShow/Hide looks 1,000 times better, but doesn't work on Android
     // TODO: Revisit this if Android begins to support - https://github.com/facebook/react-native/issues/3468
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.keyboardDidShowListener.remove()
     this.keyboardDidHideListener.remove()
   }
@@ -110,6 +109,10 @@ class LoginScreen extends React.Component {
     this.isAttempting = true
     // attempt a login - a saga is listening to pick it up from here.
     this.props.login({ username, password })
+    .then(identity=>{
+      this.props.navigation.navigate('App')
+    })
+    .catch(e => console.log(`Error: ${e}`));
   }
 
   handleChangeUsername = (text) => {
@@ -120,7 +123,7 @@ class LoginScreen extends React.Component {
     this.setState({ password: text })
   }
 
-  render() {
+  render () {
     const { username, password } = this.state
     const { fetching } = this.props
     const editable = !fetching
@@ -176,35 +179,32 @@ class LoginScreen extends React.Component {
               </View>
             </TouchableOpacity>
           </View>
-          {/* <Button onPress={this.authorize} title="Authorize" color="#DA2536" />
-          <Button onPress={this.requestToken} title="Request token" color="#DA2536" /> */}
         </View>
 
       </ScrollView>
     )
   }
 
-  animateState(nextState: $Shape<State>, delay: number = 0) {
+  animateState (nextState: $Shape<State>, delay: number = 0) {
     setTimeout(() => {
       this.setState(() => {
-        LayoutAnimation.easeInEaseOut();
-        return nextState;
-      });
-    }, delay);
+        LayoutAnimation.easeInEaseOut()
+        return nextState
+      })
+    }, delay)
   }
 }
 
 const mapStateToProps = (state, props) => ({
   username: state.login.username,
   fetching: state.login.fetching,
-  member: state.member,
-  locations: state.locations
+  member: state.member
 })
 
 const mapDispatchToProps = {
   // attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password))
   login: login,
-  getLocation: getLocation,
+  getLocation: getLocation
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)

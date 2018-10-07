@@ -17,7 +17,7 @@ import {
 } from 'native-base'
 // import Secrets from 'react-native-config'
 
-import PurpleGradient from '../PurpleGradient'
+import GradientView from '../GradientView'
 // import RoundedButton from '../RoundedButton'
 import Messages from '../Messages'
 import Loading from '../Loading'
@@ -145,7 +145,7 @@ class UpdateImage extends React.Component {
     const { event } = Animated
 
     return (
-      <PurpleGradient style={[styles.linearGradient, { flex: 1 }]}>
+      <GradientView style={[styles.linearGradient, { flex: 1 }]}>
         <ScrollView
           ref='scrolly'
           onScroll={event([{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }])}
@@ -177,7 +177,7 @@ class UpdateImage extends React.Component {
             </View>
           </View>
         </ScrollView>
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

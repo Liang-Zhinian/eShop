@@ -1,6 +1,6 @@
 import React from 'react'
 import { BackHandler, ScrollView, Text, View, Image, TouchableOpacity } from 'react-native'
-import PurpleGradient from '../Components/PurpleGradient'
+import GradientView from '../Components/GradientView'
 import TalkInfo from '../Components/TalkInfo'
 import SocialMediaButton from '../Components/SocialMediaButton'
 import { NavigationActions } from 'react-navigation'
@@ -70,7 +70,7 @@ class TalkDetail extends React.Component {
   render () {
     const {title, eventStart, setReminder, removeReminder} = this.props
     return (
-      <PurpleGradient style={styles.linearGradient}>
+      <GradientView style={styles.linearGradient}>
         <ScrollView>
           <View style={styles.container}>
             <TouchableOpacity style={styles.backButton} onPress={this.goBack}>
@@ -110,7 +110,7 @@ class TalkDetail extends React.Component {
             />
           </View>
         </ScrollView>
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

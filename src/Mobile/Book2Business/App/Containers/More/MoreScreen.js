@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import { AppState, View, Image, FlatList, ScrollView } from 'react-native'
-import PurpleGradient from '../../Components/PurpleGradient'
+import GradientView from '../../Components/GradientView'
 import {
   compareAsc,
   isSameDay,
@@ -30,55 +30,55 @@ import MainContainer from '../MainContainer'
 
 const data = [
   {
-    id: 0,
+    id: '0',
     title: 'Appointments',
     image: Images.chevronRight,
     target: 'Appointments'
   },
   {
-    id: 1,
+    id: '1',
     title: 'Classes',
     image: Images.chevronRight,
     target: 'Classes'
   },
   {
-    id: 2,
+    id: '2',
     title: 'Business information',
     image: Images.chevronRight,
     target: 'BizInfo'
   },
   {
-    id: 10,
+    id: '10',
     title: 'Staffs',
     image: Images.chevronRight,
     target: 'Staffs'
   },
   {
-    id: 3,
+    id: '3',
     title: 'Profile',
     image: Images.chevronRight,
     target: 'Profile'
   },
   {
-    id: 4,
+    id: '4',
     title: 'Change location',
     image: Images.locationIcon,
     target: 'ChangeLocation'
   },
   {
-    id: 5,
+    id: '5',
     title: 'Location',
     image: Images.inactiveLocationIcon,
     target: 'Location'
   },
   {
-    id: 6,
+    id: '6',
     title: 'About',
     image: Images.inactiveInfoIcon,
     target: 'About'
   },
   {
-    id: 6,
+    id: '7',
     title: 'Quick Dev',
     image: Images.inactiveInfoIcon,
     target: 'QuickDev'

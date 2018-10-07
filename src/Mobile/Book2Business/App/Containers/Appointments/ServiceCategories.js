@@ -10,8 +10,7 @@ import Messages from '../../Components/Messages'
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
 import { Images } from '../../Themes'
-import site from '../../Constants/site'
-import { getServiceCategories, setError } from '../../Actions/serviceCategories'
+import { setSelectedCategory, getServiceCategories, setError } from '../../Actions/serviceCategories'
 import styles from './Styles/AppointmentsScreenStyle'
 import List from '../../Components/List'
 import ListItem from '../../Components/ListItem'
@@ -133,11 +132,13 @@ class ServiceCategoryListing extends Component {
         name={item.title}
         title={item.content}
         onPress={() => {
-          const { navigation } = this.props
+          const { navigation, setSelectedEvent } = this.props
+          setSelectedEvent(item)
           navigation.navigate('AppointmentListing', { id: item.id })
         }}
         onPressEdit={() => {
-          const { navigation } = this.props
+          const { navigation, setSelectedEvent } = this.props
+          setSelectedEvent(item)
           navigation.navigate('AppointmentListing', { id: item.id })
         }}
         onPressRemove={() => {
@@ -151,9 +152,9 @@ class ServiceCategoryListing extends Component {
     * Fetch Data from API, saving to Redux
     */
   fetchServiceCategories = () => {
-    const { fetchServiceCategories, showError, dispatch } = this.props
+    const { member, fetchServiceCategories, showError } = this.props
 
-    return fetchServiceCategories(site.siteId, 10, 0)
+    return fetchServiceCategories(member.currentLocation.SiteId, 10, 0)
       .catch((err) => {
         console.log(`Error: ${err}`)
         return showError(err)
@@ -162,16 +163,14 @@ class ServiceCategoryListing extends Component {
 }
 
 const mapStateToProps = state => ({
+  member: state.member || {},
   serviceCategories: state.serviceCategories || {}
 })
 
 const mapDispatchToProps = {
   fetchServiceCategories: getServiceCategories,
   showError: setError,
-  setSelectedEvent: (data) => dispatch({
-    type: 'SERVICE_CATEGORY_SELECTED',
-    data: data
-  })
+  setSelectedEvent: setSelectedCategory
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceCategoryListing)

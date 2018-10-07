@@ -397,7 +397,16 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 {
                     ClientId = "ro.client",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-
+                    //AccessTokenType = AccessTokenType.Jwt,
+                    AccessTokenLifetime = 120, //86400,
+                    IdentityTokenLifetime = 120, //86400,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    SlidingRefreshTokenLifetime = 30,
+                    AllowOfflineAccess = true,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    AlwaysSendClientClaims = true,
+                    Enabled = true,
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
@@ -417,7 +426,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                         "sites",
                         "identityaccess"
                     }
-                },
+                }
             };
         }
     }

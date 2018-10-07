@@ -12,8 +12,6 @@ import Spacer from '../Spacer'
 import { Colors, Fonts, Metrics } from '../../Themes/'
 import LocationPickerButton from './LocationPickerButton'
 
-import site from '../../Constants/site'
-import { getLocation } from '../../Actions/locations'
 
 class UpdateGeolocation extends React.Component {
   static propTypes = {

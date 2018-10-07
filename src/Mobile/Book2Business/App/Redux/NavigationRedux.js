@@ -26,7 +26,7 @@ const LOGGED_IN_STATE = getStateForAction(reset({
  */
 // const navigateTo = routeName => () => navigate({ routeName })
 
-export function reducer(state = INITIAL_STATE, action) {
+export function reducer (state = INITIAL_STATE, action) {
   let nextState
   switch (action.type) {
     case 'SET_REHYDRATION_COMPLETE':

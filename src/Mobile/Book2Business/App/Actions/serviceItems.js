@@ -1,6 +1,6 @@
 import ErrorMessages from '../Constants/errors'
 import statusMessage from './status'
-import site from '../Constants/site'
+import {CatalogApiUrl} from '../Constants/api'
 
 /**
   * Set an Error Message
@@ -16,15 +16,15 @@ export function setError (message) {
   * Get ServiceCategories
   */
 export function getServiceItems (siteId, serviceCategoryId, pageSize, pageIndex) {
-  const { api } = site
-
+  
   return dispatch => new Promise(async (resolve, reject) => {
     await statusMessage(dispatch, 'loading', true)
-    const url = `${api}Catalog/sites/${siteId}/servicecategories/${serviceCategoryId}/serviceitems?pageSize=${pageSize}&pageIndex=${pageIndex}`
+    const url = `${CatalogApiUrl}/ServiceCatalog/sites/${siteId}/servicecategories/${serviceCategoryId}/serviceitems?pageSize=${pageSize}&pageIndex=${pageIndex}`
 
     return fetch(url)
             .then(res => res.json())
-            .then((json) => {
+            .then(async (json) => {
+              await statusMessage(dispatch, 'loading', false)
               return resolve(dispatch({
                 type: 'SERVICE_ITEMS_REPLACE',
                 data: json
@@ -34,4 +34,8 @@ export function getServiceItems (siteId, serviceCategoryId, pageSize, pageIndex)
     await statusMessage(dispatch, 'loading', false)
     throw err.message
   })
+}
+
+export function updateServiceItem(){
+  
 }

@@ -7,10 +7,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using UserManagement.Models;
 using SaaSEqt.eShop.Services.Identity.API.Models;
 
-namespace UserManagement.Utilities.TagHelpers
+namespace Identity.Utilities.TagHelpers
 {
     // You may need to install the Microsoft.AspNetCore.Razor.Runtime package into your project
     [HtmlTargetElement("td", Attributes = "identity-role")]

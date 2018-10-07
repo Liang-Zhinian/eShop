@@ -11,7 +11,7 @@ import {
   PanResponder,
   LayoutAnimation
 } from 'react-native'
-import PurpleGradient from '../Components/PurpleGradient'
+import GradientView from '../Components/GradientView'
 
 import VenueMap from '../Components/VenueMap'
 import Gallery from '../Components/Gallery'
@@ -217,7 +217,7 @@ class LocationScreen extends React.Component {
     const { event } = Animated
 
     return (
-      <PurpleGradient style={[styles.linearGradient, { flex: 1 }]}>
+      <GradientView style={[styles.linearGradient, { flex: 1 }]}>
         <ScrollView
           ref='scrolly'
           onScroll={event([{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }])}
@@ -277,7 +277,7 @@ class LocationScreen extends React.Component {
             />
           </View>
         </ScrollView>
-      </PurpleGradient>
+      </GradientView>
     )
   }
 }

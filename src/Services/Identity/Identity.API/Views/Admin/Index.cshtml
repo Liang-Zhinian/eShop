@@ -19,9 +19,6 @@
 
 @if (User?.Identity?.IsAuthenticated ?? false)
 {
-    <a class="btn btn-primary btn-sm" asp-controller="Home" asp-action="SetUserCustomProps">
-        Edit User Custom Properties
-    </a>
     <a class="btn btn-primary btn-sm" asp-controller="Claims" asp-action="Index">
         Claims
     </a>
@@ -44,41 +41,16 @@
     </tr>
     <tr>
         <td>Role</td>
-        <td>SuperAdmins</td>
+        <td>PowerUser</td>
         <td>
-            <a class="btn btn-primary btn-xs" asp-controller="SuperAdmin" asp-action="Index">Users</a>
+            <a class="btn btn-primary btn-xs" asp-controller="PowerUser" asp-action="Index">Users</a>
         </td>
     </tr>
     <tr>
         <td>Role</td>
-        <td>SuperAdmins</td>
+        <td>PowerUser</td>
         <td>
             <a class="btn btn-primary btn-xs" asp-controller="Role" asp-action="Index">Roles</a>
-        </td>
-    </tr>
-    <tr>
-        <td>Role, Claim</td>
-        <td>Customers in New Zealand</td>
-        <td>
-            <a class="btn btn-primary btn-xs" asp-controller="Home" asp-action="ForNzlCustomers">
-                NZL Customers
-            </a>
-        </td>
-    </tr>
-    <tr>
-        <td>Custom Policy</td>
-        <td>Not in New Zealand</td>
-        <td>
-            <a class="btn btn-primary btn-xs" asp-controller="Home" asp-action="Block">Not In NZL</a>
-        </td>
-    </tr>
-    <tr>
-        <td>Role, Resource</td>
-        <td>Staff AND Manager/Assistant</td>
-        <td>
-            <a class="btn btn-primary btn-xs" asp-controller="Schedule" asp-action="Index">
-                Schedules
-            </a>
         </td>
     </tr>
 

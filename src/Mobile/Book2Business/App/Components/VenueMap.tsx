@@ -23,7 +23,7 @@ interface VenueMapProps {
   scrollEnabled: boolean
   mapViewMode: boolean
   style: StyleSheet
-  onCloseMap (): void
+  onCloseMap(): void
 }
 
 interface VenueMapState {
@@ -38,14 +38,14 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
   * There are TONS of options available from traffic to buildings to indoors to compass and more!
   * For full documentation, see https://github.com/lelandrichardson/react-native-maps
   *************************************************************/
-  constructor (props) {
+  constructor(props) {
     super(props)
     /* ***********************************************************
     * STEP 1
     * Set the array of locations to be displayed on your map. You'll need to define at least
     * a latitude and longitude as well as any additional information you wish to display.
     *************************************************************/
-    const locations = [
+    const locations = props.locations || [
       { title: 'The Armory', latitude: 45.524166, longitude: -122.681645 }
     ]
     /* ***********************************************************
@@ -55,7 +55,7 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
     * You can generate a handy `calculateRegion` function with
     * `ignite generate map-utilities`
     *************************************************************/
-    const region = calculateRegion(locations, { latPadding: 0.01, longPadding: 0.01 })
+    const region = locations.length == 1 ? { ...locations[0], latitudeDelta: 0.1, longitudeDelta: 0.1 } : calculateRegion(locations, { latPadding: 0.01, longPadding: 0.01 })
     this.state = {
       region,
       locations,
@@ -65,7 +65,7 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
     this.onRegionChange = this.onRegionChange.bind(this)
   }
 
-  componentWillReceiveProps (newProps) {
+  componentWillReceiveProps(newProps) {
     /* ***********************************************************
     * STEP 3
     * If you wish to recenter the map on new locations any time the
@@ -87,7 +87,7 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
   //   }
   // }
 
-  onRegionChange (newRegion) {
+  onRegionChange(newRegion) {
     /* ***********************************************************
     * STEP 4
     * If you wish to fetch new locations when the user changes the
@@ -110,7 +110,7 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
     // })
   }
 
-  calloutPress (location) {
+  calloutPress(location) {
     /* ***********************************************************
     * STEP 5
     * Configure what will happen (if anything) when the user
@@ -120,7 +120,7 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
     // console.tron.log(location) // Reactotron
   }
 
-  renderMapMarkers (location) {
+  renderMapMarkers(location) {
     /* ***********************************************************
     * STEP 6
     * Customize the appearance and location of the map marker.
@@ -157,7 +157,7 @@ class VenueMap extends React.Component<VenueMapProps, VenueMapState> {
     )
   }
 
-  render () {
+  render() {
     return (
       <View>
         <MapView

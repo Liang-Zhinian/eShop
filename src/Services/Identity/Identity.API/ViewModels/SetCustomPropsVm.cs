@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using SaaSEqt.eShop.Services.Identity.API.Models;
-using UserManagement.Models;
 
-namespace UserManagement.ViewModels
+namespace Identity.ViewModels
 {
     public class SetCustomPropsVm
     {
