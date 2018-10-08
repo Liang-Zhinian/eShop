@@ -94,11 +94,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/s/{everything}",
-        "UpstreamHttpMethod": [],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
+        "UpstreamHttpMethod": ["GET","PUT","POST"]
       },
       {
         "DownstreamPathTemplate": "/{everything}",
