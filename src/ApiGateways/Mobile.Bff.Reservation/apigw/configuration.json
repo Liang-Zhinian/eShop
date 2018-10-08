@@ -10,11 +10,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/ia/{everything}",
-        "UpstreamHttpMethod": [],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
+        "UpstreamHttpMethod": []
       },
       {
         "DownstreamPathTemplate": "/{everything}",
@@ -38,11 +34,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/t/{everything}",
-        "UpstreamHttpMethod": [],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
+        "UpstreamHttpMethod": []
       },
       {
         "DownstreamPathTemplate": "/{everything}",
@@ -90,7 +82,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/s/{everything}",
-        "UpstreamHttpMethod": [],
+        "UpstreamHttpMethod": []
       },
       {
         "DownstreamPathTemplate": "/{everything}",
@@ -138,11 +130,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/sch/{everything}",
-        "UpstreamHttpMethod": [],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
+        "UpstreamHttpMethod": []
       },
       {
         "DownstreamPathTemplate": "/{everything}",
@@ -166,11 +154,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/a/{everything}",
-        "UpstreamHttpMethod": [],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
+        "UpstreamHttpMethod": []
       },
       {
         "DownstreamPathTemplate": "/{everything}",
@@ -194,11 +178,7 @@
           }
         ],
         "UpstreamPathTemplate": "/{everything}",
-        "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
-        "AuthenticationOptions": {
-          "AuthenticationProviderKey": "IdentityApiKey",
-          "AllowedScopes": []
-        }
+        "UpstreamHttpMethod": []
       }
   
     ],
