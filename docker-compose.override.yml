@@ -148,6 +148,8 @@ services:
     ports:
       - "5133:80"   # Important: In a production environment your should remove the external port (5120) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
+    volumes:
+      - ./src/ApiGateways/Mobile.Bff.Reservation/apigw:/app/configuration
 
   mobilereservationapigw:
     environment:
