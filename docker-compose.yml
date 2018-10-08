@@ -173,7 +173,7 @@ services:
       - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
       - ~/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     ports:
-      - "3306:3306"    # Important: In a production environment your should remove the external port
+      - "33306:3306"    # Important: In a production environment your should remove the external port
 
   nosql.data:
     image: mongo

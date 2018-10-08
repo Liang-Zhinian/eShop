@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,6 +24,7 @@ FinderService.GetSessionTypesWithinRadius
 FinderService.SendFinderUserNewPassword
     */
     [Route("api/v1/[controller]")]
+    [AllowAnonymous]
     public class FinderController : Controller
     {
         private readonly IServiceCatalogService _serviceCatalogService;

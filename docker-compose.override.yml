@@ -71,7 +71,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_BrandingDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/br/branding/withtype/[0]/category/[1]/subcategory/[2]/language/[3]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/br/branding/withtype/[0]/category/[1]/subcategory/[2]/language/[3]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
@@ -93,11 +93,11 @@ services:
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_SitesDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
       - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - SiteLogoBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/s/sites/[0]/pic}
-      - LocationPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic}
-      - LocationAdditionalPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic}
-      - StaffPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5216/api/v1/s/staffs/ofSiteId/[0]/staffId/[1]/pic}
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5202/api/v1/c/catalog/items/[0]/pic}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - SiteLogoBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/s/sites/[0]/pic}
+      - LocationPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic}
+      - LocationAdditionalPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic}
+      - StaffPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u:5216/api/v1/s/staffs/ofSiteId/[0]/staffId/[1]/pic}
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
@@ -139,11 +139,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - urls__basket=http://basket.api
-      - urls__catalog=http://servicecatalog.api
+      - urls__catalog=http://catalog.api
       - urls__orders=http://appointment.api
       - urls__appointment=http://appointment.api
-      - urls__servicecatalog=http://servicecatalog.api
-      - urls__business=http://business.api
+      - urls__servicecatalog=http://catalog.api
+      - urls__business=http://sites.api
       - urls__identity=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
     ports:
       - "5133:80"   # Important: In a production environment your should remove the external port (5120) kept here for microservice debugging purposes. 
@@ -184,7 +184,7 @@ services:
       - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_CatalogDb;uid=book2;pwd=P@ssword}
       - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5101/api/v1/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5101/api/v1/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
@@ -405,7 +405,7 @@ services:
       - ./mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
       - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     ports:
-      - "3306:3306"    # Important: In a production environment your should remove the external port
+      - "33306:3306"    # Important: In a production environment your should remove the external port
 
 
   nosql.data:
