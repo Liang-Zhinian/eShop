@@ -1,8 +1,8 @@
 import { setItem, getItem, mergeItem, removeItem } from './StorageService'
 import { StaffsApi } from './Apis'
 
-const requestTokenUrl = 'http://localhost:55105/connect/token'
-const getProfileUrl = `http://localhost:55143/api/v1/staffs`
+const requestTokenUrl = 'http://isd4u.com:5105/connect/token'
+const getProfileUrl = `http://isd4u.com:5143/api/v1/staffs`
 
 const authorize = (email, password) => {
   return new Promise((resolve, reject) => {
