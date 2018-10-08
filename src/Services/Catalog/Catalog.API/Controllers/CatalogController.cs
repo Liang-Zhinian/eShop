@@ -11,10 +11,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
 {
     [Route("api/v1/[controller]")]
+    [AllowAnonymous]
     public class CatalogController : ControllerBase
     {
         private readonly CatalogContext _catalogContext;

@@ -49,6 +49,7 @@
     <Content Remove="Pics\6.png" />
     <Content Remove="Pics\7.png" />
     <Content Remove="Pics\9.png" />
+    <Content Remove="Pics\12.png" />
   </ItemGroup>
 
 
@@ -98,5 +99,6 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\EntityConfigurations\Constants\" />
+    <Folder Include="Infrastructure\Middlewares\" />
   </ItemGroup>
 </Project>

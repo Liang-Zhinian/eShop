@@ -18,6 +18,7 @@
     using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
     using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
     using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
+    using SaaSEqt.eShop.Services.Catalog.API.Infrastructure.Middlewares;
     using SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.EventHandling;
     using SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events;
     using Microsoft.Extensions.Configuration;
@@ -30,6 +31,11 @@
     using System.Data.Common;
     using System.Reflection;
     using SaaSEqt.Infrastructure.HealthChecks.MySQL;
+    using System.IdentityModel.Tokens.Jwt;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.IdentityModel.Tokens;
+    using Swashbuckle.AspNetCore.Swagger;
+    using System.Collections.Generic;
 
     public class Startup
     {
@@ -76,6 +82,8 @@
                 //opts.SerializerSettings.DateFormatString = "yyyy-MM-dd";
             });
 
+            ConfigureAuthService(services);
+
             services.AddDbContext<CatalogContext>(options =>
             {
                 options.UseMySql(Configuration["ConnectionString"],
@@ -116,6 +124,20 @@
                     Description = "The Catalog Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
                     TermsOfService = "Terms Of Service"
                 });
+
+                options.AddSecurityDefinition("oauth2", new OAuth2Scheme
+                {
+                    Type = "oauth2",
+                    Flow = "implicit",
+                    AuthorizationUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize",
+                    TokenUrl = $"{Configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
+                    Scopes = new Dictionary<string, string>()
+                    {
+                        { "catalog", "Catalog API" }
+                    }
+                });
+
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
             services.AddCors(options =>
@@ -206,12 +228,16 @@
 
             app.UseCors("CorsPolicy");
 
+            ConfigureAuth(app);
+
             app.UseMvcWithDefaultRoute();
 
             app.UseSwagger()
               .UseSwaggerUI(c =>
               {
-                  c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Catalog.API V1");                  
+                  c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Catalog.API V1");  
+                    c.OAuthClientId("catalogswaggerui");
+                  c.OAuthAppName("Catalog Swagger UI");
               });
 
             ConfigureEventBus(app);
@@ -281,6 +307,42 @@
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
             eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
+        }
+
+        private void ConfigureAuthService(IServiceCollection services)
+        {
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "catalog";
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
+            });
+        }
+
+        protected virtual void ConfigureAuth(IApplicationBuilder app)
+        {
+            if (Configuration.GetValue<bool>("UseLoadTest"))
+            {
+                app.UseMiddleware<ByPassAuthMiddleware>();
+            }
+
+            app.UseAuthentication();
         }
     }
 }

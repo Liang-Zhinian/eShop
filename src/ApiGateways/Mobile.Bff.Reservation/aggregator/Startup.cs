@@ -41,7 +41,15 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator
             services.AddOptions();
             services.Configure<UrlsConfig>(Configuration.GetSection("urls"));
 
-            services.AddMvc();
+            services.AddMvc()
+                    .AddControllersAsServices()
+                    .AddJsonOptions(opts =>
+                    {
+                        opts.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+                        opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                        //设置时间格式
+                        //opts.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+                    });
 
             services.AddSwaggerGen(options =>
             {

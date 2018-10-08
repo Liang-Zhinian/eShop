@@ -47,9 +47,10 @@ FinderService.SendFinderUserNewPassword
         [Route("[action]")]
         public async Task<IActionResult> GetSeriviceItemsWithinRadius(double latitude, double longitude, double radius, string searchText, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            
+            var serviceItems = await _serviceCatalogService.GetSeriviceItemsWithinRadius(latitude, longitude, radius, searchText, pageSize, pageIndex);
 
-            return Ok();
+
+            return Ok(serviceItems);
         }
 
     }

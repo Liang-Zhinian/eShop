@@ -9,7 +9,7 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
     public interface IServiceCatalogService
     {
         Task<ServiceItem> GetCatalogItem(Guid id);
-        Task<IEnumerable<ServiceItem>> GetCatalogItems(IEnumerable<Guid> ids);
+        Task<PaginatedItemsViewModel<ServiceItem>> GetSeriviceItemsWithinRadius(double latitude, double longitude, double radius, string searchText, int pageSize = 10, int pageIndex = 0);
 
         Task<ServiceCategory> GetCatalog(Guid id);
         Task<IEnumerable<ServiceCategory>> GetCatalogs(IEnumerable<Guid> ids);

@@ -14,24 +14,27 @@ namespace SaaSEqt.eShop.Services.Catalog.API
         public static void Main(string[] args)
         {
             BuildWebHost(args)
-                .MigrateDbContext<CatalogContext>((context,services)=>
+                .MigrateDbContext<CatalogContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();
                     var settings = services.GetService<IOptions<CatalogSettings>>();
                     var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
                     new CatalogContextSeed()
-                    .SeedAsync(context,env,settings,logger)
+                    .SeedAsync(context, env, settings, logger)
                     .Wait();
 
+                    new ServiceeCatalogContextSeed()
+                        .SeedAsync(context, env, settings, logger)
+                        .Wait();
                 })
-                .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
+                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
                 .Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
         WebHost.CreateDefaultBuilder(args)
-                   //.UseUrls("http://*:8082")
+             //.UseUrls("http://*:8082")
              .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .UseHealthChecks("/hc")
@@ -46,7 +49,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                })                
-                .Build();    
+                })
+                .Build();
     }
 }

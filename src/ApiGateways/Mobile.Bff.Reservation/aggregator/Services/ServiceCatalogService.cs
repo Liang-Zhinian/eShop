@@ -32,11 +32,16 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
             return item;
         }
 
-        public async Task<IEnumerable<ServiceItem>> GetCatalogItems(IEnumerable<Guid> ids)
+        public async Task<PaginatedItemsViewModel<ServiceItem>> GetSeriviceItemsWithinRadius(double latitude, double longitude, double radius, string searchText, int pageSize = 10, int pageIndex = 0)
         {
-            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.ServiceCatalogOperations.GetItemsById(ids));
-            var item = JsonConvert.DeserializeObject<ServiceItem[]>(data);
-            return item;
+            var locationsData = await _apiClient.GetStringAsync(_urls.Business + UrlsConfig.BusinessLocationOperations.GetBusinessLocationsWithinRadius(latitude, longitude, radius, "", pageSize, pageIndex));
+            var locations = JsonConvert.DeserializeObject<PaginatedItemsViewModel<Location>>(locationsData);
+
+            string siteIds = string.Join(",", locations.Data.Select(y => y.SiteId));
+            var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.ServiceCatalogOperations.GetItemsBySiteIdsAndSearchText(locations.Data.Select(y => y.SiteId), searchText));
+            var items = JsonConvert.DeserializeObject<PaginatedItemsViewModel<ServiceItem>>(data);
+
+            return items;
 
         }
 

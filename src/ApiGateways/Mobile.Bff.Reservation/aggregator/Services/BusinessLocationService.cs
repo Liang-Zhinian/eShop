@@ -25,10 +25,10 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Services
             _urls = config.Value;
         }
 
-        public async Task<IEnumerable<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, int pageSize = 10, int pageIndex = 0)
+        public async Task<PaginatedItemsViewModel<Location>> GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, int pageSize = 10, int pageIndex = 0)
         {
             var data = await _apiClient.GetStringAsync(_urls.Business + UrlsConfig.BusinessLocationOperations.GetBusinessLocationsWithinRadius(latitude, longitude, radius, searchText, pageSize, pageIndex));
-            var item = JsonConvert.DeserializeObject<Location[]>(data);
+            var item = JsonConvert.DeserializeObject<PaginatedItemsViewModel<Location>>(data);
             return item;
         }
 

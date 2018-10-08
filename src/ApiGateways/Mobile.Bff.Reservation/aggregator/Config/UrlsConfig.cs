@@ -34,7 +34,7 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config
         public class ServiceCatalogOperations
         {
             public static string GetItemById(Guid id) => $"/api/v1/servicecatalog/serviceitems/{id}";
-            public static string GetItemsById(IEnumerable<Guid> ids) => $"/api/v1/servicecatalog/serviceitems?ids={string.Join(',', ids)}";
+            public static string GetItemsBySiteIdsAndSearchText(IEnumerable<Guid> siteIds, string searchText) => $"/api/v1/servicecatalog/serviceitems?siteIds={string.Join(',', siteIds)}&searchText={searchText}";
             public static string GetCatalogById(Guid id) => $"/api/v1/servicecatalog/servicecategories/{id}";
             public static string GetCatalogsById(IEnumerable<Guid> ids) => $"/api/v1/servicecatalog/servicecategories?ids={string.Join(',', ids)}";
         }
@@ -42,7 +42,7 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Config
         // Business
         public class BusinessLocationOperations
         {
-            public static string GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, int pageSize = 10, int pageIndex = 0) => $"/api/v1/sites/GetBusinessLocationsWithinRadius?latitude={latitude}&longitude={longitude}&radius={radius}&searchText={searchText}&pageSize={pageSize}&pageIndex={pageIndex}";
+            public static string GetBusinessLocationsWithinRadius(double latitude, double longitude, double radius, string searchText, int pageSize = 10, int pageIndex = 0) => $"/api/v1/Finder/GetBusinessLocationsWithinRadius?latitude={latitude}&longitude={longitude}&radius={radius}&searchText={searchText}&pageSize={pageSize}&pageIndex={pageIndex}";
             public static string GetBusinessLocation(Guid siteId, Guid locationId) => $"/api/v1/sites/{siteId}/locations/{locationId}";
         }
     }

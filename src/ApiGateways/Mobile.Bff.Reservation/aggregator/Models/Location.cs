@@ -10,27 +10,27 @@ namespace SaaSEqt.eShop.Mobile.Reservation.HttpAggregator.Models
     {
         #region public properties
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        public string Description { get; private set; }
+        public string Description { get; set; }
 
-        public string Image { get; private set; }
+        public string Image { get; set; }
 
         public string ImageUri { get; set; }
 
-        public ContactInformation ContactInformation { get; private set; }
+        public ContactInformation ContactInformation { get; set; }
 
-        public Address Address { get; private set; }
+        public Address Address { get; set; }
 
-        public Geolocation Geolocation { get; private set; }
+        public Geolocation Geolocation { get; set; }
 
-        public bool Active { get; private set; }
+        public bool Active { get; set; }
 
-        public Guid SiteId { get; private set; }
+        public Guid SiteId { get; set; }
 
-        public ICollection<LocationImage> AdditionalLocationImages { get; private set; }
+        public ICollection<LocationImage> AdditionalLocationImages { get; set; }
 
         #endregion
 
