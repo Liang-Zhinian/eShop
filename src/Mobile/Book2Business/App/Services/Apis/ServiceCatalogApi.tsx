@@ -1,7 +1,6 @@
 import { Api } from '../api'
-import * as Storage from '../../Lib/storage'
 
-export default class StaffsApi extends Api {
+export default class ServiceCatalogApi extends Api {
 
   setHeader(key: string, value){
     this.apisauce.setHeader(key, value)
@@ -13,7 +12,7 @@ export default class StaffsApi extends Api {
 
   constructor() {
     const config = {
-      url: "http://isd4u.com:5216/api/v1/s",
+      url: "http://isd4u.com:5216/api/v1/c",
       timeout: 10000,
     }
 
@@ -21,9 +20,9 @@ export default class StaffsApi extends Api {
     this.setup()
   }
 
-  async getStaffByUserName(username: string): Promise<{}> {
+  async getServiceCategories(siteId, pageSize, pageIndex): Promise<{}> {
     // make the api call
-    const response = await this.apisauce.get(`/staffs?username=${username}`)
+    const response = await this.apisauce.get(`/ServiceCatalog/sites/${siteId}/servicecategories?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -39,13 +38,9 @@ export default class StaffsApi extends Api {
     }
   }
 
-  async getStaffs(siteId: string): Promise<{}> {
-
-    const identity = await Storage.load('identity')
-    this.setAuthorizationHeader(`${identity.token_type} ${identity.access_token}`)
-
+  async getServiceItems(siteId, serviceCategoryId, pageSize, pageIndex): Promise<{}> {
     // make the api call
-    const response = await this.apisauce.get(`/Staffs/sites/${siteId}/staffs`)
+    const response = await this.apisauce.get(`ServiceCatalog/sites/${siteId}/servicecategories/${serviceCategoryId}/serviceitems?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -60,4 +55,5 @@ export default class StaffsApi extends Api {
       return { kind: "bad-data" }
     }
   }
+
 }

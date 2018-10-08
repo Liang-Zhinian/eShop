@@ -75,6 +75,7 @@ class AuthLoadingScreen extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { member } = nextProps
+    console.log('member', member)
     if (this.userToken && member.uid && member.currentLocation) this.props.navigation.navigate('App')
     else this.props.navigation.navigate('Auth')
   }

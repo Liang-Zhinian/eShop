@@ -61,16 +61,12 @@ export default function userReducer(state = initialState, action) {
           ...state,
           loading: false,
           error: null,
-          firstName: action.data.firstName,
-          lastName: action.data.lastName,
-          signedUp: action.data.signedUp,
-          role: action.data.role
+          ...action.data
         }
       }
       return initialState
     }
     case 'USER_LOGIN_LOCATIONS': {
-      console.log(action.type)
       if (action.data) {
         let currentLocation = null
         if (!state.currentLocation && action.data.siblingLocations && action.data.siblingLocations.length > 0)

@@ -80,7 +80,7 @@ class ServiceItemListing extends Component {
   fetchServiceItems = () => {
     const { member, fetchServiceItems, showError, match } = this.props
     const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
-    return fetchServiceItems(member.currentLocation.SiteId, serviceCategoryId, 10, 0)
+    return fetchServiceItems(member.SiteId, serviceCategoryId, 10, 0)
             //   .then(() => fetchMeals())
             .catch((err) => {
               console.log(`Error: ${err}`)

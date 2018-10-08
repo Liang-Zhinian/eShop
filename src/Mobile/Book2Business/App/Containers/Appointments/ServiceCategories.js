@@ -92,7 +92,8 @@ class ServiceCategoryListing extends Component {
   }
 
   render = () => {
-    const { serviceCategories, match } = this.props
+    const { member, serviceCategories, match } = this.props
+    
     const id = (match && match.params && match.params.id) ? match.params.id : null
 
     let listViewData = []
@@ -154,7 +155,7 @@ class ServiceCategoryListing extends Component {
   fetchServiceCategories = () => {
     const { member, fetchServiceCategories, showError } = this.props
 
-    return fetchServiceCategories(member.currentLocation.SiteId, 10, 0)
+    return fetchServiceCategories(member.SiteId, 10, 0)
       .catch((err) => {
         console.log(`Error: ${err}`)
         return showError(err)

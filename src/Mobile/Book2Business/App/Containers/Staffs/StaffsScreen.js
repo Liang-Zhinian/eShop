@@ -117,9 +117,9 @@ class StaffsScreen extends Component {
   componentDidMount () {
     AppState.addEventListener('change', this._handleAppStateChange)
 
-    const { member, getStaffs, locations } = this.props
+    const { member, getStaffs } = this.props
 
-    getStaffs(locations.currentLocation.SiteId)
+    getStaffs(member.currentLocation.SiteId)
 
     this.props.navigation.setParams({
       icon: 'bars',
@@ -172,7 +172,7 @@ class StaffsScreen extends Component {
       <Staff
         type={'talk'}
         name={item.FirstName + ' ' + item.LastName}
-        avatarURL={item.ImageUri}
+        avatarURL={item.ImageUri||''}
         title={item.Bio}
         onPress={() => this.onEventPress(item)}
         />
@@ -247,7 +247,6 @@ const mapStateToProps = (state) => {
     // specialTalks: state.notifications.specialTalks,
     staffs: state.staffs,
     member: state.member,
-    locations: state.locations
   }
 }
 
