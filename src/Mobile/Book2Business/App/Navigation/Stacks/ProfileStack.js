@@ -1,10 +1,8 @@
 import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation'
 
-import AppointmentCategoryListingScreen from '../../Containers/Appointments/ServiceCategories'
-import AppointmentListingScreen from '../../Containers/Appointments/ServiceItemListing'
+import ProfileSettingsScreen from '../../Containers/Profile'
 import CreateStackNavigator from '../CreateStackNavigator'
 
 export default CreateStackNavigator({
-  AppointmentCategoryListing: { screen: AppointmentCategoryListingScreen },
-  AppointmentListing: { screen: AppointmentListingScreen }
+  ProfileSettings: { screen: ProfileSettingsScreen },
 }, 'screen')

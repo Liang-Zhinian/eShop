@@ -175,7 +175,7 @@ export default class LocationInfo extends React.Component {
             })
           }]
         }]}
-        source={ImageUri}
+        source={{ uri: ImageUri }}
         resizeMode='cover'
       />
     )
@@ -231,12 +231,12 @@ export default class LocationInfo extends React.Component {
     const { mapViewMode } = this.state
     return (
       <View ref='mapContainer' {...this._panResponder.panHandlers}>
-        <VenueMap 
-        locations={[{ title: Name, latitude: Geolocation.Latitude, longitude: Geolocation.Longitude }]}
-        mapViewMode={mapViewMode} 
-        onCloseMap={this.onCloseMap} 
-        scrollEnabled={mapViewMode} 
-        style={[styles.map, mapViewMode && { height: this.activeMapHeight }]} 
+        <VenueMap
+          locations={[{ title: Name, latitude: Geolocation.Latitude, longitude: Geolocation.Longitude }]}
+          mapViewMode={mapViewMode}
+          onCloseMap={this.onCloseMap}
+          scrollEnabled={mapViewMode}
+          style={[styles.map, mapViewMode && { height: this.activeMapHeight }]}
         />
       </View>
     )
@@ -261,9 +261,20 @@ export default class LocationInfo extends React.Component {
       Address: { Street },
       ContactInformation: {
         ContactName, EmailAddress, PrimaryTelephone, SecondaryTelephone
-      }
+      },
+      AdditionalLocationImages
     } = this.props.locationData
 
+    let gallery = {
+      'Gallery': AdditionalLocationImages.map((item, index) => {
+        return {
+          "name": item.Image,
+          "image": "deschutesBrewery",
+          "address": "210 NW 11th Ave, Portland, OR 97209",
+          "link": item.ImageUrl
+        }
+      })
+    }
 
     return (
       <GradientView style={[styles.linearGradient, { flex: 1 }]}>
@@ -312,7 +323,7 @@ export default class LocationInfo extends React.Component {
               <View style={styles.liveHelp}>
                 <Text style={styles.liveHelpPhone}>
                   {PrimaryTelephone}
-      </Text>
+                </Text>
                 <Text style={styles.liveHelpText}>
                   Text or call {ContactName} at anytime for directions, suspicious activity or any other concern,
         or email us via <Text style={styles.link} onPress={() => Linking.openURL('http://confcodeofconduct.com')}>{EmailAddress}</Text>.
@@ -344,7 +355,7 @@ export default class LocationInfo extends React.Component {
               </TouchableOpacity>
             </View>
             <Gallery
-              data={nearbyData}
+              data={{...nearbyData, ...gallery}}
               onItemPress={(link) => this.openLink(link)}
             />
           </View>

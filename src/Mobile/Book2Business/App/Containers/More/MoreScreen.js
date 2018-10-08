@@ -65,12 +65,12 @@ const data = [
     image: Images.locationIcon,
     target: 'ChangeLocation'
   },
-  {
+  /*{
     id: '5',
     title: 'Location',
     image: Images.inactiveLocationIcon,
     target: 'Location'
-  },
+  },*/
   {
     id: '6',
     title: 'About',
