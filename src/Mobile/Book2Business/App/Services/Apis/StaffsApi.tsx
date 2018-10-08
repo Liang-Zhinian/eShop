@@ -12,7 +12,7 @@ export default class StaffsApi extends Api {
 
   constructor() {
     const config = {
-      url: "http://localhost:55143/api/v1/staffs",
+      url: "http://isd4u.com:5143/api/v1/staffs",
       timeout: 10000,
     }
 

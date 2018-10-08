@@ -1,7 +1,7 @@
 
-const AuthUrl = 'http://localhost:55105'
+const AuthUrl = 'http://isd4u.com:5105'
 const AccessTokenUrl = `${AuthUrl}/connect/token`
-const SitesApiUrl = `http://localhost:55143/api/v1`
-const CatalogApiUrl = `http://localhost:55101/api/v1`
+const SitesApiUrl = `http://isd4u.com:5143/api/v1`
+const CatalogApiUrl = `http://isd4u.com:5101/api/v1`
 
 export {AuthUrl, AccessTokenUrl, SitesApiUrl, CatalogApiUrl}
