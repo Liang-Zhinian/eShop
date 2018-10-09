@@ -1,35 +1,35 @@
-import Store from '../Store/serviceItems'
+import Store from '../Store/staffSchedules'
 
 export const initialState = Store
 
-export default function serviceItemReducer (state = initialState, action) {
+export default function staffSchedulesReducer (state = initialState, action) {
   switch (action.type) {
-    case 'SERVICE_ITEMS_ERROR': {
+    case 'STAFF_SCHEDULES_ERROR': {
       return {
         ...state,
         loading: false,
         error: action.data
       }
     }
-    case 'SERVICE_ITEMS_REPLACE': {
-      let serviceItems = {}
+    case 'STAFF_SCHEDULES_REPLACE': {
+      let schedules = {}
 
       // Pick out the props I need
       if (action.data && typeof action.data === 'object') {
-        serviceItems = action.data
+        schedules = action.data
       }
 
       return {
         ...state,
         error: null,
         loading: false,
-        serviceItems
+        staffSchedules: schedules
       }
     }
-    case 'SET_SELECTED_SERVICE_ITEM': {
+    case 'SET_SELECTED_SCHEDULE_ITEM': {
       return {
         ...state,
-        selectedServiceItem: action.data
+        selectedScheduleItem: action.data
       }
     }
     default:

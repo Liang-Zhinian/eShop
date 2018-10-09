@@ -38,13 +38,6 @@ class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
-    var api = new Api({
-      url: "http://localhost:55105",
-      timeout: 10000,
-    });
-    api.setup();
-    var response = await api.apisauce.get(`/api/v1/values`)
-    console.log(response)
 
     // check if token was expired
     this.userToken = await retrieveToken()

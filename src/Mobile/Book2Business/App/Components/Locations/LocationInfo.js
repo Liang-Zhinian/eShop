@@ -13,6 +13,10 @@ import {
 } from 'react-native'
 import { Button, Icon } from 'native-base'
 import GradientView from '../GradientView'
+import Messages from '../Messages'
+import Loading from '../Loading'
+import Header from '../Header'
+import Spacer from '../Spacer'
 
 import VenueMap from '../VenueMap'
 import Gallery from '../Gallery'
@@ -253,6 +257,10 @@ export default class LocationInfo extends React.Component {
   }
 
   render() {
+    const { loading, error, success } = this.props
+    if (loading) return <Loading />
+    if (error) return <Messages message={error} />
+
     const { showRideOptions, showGalleryOptions } = this.state
     const { nearbyData } = this.props
     const { event } = Animated

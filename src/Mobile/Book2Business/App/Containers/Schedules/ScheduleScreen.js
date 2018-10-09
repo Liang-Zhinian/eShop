@@ -177,8 +177,6 @@ class ScheduleScreen extends Component {
   funcOrFalse = (func, val) => val ? () => func.call(this, val) : false
 
   renderItem = ({ item }) => {
-    // console.log('FlatList renderItem', item)
-    // if (!item) return null;
     const { isCurrentDay } = this.state
     const { currentTime, setReminder, removeReminder } = this.props
     const { eventDuration, eventStart, eventEnd, eventFinal, special } = item
@@ -290,11 +288,9 @@ export class AgendaScreen extends Component {
         }}
         items={this.state.agendaData}
         renderItem={(item) => {
-          console.log('Agenda renderItem', item)
           return <ScheduleScreen navigation={this.props.navigation} />
         }}
         loadItemsForMonth={(month) => {
-          console.log('Agenda loadItemsForMonth', month, this.state.agendaData)
           const time = month.timestamp
           const strTime = this.timeToString(time)
           if (!this.state.agendaData[strTime]) {
@@ -310,7 +306,6 @@ export class AgendaScreen extends Component {
               name: strTime
             })
           }
-          console.log('Agenda items', this.state.agendaData)
           const newItems = {}
           Object.keys(this.state.agendaData).forEach(key => { newItems[key] = this.state.agendaData[key] })
           this.setState({

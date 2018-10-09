@@ -38,7 +38,6 @@ const authorize = (email, password) => {
 }
 
 const refresh = (access_token, refresh_token) => {
-  console.log(access_token, refresh_token)
   return new Promise((resolve, reject) => {
     var data = `client_id=ro.client&client_secret=secret&refresh_token=${refresh_token}&grant_type=refresh_token`;
 
@@ -143,7 +142,6 @@ export default (function () {
 
       return api.getStaffByUserName(username)
         .then(res => {
-          console.log(res)
           if (res.kind == "ok")
             return resolve(res.data)
           else return reject(Error(res.kind))

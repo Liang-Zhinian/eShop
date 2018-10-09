@@ -63,7 +63,7 @@ export default class AgendaScreen extends Component {
           }
         }
       }
-      console.log(this.state.items)
+      
       const newItems = {}
       Object.keys(this.state.items).forEach(key => { newItems[key] = this.state.items[key] })
       this.setState({
