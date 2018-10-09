@@ -1,5 +1,5 @@
-import './App/Config/ReactotronConfig'
+import './Src/Config/ReactotronConfig'
 import { AppRegistry } from 'react-native'
-import App from './App/Containers/App'
+import App from './Src/Native/Containers/App'
 
 AppRegistry.registerComponent('ChainReactApp', () => App)
