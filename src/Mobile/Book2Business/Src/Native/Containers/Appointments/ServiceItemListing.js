@@ -6,7 +6,8 @@ import { Icon } from 'native-base'
 // import Icon from 'react-native-vector-icons/FontAwesome'
 
 import { Images } from '../../Themes'
-import { setSelectedServiceItem, getServiceItems, setError } from '../../../Actions/serviceItems'
+
+import { getServiceItems, setError } from '../../Actions/serviceItems'
 import styles from './Styles/AppointmentsScreenStyle'
 import List from '../../Components/List'
 import ListItem from '../../Components/ListItem'

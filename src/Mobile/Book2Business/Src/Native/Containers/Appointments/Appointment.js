@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 
 import Layout from '../../Components/Appointments/ServiceItem'
-import { getAppointment } from '../../../Actions/serviceItems'
 import Hamburger from '../../Components/Hamburger'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
+import { getAppointment } from '../../Actions/serviceItems'
 
 class Appointment extends Component {
   static propTypes = {
