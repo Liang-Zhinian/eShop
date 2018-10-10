@@ -1,0 +1,133 @@
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { ListView, RefreshControl, TouchableOpacity } from 'react-native'
+import {
+    Container,
+    Content,
+    Left,
+    Body,
+    Right,
+    Button,
+    Icon,
+    List,
+    ListItem,
+    Text
+} from 'native-base'
+// import { Actions } from 'react-native-router-flux';
+
+import Messages from '../Messages'
+import Loading from '../Loading'
+import Header from '../Header'
+import Spacer from '../Spacer'
+
+const dataArray = [
+    { title: 'Single', content: 'Lorem ipsum dolor sit amet' },
+    { title: 'Complimentary', content: 'Lorem ipsum dolor sit amet' },
+    { title: 'Redeemable', content: 'Lorem ipsum dolor sit amet' },
+    { title: 'Package', content: 'Lorem ipsum dolor sit amet' },
+    { title: 'Personal Training', content: 'Lorem ipsum dolor sit amet' }
+]
+
+const ServiceCategoryListing = ({
+    error,
+    loading,
+    serviceCategories,
+    reFetch
+}) => {
+    // Loading
+  if (loading) return <Loading />
+
+    // Error
+  if (error) return <Error content={error} />
+
+  const keyExtractor = item => item.id
+
+  const onPress = item => Actions.appointment_items({ match: { params: { id: String(item.id) } } })
+
+  const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+
+
+  return (
+    <Container>
+      <Content>
+
+        <List
+                    // leftOpenValue={75}
+          rightOpenValue={-75}
+          dataSource={ds.cloneWithRows(serviceCategories)}
+          renderRow={(item) => {
+            return <ListItem button onPress={() => onPress(item)}>
+              <Body>
+                <Text>{item.title}</Text>
+                <Text note numberOfLines={1}>{item.content}</Text>
+              </Body>
+              <Right>
+                <Button transparent>
+                  <Text>Rename</Text>
+                </Button>
+              </Right>
+            </ListItem>
+          }}
+          renderLeftHiddenRow={data => (
+            <Button full onPress={() => alert(data)}>
+              <Icon active name='information-circle' />
+            </Button>
+                    )}
+          renderRightHiddenRow={(data, secId, rowId, rowMap) => (
+            <Button full danger onPress={_ => {
+              rowMap[`${secId}${rowId}`].props.closeRow()
+              const newData = [...this.state.listViewData]
+              newData.splice(rowId, 1)
+              this.setState({ listViewData: newData })
+            }}>
+              <Icon active name='trash' />
+            </Button>
+                    )}
+
+          keyExtractor={keyExtractor}
+          refreshControl={(
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={reFetch}
+                        />
+                    )}
+                />
+
+      </Content>
+    </Container >
+  )
+}
+
+ServiceCategoryListing.propTypes = {
+  error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  serviceCategories: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  reFetch: PropTypes.func
+}
+
+ServiceCategoryListing.defaultProps = {
+  error: null,
+  reFetch: null,
+  ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }),
+  renderRow: (item) => {
+    return <ListItem thumbnail>
+      <Body>
+        <Text>{item.title}</Text>
+        <Text note numberOfLines={1}>{item.content}</Text>
+      </Body>
+      <Right>
+        <Button transparent>
+          <Text>Rename</Text>
+        </Button>
+      </Right>
+    </ListItem>
+  },
+  deleteRow: (secId, rowId, rowMap) => {
+    rowMap[`${secId}${rowId}`].props.closeRow()
+    const newData = [...this.state.listViewData]
+    newData.splice(rowId, 1)
+    this.setState({ listViewData: newData })
+  }
+}
+
+export default ServiceCategoryListing
