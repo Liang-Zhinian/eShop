@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Text, Image, View, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 
-import { Images } from '../../Themes'
 import Layout from '../../Components/Appointments/ServiceItem'
+<<<<<<< HEAD:src/Mobile/Book2Business/Src/Native/Containers/Appointments/Appointment.js
 import { getAppointment } from '../../../Actions/serviceItems'
 import Hamburger from '../../Components/Hamburger'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
+=======
+import { getAppointment } from '../../Actions/serviceItems'
+>>>>>>> parent of 690f502... add staff schedule screen:src/Mobile/Book2Business/App/Containers/Appointments/Appointment.js
 
 class Appointment extends Component {
   static propTypes = {
@@ -22,38 +25,25 @@ class Appointment extends Component {
     match: null
   }
 
-  static navigationOptions = ({ navigation }) => {
-    const { pressHamburger, icon } = navigation.state.params || {
-      pressHamburger: () => null,
-    }
-    return {
-      title: 'Appointment Type',
-      headerRight: (<Hamburger onPress={pressHamburger} />),
-      tabBarLabel: 'More',
-      tabBarIcon: ({ focused }) => (
-        <Image
-          source={
-            focused
-              ? Images.activeInfoIcon
-              : Images.inactiveInfoIcon
-          }
-        />
-      )
-    }
-  };
+  // static renderRightButton = (props) => {
+  //     return (
+  //         <TouchableOpacity
+  //             onPress={() => {
+  //                 Actions.appointment_category({ match: { params: { action: 'ADD' } } })
+  //             }}
+  //             style={{ marginRight: 10 }}>
+  //             <Icon name='add' />
+  //         </TouchableOpacity>
+  //     );
+  // }
 
   componentDidMount = () => {
-    this.props.navigation.setParams({
-      pressHamburger: this.pressHamburger.bind(this)
-    })
   }
 
   state = {
     errorMessage: null,
     successMessage: null
   }
-
-  animatedContainerWithNavbar = null;
 
   onFormSubmit = (data) => {
     // const { onFormSubmit } = this.props;
@@ -70,6 +60,7 @@ class Appointment extends Component {
       navigation
     } = this.props
 
+    console.log('UpdateAppointmentType', this.props)
     let appointmentType = appointmentTypes.selectedAppointmentType
     if (!appointmentType) {
       appointmentType = { ServiceCategoryId: serviceCategories.selectedCategory.id }
@@ -82,37 +73,14 @@ class Appointment extends Component {
     const { successMessage, errorMessage } = this.state
 
     return (
-
-      <AnimatedContainerWithNavbar
-        ref={ref => this.animatedContainerWithNavbar = ref}
-        menuPosition='right'
-        content={(
-          <Layout
-            appointmentType={appointmentType}
-            loading={isLoading}
-            error={errorMessage}
-            success={successMessage}
-            onFormSubmit={this.onFormSubmit}
-          />
-        )}
-        // content={(<View />)}
-        menu={[{
-          text: 'Schedules',
-          onPress: () => {
-            console.log(this)
-            this.props.navigation.navigate('StaffScheduleListing')
-          }
-        }]}
+      <Layout
+        appointmentType={appointmentType}
+        loading={isLoading}
+        error={errorMessage}
+        success={successMessage}
+        onFormSubmit={this.onFormSubmit}
       />
     )
-  }
-
-  pressHamburger(isMenuOpen) {
-    if (!isMenuOpen) {
-      this.animatedContainerWithNavbar.closeMenu()
-    } else {
-      this.animatedContainerWithNavbar.showMenu()
-    }
   }
 }
 
@@ -128,14 +96,3 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointment)
-
-const styles = StyleSheet.create({
-
-  textFooter: {
-    color: '#fff'
-  },
-  menutext: {
-    fontSize: 20,
-    padding: 10
-  },
-})

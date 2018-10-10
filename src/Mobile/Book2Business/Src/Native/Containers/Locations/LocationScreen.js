@@ -139,18 +139,12 @@ class LocationScreen extends Component {
 
   render () {
     const { locations, member, nearbyData, navigation } = this.props
-
-
+console.log(locations)
     return (
       <AnimatedContainerWithNavbar
         ref={ref => this.animatedContainerWithNavbar = ref}
         menuPosition='right'
-        content={(<Layout 
-          nearbyData={nearbyData} 
-          locationData={locations.currentLocation} 
-          navigation={navigation}
-          error={locations.error}
-          loading={locations.loading} />)}
+        content={(<Layout nearbyData={nearbyData} locationData={locations.currentLocation} navigation={navigation} />)}
         // content={(<View />)}
         menu={(
           <View>

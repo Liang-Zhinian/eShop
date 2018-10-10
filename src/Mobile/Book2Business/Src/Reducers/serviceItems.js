@@ -26,12 +26,6 @@ export default function serviceItemReducer (state = initialState, action) {
         serviceItems
       }
     }
-    case 'SET_SELECTED_SERVICE_ITEM': {
-      return {
-        ...state,
-        selectedServiceItem: action.data
-      }
-    }
     default:
       return state
   }

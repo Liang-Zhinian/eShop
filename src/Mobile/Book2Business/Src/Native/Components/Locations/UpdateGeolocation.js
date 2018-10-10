@@ -108,6 +108,7 @@ class UpdateGeolocation extends React.Component {
               initialRegion={{ title: location.Name, latitude, longitude, latitudeDelta: 0.05, longitudeDelta: 0.01 }}
               locations={[{ title: location.Name, latitude, longitude }]}
               handePickButton={({location}) => {
+                console.log('handePickButton', location)
                 this.setState({
                   latitude: '' + location.latitude,
                   longitude: '' + location.longitude

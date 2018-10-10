@@ -141,6 +141,7 @@ class StaffsScreen extends Component {
 
   componentWillReceiveProps (newProps) {
     const { staffs } = newProps
+    console.log(staffs)
 
     this.setState({data: staffs.staffs})
   }
@@ -164,6 +165,9 @@ class StaffsScreen extends Component {
   funcOrFalse = (func, val) => val ? () => func.call(this, val) : false
 
   renderItem = ({ item }) => {
+    console.log('FlatList renderItem', item)
+    // if (!item) return null;
+
     return (
       <Staff
         type={'talk'}
@@ -200,6 +204,7 @@ class StaffsScreen extends Component {
   render () {
     const { data } = this.state
     const { navigation } = this.props
+    console.log(this.props)
 
     return (
       <AnimatedContainerWithNavbar

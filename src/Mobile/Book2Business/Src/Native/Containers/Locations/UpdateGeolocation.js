@@ -58,6 +58,7 @@ class UpdateGeolocation extends Component {
       isLoading
     } = this.props
 
+    // console.log(this.props)
     const { successMessage, errorMessage } = this.state
 
     return (

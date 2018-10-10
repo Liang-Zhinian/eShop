@@ -46,10 +46,3 @@ export function getServiceItems(siteId, serviceCategoryId, pageSize, pageIndex) 
 export function updateServiceItem() {
 
 }
-
-export const setSelectedServiceItem = (item) => {
-  return dispatch => new Promise(resolve => resolve(dispatch({
-    type: 'SET_SELECTED_SERVICE_ITEM',
-    data: item
-  })))
-}

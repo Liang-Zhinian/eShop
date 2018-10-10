@@ -6,7 +6,11 @@ import { Icon } from 'native-base'
 // import Icon from 'react-native-vector-icons/FontAwesome'
 
 import { Images } from '../../Themes'
+<<<<<<< HEAD:src/Mobile/Book2Business/Src/Native/Containers/Appointments/ServiceItemListing.js
 import { setSelectedServiceItem, getServiceItems, setError } from '../../../Actions/serviceItems'
+=======
+import { getServiceItems, setError } from '../../Actions/serviceItems'
+>>>>>>> parent of 690f502... add staff schedule screen:src/Mobile/Book2Business/App/Containers/Appointments/ServiceItemListing.js
 import styles from './Styles/AppointmentsScreenStyle'
 import List from '../../Components/List'
 import ListItem from '../../Components/ListItem'
@@ -52,48 +56,48 @@ class ServiceItemListing extends Component {
     }
   };
 
-  constructor(props) {
+  constructor (props) {
     super(props)
   }
 
-  // static renderRightButton = (props) => {
-  //   return (
-  //     <TouchableOpacity
-  //       onPress={() => { Actions.appointment_category({ match: { params: { action: 'ADD' } } }) }}
-  //       style={{ marginRight: 10 }}>
-  //       <Icon name='add' />
-  //     </TouchableOpacity>
-  //   )
-  // }
+  static renderRightButton = (props) => {
+    return (
+      <TouchableOpacity
+        onPress={() => { Actions.appointment_category({ match: { params: { action: 'ADD' } } }) }}
+        style={{ marginRight: 10 }}>
+        <Icon name='add' />
+      </TouchableOpacity>
+    )
+  }
 
   componentDidMount = () => {
     this.fetchServiceItems();
-
+    
     this.props.navigation.setParams({
       handleAddButton: this.handleAddButton.bind(this)
     })
   }
 
-  /**
-    * Fetch Data from API, saving to Redux
-    */
+    /**
+      * Fetch Data from API, saving to Redux
+      */
   fetchServiceItems = () => {
     const { member, fetchServiceItems, showError, match } = this.props
     const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
-    
     return fetchServiceItems(member.SiteId, serviceCategoryId, 10, 0)
-      .catch((err) => {
-        console.log(`Error: ${err}`)
-        return showError(err)
-      })
+            //   .then(() => fetchMeals())
+            .catch((err) => {
+              console.log(`Error: ${err}`)
+              return showError(err)
+            })
   }
 
   render = () => {
     const { serviceItems, match } = this.props
-
-    const id = (match && match.params && match.params.id) ? match.params.id : null
     
-    let listViewData = serviceItems.serviceItems ? serviceItems.serviceItems.Data : null
+    const id = (match && match.params && match.params.id) ? match.params.id : null
+
+    let listViewData = serviceItems.serviceItems.Data
 
     return (
 
@@ -109,33 +113,31 @@ class ServiceItemListing extends Component {
         serviceItemId={id}
         error={serviceItems.error}
         loading={serviceItems.loading}
-      />
+            />
     )
   }
 
-  _renderRow({ item }) {
+  _renderRow ({ item }) {
     return (
       <ListItem
         name={item.Name}
         title={item.Description}
         onPress={() => {
-          const { navigation, setSelectedItem } = this.props
-          setSelectedItem(item)
+          const { navigation } = this.props
           navigation.navigate('AppointmentType', { AppointmentType: item })
         }}
         onPressEdit={() => {
-          const { navigation, setSelectedItem } = this.props
-          setSelectedItem(item)
+          const { navigation } = this.props
           navigation.navigate('AppointmentType', { AppointmentType: item })
         }}
         onPressRemove={() => {
           const { navigation } = this.props
-          //   navigation.navigate('AppointmentListing', { id: item.id })
+                //   navigation.navigate('AppointmentListing', { id: item.id })
         }} />
     )
   }
 
-  handleAddButton() {
+  handleAddButton(){
     const { member, fetchServiceItems, showError, match, navigation } = this.props
     const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
 
@@ -151,8 +153,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = {
   fetchServiceItems: getServiceItems,
-  showError: setError,
-  setSelectedItem: setSelectedServiceItem
+  showError: setError
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceItemListing)

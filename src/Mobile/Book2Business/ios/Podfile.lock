@@ -52,28 +52,22 @@ DEPENDENCIES:
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - AppAuth
-    - QBImagePickerController
-    - RSKImageCropper
-
 EXTERNAL SOURCES:
   React:
-    :path: "../node_modules/react-native"
+    :path: ../node_modules/react-native
   RNImageCropPicker:
-    :path: "../node_modules/react-native-image-crop-picker"
+    :path: ../node_modules/react-native-image-crop-picker
   yoga:
-    :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
+    :path: ../node_modules/react-native/ReactCommon/yoga/yoga.podspec
 
 SPEC CHECKSUMS:
   AppAuth: 0f099c2286a1a9754e5bd27211c43d307dc4f778
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
-  React: aa2040dbb6f317b95314968021bd2888816e03d5
-  RNImageCropPicker: 32ca4b9fef4e1b7b85ba69494242122948117e06
+  React: 755b16d9a9387e856d4dce6528130c51e4d409b8
+  RNImageCropPicker: 287fc8b372e49855fd00470393005fca674628f3
   RSKImageCropper: bd0bdf765b27c046c89728d65075b363a3b665c2
-  yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
+  yoga: c3ce6137f85f60c93a834235d7f08e2b44a42eed
 
 PODFILE CHECKSUM: b0c6f820537a3c39a79136b3619ba377cace5f10
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.3.1

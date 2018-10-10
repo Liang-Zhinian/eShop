@@ -64,6 +64,8 @@ function getUserData(dispatch) {
 
   return book2.getUserData(UID)
     .then((userData) => {
+      // dispatch(getLocationsStaffCanSignIn(userData.SiteId, userData.Id))
+      console.log('staff returns', userData)
       dispatch({
         type: 'USER_LOGIN_LOCATIONS',
         data: {
@@ -106,6 +108,7 @@ export function login(formData) {
     password
   } = formData
 
+  console.log('logging in', formData)
 
   return dispatch => new Promise(async (resolve, reject) => {
     await statusMessage(dispatch, 'loading', true)
