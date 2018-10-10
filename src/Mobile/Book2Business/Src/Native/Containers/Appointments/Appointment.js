@@ -5,17 +5,9 @@ import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 
 import Layout from '../../Components/Appointments/ServiceItem'
-<<<<<<< HEAD:src/Mobile/Book2Business/Src/Native/Containers/Appointments/Appointment.js
-<<<<<<< HEAD:src/Mobile/Book2Business/Src/Native/Containers/Appointments/Appointment.js
 import { getAppointment } from '../../../Actions/serviceItems'
 import Hamburger from '../../Components/Hamburger'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
-=======
-import { getAppointment } from '../../Actions/serviceItems'
->>>>>>> parent of 690f502... add staff schedule screen:src/Mobile/Book2Business/App/Containers/Appointments/Appointment.js
-=======
-import { getAppointment } from '../../Actions/serviceItems'
->>>>>>> parent of 690f502... add staff schedule screen:src/Mobile/Book2Business/App/Containers/Appointments/Appointment.js
 
 class Appointment extends Component {
   static propTypes = {

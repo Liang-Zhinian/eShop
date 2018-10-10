@@ -6,15 +6,7 @@ import { Icon } from 'native-base'
 // import Icon from 'react-native-vector-icons/FontAwesome'
 
 import { Images } from '../../Themes'
-<<<<<<< HEAD:src/Mobile/Book2Business/Src/Native/Containers/Appointments/ServiceItemListing.js
-<<<<<<< HEAD:src/Mobile/Book2Business/Src/Native/Containers/Appointments/ServiceItemListing.js
 import { setSelectedServiceItem, getServiceItems, setError } from '../../../Actions/serviceItems'
-=======
-import { getServiceItems, setError } from '../../Actions/serviceItems'
->>>>>>> parent of 690f502... add staff schedule screen:src/Mobile/Book2Business/App/Containers/Appointments/ServiceItemListing.js
-=======
-import { getServiceItems, setError } from '../../Actions/serviceItems'
->>>>>>> parent of 690f502... add staff schedule screen:src/Mobile/Book2Business/App/Containers/Appointments/ServiceItemListing.js
 import styles from './Styles/AppointmentsScreenStyle'
 import List from '../../Components/List'
 import ListItem from '../../Components/ListItem'
