@@ -6,7 +6,7 @@ import { Icon } from 'native-base'
 
 import { Images } from '../../Themes'
 import { getLocation } from '../../Actions/locations'
-import Layout from '../../Components/Locations/UpdateAddress'
+import Layout from './Components/UpdateAddress'
 
 class UpdateAddress extends Component {
   static propTypes = {

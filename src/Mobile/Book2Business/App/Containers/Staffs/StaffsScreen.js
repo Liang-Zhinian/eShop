@@ -17,7 +17,7 @@ import {
 } from 'react-native'
 import GradientView from '../../Components/GradientView'
 import DayToggle from '../../Components/DayToggle'
-import Staff from '../../Components/Staffs/Staff'
+import Staff from './Components/Staff'
 import Break from '../../Components/Break'
 import ScheduleActions from '../../Redux/ScheduleRedux'
 import * as StaffActions from '../../Actions/staffs'

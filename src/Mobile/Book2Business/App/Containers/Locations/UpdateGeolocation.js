@@ -6,7 +6,7 @@ import { Icon } from 'native-base'
 // import { Actions } from 'react-native-router-flux';
 
 import { Images } from '../../Themes'
-import Layout from '../../Components/Locations/UpdateGeolocation'
+import Layout from './Components/UpdateGeolocation'
 
 class UpdateGeolocation extends Component {
   static propTypes = {

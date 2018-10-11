@@ -8,8 +8,8 @@ export default StyleSheet.create({
         backgroundColor: Colors.snow,
     },
     container:{
-
-        alignItems: 'center',
+        flex: 1,
+        // justifyContent: 'space-around',
     },
     header: {
         backgroundColor: Colors.snow,
@@ -26,7 +26,11 @@ export default StyleSheet.create({
         paddingHorizontal: 17.5,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: Colors.snow,
+        borderBottomWidth: 0.5,
+        borderBottomColor: Colors.cloud,
+        marginVertical: 9,
         alignItems: 'center',
+        // justifyContent: 'center',
     },
     button: {
         marginHorizontal: 16,
@@ -37,5 +41,13 @@ export default StyleSheet.create({
     primary: {
         color: Colors.redShadow,
         fontWeight: 'bold'
+    },
+    inputContainer: {
+        flex: 1,
+        marginLeft: 16,
+        alignItems: 'flex-end',
+    },
+    segmentButton: {
+        padding: '2%'
     }
 });

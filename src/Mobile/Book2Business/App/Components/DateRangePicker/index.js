@@ -41,6 +41,7 @@ export default class ImageCropperButton extends React.Component {
                         <Image
                             style={[styles.getRideIcon, showSingleDateOptions && styles.flip]}
                             source={Images.chevronIcon}
+                            esizeMode='cover'
                         />
                     </View>
                 </TouchableOpacity>

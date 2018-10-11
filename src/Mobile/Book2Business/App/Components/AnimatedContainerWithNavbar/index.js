@@ -1,75 +1,45 @@
 
 import React, { Component } from 'react'
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
   View,
   Animated,
-  ListView,
-  Image,
   Dimensions,
-  AlertIOS,
-  TouchableOpacity,
-  TouchableHighlight,
-  TouchableWithoutFeedback
 } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
-import Icon from 'react-native-vector-icons/FontAwesome'
 
-import recipes from '../data'
-import NavBar from '../Navbar'
 import styles from './Styles'
 import MenuItem from './MenuItem'
 
 export default class AnimatedContainerWithNavbar extends Component {
   constructor() {
     super()
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 
     this.state = {
-      like: false,
       loaded: false,
       anim: new Animated.Value(0),
       anim_rotateY: new Animated.Value(0),
       anim_translateX: new Animated.Value(width),
       isMenuOpen: false,
       menuAnimate: new Animated.Value(0),
-      dataSource: ds.cloneWithRows(recipes)
-      // icon: 'bars'
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.setState({ isMenuOpen: nextProps || false });
   }
 
   componentDidMount() {
     this.setState({
       loaded: true
     })
-
-    // this.props.navigation.setParams({
-    //     icon: 'bars',
-    //     pressMenu: this.toggleMenu.bind(this)
-    // })
   }
 
   toggleMenu() {
-    // let icon = 'times';
-    // let pressMenu = this.showMenu.bind(this);
     if (this.state.isMenuOpen) {
-      // icon = 'bars';
       this.closeMenu()
     } else {
-      // icon = 'times';
       this.showMenu()
     }
-
-    // this.props.navigation.setParams({
-    //     icon
-    // })
   }
 
   showMenu() {
@@ -136,7 +106,7 @@ export default class AnimatedContainerWithNavbar extends Component {
       outputRange: ['0deg', '10deg']
     }
 
-    if (this.props.menuPosition == 'left') {
+    if (menuPosition == 'left') {
       anim_translateX = {
         inputRange: [0, width],
         outputRange: [width, 0]
@@ -151,8 +121,8 @@ export default class AnimatedContainerWithNavbar extends Component {
     let menu = null
     if (this.props.menu) {
       if (this.props.menu instanceof Array) {
-        menu = this.props.menu.map(item => {
-          return <MenuItem onPress={item.onPress} text={item.text} />
+        menu = this.props.menu.map((item, index) => {
+          return <MenuItem key={`${index}`} onPress={item.onPress} text={item.text} />
         })
       }
       else //if (this.props.menu instanceof Component){
@@ -175,14 +145,7 @@ export default class AnimatedContainerWithNavbar extends Component {
           }
           ]
         }]}>
-          {/* this.state.isMenuOpen ? <NavBar icon="times" pressMenu={this.closeMenu.bind(this)} />
-                        : <NavBar icon="bars" pressMenu={this.showMenu.bind(this)} />
-            */}
-
-          {/* {this.state.isMenuOpen ? this.props.content
-                        : (<TouchableWithoutFeedback> */}
           {this.props.content}
-          {/* </TouchableWithoutFeedback>)} */}
         </Animated.View>
         <Animated.View style={{ opacity: this.state.menuAnimate, position: 'absolute', width: 200, right: 0, top: 120, backgroundColor: 'transparent' }}>
           <View>

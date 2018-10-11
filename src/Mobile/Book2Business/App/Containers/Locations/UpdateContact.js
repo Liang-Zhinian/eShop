@@ -6,7 +6,7 @@ import { Icon } from 'native-base'
 // import { Actions } from 'react-native-router-flux';
 
 import { Images } from '../../Themes'
-import Layout from '../../Components/Locations/UpdateContact'
+import Layout from './Components/UpdateContact'
 
 class UpdateContact extends Component {
   static propTypes = {

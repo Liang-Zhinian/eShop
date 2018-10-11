@@ -1,5 +1,5 @@
 import { StackNavigator } from 'react-navigation'
-import LoginScreen from '../Containers/LoginScreen'
+import LoginScreen from '../Containers/Member/LoginScreen'
 
 import styles from './Styles/NavigationStyles'
 

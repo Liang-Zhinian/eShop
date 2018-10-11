@@ -4,24 +4,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import styles from './Styles/NavigationStyles'
 
-import { Images } from '../Themes'
-import ScheduleScreen from '../Containers/Schedules/ScheduleScreen'
-import TalkDetailScreen from '../Containers/TalkDetailScreen'
-import BreakDetailScreen from '../Containers/BreakDetailScreen'
-
+import ScheduleStack from './Stacks/ScheduleStack'
 import ClientsStack from './Stacks/ClientsStack'
 import ReportsStack from './Stacks/ReportsStack'
 import MoreStack from './Stacks/MoreStack'
 
-const ScheduleStack = StackNavigator({
-  Home: { screen: ScheduleScreen },
-  TalkDetail: { screen: TalkDetailScreen },
-  BreakDetail: { screen: BreakDetailScreen }
-}, {
-  headerMode: 'none',
-  initialRouteName: 'Home',
-  cardStyle: styles.card
-})
+
 
 const TabNav = TabNavigator(
   {

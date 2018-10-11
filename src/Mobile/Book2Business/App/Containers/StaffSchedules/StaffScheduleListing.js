@@ -108,8 +108,8 @@ class StaffScheduleListing extends Component {
   }
 
   handleAddButton() {
-    const { member, selectedServiceItem, showError, navigation } = this.props
-    
+    const { navigation } = this.props
+    navigation.navigate('StaffSchedule')
   }
 }
 

@@ -1,34 +1,14 @@
 
 import React, { Component } from 'react'
-import { AppState, View, Image, FlatList, ScrollView, Button } from 'react-native'
-import GradientView from '../../Components/GradientView'
+import { AppState, Image, Button } from 'react-native'
 import {
-  compareAsc,
-  isSameDay,
-  addMinutes,
-  isWithinRange,
-  subMilliseconds
-} from 'date-fns'
-import {
-  merge,
-  groupWith,
-  contains,
-  assoc,
-  map,
   sum,
-  findIndex
 } from 'ramda'
-import {
-  Container, Content, List, ListItem, Body, Left, Text, Icon
-} from 'native-base'
 import { connect } from 'react-redux'
-import NotificationActions from '../../Redux/NotificationRedux'
-import Config from '../../Config/AppConfig'
 import { Images } from '../../Themes'
-import styles from './Styles/QuickDevScreenStyle'
 import Link from '../../Components/Link'
-import LocationPickerButton from '../../Components/Locations/LocationPickerButton'
-import ImageCropperButton from '../../Components/Locations/ImageCropperButton'
+import LocationPickerButton from '../../Components/LocationPickerButton'
+import ImageCropperButton from '../../Components/ImageCropperButton'
 import switchTheme from '../../Actions/theme'
 import MainContainer from '../MainContainer'
 
@@ -101,6 +81,8 @@ class QuickDevScreen extends Component {
         <ImageCropperButton
           handePickButton={(image) => {
           }} />
+
+          <Button title='Staff Schedule' onPress={() => { this.props.navigation.navigate('StaffSchedule') }} />
 
         <Button title='Switch theme' onPress={() => { this.props.switchTheme('Lite') }} />
       </MainContainer>

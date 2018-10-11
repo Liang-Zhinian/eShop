@@ -2,8 +2,8 @@ import status from './status'
 import member from './member'
 import locale from './locale'
 import locations from './locations'
-import appointmentCategories from './serviceCategories'
-import serviceItems from './serviceItems'
+import appointmentCategories from './appointmentCategories'
+import appointmentTypes from './appointmentTypes'
 import staffs from './staffs'
 import nearby from './nearby'
 import theme from './theme'
@@ -26,6 +26,6 @@ export default {
   locale,
   locations,
   appointmentCategories,
-  serviceItems,
+  appointmentTypes,
   staffs
 }

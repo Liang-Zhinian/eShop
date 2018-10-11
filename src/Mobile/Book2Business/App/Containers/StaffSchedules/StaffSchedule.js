@@ -8,7 +8,7 @@ import {
     //   TextInput,
 } from 'react-native';
 import {
-    Container, Content, Body, ListItem, Form, Item, Label, Input, CheckBox, Button, Switch
+    Label, Button, Switch, Segment
 } from 'native-base'
 
 import Messages from '../../Components/Messages'
@@ -108,6 +108,7 @@ class StaffSchedule extends React.Component {
             Saturday,
 
         } = this.state
+
         return (
             <ScrollView style={styles.root}>
                 <KeyboardAvoidingView behavior='padding' style={styles.container}>
@@ -120,7 +121,9 @@ class StaffSchedule extends React.Component {
                         </View>
                         <View style={styles.row}>
                             <Label>Availability</Label>
-                            <Switch value={IsAvailability} onValueChange={v => this.handleChange('IsAvailability', v)} />
+                            <View style={styles.inputContainer}>
+                                <Switch value={IsAvailability} onValueChange={v => this.handleChange('IsAvailability', v)} />
+                            </View>
                         </View>
                     </View>
                     <View style={styles.section}>
@@ -129,15 +132,43 @@ class StaffSchedule extends React.Component {
                         </View>
                         <View style={styles.row}>
                             <Label>Date Range</Label>
-                            <DateRangePicker />
+                            <View style={styles.inputContainer}>
+                                <DateRangePicker />
+                            </View>
                         </View>
                         <View style={styles.row}>
                             <Label>Days</Label>
-
+                            <View style={styles.inputContainer}>
+                                <Segment>
+                                    <Button first style={styles.segmentButton}>
+                                        <Text>Sun</Text>
+                                    </Button>
+                                    <Button style={styles.segmentButton}>
+                                        <Text>Mon</Text>
+                                    </Button>
+                                    <Button active style={styles.segmentButton}>
+                                        <Text>Tue</Text>
+                                    </Button>
+                                    <Button style={styles.segmentButton}>
+                                        <Text>Wed</Text>
+                                    </Button>
+                                    <Button active style={styles.segmentButton}>
+                                        <Text>Thu</Text>
+                                    </Button>
+                                    <Button style={styles.segmentButton}>
+                                        <Text>Fri</Text>
+                                    </Button>
+                                    <Button last style={styles.segmentButton}>
+                                        <Text>Sat</Text>
+                                    </Button>
+                                </Segment>
+                            </View>
                         </View>
                         <View style={styles.row}>
                             <Label>Time</Label>
-
+                            <View style={styles.inputContainer}>
+                                <DateRangePicker />
+                            </View>
                         </View>
                     </View>
                     <RoundedButton style={styles.button} text='SAVE' />

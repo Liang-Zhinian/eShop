@@ -6,14 +6,14 @@ import { Icon } from 'native-base'
 
 import { Images } from '../../Themes'
 import Layout from './Components/AppointmentType'
-import { getAppointment } from '../../Actions/serviceItems'
+import { updateAppointmentType } from '../../Actions/appointmentTypes'
 import Hamburger from '../../Components/Hamburger'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
 
 class Appointment extends Component {
   static propTypes = {
     appointmentTypes: PropTypes.shape({}).isRequired,
-    serviceCategories: PropTypes.shape({}).isRequired,
+    appointmentCategories: PropTypes.shape({}).isRequired,
     onFormSubmit: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired
   }
@@ -65,14 +65,14 @@ class Appointment extends Component {
   render = () => {
     const {
       appointmentTypes,
-      serviceCategories,
+      appointmentCategories,
       isLoading,
       navigation
     } = this.props
 
     let appointmentType = appointmentTypes.selectedAppointmentType
     if (!appointmentType) {
-      appointmentType = { ServiceCategoryId: serviceCategories.selectedCategory.id }
+      appointmentType = { ServiceCategoryId: appointmentCategories.selectedAppointmentCategory.Id }
     }
 
     let passedInAppointmentType = navigation.getParam('AppointmentType');
@@ -95,7 +95,6 @@ class Appointment extends Component {
             onFormSubmit={this.onFormSubmit}
           />
         )}
-        // content={(<View />)}
         menu={[{
           text: 'Schedules',
           onPress: () => {
@@ -117,25 +116,14 @@ class Appointment extends Component {
 }
 
 const mapStateToProps = state => ({
-  appointmentTypes: state.serviceItems || {},
-  serviceCategories: state.serviceCategories || {},
+  appointmentTypes: state.appointmentTypes || {},
+  appointmentCategories: state.appointmentCategories || {},
   isLoading: state.status.loading || false
 })
 
 const mapDispatchToProps = {
-  getAppointment: getAppointment,
-  onFormSubmit: function () { }
+  onFormSubmit: updateAppointmentType
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointment)
 
-const styles = StyleSheet.create({
-
-  textFooter: {
-    color: '#fff'
-  },
-  menutext: {
-    fontSize: 20,
-    padding: 10
-  },
-})

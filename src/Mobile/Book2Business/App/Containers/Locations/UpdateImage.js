@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 
 import { Images } from '../../Themes'
-import Layout from '../../Components/Locations/UpdateImage'
+import Layout from './Components/UpdateImage'
 
 class UpdateImage extends Component {
   static propTypes = {

@@ -6,7 +6,7 @@ export default StyleSheet.create({
   headingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40
+    // marginTop: 40
   },
   mainHeading: {
     fontFamily: 'Montserrat-SemiBold',
@@ -38,7 +38,9 @@ export default StyleSheet.create({
     color: Colors.darkPurple
   },
   getRideIcon: {
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    width: 15,
+    height: 15,
   },
   rideButton: {
     margin: 1.2 * Metrics.smallMargin
@@ -53,7 +55,7 @@ export default StyleSheet.create({
     margin: 10
   },
 
-  singleDateOptions:{
+  singleDateOptions: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 0,
@@ -65,7 +67,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 5
   },
-  dateRangeOptions:{
+  dateRangeOptions: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 0,

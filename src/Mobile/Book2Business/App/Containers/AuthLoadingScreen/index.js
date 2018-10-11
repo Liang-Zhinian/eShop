@@ -68,13 +68,14 @@ class AuthLoadingScreen extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { member } = nextProps
-    console.log('member', member)
     if (this.userToken && member.uid && member.currentLocation) this.props.navigation.navigate('App')
     else this.props.navigation.navigate('Auth')
   }
 
   // Render any loading content that you like here
   render() {
+    const { locations } = this.props
+    console.log('locations', locations)
     return (
       <Wallpaper>
         {/* <Image style={{flex: 1, resizeMode: 'contain'}} source={require('./images/background.jpg')} /> */}
@@ -87,7 +88,8 @@ class AuthLoadingScreen extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  member: state.member,
+  member: state.member || {},
+  locations: state.locations || {}
 })
 
 const mapDispatchToProps = (dispatch) => ({

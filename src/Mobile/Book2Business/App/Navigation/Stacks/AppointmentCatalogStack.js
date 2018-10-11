@@ -5,10 +5,13 @@ import AppointmentCategoryListingScreen from '../../Containers/AppointmentCatalo
 import AppointmentTypeListingScreen from '../../Containers/AppointmentCatalog/AppointmentTypeListing'
 import AppointmentTypeScreen from '../../Containers/AppointmentCatalog/AppointmentType'
 import StaffScheduleListingScreen from '../../Containers/StaffSchedules/StaffScheduleListing'
+import StaffScheduleScreen from '../../Containers/StaffSchedules/StaffSchedule'
+
 
 export default CreateStackNavigator({
   AppointmentCategoryListing: { screen: AppointmentCategoryListingScreen },
   AppointmentTypeListing: { screen: AppointmentTypeListingScreen },
   AppointmentType: { screen: AppointmentTypeScreen },
-  StaffScheduleListing: {screen: StaffScheduleListingScreen}
+  StaffScheduleListing: {screen: StaffScheduleListingScreen},
+  StaffSchedule: {screen: StaffScheduleScreen}
 }, 'screen')

@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { Image } from 'react-native'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-import { setSelectedCategory, getServiceCategories, setError } from '../../Actions/serviceCategories'
-import Layout from './Components/AppointmentCategoryListing'
+import { Images } from '../../Themes'
+import styles from './Styles/AppointmentsScreenStyle'
+import List from '../../Components/List/List'
+import ListItem from '../../Components/List/ListItem'
+import BackButton from '../../Components/BackButton'
 
+import { setSelectedAppointmentCategory, getAppointmentCategories, setError } from '../../Actions/appointmentCategories'
 
 class AppointmentCategoryListing extends Component {
   static propTypes = {
@@ -20,10 +25,61 @@ class AppointmentCategoryListing extends Component {
       }).isRequired,
     }).isRequired,
     fetchAppointmentCategories: PropTypes.func.isRequired,
+    setSelectedAppointmentCategory: PropTypes.func.isRequired,
     showError: PropTypes.func.isRequired,
   }
 
+  static defaultProps = {
+    error: null,
+    reFetch: null,
+  }
+
+  static navigationOptions = ({ navigation }) => ({
+    tabBarLabel: 'More',
+    tabBarIcon: ({ focused }) => (
+      <Image
+        source={
+          focused
+            ? Images.activeInfoIcon
+            : Images.inactiveInfoIcon
+        }
+      />
+    ),
+    title: 'Appointment Categories',
+    headerMode: 'screen',
+    headerBackTitleVisible: true,
+    headerLeft: (
+      <BackButton navigation={navigation} />
+    )
+  })
+
+  constructor(props) {
+    super(props)
+    this.state = {
+    }
+  }
+
   componentDidMount = () => this.fetchAppointmentCategories();
+
+  render = () => {
+    const { appointmentCategories, navigation } = this.props;
+    
+    const keyExtractor = item => item.Id;
+
+    return (
+      <List
+        headerTitle='Appointment categories'
+        data={appointmentCategories.appointmentCategories.Data}
+        renderItem={this._renderRow.bind(this)}
+        keyExtractor={keyExtractor}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        reFetch={this.fetchAppointmentCategories}
+        error={appointmentCategories.error}
+        loading={appointmentCategories.loading}
+      />
+    )
+  }
 
   /**
     * Fetch Data from API, saving to Redux
@@ -38,18 +94,26 @@ class AppointmentCategoryListing extends Component {
       })
   }
 
-  render = () => {
-    const { appointmentCategories, navigation } = this.props;
-
+  _renderRow({ item }) {
     return (
-      <Layout
-        error={appointmentCategories.error}
-        loading={appointmentCategories.loading}
-        appointmentCategories={appointmentCategories.appointmentCategories.Data}
-        reFetch={() => this.fetchServiceCategories()}
-        navigation={navigation}
-      />
-    );
+      <ListItem
+        name={item.Name}
+        title={item.Description}
+        onPress={() => {
+          const { navigation, setSelectedAppointmentCategory } = this.props
+          setSelectedAppointmentCategory(item)
+          navigation.navigate('AppointmentTypeListing', { id: item.Id })
+        }}
+        onPressEdit={() => {
+          const { navigation, setSelectedAppointmentCategory } = this.props
+          setSelectedAppointmentCategory(item)
+          navigation.navigate('AppointmentTypeListing', { id: item.Id })
+        }}
+        onPressRemove={() => {
+          const { navigation } = this.props
+          navigation.navigate('AppointmentTypeListing', { id: item.Id })
+        }} />
+    )
   }
 }
 
@@ -59,9 +123,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  fetchAppointmentCategories: getServiceCategories,
+  fetchAppointmentCategories: getAppointmentCategories,
   showError: setError,
-  setSelectedEvent: setSelectedCategory
+  setSelectedAppointmentCategory: setSelectedAppointmentCategory
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppointmentCategoryListing);

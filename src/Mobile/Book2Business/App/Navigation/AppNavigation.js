@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { StackNavigator, SwitchNavigator } from 'react-navigation'
+import { SwitchNavigator } from 'react-navigation'
 
 import LoadingScreen from '../Containers/AuthLoadingScreen'
 import LoggedInStackNavigator from './LoggedInStackNavigator'
