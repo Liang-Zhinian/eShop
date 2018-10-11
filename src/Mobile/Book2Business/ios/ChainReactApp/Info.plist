@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Book2 Business</string>
+	<string>Book2 Shop</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>52</string>
+	<string>53</string>
 	<key>CodePushDeploymentKey</key>
 	<string>HkqgbYEwKuPKbic2SrdtnJaL8GPt756512e3-04b4-4113-83a7-d7f81b62aa12</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
