@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
 using SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.Events.Staffs;
 using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
@@ -16,7 +18,10 @@ namespace SaaSEqt.eShop.Services.Sites.API.Application.IntegrationEvents.EventHa
 
 		public async Task Handle(StaffCreatedEvent @event)
         {
-            Staff newStaff = new Staff(@event.Id, @event.SiteId, @event.TenantId, 
+            Guid tenantId = @event.TenantId;
+            Site site = await _siteDbContext.Sites.SingleOrDefaultAsync(y => y.TenantId.Equals(tenantId));
+
+            Staff newStaff = new Staff(@event.Id, site.Id, @event.TenantId, 
                                        @event.Username, @event.Password,
                                        @event.FirstName, @event.LastName, @event.Enabled, 
                                        @event.EmailAddress, @event.PrimaryTelephone, @event.SecondaryTelephone, 
