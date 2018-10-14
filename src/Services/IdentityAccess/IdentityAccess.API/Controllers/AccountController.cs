@@ -67,12 +67,12 @@ namespace SaaSEqt.eShop.Services.IdentityAccess.API.Controllers
         [HttpPost]
         [Route("tenants/{tenantId:Guid}/staffs")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<IActionResult> Staffs(Guid tenantId, Guid siteId, [FromBody]RegisterUserCommand registerUserCommand)
+        public async Task<IActionResult> Staffs(Guid tenantId, [FromBody]RegisterUserCommand registerUserCommand)
         {
             var newUser = _identityApplicationService.RegisterUser(registerUserCommand);
             await _identityAccessContext.SaveChangesAsync();
 
-            StaffCreatedEvent staffCreatedEvent = new StaffCreatedEvent(newUser.Id, siteId, newUser.TenantId,
+            StaffCreatedEvent staffCreatedEvent = new StaffCreatedEvent(newUser.Id, newUser.TenantId,
                                                                         newUser.Username, newUser.Password,
                                                                         newUser.Person.Name.FirstName, newUser.Person.Name.LastName, newUser.IsEnabled,
                                                                         newUser.Enablement.StartDate, newUser.Enablement.EndDate,

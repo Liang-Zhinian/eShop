@@ -21,6 +21,7 @@ import TextInput from '../../Components/TextInput';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styles from './Styles/StaffScheduleStyle';
 import DateRangePicker from '../../Components/DateRangePicker'
+import TimeRangePicker from '../../Components/TimeRangePicker'
 
 class StaffSchedule extends React.Component {
     static navigationOptions = {
@@ -35,8 +36,8 @@ class StaffSchedule extends React.Component {
     schedule = {
         Id: '4',
         IsAvailability: true,
-        StartDateTime: (new Date()).toString(),
-        EndDateTime: (new Date()).toString(),
+        StartDateTime: new Date('2018-10-13 08:30'),
+        EndDateTime: new Date('2018-10-30 22:30'),
         StaffId: 'xxxxxx',
         ServiceItemId: 'xxxx',
         LocationId: 'xxxx',
@@ -45,7 +46,7 @@ class StaffSchedule extends React.Component {
         Sunday: true,
         Monday: true,
         Tuesday: true,
-        Wednesday: true,
+        Wednesday: false,
         Thursday: true,
         Friday: true,
         Saturday: true,
@@ -53,6 +54,9 @@ class StaffSchedule extends React.Component {
 
     constructor(props) {
         super(props)
+
+        this.schedule = props.navigation.getParam('schedule') || this.schedule;
+
         this.state = {
             IsAvailability: this.schedule.IsAvailability,
             StartDateTime: this.schedule.StartDateTime,
@@ -73,19 +77,6 @@ class StaffSchedule extends React.Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-    }
-
-    handleChange = (name, val) => {
-        this.setState({
-            [name]: val
-        })
-    }
-
-    handleSubmit = () => {
-        const { onFormSubmit } = this.props
-        onFormSubmit(this.state)
-            .then(() => console.log('Location Updated'))
-            .catch(e => console.log(`Error: ${e}`))
     }
 
     render = () => {
@@ -120,7 +111,7 @@ class StaffSchedule extends React.Component {
                             <Text style={styles.primary}>What</Text>
                         </View>
                         <View style={styles.row}>
-                            <Label>Availability</Label>
+                            <Label>Availability / Unavailability</Label>
                             <View style={styles.inputContainer}>
                                 <Switch value={IsAvailability} onValueChange={v => this.handleChange('IsAvailability', v)} />
                             </View>
@@ -133,32 +124,71 @@ class StaffSchedule extends React.Component {
                         <View style={styles.row}>
                             <Label>Date Range</Label>
                             <View style={styles.inputContainer}>
-                                <DateRangePicker />
+                                <DateRangePicker
+                                    initStartDate={StartDateTime}
+                                    initEndDate={EndDateTime}
+                                    onValueChanged={(value) => {
+                                        let { StartDateTime, EndDateTime } = this.state
+                                        StartDateTime.setFullYear(value[0].getFullYear())
+                                        StartDateTime.setMonth(value[0].getMonth())
+                                        StartDateTime.setDate(value[0].getDate())
+                                        EndDateTime.setFullYear(value[1].getFullYear())
+                                        EndDateTime.setMonth(value[1].getMonth())
+                                        EndDateTime.setDate(value[1].getDate())
+                                        this.setState({
+                                            StartDateTime,
+                                            EndDateTime,
+                                        })
+                                    }} />
                             </View>
                         </View>
                         <View style={styles.row}>
                             <Label>Days</Label>
                             <View style={styles.inputContainer}>
                                 <Segment>
-                                    <Button first style={styles.segmentButton}>
+                                    <Button
+                                        active={Sunday}
+                                        first style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Sunday')
+                                        }}>
                                         <Text>Sun</Text>
                                     </Button>
-                                    <Button style={styles.segmentButton}>
+                                    <Button active={Monday}
+                                        style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Monday')
+                                        }}>
                                         <Text>Mon</Text>
                                     </Button>
-                                    <Button active style={styles.segmentButton}>
+                                    <Button active={Tuesday} style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Tuesday')
+                                        }}>
                                         <Text>Tue</Text>
                                     </Button>
-                                    <Button style={styles.segmentButton}>
+                                    <Button active={Wednesday} style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Wednesday')
+                                        }}>
                                         <Text>Wed</Text>
                                     </Button>
-                                    <Button active style={styles.segmentButton}>
+                                    <Button active={Thursday} style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Thursday')
+                                        }}>
                                         <Text>Thu</Text>
                                     </Button>
-                                    <Button style={styles.segmentButton}>
+                                    <Button active={Friday} style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Friday')
+                                        }}>
                                         <Text>Fri</Text>
                                     </Button>
-                                    <Button last style={styles.segmentButton}>
+                                    <Button active={Saturday} last style={styles.segmentButton}
+                                        onPress={() => {
+                                            this.toggleDayEnability('Saturday')
+                                        }}>
                                         <Text>Sat</Text>
                                     </Button>
                                 </Segment>
@@ -166,8 +196,16 @@ class StaffSchedule extends React.Component {
                         </View>
                         <View style={styles.row}>
                             <Label>Time</Label>
-                            <View style={styles.inputContainer}>
-                                <DateRangePicker />
+                            <View style={[styles.inputContainer]}>
+                                <TimeRangePicker
+                                    initStartDate={StartDateTime}
+                                    initEndDate={EndDateTime}
+                                    onValueChanged={(value) => {
+                                        this.setState({
+                                            StartDateTime: value[0],
+                                            EndDateTime: value[1],
+                                        })
+                                    }} />
                             </View>
                         </View>
                     </View>
@@ -175,6 +213,23 @@ class StaffSchedule extends React.Component {
                 </KeyboardAvoidingView>
             </ScrollView>
         )
+    }
+
+    toggleDayEnability(name) {
+        this.handleChange(name, !this.state[name])
+    }
+
+    handleChange = (name, val) => {
+        this.setState({
+            [name]: val
+        })
+    }
+
+    handleSubmit = () => {
+        const { onFormSubmit } = this.props
+        onFormSubmit(this.state)
+            .then(() => console.log('Location Updated'))
+            .catch(e => console.log(`Error: ${e}`))
     }
 }
 

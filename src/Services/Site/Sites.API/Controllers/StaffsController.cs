@@ -49,9 +49,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Controllers
             }
 
             var staff = await _sitesContext.Staffs
-                                           .Include(y => y.Site)
+                                        //    .Include(y => y.Site)
                                            .Include(y => y.StaffLoginLocations)
-                                                .ThenInclude(y=>y.Location)
+                                                // .ThenInclude(y=>y.Location)
                                            .SingleOrDefaultAsync(y => y.EmailAddress.Equals(userName));
 
             if (staff == null) return NotFound();

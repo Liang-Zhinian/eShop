@@ -19,8 +19,6 @@ import { Images, Metrics } from '../../../Themes'
 import LoginActions from '../../../Redux/LoginRedux'
 import { login } from '../../../Actions/member'
 import { getLocation } from '../../../Actions/locations'
-import { Logo, Form, Wallpaper, ButtonSubmit, SignupSection } from './components'
-import config from './AuthConfig'
 
 UIManager.setLayoutAnimationEnabledExperimental &&
   UIManager.setLayoutAnimationEnabledExperimental(true)
@@ -36,7 +34,7 @@ class LoginScreen extends React.Component {
   keyboardDidShowListener = {}
   keyboardDidHideListener = {}
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       username: 'demouser@microsoft.com',
@@ -51,36 +49,36 @@ class LoginScreen extends React.Component {
     this.isAttempting = false
   }
 
-  componentWillReceiveProps (newProps) {
+  componentWillReceiveProps(newProps) {
     this.forceUpdate()
     // Did the login attempt complete?
     if (this.isAttempting && !newProps.fetching) {
       this.props.navigation.goBack()
     }
 
-//     const { member, locations, getLocation } = newProps
-// console.log(member, locations)
-//     if (member) {
-//       if (locations.currentLocation) {
-//         this.props.navigation.navigate('App')
-//       } else if (!locations.currentLocation && locations.siblingLocations && locations.siblingLocations.length > 0) {
-//         getLocation(locations.siblingLocations[0].SiteId, locations.siblingLocations[0].Id)
-//       }
-//     }
+    //     const { member, locations, getLocation } = newProps
+    // console.log(member, locations)
+    //     if (member) {
+    //       if (locations.currentLocation) {
+    //         this.props.navigation.navigate('App')
+    //       } else if (!locations.currentLocation && locations.siblingLocations && locations.siblingLocations.length > 0) {
+    //         getLocation(locations.siblingLocations[0].SiteId, locations.siblingLocations[0].Id)
+    //       }
+    //     }
 
     // if (newProps.member && newProps.member.currentLocation) {
     //     this.props.navigation.navigate('App')
     // }
   }
 
-  componentWillMount () {
+  componentWillMount() {
     // Using keyboardWillShow/Hide looks 1,000 times better, but doesn't work on Android
     // TODO: Revisit this if Android begins to support - https://github.com/facebook/react-native/issues/3468
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.keyboardDidShowListener.remove()
     this.keyboardDidHideListener.remove()
   }
@@ -109,10 +107,10 @@ class LoginScreen extends React.Component {
     this.isAttempting = true
     // attempt a login - a saga is listening to pick it up from here.
     this.props.login({ username, password })
-    .then(identity=>{
-      this.props.navigation.navigate('App')
-    })
-    .catch(e => console.log(`Error: ${e}`));
+      .then(identity => {
+        this.props.navigation.navigate('App')
+      })
+      .catch(e => console.log(`Error: ${e}`));
   }
 
   handleChangeUsername = (text) => {
@@ -123,9 +121,10 @@ class LoginScreen extends React.Component {
     this.setState({ password: text })
   }
 
-  render () {
+  render() {
     const { username, password } = this.state
-    const { fetching } = this.props
+    const { fetching, member } = this.props
+    
     const editable = !fetching
     const textInputStyle = editable ? styles.textInput : styles.textInputReadonly
     return (
@@ -185,7 +184,7 @@ class LoginScreen extends React.Component {
     )
   }
 
-  animateState (nextState: $Shape<State>, delay: number = 0) {
+  animateState(nextState: $Shape<State>, delay: number = 0) {
     setTimeout(() => {
       this.setState(() => {
         LayoutAnimation.easeInEaseOut()

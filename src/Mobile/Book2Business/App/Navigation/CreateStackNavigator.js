@@ -11,7 +11,7 @@ export default (routes, headerMode) => {
   return StackNavigator(routes, {
     headerMode: headerMode || 'none',
     cardStyle: styles.card,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerStyle: {
         backgroundColor: 'transparent',
         elevation: 0,
@@ -29,7 +29,7 @@ export default (routes, headerMode) => {
             locations={[0.0, 0.38, 1.0]}
             colors={ComponentStyles.navBar.colors}
             style={styles.headerGradient}
-                    >
+          >
             <View>
               <Header {...props} style={{ backgroundColor: 'transparent' }} />
             </View>
@@ -37,8 +37,8 @@ export default (routes, headerMode) => {
         )
       },
       headerLeft: (
-        <BackButton navigation={navigation} />
-            )
+        <BackButton onPress={() => { navigation.goBack(null) }} />
+      )
     })
 
   })

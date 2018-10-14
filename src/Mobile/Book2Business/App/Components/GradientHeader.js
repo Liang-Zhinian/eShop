@@ -1,42 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, TouchableOpacity, Image } from 'react-native'
-import { Text, H1 } from 'native-base'
+import { View, TouchableOpacity, Image, Text, } from 'react-native'
 import Spacer from './Spacer'
 import LinearGradient from 'react-native-linear-gradient'
 import styles from './Styles/HeaderStyle'
-import { Images } from '../Themes'
+import { Images, Colors } from '../Themes'
+import BackButton from './BackButton'
 
-const Header = ({ title, content, goBack }) => (
-  <View style={{ flex: 1 }}>
+export const Header = ({ title, content, goBack }) => (
+  <View style={{ flex: 1, flexDirection: 'row' }}>
 
-    <TouchableOpacity style={styles.backButton} onPress={() => {
-      goBack()
-    }}>
-      <Image style={styles.backButtonIcon} source={Images.arrowIcon} />
-      <Text style={styles.backButtonText}>Back</Text>
-    </TouchableOpacity>
+    <BackButton onPress={goBack} />
     <View style={{
-      flex: 1,
-      flexDirection: 'column',
+      // flex: 1,
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-evenly'
     }}>
-      <Spacer size={25} />
-      <H1>
+      <Text style={styles.title}>
         {title}
-      </H1>
-      {!!content && (
-        <View style={{
-          flex: 1
-        }}>
-          <Spacer size={10} />
-          <Text>
-            {content}
-          </Text>
-        </View>
-      )}
-      <Spacer size={25} />
+      </Text>
     </View>
   </View>
 )
@@ -65,8 +48,8 @@ const GradientHeader = props => {
       locations={[0.0, 0.38, 1.0]}
       colors={['#46114E', '#521655', '#571757']}
       style={styles.headerGradient}
-      >
-      <View style={styles.dayToggle}>
+    >
+      <View style={styles.body}>
         {children}
       </View>
     </LinearGradient>

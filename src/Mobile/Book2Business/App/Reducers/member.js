@@ -6,6 +6,7 @@ export default function userReducer(state = initialState, action) {
   switch (action.type) {
     case 'DONE_REFRESHING_TOKEN':{
       if (action.data) {
+        console.log(action)
         return {
           ...state,
           loading: false,
@@ -17,6 +18,7 @@ export default function userReducer(state = initialState, action) {
     }
     case 'REFRESHING_TOKEN':{
       if (action.data) {
+        console.log(action)
         return {
           ...state,
           loading: true,
@@ -26,26 +28,25 @@ export default function userReducer(state = initialState, action) {
       }
       return initialState
     }
-    case 'AUTH': {
-      if (action.data) {
-        return {
-          ...state,
-          loading: false,
-          error: null,
-          token: action.data
-        }
-      }
-      return initialState
-    }
+    // case 'AUTH': {
+    //   if (action.data) {
+    //     console.log(action)
+    //     return {
+    //       ...state,
+    //       loading: false,
+    //       error: null,
+    //       token: action.data
+    //     }
+    //   }
+    //   return initialState
+    // }
     case 'USER_LOGIN': {
       if (action.data) {
         return {
           ...state,
           loading: false,
           error: null,
-          uid: action.data.uid,
-          email: action.data.email,
-          emailVerified: action.data.emailVerified
+          ...action.data
         }
       }
       return initialState

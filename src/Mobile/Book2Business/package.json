@@ -67,6 +67,7 @@
     "react-native-statusbar-alert": "^0.4.0",
     "react-native-vector-icons": "^5.0.0",
     "react-native-video": "^3.2.1",
+    "react-native-wheel-picker-android": "^1.1.4",
     "react-navigation": "^1.5.13",
     "react-navigation-redux-helpers": "1.0.3",
     "react-redux": "^5.0.5",

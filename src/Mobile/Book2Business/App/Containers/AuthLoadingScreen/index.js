@@ -1,84 +1,39 @@
 import React from 'react'
 import {
-  ActivityIndicator,
-  AsyncStorage,
   StatusBar,
   StyleSheet,
   View,
-  Image,
   Text
 } from 'react-native'
-import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 import Wallpaper from './components/Wallpaper'
-import { getLocation } from '../../Actions/locations'
-import statusMessage from '../../Actions/status'
-import book2, { retrieveToken } from '../../Services/Auth'
-import { Api } from '../../Services/api'
-
-function isExpired(token) {
-  let currentTime = new Date()
-  let auth_time = new Date(token.auth_time)
-  let expires_date = auth_time.setSeconds(auth_time.getSeconds() + token.expires_in)
-  return currentTime > expires_date
-}
+import PropTypes from 'prop-types'
 
 class AuthLoadingScreen extends React.Component {
-  static defaultProps = {
-  }
-
-  constructor(props) {
-    super(props)
-    this._bootstrapAsync()
-    this.state = {
-    }
-  }
-
-  userToken = null
-
-  // Fetch the token from storage then navigate to our appropriate place
-  _bootstrapAsync = async () => {
-
-    // check if token was expired
-    this.userToken = await retrieveToken()
-    if (!this.userToken) {
-      this.props.navigation.navigate('Auth')
-      return
-    }
-
-    let expired = book2.auth().isExpired()
-    if (expired === true) {
-      book2.auth().refreshToken().then(async (identity) => {
-        this.userToken = await retrieveToken()
-      })
-    }
-  }
-
-  _resetRouteStack = (routeName) => {
-    this.props.navigation.dispatch(NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: routeName })]
-    }))
+  static propTypes = {
+    member: PropTypes.shape({}).isRequired,
   }
 
   printProps(title = 'auth loading ...') {
     const { member } = this.props
-    console.log('printProps ' + title, this.userToken, member)
+    console.log('printProps ' + title, member)
   }
 
   componentWillReceiveProps(nextProps) {
     const { member } = nextProps
-    if (this.userToken && member.uid && member.currentLocation) this.props.navigation.navigate('App')
-    else this.props.navigation.navigate('Auth')
+    this.printProps()
+    if (member) {
+      if (!member.token) {
+        this.props.navigation.navigate('Auth')
+      }
+      else { this.props.navigation.navigate('App') }
+    }
   }
 
   // Render any loading content that you like here
   render() {
-    const { locations } = this.props
-    console.log('locations', locations)
     return (
       <Wallpaper>
-        {/* <Image style={{flex: 1, resizeMode: 'contain'}} source={require('./images/background.jpg')} /> */}
         <StatusBar barStyle='default' />
         <View style={styles.container}>
           <Text style={styles.logo}>Book2</Text></View>
@@ -89,11 +44,9 @@ class AuthLoadingScreen extends React.Component {
 
 const mapStateToProps = (state, props) => ({
   member: state.member || {},
-  locations: state.locations || {}
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  statusMessage: async (loading) => { await statusMessage(dispatch, 'loading', loading) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen)

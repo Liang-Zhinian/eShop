@@ -1,4 +1,4 @@
-export const staffSchedules = [
+export default [
     {
         Id: '4',
         IsAvailability: true,

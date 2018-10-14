@@ -1,6 +1,6 @@
 import { Api } from '../api'
 
-export default class StaffsApi extends Api {
+export default class MemberApi extends Api {
 
   setHeader(key: string, value) {
     this.apisauce.setHeader(key, value)
@@ -20,30 +20,9 @@ export default class StaffsApi extends Api {
     this.setup()
   }
 
-  async getStaffByUserName(username: string): Promise<{}> {
+  async getMemberByUserName(username: string): Promise<{}> {
     // make the api call
     const response = await this.apisauce.get(`/staffs?username=${username}`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = this.getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      return { kind: "ok", data: response.data }
-    } catch {
-      return { kind: "bad-data" }
-    }
-  }
-
-  async getStaffs(siteId: string): Promise<{}> {
-
-    // this.setAuthorizationHeader(`${token.token_type} ${token.access_token}`)
-
-    // make the api call
-    const response = await this.apisauce.get(`/Staffs/sites/${siteId}/staffs`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {

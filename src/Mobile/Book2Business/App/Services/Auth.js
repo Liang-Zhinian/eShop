@@ -50,6 +50,7 @@ const refresh = (access_token, refresh_token) => {
       }
       if (this.status === 200) {
         try {
+          console.log('responsed token', this.response)
           const responseJson = JSON.parse(this.response)
           return resolve(responseJson)
         } catch (reason) {
@@ -90,19 +91,8 @@ const refresh = (access_token, refresh_token) => {
   };
  */
 
-const revoke = async () => {
-  await removeItem('identity')
-}
-
-const retrieveTokenFromStorage = async () => {
-  return await getItem('identity')
-}
-
-const saveTokenToStorage = async (token) => {
-  return await setItem('identity', token)
-}
-
 const isExpired = (token) => {
+  if (!token.auth_time) return true
   let currentTime = new Date()
   let auth_time = new Date(token.auth_time)
   auth_time.setSeconds(auth_time.getSeconds() + token.expires_in)
@@ -110,19 +100,14 @@ const isExpired = (token) => {
   return currentTime > expires_date
 }
 
-export const retrieveToken = retrieveTokenFromStorage
-
 export default (function () {
   // revoke()
   signInWithEmailAndPassword = (email, password) => {
     return new Promise((resolve, reject) => {
       authorize(email, password)
         .then(async (token) => {
-          await saveTokenToStorage({ auth_time: new Date(), email, password, ...token })
-          // const userData = await getUserData(email)
-
           this.currentUser = { uid: email }
-
+          this.token = token
           resolve({
             token: token,
             user: this.currentUser
@@ -133,12 +118,13 @@ export default (function () {
   }
 
   getUserData = async (username) => {
+    var that = this
     return new Promise(async (resolve, reject) => {
 
       var api = new StaffsApi()
+      var token = that.token
 
-      const identity = await retrieveTokenFromStorage()
-      api.setAuthorizationHeader(`${identity.token_type} ${identity.access_token}`)
+      api.setAuthorizationHeader(`${token.token_type} ${token.access_token}`)
 
       return api.getStaffByUserName(username)
         .then(res => {
@@ -150,38 +136,18 @@ export default (function () {
   }
 
   refreshToken = (access_token, refresh_token) => {
-    async function _resfresh(access_token, refresh_token) {
-      return await refresh(access_token, refresh_token)
-        .then(async (newIdentity) => {
-          const newToken = { auth_time: new Date(), email: identity.email, password: identity.password, ...newIdentity }
-          await saveTokenToStorage(newToken)
-          return newToken
-        })
-    }
-
-    return new Promise((resolve, reject) => {
-      if (!access_token) {
-        return retrieveTokenFromStorage()
-          .then(async identity => {
-            return await _resfresh(identity.access_token, identity.refresh_token)
-          })
-          .catch(reject)
-      } else {
-        return _resfresh(access_token, refresh_token)
-      }
-    })
+    return refresh(access_token, refresh_token)
+      .then(async (newIdentity) => {
+        const newToken = { auth_time: new Date(), ...newIdentity }
+        return newToken
+      })
   }
 
-  isTokenExpired = () => {
-    return new Promise((resolve, reject) => {
-      return retrieveTokenFromStorage()
-        .then(identity => {
-          resolve(isExpired(identity))
-        })
-        .catch(reject)
-    })
+  isTokenExpired = (token) => {
+    return isExpired(token)
   }
 
+  this.token = null
   this.currentUser = null
   this.auth = () => {
 

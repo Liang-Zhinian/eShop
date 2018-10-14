@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import { Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
@@ -13,26 +13,7 @@ export default StyleSheet.create({
     elevation: 20,
     backgroundColor: 'black'
   },
-  backButton: {
-    position: 'absolute',
-    // top: -59,
-    // left: -10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    zIndex: 4
-  },
-  backButtonIcon: {
-    marginRight: 5
-  },
-  backButtonText: {
-    fontFamily: 'Montserrat-Light',
-    fontSize: 17,
-    letterSpacing: 0,
-    backgroundColor: Colors.transparent,
-    color: 'rgba(255,255,255,0.80)'
-  },
-  dayToggle: {
+  body: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -40,27 +21,11 @@ export default StyleSheet.create({
     height: 85,
     backgroundColor: Colors.clear
   },
-  inactiveDay: {
-    backgroundColor: Colors.clear,
-    fontFamily: 'Montserrat-Light',
-    fontSize: 20,
-    color: 'rgba(255,255,255,0.80)',
-    letterSpacing: 0
-  },
-  activeDay: {
-    backgroundColor: Colors.clear,
-    fontFamily: 'Montserrat-SemiBold',
-    fontSize: 20,
-    color: Colors.snow,
-    letterSpacing: 0
-  },
-  timeline: {
-    width: 2,
-    backgroundColor: '#6E3C7B',
-    position: 'absolute',
-    top: 85,
-    bottom: 0,
-    right: 11
+  title: {
+    fontSize: Platform.OS === 'ios' ? 17 : 20,
+    fontWeight: Platform.OS === 'ios' ? '700' : '500',
+    color: 'rgba(255, 255, 255, .9)',
+    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
+    marginHorizontal: 16,
   }
-
 })

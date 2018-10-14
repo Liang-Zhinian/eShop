@@ -28,7 +28,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16
+    paddingVertical: 16,
   },
   getRideLabel: {
     fontFamily: 'Montserrat-Medium',
@@ -79,22 +79,5 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 5
-  },
-  TouchableOpacityStyle:
-  {
-      padding: 10,
-      backgroundColor: '#00BCD4',
-      borderWidth: StyleSheet.hairlineWidth,
-      borderLeftWidth: 0,
-      borderRightWidth: 0,
-      borderBottomWidth: 0,
-      borderColor: Colors.snow
-  },
-  TouchableOpacityTitleText:
-  {
-      textAlign: 'center',
-      color: '#fff',
-      fontSize: 20
-  },
-
+  }
 })

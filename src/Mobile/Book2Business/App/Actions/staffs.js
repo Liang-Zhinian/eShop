@@ -1,7 +1,4 @@
-import ErrorMessages from '../Constants/errors'
-import statusMessage from './status'
 import { StaffsApi } from '../Services/Apis'
-import * as Storage from '../Services/StorageService'
 
 /**
   * Set an Error Message
@@ -17,14 +14,17 @@ export function setError(message) {
   * Get ServiceCategories
   */
 export function getStaffs(siteId) {
-  return dispatch => new Promise(async (resolve, reject) => {
-    await statusMessage(dispatch, 'loading', true)
+  return (dispatch, getState) => new Promise(async (resolve, reject) => {
+
+    dispatch({ type: 'STAFFS_LOADING', data: true })
 
     var api = new StaffsApi()
+    const token = getState().member.token
 
+    api.setAuthorizationHeader(`${token.token_type} ${token.access_token}`)
     return api.getStaffs(siteId)
       .then(async (res) => {
-        await statusMessage(dispatch, 'loading', false)
+        dispatch({ type: 'STAFFS_LOADING', data: false })
         if (res.kind == "ok") {
           return resolve(dispatch({
             type: 'STAFFS_REPLACE',
@@ -32,12 +32,10 @@ export function getStaffs(siteId) {
           }))
         }
         else {
-          reject(Error(res.kind))
+          return reject(Error(res.kind))
         }
       })
-      .catch(reject)
   }).catch(async (err) => {
-    await statusMessage(dispatch, 'loading', false)
     throw err.message
   })
 

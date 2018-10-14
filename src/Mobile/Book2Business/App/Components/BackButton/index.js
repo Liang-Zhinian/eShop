@@ -4,8 +4,8 @@ import { TouchableOpacity, Text, ScrollView, View, Image, Button } from 'react-n
 import { Images } from '../../Themes'
 import styles from './BackButtonStyle'
 
-export default ({navigation}) => (
-  <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack(null)}>
+export default ({onPress}) => (
+  <TouchableOpacity style={styles.backButton} onPress={onPress}>
     <Image style={styles.backButtonIcon} source={Images.arrowIcon} />
   </TouchableOpacity>
 )

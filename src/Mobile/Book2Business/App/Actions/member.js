@@ -1,10 +1,19 @@
 
-import { authorize, refresh, revoke } from 'react-native-app-auth'
-
 import ErrorMessages from '../Constants/errors'
 import statusMessage from './status'
-import book2 from '../Services/Auth'
+import { AuthApi, MemberApi } from '../Services/Apis'
 import { getLocationsStaffCanSignIn } from './locations'
+
+
+/**
+  * Set an Error Message
+  */
+export function setError(message) {
+  return dispatch => new Promise(resolve => resolve(dispatch({
+    type: 'MEMBER_ERROR',
+    data: message
+  })))
+}
 
 /**
   * Sign Up to Firebase
@@ -52,34 +61,31 @@ export function signUp(formData) {
 /**
   * Get this User's Details
   */
-function getUserData(dispatch) {
-  const UID = (
-    book2 &&
-    book2.auth() &&
-    book2.auth().currentUser &&
-    book2.auth().currentUser.uid
-  ) ? book2.auth().currentUser.uid : null
+function getUserData(dispatch, username, token) {
+  let memberApi = new MemberApi()
 
-  if (!UID) return false
+  memberApi.setAuthorizationHeader(`${token.token_type} ${token.access_token}`)
 
-  return book2.getUserData(UID)
-    .then((userData) => {
-      dispatch({
-        type: 'USER_LOGIN_LOCATIONS',
-        data: {
-          siblingLocations: userData.StaffLoginLocations,
-        }
-      })
+  return memberApi.getMemberByUserName(username)
+    .then(res => {
+      if (res.kind == "ok") {
+        dispatch({
+          type: 'USER_LOGIN_LOCATIONS',
+          data: {
+            siblingLocations: res.data.StaffLoginLocations,
+          }
+        })
 
-      return dispatch({
-        type: 'USER_DETAILS_UPDATE',
-        data: userData
-      })
+        return dispatch({
+          type: 'USER_DETAILS_UPDATE',
+          data: res.data
+        })
+      }
+      else {
+        return Promise.reject(Error(res.kind))
+      }
     })
-    .catch(err => {
-      console.log('err returns', err)
-      throw err.message
-    })
+    .catch(Promise.reject);
 }
 
 export function getMemberData() {
@@ -115,33 +121,35 @@ export function login(formData) {
     if (!password) return reject({ message: ErrorMessages.missingPassword })
 
     //
+    var api = new AuthApi();
 
-    return book2.auth()
-      .signInWithEmailAndPassword(username, password)
+    return api.authorizeXhr(username, password)
       .then(async (res) => {
-        const token = res && res.token ? res.token : null
-        if (token) {
-          dispatch({
-            type: 'AUTH',
-            data: token
-          })
-        }
+        if (res.kind == "ok") {
+          const token = res && res.data ? res.data : null
+          // if (token) {
+          //   dispatch({
+          //     type: 'AUTH',
+          //     data: { ...token, username, password, auth_time: new Date() }
+          //   })
+          // }
 
-        const userDetails = res && res.user ? res.user : null
-
-        if (userDetails.uid) {
           // Get User Data
-          getUserData(dispatch)
+          getUserData(dispatch, username, token)
+
+          await statusMessage(dispatch, 'loading', false)
+
+          // Send Login data to Redux
+          return resolve(dispatch({
+            type: 'USER_LOGIN',
+            data: { token: { ...token, auth_time: new Date() }, username, password }
+          }))
         }
-
-        await statusMessage(dispatch, 'loading', false)
-
-        // Send Login data to Redux
-        return resolve(dispatch({
-          type: 'USER_LOGIN',
-          data: userDetails
-        }))
-      }).catch(reject);
+        else {
+          return reject(Error(res.kind))
+        }
+      })
+      .catch(reject);
   })
     .catch(async (err) => {
       await statusMessage(dispatch, 'loading', false)
@@ -234,47 +242,60 @@ export function updateProfile(formData) {
   */
 export function logout() {
   return dispatch => new Promise((resolve, reject) => {
-    Firebase.auth().signOut()
-      .then(() => {
-        dispatch({ type: 'USER_RESET' })
-        setTimeout(resolve, 1000) // Resolve after 1s so that user sees a message
-      }).catch(reject)
+    dispatch({ type: 'USER_RESET' })
+    setTimeout(resolve, 1000) // Resolve after 1s so that user sees a message
   }).catch(async (err) => { await statusMessage(dispatch, 'error', err.message); throw err.message })
 }
 
-// export function refreshToken(dispatch) {
 
-//   var freshTokenPromise = fetchJWTToken()
-//       .then(t => {
-//           dispatch({
-//               type: DONE_REFRESHING_TOKEN
-//           });
+export function refreshToken(dispatch, state) {
+  const { access_token, token_type, refresh_token } = state.member.token
 
-//           dispatch(saveAppToken(t.token));
+  var api = new AuthApi()
 
-//           return t.token ? Promise.resolve(t.token) : Promise.reject({
-//               message: 'could not refresh token'
-//           });
-//       })
-//       .catch(e => {
+  let refreshTokenPromise =
+    api.refreshXhr(access_token, token_type, refresh_token)
+      .then(resp => {
+        if (resp.kind == 'ok') {
+          dispatch({
+            type: 'DONE_REFRESHING_TOKEN',
+            data: {
+              error: null,
+              token: { ...resp.data, auth_time: new Date() }
+            }
+          });
+          return Promise.resolve(resp.data)
+        } else {
 
-//           console.log('error refreshing token', e);
+          dispatch({
+            type: 'DONE_REFRESHING_TOKEN',
+            data: {
+              error: 'exception refresh_token: ' + resp.kind,
+              token: null
+            }
+          });
 
-//           dispatch({
-//               type: DONE_REFRESHING_TOKEN
-//           });
-//           return Promise.reject(e);
-//       });
+          return Promise.reject({
+            message: 'could not refresh token'
+          });
+        }
 
+      }).catch(ex => {
+        console.log('exception refresh_token', ex);
+        dispatch({
+          type: 'DONE_REFRESHING_TOKEN',
+          data: {
+            error: 'exception refresh_token',
+            token: null
+          }
+        });
+      });
 
+  dispatch({
+    type: 'REFRESHING_TOKEN',
+    // we want to keep track of token promise in the state so that we don't     try to refresh the token again while refreshing is in process
+    data: refreshTokenPromise
+  });
 
-//   dispatch({
-//       type: REFRESHING_TOKEN,
-
-//       // we want to keep track of token promise in the state so that we don't try to refresh
-//       // the token again while refreshing is in process
-//       freshTokenPromise
-//   });
-
-//   return freshTokenPromise;
-// }
+  return refreshTokenPromise;
+}

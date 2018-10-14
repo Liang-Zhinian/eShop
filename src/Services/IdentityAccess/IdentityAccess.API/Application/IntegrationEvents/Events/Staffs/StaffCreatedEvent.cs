@@ -5,16 +5,14 @@ namespace SaaSEqt.eShop.Services.IdentityAccess.API.Application.IntegrationEvent
 {
     public class StaffCreatedEvent : IntegrationEvent
     {
-        public StaffCreatedEvent(Guid id,
-                                 Guid siteId,
+        public StaffCreatedEvent(Guid staffId,
                                  Guid tenantId, String username, String password, String firstName,
             String lastName, bool enabled, DateTime startDate, DateTime endDate, String emailAddress, String primaryTelephone,
             String secondaryTelephone, String addressStreetAddress, String addressCity, String addressStateProvince,
             String addressPostalCode, String addressCountryCode
                                 )
         {
-            Id = id;
-            SiteId = siteId;
+            StaffId = staffId;
 
             this.TenantId = tenantId;
             this.Username = username;
@@ -34,7 +32,7 @@ namespace SaaSEqt.eShop.Services.IdentityAccess.API.Application.IntegrationEvent
             this.AddressCountryCode = addressCountryCode;
         }
 
-        public Guid Id { get; set; }
+        public Guid StaffId { get; set; }
         public Guid TenantId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -51,14 +49,9 @@ namespace SaaSEqt.eShop.Services.IdentityAccess.API.Application.IntegrationEvent
         public string AddressStateProvince { get; set; }
         public string AddressPostalCode { get; set; }
         public string AddressCountryCode { get; set; }
-
-        public Guid SiteId { get; set; }
         public bool IsMale { get; set; }
-
         public string Bio { get; set; }
-
         public string ImageUrl { get; set; }
-
         public bool CanLoginAllLocations { get; set; } = false;
     }
 }

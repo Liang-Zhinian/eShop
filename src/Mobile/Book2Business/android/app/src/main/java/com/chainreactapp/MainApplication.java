@@ -3,6 +3,7 @@ package com.chainreactapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.wheelpicker.WheelPickerPackage;
 import com.reactlibrary.RNAppAuthPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
@@ -45,6 +46,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new WheelPickerPackage(),
             new RNAppAuthPackage(),
             new VectorIconsPackage(),
             new PickerPackage(),

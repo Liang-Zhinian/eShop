@@ -1,7 +1,6 @@
 import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
-import * as Types from "./api.types"
 
 /**
  * Manages all requests to the API.
@@ -41,34 +40,11 @@ export class Api {
       baseURL: this.config.url,
       timeout: this.config.timeout,
       headers: {
-        Accept: "application/vnd.github.v3+json",
+        Accept: "application/json",
       },
     })
-  }
 
-  /**
-   * Gets a list of repos.
-   */
-  async getRepo(repo: string): Promise<Types.GetRepoResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/repos/${repo}`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      const resultRepo: Types.Repo = {
-        id: response.data.id,
-        name: response.data.name,
-        owner: response.data.owner.login,
-      }
-      return { kind: "ok", repo: resultRepo }
-    } catch {
-      return { kind: "bad-data" }
-    }
+    const naviMonitor = (response) => console.log('hey!  listen! ', response)
+    this.apisauce.addMonitor(naviMonitor)
   }
 }

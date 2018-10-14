@@ -179,6 +179,7 @@ allprojects {
 }
 
 dependencies {
+    compile project(':react-native-wheel-picker-android')
     compile project(':react-native-app-auth')
     compile project(':react-native-vector-icons')
     compile project(':react-native-image-crop-picker')

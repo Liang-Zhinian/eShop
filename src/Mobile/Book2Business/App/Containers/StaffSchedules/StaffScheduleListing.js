@@ -2,20 +2,30 @@ import React, { Component } from 'react'
 import { TouchableOpacity, Text, Image, View, StyleSheet, FlatList } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Icon } from 'native-base'
 
 import { Images } from '../../Themes'
 import { getStaffSchedules, setError } from '../../Actions/staffSchedules'
-import Hamburger from '../../Components/Hamburger'
-import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
-import GradientView from '../../Components/GradientView'
+import List from '../../Components/List/List'
+import Availability from './Components/Availability'
+import { staffSchedules as testData } from '../../Fixtures/data'
 
 class StaffScheduleListing extends Component {
   static propTypes = {
-    isLoading: PropTypes.bool.isRequired
+    member: PropTypes.shape({}).isRequired,
+    staffSchedules: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+      error: PropTypes.string,
+      staffSchedules: PropTypes.shape({}).isRequired
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({})
+    }),
+    fetchStaffSchedules: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired
   }
 
   static defaultProps = {
+    match: null
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -23,7 +33,7 @@ class StaffScheduleListing extends Component {
       handleAddButton: () => null,
     }
     return {
-      title: 'Appointment Types',
+      title: 'Staff Schedules',
       headerRight: (
         <TouchableOpacity style={{ marginRight: 20 }} onPress={handleAddButton} >
           <Text>Add</Text>
@@ -42,12 +52,12 @@ class StaffScheduleListing extends Component {
   };
 
   componentDidMount = () => {
-    const { navigation, member, getStaffSchedules, selectedServiceItem } = this.props
+    const { navigation, } = this.props
     navigation.setParams({
       handleAddButton: this.handleAddButton.bind(this)
     })
 
-    getStaffSchedules(selectedServiceItem.SiteId, member.currentLocation.Id, member.Id, selectedServiceItem.Id)
+    this.fetchStaffSchedules()
   }
 
   state = {
@@ -57,29 +67,25 @@ class StaffScheduleListing extends Component {
 
   animatedContainerWithNavbar = null;
 
-  componentWillReceiveProps(newProps) {
-    const { staffSchedules } = newProps
-
-    this.setState({ data: staffSchedules.staffSchedules })
-  }
-
   render = () => {
-    const { data } = this.state
-    const { navigation } = this.props
+    const { staffSchedules } = this.props
+    console.log(staffSchedules)
+
+    let listViewData = staffSchedules.staffSchedules ? staffSchedules.staffSchedules.Data : testData
 
     return (
-      <GradientView style={[styles.linearGradient, { flex: 1 }]}>
-        <FlatList
-          ref='scheduleList'
-          data={data}
-          extraData={this.props}
-          renderItem={this.renderItem}
-          keyExtractor={(item, idx) => item.eventStart}
-          contentContainerStyle={styles.listContent}
-          getItemLayout={this.getItemLayout}
-          showsVerticalScrollIndicator={false}
-        />
-      </GradientView>
+      <List
+        headerTitle='Staff schedules'
+        navigation={this.props.navigation}
+        data={listViewData}
+        renderItem={this.renderItem.bind(this)}
+        keyExtractor={(item, idx) => item.Id}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        reFetch={() => this.fetchStaffSchedules()}
+        error={staffSchedules.error}
+        loading={staffSchedules.loading}
+      />
     )
   }
 
@@ -103,7 +109,12 @@ class StaffScheduleListing extends Component {
 
   renderItem = ({ item }) => {
     return (
-      <View />
+      <Availability
+        name={`${item.ServiceItemId}`}
+        title={`from ${item.StartDateTime} to ${item.EndDateTime}`}
+        onPress={() => { this.props.navigation.navigate('StaffSchedule', { schedule: item }) }}
+        onPressEdit={() => { }}
+        onPressRemove={() => { }} />
     )
   }
 
@@ -111,17 +122,27 @@ class StaffScheduleListing extends Component {
     const { navigation } = this.props
     navigation.navigate('StaffSchedule')
   }
+
+  fetchStaffSchedules() {
+    const { member, fetchStaffSchedules, selectedAppointmentType, showError } = this.props
+
+    fetchStaffSchedules(member.SiteId, member.currentLocation.Id, member.Id, selectedAppointmentType.Id)
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
+  }
 }
 
 const mapStateToProps = state => ({
   member: state.member || {},
-  selectedServiceItem: state.selectedServiceItem || {},
+  selectedAppointmentType: state.appointmentTypes.selectedAppointmentType || {},
   staffSchedules: state.staffSchedules || {},
   isLoading: state.status.loading || false
 })
 
 const mapDispatchToProps = {
-  getStaffSchedules: getStaffSchedules,
+  fetchStaffSchedules: getStaffSchedules,
   showError: setError
 }
 

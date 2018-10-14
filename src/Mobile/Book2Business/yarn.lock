@@ -4991,6 +4991,10 @@ mockery@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/mockery/-/mockery-2.1.0.tgz#5b0aef1ff564f0f8139445e165536c7909713470"
 
+moment@2.22.0:
+  version "2.22.0"
+  resolved "http://registry.npmjs.org/moment/-/moment-2.22.0.tgz#7921ade01017dd45186e7fee5f424f0b8663a730"
+
 morgan@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
@@ -6081,6 +6085,12 @@ react-native-video@^3.2.1:
   dependencies:
     keymirror "0.1.1"
     prop-types "^15.5.10"
+
+react-native-wheel-picker-android@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-wheel-picker-android/-/react-native-wheel-picker-android-1.1.4.tgz#0b2a0c2ff950d43de9670bce24e42e10af22a7aa"
+  dependencies:
+    moment "2.22.0"
 
 react-native@0.55.4:
   version "0.55.4"

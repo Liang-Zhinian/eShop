@@ -7,11 +7,13 @@ import {
     Text,
     //   TextInput,
 } from 'react-native';
+import { connect } from 'react-redux'
 
 import Avatar from '../../../Components/Avatar';
 import RoundedButton from '../../../Components/RoundedButton';
 import TextInput from '../../../Components/TextInput';
 import styles from './Styles';
+import { logout, setError } from '../../../Actions/member'
 
 class ProfileSettings extends React.Component {
     static navigationOptions = {
@@ -162,9 +164,18 @@ class ProfileSettings extends React.Component {
                     </View>
                 </View>
                 <RoundedButton style={styles.button} text='SAVE' />
+
+                <RoundedButton onPress={this.props.logout} style={styles.button} text='SIGN OUT' />
             </KeyboardAvoidingView>
         </ScrollView>
     );
 }
 
-export default ProfileSettings;
+const mapStateToProps = (state) => ({})
+
+const mapDispatchToProps = {
+    logout: logout,
+    showError: setError
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileSettings);

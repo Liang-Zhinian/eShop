@@ -15,12 +15,6 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback
 } from 'react-native'
-import GradientView from '../../Components/GradientView'
-import DayToggle from '../../Components/DayToggle'
-import Staff from './Components/Staff'
-import Break from '../../Components/Break'
-import ScheduleActions from '../../Redux/ScheduleRedux'
-import * as StaffActions from '../../Actions/staffs'
 import { connect } from 'react-redux'
 import {
   compareAsc,
@@ -38,26 +32,41 @@ import {
   sum,
   findIndex
 } from 'ramda'
-import NotificationActions from '../../Redux/NotificationRedux'
-import Config from '../../Config/AppConfig'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import PropTypes from 'prop-types'
+
+import Staff from './Components/Staff'
+import * as StaffActions from '../../Actions/staffs'
 import { Images } from '../../Themes'
 import styles from './Styles/StaffsScreenStyle'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
-import Icon from 'react-native-vector-icons/FontAwesome'
-
-const isActiveCurrentDay = (currentTime, activeDay) =>
-  isSameDay(currentTime, new Date(Config.conferenceDates[activeDay]))
-
-const addSpecials = (specialTalksList, talks) =>
-  map((talk) => assoc('special', contains(talk.title, specialTalksList), talk), talks)
+import List from '../../Components/List/List'
 
 class StaffsScreen extends Component {
-  constructor (props) {
+  static propTypes = {
+    member: PropTypes.shape({}).isRequired,
+    staffs: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+      error: PropTypes.string,
+      staffs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({})
+    }),
+    fetchStaffs: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    match: null
+  }
+
+  constructor(props) {
     super(props)
 
     const appState = AppState.currentState
 
-    this.state = { data: [], appState, isMenuOpen: false }
+    this.state = { appState, isMenuOpen: false }
   }
 
   animatedContainerWithNavbar = null;
@@ -95,7 +104,7 @@ class StaffsScreen extends Component {
     //   : navigation.navigate('BreakDetail')
   }
 
-  toggleMenu () {
+  toggleMenu() {
     let icon = 'times'
     // let pressMenu = this.showMenu.bind(this);
     if (this.state.isMenuOpen) {
@@ -114,20 +123,18 @@ class StaffsScreen extends Component {
     })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange)
-
-    const { member, getStaffs } = this.props
-
-    getStaffs(member.currentLocation.SiteId)
 
     this.props.navigation.setParams({
       icon: 'bars',
       pressMenu: this.toggleMenu.bind(this)
     })
+
+    this.fetchStaffs()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange)
   }
 
@@ -139,85 +146,50 @@ class StaffsScreen extends Component {
     this.setState({ appState: nextAppState })
   }
 
-  componentWillReceiveProps (newProps) {
-    const { staffs } = newProps
-
-    this.setState({data: staffs.staffs})
-  }
-
-  getItemLayout = (data, index) => {
-    const item = data[index]
-    const itemLength = (item, index) => {
-      if (item.type === 'talk') {
-        // use best guess for variable height rows
-        return 138 + (1.002936 * item.title.length + 6.77378)
-      } else {
-        return 145
-      }
-    }
-    const length = itemLength(item)
-    const offset = sum(data.slice(0, index).map(itemLength))
-    return { length, offset, index }
-  }
-
-  // if value exists, create the function calling it, otherwise false
-  funcOrFalse = (func, val) => val ? () => func.call(this, val) : false
-
   renderItem = ({ item }) => {
     return (
       <Staff
         type={'talk'}
         name={item.FirstName + ' ' + item.LastName}
-        avatarURL={item.ImageUri||''}
+        avatarURL={item.ImageUri || ''}
         title={item.Bio}
         onPress={() => this.onEventPress(item)}
-        />
+      />
     )
   }
 
-  renderContent () {
-    const { isCurrentDay, activeDay, data } = this.state
-    return (
-      <GradientView style={styles.linearGradient}>
-        <DayToggle
-          activeDay={activeDay}
-          onPressIn={this.setActiveDay}
-        />
-        <FlatList
-          ref='scheduleList'
-          data={data}
-          extraData={this.props}
-          renderItem={this.renderItem}
-          keyExtractor={(item, idx) => item.eventStart}
-          contentContainerStyle={styles.listContent}
-          getItemLayout={this.getItemLayout}
-          showsVerticalScrollIndicator={false}
-        />
-      </GradientView>
-    )
+  fetchStaffs() {
+    const { member, fetchStaffs, showError } = this.props
+
+    fetchStaffs(member.SiteId)
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
   }
 
-  render () {
-    const { data } = this.state
-    const { navigation } = this.props
+  render() {
+    const { navigation, staffs, member } = this.props
+
+    let listViewData = staffs.staffs ? staffs.staffs : null
 
     return (
       <AnimatedContainerWithNavbar
         ref={ref => this.animatedContainerWithNavbar = ref}
         menuPosition='right'
         content={(
-          <GradientView style={[styles.linearGradient, { flex: 1 }]}>
-            <FlatList
-              ref='scheduleList'
-              data={data}
-              extraData={this.props}
-              renderItem={this.renderItem}
-              keyExtractor={(item, idx) => item.eventStart}
-              contentContainerStyle={styles.listContent}
-              getItemLayout={this.getItemLayout}
-              showsVerticalScrollIndicator={false}
-            />
-          </GradientView>
+          <List
+            headerTitle='Staffs'
+            navigation={navigation}
+            data={listViewData}
+            renderItem={this.renderItem.bind(this)}
+            keyExtractor={(item, idx) => item.Id}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            reFetch={this.fetchStaffs.bind(this)}
+            error={staffs.error}
+            loading={staffs.loading}
+          />
         )}
         // content={(<View />)}
         menu={(
@@ -237,23 +209,15 @@ class StaffsScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    // currentTime: new Date(state.schedule.currentTime),
-    // schedule: state.schedule.speakerSchedule,
-    // specialTalks: state.notifications.specialTalks,
-    staffs: state.staffs,
-    member: state.member,
+    staffs: state.staffs || {},
+    member: state.member || {}
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // getScheduleUpdates: () => dispatch(ScheduleActions.getScheduleUpdates()),
-    // setSelectedEvent: data => dispatch(ScheduleActions.setSelectedEvent(data)),
-    // onPressGithub: url => dispatch(ScheduleActions.visitGithub(url)),
-    // onPressTwitter: url => dispatch(ScheduleActions.visitTwitter(url)),
-    // setReminder: title => dispatch(NotificationActions.addTalk(title)),
-    // removeReminder: title => dispatch(NotificationActions.removeTalk(title)),
-    getStaffs: siteId => dispatch(StaffActions.getStaffs(siteId))
+    fetchStaffs: (siteId) => dispatch(StaffActions.getStaffs(siteId)),
+    showError: (err) => dispatch(StaffActions.setError(err))
   }
 }
 
