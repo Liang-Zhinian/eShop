@@ -1,10 +1,10 @@
 import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation'
 
-import StaffListingScreen from '../../Containers/Staffs/StaffsScreen'
-// import AppointmentListingScreen from '../../Containers/AppointmentCatalog/ServiceItemListing'
 import CreateStackNavigator from '../CreateStackNavigator'
+import StaffListingScreen from '../../Containers/Staffs/StaffsScreen'
+import AddStaffScreen from '../../Containers/Staffs/AddStaffScreen'
 
 export default CreateStackNavigator({
-  StaffListing: { screen: StaffListingScreen }
-  // AppointmentListing: { screen: AppointmentListingScreen }
+  StaffListing: { screen: StaffListingScreen },
+  AddStaff: { screen: AddStaffScreen }
 }, 'screen')

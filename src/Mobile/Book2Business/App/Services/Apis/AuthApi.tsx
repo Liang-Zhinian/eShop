@@ -150,4 +150,22 @@ export default class AuthApi extends Api {
     })
   }
 
+  async getMemberByUserName(username: string): Promise<{}> {
+    // make the api call
+    const response = await this.apisauce.get(`/api/v1/identity/users/with-user-name/${username}`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = this.getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      return { kind: "ok", data: response.data }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
 }

@@ -192,16 +192,9 @@ class StaffsScreen extends Component {
           />
         )}
         // content={(<View />)}
-        menu={(
-          <View>
-            <TouchableOpacity style={{}} onPress={() => {
-              // this.toggleMenu()
-              // this.goTo('UpdateInfoScreen')
-            }} >
-              <Text style={[styles.textFooter, styles.menutext]}>{'Name & Description'}</Text>
-            </TouchableOpacity >
-          </View>
-        )}
+        menu={[
+          {text:'Add Staff',onPress:()=>{ this.props.navigation.navigate('AddStaff')}}
+        ]}
       />
     )
   }

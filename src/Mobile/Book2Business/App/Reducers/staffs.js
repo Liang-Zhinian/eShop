@@ -32,6 +32,24 @@ export default function staffsReducer (state = initialState, action) {
         staffs
       }
     }
+    case 'MEMBER_CHECKING_STARTED': {
+      return {
+        ...state,
+        memberCheckingStarted: action.data
+      }
+    }
+    case 'MEMBER_CHECKING_DONE': {
+      return {
+        ...state,
+        memberCheckingDone: action.data
+      }
+    }
+    case 'MEMBER_EXISTANCE': {
+      return {
+        ...state,
+        memberExistance: action.data
+      }
+    }
     default:
       return state
   }
