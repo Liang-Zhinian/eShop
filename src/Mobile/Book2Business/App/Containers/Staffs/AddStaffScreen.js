@@ -88,6 +88,7 @@ class AddStaff extends Component {
     }
 
     startCheckingMemberExistance(username) {
+        if (!username) return
         this.cancelCheckingMemberExistance()
         this.timeout = setTimeout(() => {
             this.setState({ memberCheckingStarted: true })

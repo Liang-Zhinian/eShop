@@ -48,7 +48,7 @@ class StaffsScreen extends Component {
     staffs: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
       error: PropTypes.string,
-      staffs: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+      staffs: PropTypes.arrayOf(PropTypes.shape({})),
     }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({})
@@ -171,7 +171,7 @@ class StaffsScreen extends Component {
   render() {
     const { navigation, staffs, member } = this.props
 
-    let listViewData = staffs.staffs ? staffs.staffs : null
+    let listViewData = staffs && staffs.staffs ? staffs.staffs : null
 
     return (
       <AnimatedContainerWithNavbar

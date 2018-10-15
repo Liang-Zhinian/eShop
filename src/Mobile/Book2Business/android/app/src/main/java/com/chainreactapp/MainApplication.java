@@ -16,7 +16,7 @@ import com.microsoft.azure.mobile.react.analytics.RNAnalyticsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
-import com.i18n.reactnativei18n.ReactNativeI18n;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.facebook.react.ReactNativeHost;
@@ -60,8 +60,7 @@ public class MainApplication extends Application implements ReactApplication {
         new ReactVideoPackage(),
         new ReactNativePushNotificationPackage(),
         new LinearGradientPackage(),
-        new ReactNativeI18n(),
-        new VectorIconsPackage(),
+        new RNI18nPackage(),
         new RNDeviceInfo(),
         new ReactNativeConfigPackage()
       );
