@@ -6,9 +6,10 @@ import { connect } from 'react-redux'
 import { Images } from '../../Themes'
 import Layout from './Components/AddStaff'
 import { checkMemberExistance } from '../../Actions/staffs'
+import { offerRegistrationInvitation } from '../../Actions/identityAccess'
 
 
-class AddStaff extends Component {
+class AddStaffScreen extends Component {
     static propTypes = {
         staffs: PropTypes.shape({}).isRequired,
         onFormSubmit: PropTypes.func.isRequired,
@@ -61,7 +62,9 @@ class AddStaff extends Component {
             staffs,
             // Layout,
             isLoading,
-            checkMemberExistance
+            checkMemberExistance,
+            offerRegistrationInvitation,
+            identityAccess
         } = this.props
         console.log(staffs)
 
@@ -73,12 +76,13 @@ class AddStaff extends Component {
                 error={errorMessage}
                 success={successMessage}
                 onFormSubmit={this.onFormSubmit}
-                // memberChecking={staffs.memberChecking || false}
                 memberCheckingStarted={staffs.memberCheckingStarted || false}
                 memberCheckingDone={staffs.memberCheckingDone || false}
                 memberExistance={staffs.memberExistance || false}
-                // cancelCheckingMemberExistance={this.cancelCheckingMemberExistance}
                 startCheckingMemberExistance={this.startCheckingMemberExistance.bind(this)}
+                offerRegistrationInvitation={offerRegistrationInvitation}
+                offerRegistrationInvitationLoading={identityAccess.loading}
+                registrationInvitation={identityAccess.registrationInvitation}
             />
         )
     }
@@ -106,13 +110,14 @@ const mapStateToProps = state => ({
     member: state.member || {},
     staffs: state.staffs || {},
     isLoading: state.status.loading || false,
+    identityAccess: state.identityAccess || {},
 })
 
 const mapDispatchToProps = {
     onFormSubmit: function () { },
     // showError: setError,
     checkMemberExistance: checkMemberExistance,
-
+    offerRegistrationInvitation: offerRegistrationInvitation
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddStaff)
+export default connect(mapStateToProps, mapDispatchToProps)(AddStaffScreen)

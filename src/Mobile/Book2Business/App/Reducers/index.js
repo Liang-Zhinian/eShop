@@ -7,6 +7,7 @@ import appointmentTypes from './appointmentTypes'
 import staffs from './staffs'
 import nearby from './nearby'
 import theme from './theme'
+import identityAccess from './identityAccess'
 
 const rehydrated = (state = false, action) => {
   switch (action.type) {
@@ -27,5 +28,6 @@ export default {
   locations,
   appointmentCategories,
   appointmentTypes,
-  staffs
+  staffs,
+  identityAccess
 }

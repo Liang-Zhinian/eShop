@@ -1,7 +1,7 @@
 import { Api } from '../api'
 import RegisterUserCommand from '../../Models/RegisterUserCommand';
 
-export default class StaffsApi extends Api {
+export default class IdentityAccessApi extends Api {
 
   setHeader(key: string, value) {
     this.apisauce.setHeader(key, value)

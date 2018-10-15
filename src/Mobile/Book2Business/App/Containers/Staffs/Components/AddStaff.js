@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { TouchableOpacity, Modal } from 'react-native';
 import {
     Container,
     Content,
@@ -19,6 +20,7 @@ import Loading from '../../../Components/Loading'
 import Header from '../../../Components/Header'
 import Spacer from '../../../Components/Spacer'
 import { Colors } from '../../../Themes'
+import OfferInvitationDescription from './RegistrationInvitation';
 
 class AddStaff extends React.Component {
     static propTypes = {
@@ -26,11 +28,14 @@ class AddStaff extends React.Component {
         success: PropTypes.string,
         loading: PropTypes.bool,
         onFormSubmit: PropTypes.func.isRequired,
-        // cancelCheckingMemberExistance: PropTypes.func.isRequired,
         startCheckingMemberExistance: PropTypes.func.isRequired,
         memberCheckingStarted: PropTypes.bool.isRequired,
         memberCheckingDone: PropTypes.bool.isRequired,
         memberExistance: PropTypes.bool.isRequired,
+
+        offerRegistrationInvitation: PropTypes.func.isRequired,
+        offerRegistrationInvitationLoading: PropTypes.bool,
+        registrationInvitation: PropTypes.string,
     }
 
     static defaultProps = {
@@ -42,7 +47,9 @@ class AddStaff extends React.Component {
         super(props)
         this.state = {
             username: '',
-            memberCheckingDone: false
+            invitationDescription: '',
+
+            showModal: false,
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -69,10 +76,19 @@ class AddStaff extends React.Component {
         if (loading) return <Loading />
 
         const {
-            username
+            username,
+            invitationDescription
         } = this.state
 
-        const { memberExistance, memberCheckingStarted, memberCheckingDone } = this.props
+        const {
+            memberExistance,
+            memberCheckingStarted,
+            memberCheckingDone,
+            offerRegistrationInvitationLoading,
+            registrationInvitation,
+            offerRegistrationInvitation,
+
+        } = this.props
         let icon = ''
         let iconActive = true
         if (memberCheckingStarted) {
@@ -113,17 +129,54 @@ class AddStaff extends React.Component {
                             </Item>
                         </Item>
 
+                        <Item stackedLabel>
+                            <Label>
+                                Invitation Description
+                                </Label>
+                            <TouchableOpacity onPress={() => { this.showModal() }}>
+                                <Text style={{ fontSize: 12, color: 'blue' }}>Don't have an Invitation Description? Click to create one</Text>
+                            </TouchableOpacity>
+                            <Item>
+                                <Input
+                                    value={invitationDescription}
+                                    onChangeText={(v) => this.handleChange('invitationDescription', v)}
+                                />
+                            </Item>
+                        </Item>
+
                         <Spacer size={20} />
 
                         <Button block onPress={this.handleSubmit}>
                             <Text>
                                 Save
-              </Text>
+                            </Text>
                         </Button>
                     </Form>
+                    <Modal
+                        animationType="slide"
+                        visible={this.state.showModal}
+                        onRequestClose={this.hideModal.bind(this)}>
+                        <OfferInvitationDescription
+                            cancel={this.hideModal.bind(this)}
+                            offerRegistrationInvitation={(desc) => {
+                                offerRegistrationInvitation(desc)
+                            }}
+                            offerRegistrationInvitationLoading={offerRegistrationInvitationLoading}
+                            registrationInvitation={registrationInvitation}
+                        />
+                    </Modal>
                 </Content>
             </Container>
         )
+    }
+
+    // modal
+    showModal = () => {
+        this.setState({ showModal: true })
+    }
+
+    hideModal = () => {
+        this.setState({ showModal: false })
     }
 }
 
