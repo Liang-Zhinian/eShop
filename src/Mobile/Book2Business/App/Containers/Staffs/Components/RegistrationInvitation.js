@@ -65,29 +65,29 @@ export default class RegistrationInvitation extends React.Component {
                         goBack={this.handleCancel} />
                 </GradientHeader>
                 <Content padder>
-                    <Item stackedLabel>
-                        <Label>
-                            Invitation Description
+                    <Form>
+                        <Item stackedLabel>
+                            <Label>
+                                Invitation Description
                     </Label>
-                        <Input
-                            value={invitationDescription}
-                            onChangeText={(v) => this.handleChange('invitationDescription', v)}
-                        />
-                    </Item>
+                            <Input
+                                value={invitationDescription}
+                                onChangeText={(v) => this.handleChange('invitationDescription', v)}
+                            />
+                        </Item>
 
-                    <Spacer size={20} />
-
+                        <Spacer size={20} />
+                    </Form>
                     {/* <Button block onPress={this.handleSubmit}>
                             <Text>
                                 Save
                         </Text>
                         </Button> */}
+                    <View>
+                        <AnimatedSubmissionButton />
+                    </View>
 
                 </Content>
-                <Footer>
-                    <View block >
-                        <AnimatedSubmissionButton />
-                    </View></Footer>
             </Container>
         )
     }
