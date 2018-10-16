@@ -7,7 +7,7 @@ import styles from './Styles/HeaderStyle'
 import { Images, Colors } from '../Themes'
 import BackButton from './BackButton'
 
-export const Header = ({ title, content, goBack }) => (
+export const Header = ({ title, goBack }) => (
   <View style={{ flex: 1, flexDirection: 'row' }}>
 
     <BackButton onPress={goBack} />

@@ -56,9 +56,10 @@ export function checkMemberExistance(username) {
         dispatch({ type: 'MEMBER_CHECKING_STARTED', data: false })
         dispatch({ type: 'MEMBER_CHECKING_DONE', data: true })
         if (res.kind == "ok") {
+
           return resolve(dispatch({
             type: 'MEMBER_EXISTANCE',
-            data: res.data != null
+            data: res.data
           }))
         }
         else {

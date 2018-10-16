@@ -20,7 +20,7 @@ import Loading from '../../../Components/Loading'
 import Header from '../../../Components/Header'
 import Spacer from '../../../Components/Spacer'
 import { Colors } from '../../../Themes'
-import OfferInvitationDescription from './RegistrationInvitation';
+import OfferInvitationDescription from '../RegistrationInvitation';
 
 class AddStaff extends React.Component {
     static propTypes = {
@@ -64,7 +64,7 @@ class AddStaff extends React.Component {
 
     handleSubmit = () => {
         const { onFormSubmit } = this.props
-        onFormSubmit(this.state)
+        onFormSubmit({username: this.state.username, invitationDescription:this.state.invitationDescription})
             .then(() => console.log('Location Updated'))
             .catch(e => console.log(`Error: ${e}`))
     }
@@ -157,12 +157,7 @@ class AddStaff extends React.Component {
                         visible={this.state.showModal}
                         onRequestClose={this.hideModal.bind(this)}>
                         <OfferInvitationDescription
-                            cancel={this.hideModal.bind(this)}
-                            offerRegistrationInvitation={(desc) => {
-                                offerRegistrationInvitation(desc)
-                            }}
-                            offerRegistrationInvitationLoading={offerRegistrationInvitationLoading}
-                            registrationInvitation={registrationInvitation}
+                            onDismiss={this.hideModal.bind(this)}
                         />
                     </Modal>
                 </Content>

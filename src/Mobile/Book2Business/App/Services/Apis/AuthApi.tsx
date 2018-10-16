@@ -1,6 +1,7 @@
 import { Api } from '../api'
 
-const url = "http://isd4u.com:5105"
+const url = 'http://isd4u.com:5105'
+const scopes = 'role openid profile offline_access identity identityaccess sites catalog appointment mobilereservationagg schedules'
 
 export default class AuthApi extends Api {
 
@@ -27,7 +28,7 @@ export default class AuthApi extends Api {
   async authorize(username: string, password: string): Promise<{}> {
     var data = {
       'client_id': 'ro.client',
-      'scope': 'role openid profile offline_access',
+      'scope': scopes,
       'username': username,
       'password': password,
       'client_secret': 'secret',
@@ -85,7 +86,6 @@ export default class AuthApi extends Api {
 
   authorizeXhr(username, password) {
     return new Promise((resolve, reject) => {
-      var scopes = 'role openid profile offline_access identity sites'
       var data = `grant_type=password&scope=${scopes}&username=${username}&password=${password}&client_id=ro.client&client_secret=secret`
 
       var xhr = new XMLHttpRequest()

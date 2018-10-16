@@ -47,7 +47,8 @@ export default function staffsReducer (state = initialState, action) {
     case 'MEMBER_EXISTANCE': {
       return {
         ...state,
-        memberExistance: action.data
+        memberExistance: action.data != null,
+        memberChecked: action.data
       }
     }
     default:

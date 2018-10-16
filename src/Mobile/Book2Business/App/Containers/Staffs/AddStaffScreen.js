@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import { Images } from '../../Themes'
 import Layout from './Components/AddStaff'
 import { checkMemberExistance } from '../../Actions/staffs'
-import { offerRegistrationInvitation } from '../../Actions/identityAccess'
+import { offerRegistrationInvitation, addStaff } from '../../Actions/identityAccess'
+import RegisterUserCommand from '../../Models/RegisterUserCommand'
 
 
 class AddStaffScreen extends Component {
@@ -41,8 +42,31 @@ class AddStaffScreen extends Component {
     }
 
     onFormSubmit = (data) => {
-        // const { onFormSubmit } = this.props;
-        // return onFormSubmit(data)
+        const { onFormSubmit, staffs, member } = this.props;
+        // console.log(staffs)
+        let memberChecked = staffs.memberChecked
+        let staffToAdd = {
+            TenantId: member.TenantId,
+            InvitationIdentifier: data.invitationDescription,
+            Username: memberChecked.UserName,
+            Password: memberChecked.PasswordHash,
+            FirstName: memberChecked.Name,
+            LastName: memberChecked.LastName,
+            Enabled: true,
+            // StartDate: memberChecked.,
+            // EndDate: memberChecked.,
+            EmailAddress: memberChecked.Email,
+            PrimaryTelephone: memberChecked.PhoneNumber,
+            SecondaryTelephone: memberChecked.PhoneNumber,
+            AddressStreetAddress: memberChecked.Street,
+            AddressCity: memberChecked.City,
+            AddressStateProvince: memberChecked.State,
+            AddressPostalCode: memberChecked.ZipCode,
+            AddressCountryCode: memberChecked.Country,
+
+        }
+
+        return onFormSubmit(staffToAdd)
         //   .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
         //   .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err; });
     }
@@ -114,7 +138,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    onFormSubmit: function () { },
+    onFormSubmit: addStaff,
     // showError: setError,
     checkMemberExistance: checkMemberExistance,
     offerRegistrationInvitation: offerRegistrationInvitation

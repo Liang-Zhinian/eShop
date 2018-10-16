@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
@@ -18,9 +18,19 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 
-export default class ButtonSubmit extends Component {
-  constructor() {
-    super();
+interface ButtonSubmitProps {
+  onPress(callback): void
+  onSucceed ():void
+  onFailed ():void
+}
+
+interface ButtonSubmitState {
+  isLoading: boolean
+}
+
+export default class ButtonSubmit extends Component<ButtonSubmitProps, ButtonSubmitState> {
+  constructor(props) {
+    super(props);
 
     this.state = {
       isLoading: false,
@@ -31,26 +41,55 @@ export default class ButtonSubmit extends Component {
     this._onPress = this._onPress.bind(this);
   }
 
-  _onPress() {
-    if (this.state.isLoading) return;
+  buttonAnimated = new Animated.Value(0);
+  growAnimated = new Animated.Value(0);
 
-    this.setState({isLoading: true});
+  componentWillReceiveProps(nextProps) {
+    // if (nextProps.loading === true) {
+    //   this._startAnimation()
+    // } else {
+    //   // setTimeout(() => {
+    //   //   this._onGrow();
+    //   // }, 2000);
+    //   this._stopAnimation()
+    // }
+  }
+
+  _startAnimation(callback?: () => void) {
+    this.setState({ isLoading: true });
     Animated.timing(this.buttonAnimated, {
       toValue: 1,
       duration: 200,
       easing: Easing.linear,
-    }).start();
+    }).start(callback);
+  }
 
+  _stopAnimation() {
+    this.setState({ isLoading: false });
+    this.buttonAnimated.setValue(0);
+    this.growAnimated.setValue(0);
+  }
+
+  _onPress() {
+    if (this.state.isLoading) return;
+
+    this._startAnimation(() => {
+      this.props.onPress && this.props.onPress(this._onSucceed.bind(this));
+    })
+
+    setTimeout(() => {
+      if (!this.state.isLoading) return;
+      this._stopAnimation()
+      this.props.onFailed && this.props.onFailed()
+    }, 5000);
+  }
+
+  _onSucceed() {
     setTimeout(() => {
       this._onGrow();
     }, 2000);
 
-    setTimeout(() => {
-    //   Actions.secondScreen();
-      this.setState({isLoading: false});
-      this.buttonAnimated.setValue(0);
-      this.growAnimated.setValue(0);
-    }, 2300);
+    this._stopAnimation()
   }
 
   _onGrow() {
@@ -58,7 +97,7 @@ export default class ButtonSubmit extends Component {
       toValue: 1,
       duration: 200,
       easing: Easing.linear,
-    }).start();
+    }).start(this.props.onSucceed);
   }
 
   render() {
@@ -73,7 +112,7 @@ export default class ButtonSubmit extends Component {
 
     return (
       <View style={styles.container}>
-        <Animated.View style={{width: changeWidth}}>
+        <Animated.View style={{ width: changeWidth }}>
           <TouchableOpacity
             style={styles.button}
             onPress={this._onPress}
@@ -81,11 +120,11 @@ export default class ButtonSubmit extends Component {
             {this.state.isLoading ? (
               <Image source={spinner} style={styles.image} />
             ) : (
-              <Text style={styles.text}>SAVE</Text>
-            )}
+                <Text style={styles.text}>SAVE</Text>
+              )}
           </TouchableOpacity>
           <Animated.View
-            style={[styles.circle, {transform: [{scale: changeScale}]}]}
+            style={[styles.circle, { transform: [{ scale: changeScale }] }]}
           />
         </Animated.View>
       </View>
@@ -96,7 +135,7 @@ export default class ButtonSubmit extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    top: -95,
+    // top: -95,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
