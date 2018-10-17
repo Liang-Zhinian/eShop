@@ -22,7 +22,7 @@ export const getAppointmentCategories = (siteId, pageSize, pageIndex) => {
 
     var api = new ServiceCatalogApi()
 
-    return api.getServiceCategories(siteId, pageSize, pageIndex)
+    return api.getAppointmentCategories(siteId, pageSize, pageIndex)
       .then(async (res) => {
         await statusMessage(dispatch, 'loading', false)
         if (res.kind == "ok") {
@@ -47,4 +47,64 @@ export const setSelectedAppointmentCategory = (item) => {
     type: 'SET_SELECTED_APPOINTMENT_CATEGORY',
     data: item
   })))
+}
+
+export const addOrUpdateAppointmentCategory = (formData) => {
+  const {
+    Id,
+    Name,
+    Description,
+    AllowOnlineScheduling,
+    ScheduleTypeId,
+    SiteId,
+  } = formData
+
+  return (dispatch, getState) => new Promise(async (resolve, reject) => {
+
+    // Validation checks
+    if (!Name) return reject({ message: ErrorMessages.missingAppointmentCategoryName })
+
+    await statusMessage(dispatch, 'loading', true)
+
+    var api = new ServiceCatalogApi()
+
+    const token = getState().member.token
+    api.setAuthorizationHeader(`${token.token_type} ${token.access_token}`)
+
+    if (!Id) {
+      return api.addAppointmentCategory({
+        Name,
+        Description,
+        AllowOnlineScheduling,
+        ScheduleTypeId,
+        SiteId,
+      })
+        .then(async (res) => {
+          await statusMessage(dispatch, 'loading', false)
+          if (res.kind == "ok") {
+            return resolve('Appointment Category Saved')
+          }
+          else {
+            reject(Error(res.kind))
+          }
+        })
+        .catch(reject)
+    }
+    else {
+      return api.updateAppointmentCategory(formData)
+        .then(async (res) => {
+          await statusMessage(dispatch, 'loading', false)
+          if (res.kind == "ok") {
+            return resolve('Appointment Category Saved')
+          }
+          else {
+            reject(Error(res.kind))
+          }
+        })
+        .catch(reject)
+    }
+  }).catch(async (err) => {
+    await statusMessage(dispatch, 'loading', false)
+    throw err.message
+  })
 }

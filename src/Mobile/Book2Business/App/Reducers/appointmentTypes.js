@@ -23,7 +23,8 @@ export default function appointmentTypeReducer (state = initialState, action) {
         ...state,
         error: null,
         loading: false,
-        appointmentTypes
+        appointmentTypes,
+        selectedAppointmentType: null
       }
     }
     case 'SET_SELECTED_APPOINTMENT_TYPE': {

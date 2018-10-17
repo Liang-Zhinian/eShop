@@ -58,7 +58,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/c/{everything}",
-        "UpstreamHttpMethod": [ "GET" ]
+        "UpstreamHttpMethod": [ ]
       },
       {
         "DownstreamPathTemplate": "/{everything}",
@@ -82,11 +82,7 @@
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/s/{everything}",
-<<<<<<< HEAD
-        "UpstreamHttpMethod": ["GET","PUT","POST"]
-=======
         "UpstreamHttpMethod": []
->>>>>>> 1bc41b23f8b83fc7d9812eb94eea25891c624370
       },
       {
         "DownstreamPathTemplate": "/{everything}",

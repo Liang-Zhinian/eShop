@@ -51,5 +51,13 @@ export default StyleSheet.create({
     top: 85,
     bottom: 0,
     right: 11
-  }
+  },
+  input: {
+    marginTop: 10,
+    fontSize: 20,
+    lineHeight: 26,
+    padding: 3,
+    borderBottomWidth: 1
+  },
+  text:{ fontSize: 20 }
 })

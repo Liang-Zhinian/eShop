@@ -265,6 +265,9 @@ export default class LocationInfo extends React.Component {
     if (loading) return <Loading />
     if (error) return <Messages message={error} />
 
+
+    // if (!this.props.locationData || !this.props.locationData.Id) return null
+
     const { showRideOptions, showGalleryOptions } = this.state
     const { nearbyData } = this.props
     const { event } = Animated
@@ -289,6 +292,7 @@ export default class LocationInfo extends React.Component {
     }
 
     return (
+
       <GradientView style={[styles.linearGradient, { flex: 1 }]}>
         <ScrollView
           ref='scrolly'

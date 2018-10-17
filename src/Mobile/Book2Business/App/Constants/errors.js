@@ -21,5 +21,8 @@ export default {
   missingMealId: 'Missing meal definition',
 
   // Locale
-  localeDoesNotExist: 'Sorry, we do not support that local'
+  localeDoesNotExist: 'Sorry, we do not support that local',
+
+  // AppointmentCategories
+  missingAppointmentCategoryName: 'Appointment category name is missing',
 }

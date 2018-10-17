@@ -23,7 +23,8 @@ export default function serviceCategoryReducer (state = initialState, action) {
         ...state,
         error: null,
         loading: false,
-        appointmentCategories
+        appointmentCategories,
+        selectedAppointmentCategory: null,
       }
     }
     case 'SET_SELECTED_APPOINTMENT_CATEGORY': {

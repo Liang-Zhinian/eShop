@@ -123,7 +123,7 @@ class AppointmentTypeListing extends Component {
   }
 
   handleAddButton() {
-    navigation.navigate('AppointmentType')
+    this.props.navigation.navigate('AppointmentType')
   }
 }
 

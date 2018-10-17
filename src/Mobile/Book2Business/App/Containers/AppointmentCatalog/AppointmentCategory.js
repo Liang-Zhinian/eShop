@@ -4,77 +4,69 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 
+import Layout from './Components/AppointmentCategory'
+import { addOrUpdateAppointmentCategory } from '../../Actions/appointmentCategories'
+
 class AppointmentCategory extends Component {
   static propTypes = {
-    Layout: PropTypes.func.isRequired,
-    // recipes: PropTypes.shape({
-    //   loading: PropTypes.bool.isRequired,
-    //   error: PropTypes.string,
-    //   recipes: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-    // }).isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({})
-    })
-    // fetchRecipes: PropTypes.func.isRequired,
-    // fetchMeals: PropTypes.func.isRequired,
-    // showError: PropTypes.func.isRequired,
+    onFormSubmit: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    member: PropTypes.shape({}).isRequired,
+    appointmentCategories: PropTypes.shape({}).isRequired,
   }
 
-  static defaultProps = {
-    match: null
+  state = {
+    errorMessage: null,
+    successMessage: null
   }
 
-  static renderRightButton = (props) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          Actions.appointment_category({ match: { params: { action: 'ADD' } } })
-        }}
-        style={{marginRight: 10}}>
-        <Icon name='add' />
-      </TouchableOpacity>
-    )
+  constructor(props){
+    super(props)
+    this.actionType = this.props.navigation.getParam('ActionType') || 'Add'
   }
 
-  componentDidMount = () => this.fetchRecipes();
 
-  /**
-    * Fetch Data from API, saving to Redux
-    */
-  fetchRecipes = () => {
-    // const { fetchRecipes, fetchMeals, showError } = this.props;
-    // return fetchRecipes()
-    //   .then(() => fetchMeals())
-    //   .catch((err) => {
-    //     console.log(`Error: ${err}`);
-    //     return showError(err);
-    //   });
+  onFormSubmit = (data) => {
+    const { onFormSubmit } = this.props
+    return onFormSubmit(data)
+      .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
+      .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err })
   }
 
   render = () => {
-    const { Layout, /* recipes, */match } = this.props
-    // const id = (match && match.params && match.params.id) ? match.params.id : null;
+    const {
+      member,
+      appointmentCategories,
+      isLoading
+    } = this.props
+
+    const { successMessage, errorMessage } = this.state
+
+    let appointmentCategory = this.actionType == 'Update' ? appointmentCategories.selectedAppointmentCategory : {
+      ScheduleTypeId: 4,
+      SiteId: member.SiteId
+    }
 
     return (
       <Layout
-        // recipeId={id}
-        // error={recipes.error}
-        // loading={recipes.loading}
-        // recipes={recipes.recipes}
-        reFetch={() => this.fetchRecipes()}
+        appointmentCategory={appointmentCategory}
+        loading={isLoading}
+        error={errorMessage}
+        success={successMessage}
+        onFormSubmit={this.onFormSubmit}
       />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  // recipes: state.recipes || {},
+  member: state.member || {},
+  appointmentCategories: state.appointmentCategories || {},
+  isLoading: state.status.loading || false,
 })
 
 const mapDispatchToProps = {
-  // fetchRecipes: getRecipes,
-  // fetchMeals: getMeals,
-  // showError: setError,
+  onFormSubmit: addOrUpdateAppointmentCategory
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppointmentCategory)

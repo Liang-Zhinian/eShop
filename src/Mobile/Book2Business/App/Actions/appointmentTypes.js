@@ -15,14 +15,14 @@ export function setError(message) {
 /**
   * Get ServiceCategories
   */
-export function getAppointmentTypes(siteId, serviceCategoryId, pageSize, pageIndex) {
+export function getAppointmentTypes(siteId, appointmentCategoryId, pageSize, pageIndex) {
 
   return dispatch => new Promise(async (resolve, reject) => {
     await statusMessage(dispatch, 'loading', true)
 
     var api = new ServiceCatalogApi()
 
-    return api.getServiceItems(siteId, serviceCategoryId, pageSize, pageIndex)
+    return api.getAppointmentTypes(siteId, appointmentCategoryId, pageSize, pageIndex)
       .then(async (res) => {
         await statusMessage(dispatch, 'loading', false)
         if (res.kind == "ok") {

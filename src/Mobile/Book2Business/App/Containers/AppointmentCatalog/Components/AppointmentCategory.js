@@ -1,83 +1,145 @@
-import React, { Component } from 'react'
-import { TouchableOpacity, Text } from 'react-native'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { Icon } from 'native-base'
-// import { Actions } from 'react-native-router-flux';
+import {
+  Container, 
+  Content, 
+  Text, 
+  Header, 
+  Form, 
+  Item, 
+  Label, 
+  Input, 
+  Button, 
+  Switch
+} from 'native-base'
 
-// import { getRecipes, getMeals, setError } from '../Actions/recipes';
+import Messages from '../../../Components/Messages'
+import Loading from '../../../Components/Loading'
+import Spacer from '../../../Components/Spacer'
 
-class AppointmentCategory extends Component {
+const data = {
+  Id: "9eeb8643-2e1a-4168-a5c4-fbf17162e3a6",
+  Name: "Complimentary",
+  Description: "Complimentary",
+  AllowOnlineScheduling: true,
+  ScheduleTypeId: 4,
+  SiteId: "6879a31e-8936-414a-9d5f-abb4ee4a6bb8"
+}
+
+export default class AppointmentCategory extends React.Component {
   static propTypes = {
-    Layout: PropTypes.func.isRequired,
-    // recipes: PropTypes.shape({
-    //   loading: PropTypes.bool.isRequired,
-    //   error: PropTypes.string,
-    //   recipes: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-    // }).isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({})
+    error: PropTypes.string,
+    success: PropTypes.string,
+    loading: PropTypes.bool.isRequired,
+    onFormSubmit: PropTypes.func.isRequired,
+    appointmentCategory: PropTypes.shape({
+      Id: PropTypes.string,
+      Name: PropTypes.string,
+      Description: PropTypes.string,
+      AllowOnlineScheduling: PropTypes.bool,
+      ScheduleTypeId: PropTypes.number,
+      SiteId: PropTypes.string
+    }).isRequired
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      Id: props.appointmentCategory.Id || '',
+      Name: props.appointmentCategory.Name || '',
+      Description: props.appointmentCategory.Description || '',
+      AllowOnlineScheduling: props.appointmentCategory.AllowOnlineScheduling || true,
+      ScheduleTypeId: props.appointmentCategory.ScheduleTypeId || 4,
+      SiteId: props.appointmentCategory.SiteId || '',
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+
+    this._bootStrapAsync()
+  }
+
+  async _bootStrapAsync() {
+    
+  }
+
+  handleChange = (name, val) => {
+    this.setState({
+      [name]: val
     })
-    // fetchRecipes: PropTypes.func.isRequired,
-    // fetchMeals: PropTypes.func.isRequired,
-    // showError: PropTypes.func.isRequired,
   }
 
-  static defaultProps = {
-    match: null
-  }
-
-  static renderRightButton = (props) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          Actions.appointment_category({ match: { params: { action: 'ADD' } } })
-        }}
-        style={{marginRight: 10}}>
-        <Icon name='add' />
-      </TouchableOpacity>
-    )
-  }
-
-  componentDidMount = () => this.fetchRecipes();
-
-  /**
-    * Fetch Data from API, saving to Redux
-    */
-  fetchRecipes = () => {
-    // const { fetchRecipes, fetchMeals, showError } = this.props;
-    // return fetchRecipes()
-    //   .then(() => fetchMeals())
-    //   .catch((err) => {
-    //     console.log(`Error: ${err}`);
-    //     return showError(err);
-    //   });
+  handleSubmit = () => {
+    const { onFormSubmit } = this.props
+    onFormSubmit && onFormSubmit(this.state)
+      .then(() => console.log('Appointment Type Updated'))
+      .catch(e => console.log(`Error: ${e}`))
   }
 
   render = () => {
-    const { Layout, /* recipes, */match } = this.props
-    // const id = (match && match.params && match.params.id) ? match.params.id : null;
+    const { loading, error, success } = this.props
+    const {
+      Id,
+      Name,
+      Description,
+      AllowOnlineScheduling,
+      ScheduleTypeId,
+      SiteId,
+    } = this.state
+
+    // Loading
+    if (loading) return <Loading />
 
     return (
-      <Layout
-        // recipeId={id}
-        // error={recipes.error}
-        // loading={recipes.loading}
-        // recipes={recipes.recipes}
-        reFetch={() => this.fetchRecipes()}
-      />
+      <Container style={{ backgroundColor: 'white' }}>
+        <Content padder>
+          <Header
+            title='Appointment category'
+            content='Thanks for keeping your appointment category up to date!'
+          />
+
+          {error && <Messages message={error} />}
+          {success && <Messages message={success} type='success' />}
+
+          <Form>
+            <Item stackedLabel>
+              <Label>
+                Name
+                </Label>
+              <Input
+                value={Name}
+                onChangeText={v => this.handleChange('Name', v)}
+              />
+            </Item>
+
+            <Item stackedLabel>
+              <Label>
+                Description
+            </Label>
+              <Input
+                value={Description}
+                onChangeText={v => this.handleChange('Description', v)}
+              />
+            </Item>
+
+            <Item fixedLabel style={{ height: 80 }}>
+              <Label>
+                AllowOnlineScheduling
+              </Label>
+              <Switch value={AllowOnlineScheduling} onValueChange={v => this.handleChange('AllowOnlineScheduling', v)} />
+            </Item>
+
+            <Spacer size={20} />
+
+            <Button block onPress={this.handleSubmit}>
+              <Text>
+                Save
+              </Text>
+            </Button>
+          </Form>
+        </Content>
+      </Container>
     )
   }
 }
-
-const mapStateToProps = state => ({
-  // recipes: state.recipes || {},
-})
-
-const mapDispatchToProps = {
-  // fetchRecipes: getRecipes,
-  // fetchMeals: getMeals,
-  // showError: setError,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppointmentCategory)

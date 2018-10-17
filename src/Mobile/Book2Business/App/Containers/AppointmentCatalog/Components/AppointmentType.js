@@ -65,7 +65,7 @@ class ServiceItem extends React.Component {
   handleSubmit = () => {
     const { onFormSubmit } = this.props
     onFormSubmit(this.state)
-      .then(() => console.log('Location Updated'))
+      .then(() => console.log('Appointment Type Updated'))
       .catch(e => console.log(`Error: ${e}`))
   }
 

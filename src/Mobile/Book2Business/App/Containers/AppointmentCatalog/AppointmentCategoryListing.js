@@ -7,13 +7,12 @@ import { Images } from '../../Themes'
 import styles from './Styles/AppointmentsScreenStyle'
 import List from '../../Components/List/List'
 import ListItem from '../../Components/List/ListItem'
-import BackButton from '../../Components/BackButton'
+import AddButton from '../../Components/AddButton'
 
 import { setSelectedAppointmentCategory, getAppointmentCategories, setError } from '../../Actions/appointmentCategories'
 
 class AppointmentCategoryListing extends Component {
   static propTypes = {
-    // Layout: PropTypes.func.isRequired,
     appointmentCategories: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
       error: PropTypes.string,
@@ -34,24 +33,29 @@ class AppointmentCategoryListing extends Component {
     reFetch: null,
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    tabBarLabel: 'More',
-    tabBarIcon: ({ focused }) => (
-      <Image
-        source={
-          focused
-            ? Images.activeInfoIcon
-            : Images.inactiveInfoIcon
-        }
-      />
-    ),
-    title: 'Appointment Categories',
-    headerMode: 'screen',
-    headerBackTitleVisible: true,
-    headerLeft: (
-      <BackButton navigation={navigation} />
-    )
-  })
+  static navigationOptions = ({ navigation }) => {
+
+    const { handleAddButton } = navigation.state.params || {
+      handleAddButton: () => null,
+    }
+
+    return {
+      tabBarLabel: 'More',
+      tabBarIcon: ({ focused }) => (
+        <Image
+          source={
+            focused
+              ? Images.activeInfoIcon
+              : Images.inactiveInfoIcon
+          }
+        />
+      ),
+      title: 'Appointment Categories',
+      headerMode: 'screen',
+      headerBackTitleVisible: true,
+      headerRight: (<AddButton onPress={handleAddButton} />),
+    }
+  }
 
   constructor(props) {
     super(props)
@@ -59,11 +63,17 @@ class AppointmentCategoryListing extends Component {
     }
   }
 
-  componentDidMount = () => this.fetchAppointmentCategories();
+  componentDidMount = () => {
+    this.fetchAppointmentCategories();
+
+    this.props.navigation.setParams({
+      handleAddButton: this.handleAddButton.bind(this)
+    })
+  }
 
   render = () => {
     const { appointmentCategories, navigation } = this.props;
-    
+
     const keyExtractor = item => item.Id;
 
     return (
@@ -86,6 +96,7 @@ class AppointmentCategoryListing extends Component {
     */
   fetchAppointmentCategories = () => {
     const { member, fetchAppointmentCategories, showError } = this.props
+    console.log(member)
 
     return fetchAppointmentCategories(member.SiteId, 10, 0)
       .catch((err) => {
@@ -107,14 +118,19 @@ class AppointmentCategoryListing extends Component {
         onPressEdit={() => {
           const { navigation, setSelectedAppointmentCategory } = this.props
           setSelectedAppointmentCategory(item)
-          navigation.navigate('AppointmentTypeListing', { id: item.Id })
+          navigation.navigate('AppointmentCategory', {ActionType: 'Update'})
         }}
         onPressRemove={() => {
           const { navigation } = this.props
-          navigation.navigate('AppointmentTypeListing', { id: item.Id })
+          // navigation.navigate('AppointmentTypeListing', { id: item.Id })
         }} />
     )
   }
+
+  handleAddButton() {
+    this.props.navigation.navigate('AppointmentCategory', {ActionType: 'Add'})
+  }
+
 }
 
 const mapStateToProps = state => ({

@@ -62,7 +62,8 @@ class LocationScreen extends Component {
 
     this.state = {
       isMenuOpen: false,
-      loaded: false
+      loaded: false,
+      isLoading: false
     }
   }
 
@@ -81,7 +82,7 @@ class LocationScreen extends Component {
   }
 
   render() {
-    // if (this.state.isLoading) return null
+    if (this.state.isLoading) return null
 
     const { locations, nearbyData, navigation } = this.props
 
@@ -90,7 +91,8 @@ class LocationScreen extends Component {
         ref={ref => this.animatedContainerWithNavbar = ref}
         menuPosition='right'
         content={(<Layout
-          nearbyData={nearbyData} locationData={locations.currentLocation}
+          nearbyData={nearbyData} 
+          locationData={locations.currentLocation}
           navigation={navigation}
           error={locations.error}
           loading={locations.loading}
@@ -153,7 +155,7 @@ class LocationScreen extends Component {
   fetchLocation() {
     const { fetchLocation, showError, member } = this.props
     const { SiteId, LocationId } = member.currentLocation
-    console.log(SiteId, LocationId)
+    
     fetchLocation(SiteId, LocationId)
       .then(() => {
         this.setState({ isLoading: false })
