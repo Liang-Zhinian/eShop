@@ -52,6 +52,11 @@ class AppointmentTypeListing extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      reFetchingStatus: false,
+      fetchingNextPageStatus: false,
+      pageIndex: 0
+    }
   }
 
   componentDidMount = () => {
@@ -62,25 +67,11 @@ class AppointmentTypeListing extends Component {
     })
   }
 
-  /**
-    * Fetch Data from API, saving to Redux
-    */
-   fetchAppointmentTypes = () => {
-    const { member, fetchAppointmentTypes, showError, match } = this.props
-    const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
-    
-    return fetchAppointmentTypes(member.SiteId, serviceCategoryId, 10, 0)
-      .catch((err) => {
-        console.log(`Error: ${err}`)
-        return showError(err)
-      })
-  }
-
   render = () => {
     const { appointmentTypes, match } = this.props
 
     const id = (match && match.params && match.params.id) ? match.params.id : null
-    
+
     let listViewData = appointmentTypes.appointmentTypes ? appointmentTypes.appointmentTypes.Data : null
 
     return (
@@ -93,7 +84,10 @@ class AppointmentTypeListing extends Component {
         keyExtractor={(item, idx) => item.Id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        reFetch={() => this.fetchAppointmentTypes()}
+        refresh={this.onRefresh}
+        loadMore={this.onNextPage.bind(this)}
+        refreshing={this.state.reFetchingStatus}
+        loadingMore={this.state.fetchingNextPageStatus}
         error={appointmentTypes.error}
         loading={appointmentTypes.loading}
       />
@@ -108,12 +102,12 @@ class AppointmentTypeListing extends Component {
         onPress={() => {
           const { navigation, setSelectedAppointmentType } = this.props
           setSelectedAppointmentType(item)
-          navigation.navigate('AppointmentType', { AppointmentType: item })
+          navigation.navigate('AppointmentType', { ActionType: 'Update' })
         }}
         onPressEdit={() => {
           const { navigation, setSelectedAppointmentType } = this.props
           setSelectedAppointmentType(item)
-          navigation.navigate('AppointmentType', { AppointmentType: item })
+          navigation.navigate('AppointmentType', { ActionType: 'Update' })
         }}
         onPressRemove={() => {
           const { navigation } = this.props
@@ -123,7 +117,54 @@ class AppointmentTypeListing extends Component {
   }
 
   handleAddButton() {
-    this.props.navigation.navigate('AppointmentType')
+    this.props.navigation.navigate('AppointmentType', { ActionType: 'Add' })
+  }
+
+  /**
+    * Fetch Data from API, saving to Redux
+    */
+  fetchAppointmentTypes = () => {
+    const { member, fetchAppointmentTypes, showError, match } = this.props
+    const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
+
+    return fetchAppointmentTypes(member.SiteId, serviceCategoryId, 10, 0)
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
+  }
+
+  onRefresh = () => {
+    this.setState({ reFetchingStatus: true, pageIndex: 0 })
+    const { member, fetchAppointmentTypes, showError, match } = this.props
+    const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
+
+    return fetchAppointmentTypes(member.SiteId, serviceCategoryId, 10, this.state.pageIndex)
+      .then(res => {
+        this.setState({ reFetchingStatus: false })
+      })
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
+  }
+
+  onNextPage = () => {
+    this.setState({ fetchingNextPageStatus: true })
+    const { member, fetchAppointmentTypes, showError, match } = this.props
+    const serviceCategoryId = (match && match.params && match.params.id) ? match.params.id : null
+
+    return fetchAppointmentTypes(member.SiteId, serviceCategoryId, 10, this.state.pageIndex + 1)
+      .then(res => {
+        this.setState({
+          fetchingNextPageStatus: false,
+          pageIndex: this.state.pageIndex + 1
+        })
+      })
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
   }
 }
 

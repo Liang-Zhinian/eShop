@@ -97,4 +97,42 @@ export default class ServiceCatalogApi extends Api {
     }
   }
 
+  async addAppointmentType(data): Promise<{}> {
+    // this.setHeader('content-type', 'application/x-www-form-urlencoded')
+    // make the api call
+    const response = await this.apisauce.post(`/ServiceCatalog/serviceitems`, data)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = this.getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      return { kind: "ok", data: response.data }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async updateAppointmentType(data): Promise<{}> {
+    // this.setHeader('content-type', 'application/x-www-form-urlencoded')
+    // make the api call
+    const response = await this.apisauce.put(`/ServiceCatalog/serviceitems`, data)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = this.getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      return { kind: "ok", data: response.data }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
 }

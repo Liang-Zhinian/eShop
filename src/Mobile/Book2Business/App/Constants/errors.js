@@ -25,4 +25,7 @@ export default {
 
   // AppointmentCategories
   missingAppointmentCategoryName: 'Appointment category name is missing',
+
+  // AppointmentTypes
+  missingAppointmentTypeName: 'Appointment type name is missing',
 }

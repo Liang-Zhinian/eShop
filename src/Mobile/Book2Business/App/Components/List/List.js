@@ -90,8 +90,6 @@ class List extends Component {
     keyExtractor: (item, idx) => idx,
     showsVerticalScrollIndicator: false,
     data: [],
-    pageSize: 20,
-    pageIndex: 0,
     refresh: _ => null,
     loadMore: _ => null,
     refreshing: false,

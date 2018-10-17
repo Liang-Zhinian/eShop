@@ -60,6 +60,9 @@ class AppointmentCategoryListing extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      reFetchingStatus: false,
+      fetchingNextPageStatus: false,
+      pageIndex: 0
     }
   }
 
@@ -84,7 +87,10 @@ class AppointmentCategoryListing extends Component {
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        reFetch={this.fetchAppointmentCategories}
+        refresh={this.onRefresh}
+        loadMore={this.onNextPage.bind(this)}
+        refreshing={this.state.reFetchingStatus}
+        loadingMore={this.state.fetchingNextPageStatus}
         error={appointmentCategories.error}
         loading={appointmentCategories.loading}
       />
@@ -96,9 +102,39 @@ class AppointmentCategoryListing extends Component {
     */
   fetchAppointmentCategories = () => {
     const { member, fetchAppointmentCategories, showError } = this.props
-    console.log(member)
 
-    return fetchAppointmentCategories(member.SiteId, 10, 0)
+    return fetchAppointmentCategories(member.SiteId, 10, this.state.pageIndex)
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
+  }
+
+  onRefresh = () => {
+    this.setState({ reFetchingStatus: true, pageIndex: 0 })
+    const { member, fetchAppointmentCategories, showError } = this.props
+
+    return fetchAppointmentCategories(member.SiteId, 10, this.state.pageIndex)
+      .then(res => {
+        this.setState({ reFetchingStatus: false })
+      })
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
+  }
+
+  onNextPage = () => {
+    this.setState({ fetchingNextPageStatus: true })
+    const { member, fetchAppointmentCategories, showError } = this.props
+
+    fetchAppointmentCategories(member.SiteId, 10, this.state.pageIndex + 1)
+      .then(res => {
+        this.setState({
+          fetchingNextPageStatus: false,
+          pageIndex: this.state.pageIndex + 1
+        })
+      })
       .catch((err) => {
         console.log(`Error: ${err}`)
         return showError(err)
@@ -118,7 +154,7 @@ class AppointmentCategoryListing extends Component {
         onPressEdit={() => {
           const { navigation, setSelectedAppointmentCategory } = this.props
           setSelectedAppointmentCategory(item)
-          navigation.navigate('AppointmentCategory', {ActionType: 'Update'})
+          navigation.navigate('AppointmentCategory', { ActionType: 'Update' })
         }}
         onPressRemove={() => {
           const { navigation } = this.props
@@ -128,7 +164,7 @@ class AppointmentCategoryListing extends Component {
   }
 
   handleAddButton() {
-    this.props.navigation.navigate('AppointmentCategory', {ActionType: 'Add'})
+    this.props.navigation.navigate('AppointmentCategory', { ActionType: 'Add' })
   }
 
 }

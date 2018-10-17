@@ -3,7 +3,7 @@
 import React from 'react'
 import MapView from 'react-native-maps'
 import {
-  View, TouchableOpacity, Text, Image, Dimensions
+  View, TouchableOpacity, Text, Dimensions
 } from 'react-native'
 import VenueMapCallout from '../VenueMapCallout'
 import {
@@ -26,6 +26,7 @@ import AnimatedButton from '../AnimatedButton'
 import GradientView from '../GradientView'
 import GradientHeader from '../GradientHeader'
 import ThemeScreen from '../../../ignite/DevScreens/ThemeScreen'
+import BackButton from '../BackButton'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -299,9 +300,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
       <GradientHeader>
         <View style={[styles.header]}>
           <Left>
-            <TouchableOpacity style={styles.backButton} onPress={this.props.screenProps.toggle}>
-              <Image style={styles.backButtonIcon} source={Images.arrowIcon} />
-            </TouchableOpacity>
+            <BackButton onPress={this.props.screenProps.toggle} />
           </Left>
           <Body>
             <Title style={{ color: Colors.snow }}>Pick a location</Title>

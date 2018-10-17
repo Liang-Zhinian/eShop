@@ -75,7 +75,7 @@ class RegistrationInvitation extends React.Component<Props, State> {
         return (
             <View style={{ flex: 1, backgroundColor: Colors.snow }}>
                 <GradientHeader>
-                    <Header title='Off Registration Invitation'
+                    <Header title='Offer Registration Invitation'
                         goBack={this.handleCancel} />
                 </GradientHeader>
                 <ScrollView style={{ padding: 10 }}>

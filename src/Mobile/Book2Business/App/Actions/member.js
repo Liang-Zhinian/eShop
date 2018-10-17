@@ -264,6 +264,9 @@ export function refreshToken(dispatch, state) {
               token: { ...resp.data, auth_time: new Date() }
             }
           });
+
+          getUserData(dispatch, state.member.username, resp.data)
+
           return Promise.resolve(resp.data)
         } else {
 

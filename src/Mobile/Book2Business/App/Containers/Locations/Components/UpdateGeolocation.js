@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import {
-    Container, Content, Text, Body, ListItem, Form, Item, Label, Input, CheckBox, Button, View
+  Container, Content, Text, Body, ListItem, Form, Item, Label, Input, CheckBox, Button, View
 } from 'native-base'
 import { connect } from 'react-redux'
 import Messages from '../../../Components/Messages'
@@ -33,7 +33,7 @@ class UpdateGeolocation extends React.Component {
     success: null
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       latitude: '' + props.location.Geolocation.Latitude,
@@ -53,19 +53,19 @@ class UpdateGeolocation extends React.Component {
   handleSubmit = () => {
     const { onFormSubmit } = this.props
     onFormSubmit(this.state)
-            .then(() => console.log('Location Updated'))
-            .catch(e => console.log(`Error: ${e}`))
+      .then(() => console.log('Location Updated'))
+      .catch(e => console.log(`Error: ${e}`))
   }
 
-  render () {
+  render() {
     const { loading, error, success, location } = this.props
 
     const {
-            latitude,
-            longitude
-        } = this.state
+      latitude,
+      longitude
+    } = this.state
 
-        // Loading
+    // Loading
     if (loading) return <Loading />
 
     return (
@@ -74,7 +74,7 @@ class UpdateGeolocation extends React.Component {
           <Header
             title='Geolocation'
             content='Thanks for keeping your geolocation up to date!'
-                    />
+          />
 
           {error && <Messages message={error} />}
           {success && <Messages message={success} type='success' />}
@@ -82,22 +82,22 @@ class UpdateGeolocation extends React.Component {
           <Form>
             <Item stackedLabel>
               <Label>
-                                Latitude
+                Latitude
                             </Label>
               <Input
                 value={latitude}
                 onChangeText={v => this.handleChange('latitude', v)}
-                            />
+              />
             </Item>
 
             <Item stackedLabel>
               <Label>
-                                Longitude
+                Longitude
                             </Label>
               <Input
                 value={longitude}
                 onChangeText={v => this.handleChange('longitude', v)}
-                            />
+              />
             </Item>
             <Spacer size={20} />
 
@@ -105,9 +105,9 @@ class UpdateGeolocation extends React.Component {
               mapViewMode={false}
               scrollEnabled
               style={[styles.map]}
-              initialRegion={{ title: location.Name, latitude, longitude, latitudeDelta: 0.05, longitudeDelta: 0.01 }}
-              locations={[{ title: location.Name, latitude, longitude }]}
-              handePickButton={({location}) => {
+              initialRegion={{ title: location.Name, latitude: latitude - 0, longitude: longitude - 0, latitudeDelta: 0.05, longitudeDelta: 0.01 }}
+              locations={[{ title: location.Name, latitude: latitude - 0, longitude: longitude - 0 }]}
+              handePickButton={({ location }) => {
                 this.setState({
                   latitude: '' + location.latitude,
                   longitude: '' + location.longitude
@@ -127,7 +127,7 @@ class UpdateGeolocation extends React.Component {
 
             <Button block onPress={this.handleSubmit}>
               <Text>
-                                Save
+                Save
               </Text>
             </Button>
           </Form>

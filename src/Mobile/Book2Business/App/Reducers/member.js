@@ -64,9 +64,10 @@ export default function userReducer(state = initialState, action) {
     }
     case 'USER_LOGIN_LOCATIONS': {
       if (action.data) {
-        let currentLocation = null
-        if (!state.currentLocation && action.data.siblingLocations && action.data.siblingLocations.length > 0)
+        let currentLocation = state.currentLocation
+        if (!currentLocation && action.data.siblingLocations && action.data.siblingLocations.length > 0)
           currentLocation = action.data.siblingLocations[0]
+        console.log(state.currentLocation, action)
         return {
           ...state,
           loading: false,

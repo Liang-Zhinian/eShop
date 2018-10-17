@@ -62,7 +62,9 @@ class StaffScheduleListing extends Component {
 
   state = {
     errorMessage: null,
-    successMessage: null
+    successMessage: null,
+    reFetchingStatus: false,
+    fetchingNextPageStatus: false,
   }
 
   animatedContainerWithNavbar = null;
@@ -82,7 +84,10 @@ class StaffScheduleListing extends Component {
         keyExtractor={(item, idx) => item.Id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        reFetch={() => this.fetchStaffSchedules()}
+        refresh={this.fetchStaffSchedules.bind(this)}
+        loadMore={this.onNextPage.bind(this)}
+        refreshing={this.state.reFetchingStatus}
+        loadingMore={this.state.fetchingNextPageStatus}
         error={staffSchedules.error}
         loading={staffSchedules.loading}
       />
@@ -127,6 +132,21 @@ class StaffScheduleListing extends Component {
     const { member, fetchStaffSchedules, selectedAppointmentType, showError } = this.props
 
     fetchStaffSchedules(member.SiteId, member.currentLocation.Id, member.Id, selectedAppointmentType.Id)
+      .catch((err) => {
+        console.log(`Error: ${err}`)
+        return showError(err)
+      })
+  }
+
+  onNextPage(pageSize = 10, pageIndex = 0) {
+    const { member, fetchStaffSchedules, selectedAppointmentType, showError } = this.props
+
+    fetchStaffSchedules(member.SiteId,
+      member.currentLocation.Id,
+      member.Id,
+      selectedAppointmentType.Id,
+      pageSize,
+      pageIndex)
       .catch((err) => {
         console.log(`Error: ${err}`)
         return showError(err)

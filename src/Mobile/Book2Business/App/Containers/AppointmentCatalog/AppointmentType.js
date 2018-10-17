@@ -6,12 +6,13 @@ import { Icon } from 'native-base'
 
 import { Images } from '../../Themes'
 import Layout from './Components/AppointmentType'
-import { updateAppointmentType } from '../../Actions/appointmentTypes'
 import Hamburger from '../../Components/Hamburger'
 import AnimatedContainerWithNavbar from '../../Components/AnimatedContainerWithNavbar'
+import { addOrUpdateAppointmentType } from '../../Actions/appointmentTypes'
 
-class Appointment extends Component {
+class AppointmentType extends Component {
   static propTypes = {
+    member: PropTypes.shape({}).isRequired,
     appointmentTypes: PropTypes.shape({}).isRequired,
     appointmentCategories: PropTypes.shape({}).isRequired,
     onFormSubmit: PropTypes.func.isRequired,
@@ -56,28 +57,26 @@ class Appointment extends Component {
   animatedContainerWithNavbar = null;
 
   onFormSubmit = (data) => {
-    // const { onFormSubmit } = this.props;
-    // return onFormSubmit(data)
-    //   .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
-    //   .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err; });
+    const { onFormSubmit } = this.props;
+    return onFormSubmit(data)
+      .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
+      .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err; });
   }
 
   render = () => {
     const {
+      member,
       appointmentTypes,
       appointmentCategories,
       isLoading,
       navigation
     } = this.props
 
-    let appointmentType = appointmentTypes.selectedAppointmentType
-    if (!appointmentType) {
-      appointmentType = { ServiceCategoryId: appointmentCategories.selectedAppointmentCategory.Id }
-    }
 
-    let passedInAppointmentType = navigation.getParam('AppointmentType');
-    if (passedInAppointmentType)
-      appointmentType = passedInAppointmentType
+    let appointmentType = this.actionType == 'Update' ? appointmentTypes.selectedAppointmentType : {
+      ServiceCategoryId: appointmentCategories.selectedAppointmentCategory.Id,
+      SiteId: member.SiteId
+    }
 
     const { successMessage, errorMessage } = this.state
 
@@ -116,14 +115,15 @@ class Appointment extends Component {
 }
 
 const mapStateToProps = state => ({
+  member: state.member || {},
   appointmentTypes: state.appointmentTypes || {},
   appointmentCategories: state.appointmentCategories || {},
   isLoading: state.status.loading || false
 })
 
 const mapDispatchToProps = {
-  onFormSubmit: updateAppointmentType
+  onFormSubmit: addOrUpdateAppointmentType
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Appointment)
+export default connect(mapStateToProps, mapDispatchToProps)(AppointmentType)
 

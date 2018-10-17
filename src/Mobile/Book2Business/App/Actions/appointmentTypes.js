@@ -43,13 +43,81 @@ export function getAppointmentTypes(siteId, appointmentCategoryId, pageSize, pag
 
 }
 
-export function updateAppointmentType() {
-
-}
-
 export const setSelectedAppointmentType = (item) => {
   return dispatch => new Promise(resolve => resolve(dispatch({
     type: 'SET_SELECTED_APPOINTMENT_TYPE',
     data: item
   })))
+}
+
+export const addOrUpdateAppointmentType = (formData) => {
+  const {
+    Id,
+    Name,
+    Description,
+    DefaultTimeLength,
+    ServiceCategoryId,
+    IndustryStandardCategoryName,
+    IndustryStandardSubcategoryName,
+    Price,
+    AllowOnlineScheduling,
+    TaxRate,
+    TaxAmount,
+    SiteId,
+  } = formData
+
+  return (dispatch, getState) => new Promise(async (resolve, reject) => {
+
+    // Validation checks
+    if (!Name) return reject({ message: ErrorMessages.missingAppointmentTypeName })
+
+    await statusMessage(dispatch, 'loading', true)
+
+    var api = new ServiceCatalogApi()
+
+    const token = getState().member.token
+    api.setAuthorizationHeader(`${token.token_type} ${token.access_token}`)
+
+    if (!Id) {
+      return api.addAppointmentType({
+        Name,
+        Description,
+        DefaultTimeLength,
+        ServiceCategoryId,
+        IndustryStandardCategoryName,
+        IndustryStandardSubcategoryName,
+        Price,
+        AllowOnlineScheduling,
+        TaxRate,
+        TaxAmount,
+        SiteId,
+      })
+        .then(async (res) => {
+          await statusMessage(dispatch, 'loading', false)
+          if (res.kind == "ok") {
+            return resolve('Appointment Type Saved')
+          }
+          else {
+            reject(Error(res.kind))
+          }
+        })
+        .catch(reject)
+    }
+    else {
+      return api.updateAppointmentType(formData)
+        .then(async (res) => {
+          await statusMessage(dispatch, 'loading', false)
+          if (res.kind == "ok") {
+            return resolve('Appointment Type Saved')
+          }
+          else {
+            reject(Error(res.kind))
+          }
+        })
+        .catch(reject)
+    }
+  }).catch(async (err) => {
+    await statusMessage(dispatch, 'loading', false)
+    throw err.message
+  })
 }
