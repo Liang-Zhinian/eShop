@@ -25,7 +25,6 @@ function equalDates(d1, d2) {
 }
 
 function formatText(markedDates, formatString = DateFormat) {
-    console.log(markedDates)
     if (equalDates(markedDates[0], markedDates[1])) {
         if (equalDates(markedDates[0], MinDate)) {
             return 'Ongoing'

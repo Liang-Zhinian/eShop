@@ -6,8 +6,9 @@ export default StyleSheet.create({
     marginRight: 20
   },
   addButtonText: {
-    fontFamily: 'Montserrat-Light',
+    // fontFamily: 'Montserrat-Light',
     fontSize: 17,
+    fontWeight: 'bold',
     letterSpacing: 0,
     backgroundColor: Colors.transparent,
     color: 'rgba(255,255,255,0.80)'

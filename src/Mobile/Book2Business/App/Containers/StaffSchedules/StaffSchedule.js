@@ -1,36 +1,23 @@
 import React from 'react';
-import {
-    ScrollView,
-    View,
-    StyleSheet,
-    KeyboardAvoidingView,
-    Text,
-    //   TextInput,
-} from 'react-native';
-import {
-    Label, Button, Switch, Segment
-} from 'native-base'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import Messages from '../../Components/Messages'
-import Loading from '../../Components/Loading'
-import Header from '../../Components/Header'
-import Spacer from '../../Components/Spacer'
-import Avatar from '../../Components/Avatar';
-import RoundedButton from '../../Components/RoundedButton';
-import TextInput from '../../Components/TextInput';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import styles from './Styles/StaffScheduleStyle';
-import DateRangePicker from '../../Components/DateRangePicker'
-import TimeRangePicker from '../../Components/TimeRangePicker'
+import Layout from './Components/StaffSchedule'
+import * as StaffScheduleActions from '../../Actions/staffSchedules'
 
 class StaffSchedule extends React.Component {
-    static navigationOptions = {
-        title: 'Schedule'.toUpperCase(),
-    };
+    static propTypes = {
+        onFormSubmit: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
+        member: PropTypes.shape({}).isRequired,
+        appointmentTypes: PropTypes.shape({}).isRequired,
+        appointmentCategories: PropTypes.shape({}).isRequired,
+        staffSchedules: PropTypes.shape({}).isRequired,
+    }
 
-    static defaultProps = {
-        error: null,
-        success: null
+    state = {
+        errorMessage: null,
+        successMessage: null
     }
 
     schedule = {
@@ -54,183 +41,67 @@ class StaffSchedule extends React.Component {
 
     constructor(props) {
         super(props)
+        this.actionType = props.navigation.getParam('ActionType') || 'Add'
+    }
 
-        this.schedule = props.navigation.getParam('schedule') || this.schedule;
-
-        this.state = {
-            IsAvailability: this.schedule.IsAvailability,
-            StartDateTime: this.schedule.StartDateTime,
-            EndDateTime: this.schedule.EndDateTime,
-            StaffId: this.schedule.StaffId,
-            ServiceItemId: this.schedule.ServiceItemId,
-            LocationId: this.schedule.LocationId,
-            BookableEndDateTime: this.schedule.BookableEndDateTime,
-            Sunday: this.schedule.Sunday,
-            Monday: this.schedule.Monday,
-            Tuesday: this.schedule.Tuesday,
-            Wednesday: this.schedule.Wednesday,
-            Thursday: this.schedule.Thursday,
-            Friday: this.schedule.Friday,
-            Saturday: this.schedule.Saturday,
-
-        };
-
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+    onFormSubmit = (data) => {
+        const { onFormSubmit } = this.props
+        return onFormSubmit(data)
+            .then(mes => this.setState({ successMessage: mes, errorMessage: null }))
+            .catch((err) => { this.setState({ errorMessage: err, successMessage: null }); throw err })
     }
 
     render = () => {
-        const { loading, error, success } = this.props
-
         const {
-            IsAvailability,
-            StartDateTime,
-            EndDateTime,
-            StaffId,
-            ServiceItemId,
-            LocationId,
-            BookableEndDateTime,
-            Sunday,
-            Monday,
-            Tuesday,
-            Wednesday,
-            Thursday,
-            Friday,
-            Saturday,
+            member,
+            staffSchedules,
+            appointmentTypes,
+            isLoading,
+        } = this.props
 
-        } = this.state
+        const { successMessage, errorMessage } = this.state
+
+        let staffSchedule = this.actionType == 'Update' ? staffSchedules.selectedStaffSchedule : {
+            StaffId: member.Id,
+            LocationId: member.currentLocation.LocationId,
+            ServiceItemId: appointmentTypes.selectedAppointmentType.Id,
+            SiteId: member.SiteId,
+            Id: '',
+            IsAvailability: true,
+            StartDateTime: new Date(),
+            EndDateTime: new Date(),
+            BookableEndDateTime: new Date(),
+            Sunday: false,
+            Monday: false,
+            Tuesday: false,
+            Wednesday: false,
+            Thursday: false,
+            Friday: false,
+            Saturday: false,
+        }
 
         return (
-            <ScrollView style={styles.root}>
-                <KeyboardAvoidingView behavior='padding' style={styles.container}>
-
-                    {error && <Messages message={error} />}
-                    {success && <Messages message={success} type='success' />}
-                    <View style={styles.section}>
-                        <View style={[styles.row, styles.heading]}>
-                            <Text style={styles.primary}>What</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Label>Availability / Unavailability</Label>
-                            <View style={styles.inputContainer}>
-                                <Switch value={IsAvailability} onValueChange={v => this.handleChange('IsAvailability', v)} />
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.section}>
-                        <View style={[styles.row, styles.heading]}>
-                            <Text style={styles.primary}>When</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Label>Date Range</Label>
-                            <View style={styles.inputContainer}>
-                                <DateRangePicker
-                                    initStartDate={StartDateTime}
-                                    initEndDate={EndDateTime}
-                                    onValueChanged={(value) => {
-                                        let { StartDateTime, EndDateTime } = this.state
-                                        StartDateTime.setFullYear(value[0].getFullYear())
-                                        StartDateTime.setMonth(value[0].getMonth())
-                                        StartDateTime.setDate(value[0].getDate())
-                                        EndDateTime.setFullYear(value[1].getFullYear())
-                                        EndDateTime.setMonth(value[1].getMonth())
-                                        EndDateTime.setDate(value[1].getDate())
-                                        this.setState({
-                                            StartDateTime,
-                                            EndDateTime,
-                                        })
-                                    }} />
-                            </View>
-                        </View>
-                        <View style={styles.row}>
-                            <Label>Days</Label>
-                            <View style={styles.inputContainer}>
-                                <Segment>
-                                    <Button
-                                        active={Sunday}
-                                        first style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Sunday')
-                                        }}>
-                                        <Text>Sun</Text>
-                                    </Button>
-                                    <Button active={Monday}
-                                        style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Monday')
-                                        }}>
-                                        <Text>Mon</Text>
-                                    </Button>
-                                    <Button active={Tuesday} style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Tuesday')
-                                        }}>
-                                        <Text>Tue</Text>
-                                    </Button>
-                                    <Button active={Wednesday} style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Wednesday')
-                                        }}>
-                                        <Text>Wed</Text>
-                                    </Button>
-                                    <Button active={Thursday} style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Thursday')
-                                        }}>
-                                        <Text>Thu</Text>
-                                    </Button>
-                                    <Button active={Friday} style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Friday')
-                                        }}>
-                                        <Text>Fri</Text>
-                                    </Button>
-                                    <Button active={Saturday} last style={styles.segmentButton}
-                                        onPress={() => {
-                                            this.toggleDayEnability('Saturday')
-                                        }}>
-                                        <Text>Sat</Text>
-                                    </Button>
-                                </Segment>
-                            </View>
-                        </View>
-                        <View style={styles.row}>
-                            <Label>Time</Label>
-                            <View style={[styles.inputContainer]}>
-                                <TimeRangePicker
-                                    initStartDate={StartDateTime}
-                                    initEndDate={EndDateTime}
-                                    onValueChanged={(value) => {
-                                        this.setState({
-                                            StartDateTime: value[0],
-                                            EndDateTime: value[1],
-                                        })
-                                    }} />
-                            </View>
-                        </View>
-                    </View>
-                    <RoundedButton style={styles.button} text='SAVE' />
-                </KeyboardAvoidingView>
-            </ScrollView>
+            <Layout
+                staffSchedule={staffSchedule}
+                loading={isLoading}
+                error={errorMessage}
+                success={successMessage}
+                onFormSubmit={this.onFormSubmit}
+            />
         )
-    }
-
-    toggleDayEnability(name) {
-        this.handleChange(name, !this.state[name])
-    }
-
-    handleChange = (name, val) => {
-        this.setState({
-            [name]: val
-        })
-    }
-
-    handleSubmit = () => {
-        const { onFormSubmit } = this.props
-        onFormSubmit(this.state)
-            .then(() => console.log('Location Updated'))
-            .catch(e => console.log(`Error: ${e}`))
     }
 }
 
-export default StaffSchedule;
+const mapStateToProps = state => ({
+    member: state.member || {},
+    appointmentTypes: state.appointmentTypes || {},
+    appointmentCategories: state.appointmentCategories || {},
+    staffSchedules: state.staffSchedules || {},
+    isLoading: state.status.loading || false,
+})
+
+const mapDispatchToProps = {
+    onFormSubmit: StaffScheduleActions.addOrUpdateAvailability
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StaffSchedule)

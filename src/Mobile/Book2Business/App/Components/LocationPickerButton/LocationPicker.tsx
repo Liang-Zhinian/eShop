@@ -9,7 +9,7 @@ import VenueMapCallout from '../VenueMapCallout'
 import {
   Left, Right, Body, Button, Title
 } from 'native-base'
-import { Images, Colors } from '../../Themes'
+import { Images, Colors, Metrics } from '../../Themes'
 import styles from './LocationPickerStyles'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import FadeIn from 'react-native-fade-in-image'
@@ -22,10 +22,9 @@ import { fetchNearby, setError } from '../../Actions/nearby'
 // Generate this MapHelpers file with `ignite generate map-utilities`
 // You must have Ramda as a dev dependency to use this.
 import { calculateRegion } from '../../Lib/MapHelpers'
-import AnimatedButton from '../AnimatedButton'
+import AnimatedTouchable from '../AnimatedTouchable'
 import GradientView from '../GradientView'
 import GradientHeader from '../GradientHeader'
-import ThemeScreen from '../../../ignite/DevScreens/ThemeScreen'
 import BackButton from '../BackButton'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -39,18 +38,18 @@ const SCREEN_HEIGHT = Dimensions.get('window').height
 *************************************************************/
 
 interface LocationPickerProps {
-  screenProps: { toggle (): void }
+  screenProps: { hideModal(): void }
   initialRegion: object
   locations: object[]
   scrollEnabled: boolean
   mapViewMode: boolean
   style: StyleSheet
-  isLoading: boolean
+  // isLoading: boolean
   nearbyData: object
-  onCloseMap (): void
-  showError (err): object
-  getNearby (latlng, pageSize, pageIndex): Promise<object>
-  handePickButton (item): void
+  onCloseMap(): void
+  showError(err): object
+  getNearby(latlng, pageSize, pageIndex): Promise<object>
+  handePickButton(item): void
 }
 
 interface LocationPickerState {
@@ -80,7 +79,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
   * There are TONS of options available from traffic to buildings to indoors to compass and more!
   * For full documentation, see https://github.com/lelandrichardson/react-native-maps
   *************************************************************/
-  constructor (props) {
+  constructor(props) {
     super(props)
     /* ***********************************************************
     * STEP 1
@@ -123,7 +122,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
 
   }
 
-  componentWillReceiveProps (newProps) {
+  componentWillReceiveProps(newProps) {
     /* ***********************************************************
     * STEP 3
     * If you wish to recenter the map on new locations any time the
@@ -134,7 +133,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
     // })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.setState({ isLoading: true })
     this.getNearby(this.state.pageSize, 1)
       .then(nearby => {
@@ -144,6 +143,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
           isLoading: false
         })
       })
+      .catch(error => console.log(error))
   }
 
   onRefresh = () => {
@@ -157,12 +157,14 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
           reFetchingStatus: false
         })
       })
+      .catch(error => console.log(error))
   }
 
   onNextPage = async () => {
     this.setState({ fetchingNextPageStatus: true })
     const { pageSize, pageIndex, nearbyData } = this.state
     const nearby = await this.getNearby(pageSize, pageIndex + 1)
+      .catch(error => console.log(error))
     this.setState({
       nearbyData: [...nearbyData, ...nearby.data],
       pageIndex: pageIndex + 1,
@@ -180,7 +182,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
       })
   }
 
-  onRegionChange (newRegion) {
+  onRegionChange(newRegion) {
     /* ***********************************************************
     * STEP 4
     * If you wish to fetch new locations when the user changes the
@@ -203,7 +205,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
     // })
   }
 
-  calloutPress (location) {
+  calloutPress(location) {
     /* ***********************************************************
     * STEP 5
     * Configure what will happen (if anything) when the user
@@ -213,7 +215,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
     // console.tron.log(location) // Reactotron
   }
 
-  renderMapMarkers (location) {
+  renderMapMarkers(location) {
     /* ***********************************************************
     * STEP 6
     * Customize the appearance and location of the map marker.
@@ -267,20 +269,26 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
     )
   }
 
-  onSelectRow (item) {
+  onSelectRow(item) {
     this.setState({
       selectedItem: item,
       locations: [{ ...item.location, title: item.title }]
     })
   }
 
-  renderRow ({ item }) {
+  renderRow({ item }) {
     const { address, title } = item
     return (
-      <AnimatedButton
+      <AnimatedTouchable
         onPress={() => {
           this.onSelectRow(item)
-        }}>
+        }}
+        style={{ 
+          borderRadius: Metrics.cardRadius,
+          marginVertical: Metrics.baseMargin,
+          marginHorizontal: Metrics.doubleBaseMargin
+         }}
+      >
 
         <View style={styles.infoText}>
           <Text style={styles.title}>{title}</Text>
@@ -290,26 +298,28 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
           <Icon name='check' size={20} />
         </FadeIn>
         }
-      </AnimatedButton>
+      </AnimatedTouchable>
     )
   }
 
-  renderHeader () {
+  renderHeader() {
     return (
 
       <GradientHeader>
         <View style={[styles.header]}>
           <Left>
-            <BackButton onPress={this.props.screenProps.toggle} />
+            <BackButton onPress={this.props.screenProps.hideModal} />
           </Left>
           <Body>
             <Title style={{ color: Colors.snow }}>Pick a location</Title>
           </Body>
           <Right>
-            <Button transparent onPress={() => {
-              this.props.handePickButton(this.state.selectedItem)
-              this.props.screenProps.toggle()
-            }}>
+            <Button transparent
+              style={{ padding: 20 }}
+              onPress={() => {
+                this.props.handePickButton(this.state.selectedItem)
+                this.props.screenProps.hideModal()
+              }}>
               <Title style={{ color: Colors.snow }}>Done</Title>
             </Button>
           </Right>
@@ -318,7 +328,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
     )
   }
 
-  renderMapView () {
+  renderMapView() {
     return (
       <View ref='mapContainer'>
         <View>
@@ -337,7 +347,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
     )
   }
 
-  render () {
+  render() {
     return (
       <GradientView style={[styles.linearGradient]}>
         {this.renderHeader()}
@@ -351,7 +361,7 @@ class LocationPicker extends React.Component<LocationPickerProps, LocationPicker
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.status.loading || false,
+    // isLoading: state.status.loading || false,
     nearbyData: state.nearby
   }
 }

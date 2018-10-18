@@ -14,13 +14,13 @@ export function setError (message) {
 
 export function fetchNearby (latlng, pageSize = 20, pageIndex = 1) {
   return dispatch => new Promise(async (resolve, reject) => {
-    await statusMessage(dispatch, 'loading', true)
+    // await statusMessage(dispatch, 'loading', true)
 
     latlng = await translate(latlng).catch(reject)
 
     const nearby = await getNearby(latlng, pageSize, pageIndex).catch(reject)
 
-    await statusMessage(dispatch, 'loading', false)
+    // await statusMessage(dispatch, 'loading', false)
     return resolve(dispatch({
       type: 'NEARBY',
       data: {
@@ -31,7 +31,7 @@ export function fetchNearby (latlng, pageSize = 20, pageIndex = 1) {
       }
     }))
   }).catch(async (err) => {
-    await statusMessage(dispatch, 'loading', false)
+    // await statusMessage(dispatch, 'loading', false)
     throw err.message
   })
 }

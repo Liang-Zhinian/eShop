@@ -11,6 +11,13 @@ export default function serviceCategoryReducer (state = initialState, action) {
         error: action.data
       }
     }
+    case 'APPOINTMENT_CATEGORIES_FETCHING_STATUS': {
+      return {
+        ...state,
+        error: null,
+        loading: action.data,
+      }
+    }
     case 'APPOINTMENT_CATEGORIES_REPLACE': {
       let appointmentCategories = []
 

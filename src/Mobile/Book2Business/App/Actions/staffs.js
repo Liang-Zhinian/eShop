@@ -71,3 +71,10 @@ export function checkMemberExistance(username) {
   })
 
 }
+
+export const setSelectedStaff = (staff) => {
+  return dispatch => new Promise(resolve => resolve(dispatch({
+    type: 'SET_SELECTED_STAFF',
+    data: staff
+  })))
+}

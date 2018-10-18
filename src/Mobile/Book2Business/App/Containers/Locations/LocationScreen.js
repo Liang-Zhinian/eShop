@@ -155,7 +155,7 @@ class LocationScreen extends Component {
   fetchLocation() {
     const { fetchLocation, showError, member } = this.props
     const { SiteId, LocationId } = member.currentLocation
-    console.log(member)
+    
     if (!member.currentLocation || !SiteId || !LocationId)
       return showError('Invalid location')
 

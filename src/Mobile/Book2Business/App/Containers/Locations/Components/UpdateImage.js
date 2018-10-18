@@ -167,7 +167,6 @@ class UpdateImage extends React.Component {
 
               <ImageCropperButton
                 handePickButton={(image) => {
-                  console.log(image)
                   this.setState({ backgroundImage: image })
                 }} />
 

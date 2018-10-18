@@ -78,6 +78,6 @@ export default StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    marginHorizontal: Metrics.doubleBaseMargin
+    // marginHorizontal: Metrics.doubleBaseMargin
   }
 })

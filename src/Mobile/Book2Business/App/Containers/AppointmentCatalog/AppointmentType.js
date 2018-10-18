@@ -97,7 +97,6 @@ class AppointmentType extends Component {
         menu={[{
           text: 'Schedules',
           onPress: () => {
-            console.log(this)
             this.props.navigation.navigate('StaffScheduleListing')
           }
         }]}

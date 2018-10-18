@@ -68,8 +68,6 @@ export default class AuthApi extends Api {
     // make the api call
     const response = await this.apisauce.post('/connect/token', data)
 
-    console.log(response)
-
     // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = this.getGeneralApiProblem(response)

@@ -5,7 +5,6 @@ export const initialState = Store
 export default function staffsReducer (state = initialState, action) {
   switch (action.type) {
     case 'STAFFS_ERROR': {
-      console.log('STAFFS_ERROR', action)
       return {
         ...state,
         error: action.data

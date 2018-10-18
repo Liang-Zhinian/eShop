@@ -8,6 +8,7 @@ import { getStaffSchedules, setError } from '../../Actions/staffSchedules'
 import List from '../../Components/List/List'
 import Availability from './Components/Availability'
 import { staffSchedules as testData } from '../../Fixtures/data'
+import AddButton from '../../Components/AddButton'
 
 class StaffScheduleListing extends Component {
   static propTypes = {
@@ -34,10 +35,7 @@ class StaffScheduleListing extends Component {
     }
     return {
       title: 'Staff Schedules',
-      headerRight: (
-        <TouchableOpacity style={{ marginRight: 20 }} onPress={handleAddButton} >
-          <Text>Add</Text>
-        </TouchableOpacity >),
+      headerRight: (<AddButton onPress={handleAddButton} />),
       tabBarLabel: 'More',
       tabBarIcon: ({ focused }) => (
         <Image
@@ -117,7 +115,7 @@ class StaffScheduleListing extends Component {
       <Availability
         name={`${item.ServiceItemId}`}
         title={`from ${item.StartDateTime} to ${item.EndDateTime}`}
-        onPress={() => { this.props.navigation.navigate('StaffSchedule', { schedule: item }) }}
+        onPress={() => { this.props.navigation.navigate('StaffSchedule', { schedule: item, ActionType: 'Add' }) }}
         onPressEdit={() => { }}
         onPressRemove={() => { }} />
     )
@@ -125,7 +123,7 @@ class StaffScheduleListing extends Component {
 
   handleAddButton() {
     const { navigation } = this.props
-    navigation.navigate('StaffSchedule')
+    navigation.navigate('StaffSchedule', { ActionType: 'Add' })
   }
 
   fetchStaffSchedules() {

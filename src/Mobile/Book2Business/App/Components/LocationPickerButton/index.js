@@ -12,6 +12,14 @@ export default class LocationPickerButton extends React.Component {
     }
   }
 
+  showModal = () => {
+    this.setState({ showModal: true })
+  }
+
+  hideModal = () => {
+    this.setState({ showModal: false })
+  }
+
   toggleModal = () => {
     this.setState({ showModal: !this.state.showModal })
   }
@@ -23,15 +31,15 @@ export default class LocationPickerButton extends React.Component {
           backgroundColor: Colors.purple,
           borderColor: Colors.purple
           // color: Colors.purple,
-        }} onPress={this.toggleModal}>
+        }} onPress={this.showModal}>
           Pick a location
           </RoundedButton>
         <Modal
           style={{backgroundColor: Colors.transparent}}
           visible={this.state.showModal}
-          onRequestClose={this.toggleModal}>
+          onRequestClose={this.hideModal}>
           <LocationPickerScreen screenProps={{
-            toggle: this.toggleModal
+            hideModal: this.hideModal
           }} {...this.props} />
 
         </Modal>

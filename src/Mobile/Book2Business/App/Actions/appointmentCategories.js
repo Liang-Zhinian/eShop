@@ -18,13 +18,19 @@ export function setError(message) {
 export const getAppointmentCategories = (siteId, pageSize, pageIndex) => {
 
   return dispatch => new Promise(async (resolve, reject) => {
-    await statusMessage(dispatch, 'loading', true)
+    dispatch({
+      type: 'APPOINTMENT_CATEGORIES_FETCHING_STATUS',
+      data: true
+    })
 
     var api = new ServiceCatalogApi()
 
     return api.getAppointmentCategories(siteId, pageSize, pageIndex)
       .then(async (res) => {
-        await statusMessage(dispatch, 'loading', false)
+        dispatch({
+          type: 'APPOINTMENT_CATEGORIES_FETCHING_STATUS',
+          data: false
+        })
         if (res.kind == "ok") {
           return resolve(dispatch({
             type: 'APPOINTMENT_CATEGORIES_REPLACE',
@@ -32,12 +38,15 @@ export const getAppointmentCategories = (siteId, pageSize, pageIndex) => {
           }))
         }
         else {
-          reject(Error(res.kind))
+          return reject(res.kind)
         }
       })
       .catch(reject)
   }).catch(async (err) => {
-    await statusMessage(dispatch, 'loading', false)
+    dispatch({
+      type: 'APPOINTMENT_CATEGORIES_FETCHING_STATUS',
+      data: false
+    })
     throw err.message
   })
 }
@@ -85,7 +94,7 @@ export const addOrUpdateAppointmentCategory = (formData) => {
             return resolve('Appointment Category Saved')
           }
           else {
-            reject(Error(res.kind))
+            return reject(Error(res.kind))
           }
         })
         .catch(reject)
@@ -98,7 +107,7 @@ export const addOrUpdateAppointmentCategory = (formData) => {
             return resolve('Appointment Category Saved')
           }
           else {
-            reject(Error(res.kind))
+            return reject(Error(res.kind))
           }
         })
         .catch(reject)

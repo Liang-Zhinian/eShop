@@ -16,22 +16,22 @@ export function setError (message) {
 export function getLocation (siteId, locationId) {
 
   return dispatch => new Promise(async (resolve, reject) => {
-    await statusMessage(dispatch, 'loading', true)
+    // await statusMessage(dispatch, 'loading', true)
 
     // Go to
     const url = `${SitesApiUrl}/business-information/sites/${siteId}/locations/${locationId}`
-    console.log(url)
+    
     return fetch(url)
       .then(res => res.json())
       .then((json) => {
-        statusMessage(dispatch, 'loading', false)
+        // statusMessage(dispatch, 'loading', false)
         return resolve(dispatch({
           type: 'CURRENT_LOCATION',
           data: json
         }))
       }).catch(reject)
   }).catch(async (err) => {
-    await statusMessage(dispatch, 'loading', false)
+    // await statusMessage(dispatch, 'loading', false)
     throw err.message
   })
 }

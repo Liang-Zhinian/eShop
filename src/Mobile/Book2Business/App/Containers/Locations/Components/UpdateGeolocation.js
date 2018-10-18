@@ -114,15 +114,6 @@ class UpdateGeolocation extends React.Component {
                 })
               }} />
 
-            {/* <View ref='mapContainer' >
-                            <LocationPicker
-                                mapViewMode={false}
-                                scrollEnabled={true}
-                                style={[styles.map,]}
-                                initialRegion={{ title: location.Name, latitude, longitude, latitudeDelta: 0.05, longitudeDelta: 0.01 }}
-                                locations={[{ title: location.Name, latitude, longitude }, { title: 'Chanel@Unkown', "latitude":22.3158808,"longitude":114.1625219 }]} />
-                        </View> */}
-
             <Spacer size={20} />
 
             <Button block onPress={this.handleSubmit}>

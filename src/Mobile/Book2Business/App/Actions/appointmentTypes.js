@@ -18,13 +18,21 @@ export function setError(message) {
 export function getAppointmentTypes(siteId, appointmentCategoryId, pageSize, pageIndex) {
 
   return dispatch => new Promise(async (resolve, reject) => {
-    await statusMessage(dispatch, 'loading', true)
+    
+    dispatch({
+      type: 'APPOINTMENT_TYPES_FETCHING_STATUS',
+      data: true
+    })
 
     var api = new ServiceCatalogApi()
 
     return api.getAppointmentTypes(siteId, appointmentCategoryId, pageSize, pageIndex)
       .then(async (res) => {
-        await statusMessage(dispatch, 'loading', false)
+        
+    dispatch({
+      type: 'APPOINTMENT_TYPES_FETCHING_STATUS',
+      data: false
+    })
         if (res.kind == "ok") {
           return resolve(dispatch({
             type: 'APPOINTMENT_TYPES_REPLACE',
@@ -37,7 +45,11 @@ export function getAppointmentTypes(siteId, appointmentCategoryId, pageSize, pag
       })
       .catch(reject)
   }).catch(async (err) => {
-    await statusMessage(dispatch, 'loading', false)
+    
+    dispatch({
+      type: 'APPOINTMENT_TYPES_FETCHING_STATUS',
+      data: false
+    })
     throw err.message
   })
 

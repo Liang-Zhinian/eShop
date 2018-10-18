@@ -8,6 +8,7 @@ import { setSelectedAppointmentType, getAppointmentTypes, setError } from '../..
 import styles from './Styles/AppointmentsScreenStyle'
 import List from '../../Components/List/List'
 import ListItem from '../../Components/List/ListItem'
+import AddButton from '../../Components/AddButton'
 
 class AppointmentTypeListing extends Component {
   static propTypes = {
@@ -33,10 +34,7 @@ class AppointmentTypeListing extends Component {
     }
     return {
       title: 'Appointment Types',
-      headerRight: (
-        <TouchableOpacity style={{ marginRight: 20 }} onPress={handleAddButton} >
-          <Text>Add</Text>
-        </TouchableOpacity >),
+      headerRight: (<AddButton onPress={handleAddButton} />),
       tabBarLabel: 'More',
       tabBarIcon: ({ focused }) => (
         <Image

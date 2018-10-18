@@ -90,7 +90,6 @@ class AddStaffScreen extends Component {
             offerRegistrationInvitation,
             identityAccess
         } = this.props
-        console.log(staffs)
 
         const { successMessage, errorMessage } = this.state
 

@@ -6,7 +6,6 @@ export default function userReducer(state = initialState, action) {
   switch (action.type) {
     case 'DONE_REFRESHING_TOKEN':{
       if (action.data) {
-        console.log(action)
         return {
           ...state,
           loading: false,
@@ -18,7 +17,6 @@ export default function userReducer(state = initialState, action) {
     }
     case 'REFRESHING_TOKEN':{
       if (action.data) {
-        console.log(action)
         return {
           ...state,
           loading: true,
@@ -67,7 +65,7 @@ export default function userReducer(state = initialState, action) {
         let currentLocation = state.currentLocation
         if (!currentLocation && action.data.siblingLocations && action.data.siblingLocations.length > 0)
           currentLocation = action.data.siblingLocations[0]
-        console.log(state.currentLocation, action)
+          
         return {
           ...state,
           loading: false,

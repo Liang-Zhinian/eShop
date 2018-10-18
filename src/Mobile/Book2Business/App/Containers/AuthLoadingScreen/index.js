@@ -21,7 +21,6 @@ class AuthLoadingScreen extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { member } = nextProps
-    this.printProps()
     if (member) {
       if (!member.token) {
         this.props.navigation.navigate('Auth')

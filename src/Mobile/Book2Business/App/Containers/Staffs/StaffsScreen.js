@@ -96,12 +96,10 @@ class StaffsScreen extends Component {
   };
 
   onEventPress = (item) => {
-    const { navigation, setSelectedEvent } = this.props
-    setSelectedEvent(item)
+    const { navigation, setSelectedStaff } = this.props
+    setSelectedStaff(item)
 
-    // item.type === 'talk'
-    //   ? navigation.navigate('TalkDetail')
-    //   : navigation.navigate('BreakDetail')
+    navigation.navigate('Staff')
   }
 
   toggleMenu() {
@@ -209,6 +207,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    setSelectedStaff: (staff) => dispatch(StaffActions.setSelectedStaff(staff)),
     fetchStaffs: (siteId) => dispatch(StaffActions.getStaffs(siteId)),
     showError: (err) => dispatch(StaffActions.setError(err))
   }

@@ -28,11 +28,6 @@ class AppointmentCategoryListing extends Component {
     showError: PropTypes.func.isRequired,
   }
 
-  static defaultProps = {
-    error: null,
-    reFetch: null,
-  }
-
   static navigationOptions = ({ navigation }) => {
 
     const { handleAddButton } = navigation.state.params || {
@@ -76,13 +71,15 @@ class AppointmentCategoryListing extends Component {
 
   render = () => {
     const { appointmentCategories, navigation } = this.props;
-
+    
     const keyExtractor = item => item.Id;
+
+    let listViewData = appointmentCategories.appointmentCategories ? appointmentCategories.appointmentCategories.Data : null
 
     return (
       <List
         headerTitle='Appointment categories'
-        data={appointmentCategories.appointmentCategories.Data}
+        data={listViewData}
         renderItem={this._renderRow.bind(this)}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.listContent}
@@ -106,7 +103,7 @@ class AppointmentCategoryListing extends Component {
     return fetchAppointmentCategories(member.SiteId, 10, this.state.pageIndex)
       .catch((err) => {
         console.log(`Error: ${err}`)
-        return showError(err)
+        return showError(err.message)
       })
   }
 
@@ -120,7 +117,7 @@ class AppointmentCategoryListing extends Component {
       })
       .catch((err) => {
         console.log(`Error: ${err}`)
-        return showError(err)
+        return showError(err.message)
       })
   }
 
@@ -137,7 +134,7 @@ class AppointmentCategoryListing extends Component {
       })
       .catch((err) => {
         console.log(`Error: ${err}`)
-        return showError(err)
+        return showError(err.message)
       })
   }
 

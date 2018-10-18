@@ -11,6 +11,13 @@ export default function appointmentTypeReducer (state = initialState, action) {
         error: action.data
       }
     }
+    case 'APPOINTMENT_TYPES_FETCHING_STATUS': {
+      return {
+        ...state,
+        error: null,
+        loading: action.data,
+      }
+    }
     case 'APPOINTMENT_TYPES_REPLACE': {
       let appointmentTypes = {}
 

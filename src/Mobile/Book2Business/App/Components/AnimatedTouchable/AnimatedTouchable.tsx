@@ -1,19 +1,24 @@
 import React from 'react'
-import { View, Text, Image, TouchableWithoutFeedback, LayoutAnimation, Animated } from 'react-native'
-import styles from './Styles/AnimatedButtonStyle'
-import FadeIn from 'react-native-fade-in-image'
-import { Images } from '../Themes'
+import { 
+  View, 
+  TouchableWithoutFeedback, 
+  Animated, 
+  StyleProp, 
+  ViewStyle 
+} from 'react-native'
+import styles from './Styles'
 
 interface ButtonProps {
-  onPress (): void
+  onPress(): void,
+  style?: StyleProp<ViewStyle>
 }
 
 interface ButtonState {
   animatedSize: Animated.Value
 }
 
-export default class AnimatedButton extends React.Component<ButtonProps, ButtonState> {
-  constructor (props) {
+export default class AnimatedTouchable extends React.Component<ButtonProps, ButtonState> {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -36,8 +41,8 @@ export default class AnimatedButton extends React.Component<ButtonProps, ButtonS
     }).start()
   }
 
-  render () {
-    const {children} = this.props
+  render() {
+    const { children, style } = this.props
 
     const animatedStyle = {
       transform: [{ scale: this.state.animatedSize }]
@@ -56,7 +61,7 @@ export default class AnimatedButton extends React.Component<ButtonProps, ButtonS
           onPress={this.props.onPress}
         >
           <Animated.View style={containerStyles}>
-            <View style={styles.info}>
+            <View style={[styles.info, style]}>
               {children}
             </View>
           </Animated.View>

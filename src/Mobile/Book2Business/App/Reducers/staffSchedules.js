@@ -11,6 +11,13 @@ export default function staffSchedulesReducer (state = initialState, action) {
         error: action.data
       }
     }
+    case 'STAFF_SCHEDULES_FETCHING_STATUS': {
+      return {
+        ...state,
+        loading: action.data,
+        error: null
+      }
+    }
     case 'STAFF_SCHEDULES_REPLACE': {
       let schedules = {}
 
