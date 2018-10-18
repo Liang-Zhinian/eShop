@@ -25,7 +25,6 @@ class AppointmentCategory extends Component {
     this.actionType = this.props.navigation.getParam('ActionType') || 'Add'
   }
 
-
   onFormSubmit = (data) => {
     const { onFormSubmit } = this.props
     return onFormSubmit(data)

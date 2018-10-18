@@ -41,12 +41,11 @@ class AppointmentType extends Component {
         />
       )
     }
-  };
+  }
 
-  componentDidMount = () => {
-    this.props.navigation.setParams({
-      pressHamburger: this.pressHamburger.bind(this)
-    })
+  constructor(props){
+    super(props)
+    this.actionType = this.props.navigation.getParam('ActionType') || 'Add'
   }
 
   state = {
@@ -55,6 +54,12 @@ class AppointmentType extends Component {
   }
 
   animatedContainerWithNavbar = null;
+
+  componentDidMount = () => {
+    this.props.navigation.setParams({
+      pressHamburger: this.pressHamburger.bind(this)
+    })
+  }
 
   onFormSubmit = (data) => {
     const { onFormSubmit } = this.props;
