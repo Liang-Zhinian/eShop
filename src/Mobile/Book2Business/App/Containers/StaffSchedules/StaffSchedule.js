@@ -59,6 +59,8 @@ class StaffSchedule extends React.Component {
             isLoading,
         } = this.props
 
+        console.log(member)
+
         const { successMessage, errorMessage } = this.state
 
         let staffSchedule = this.actionType == 'Update' ? staffSchedules.selectedStaffSchedule : {

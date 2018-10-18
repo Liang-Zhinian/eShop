@@ -129,7 +129,7 @@ class StaffScheduleListing extends Component {
   fetchStaffSchedules() {
     const { member, fetchStaffSchedules, selectedAppointmentType, showError } = this.props
 
-    fetchStaffSchedules(member.SiteId, member.currentLocation.Id, member.Id, selectedAppointmentType.Id)
+    fetchStaffSchedules(member.SiteId, member.currentLocation.LocationId, member.Id, selectedAppointmentType.Id)
       .catch((err) => {
         console.log(`Error: ${err}`)
         return showError(err)
@@ -140,7 +140,7 @@ class StaffScheduleListing extends Component {
     const { member, fetchStaffSchedules, selectedAppointmentType, showError } = this.props
 
     fetchStaffSchedules(member.SiteId,
-      member.currentLocation.Id,
+      member.currentLocation.LocationId,
       member.Id,
       selectedAppointmentType.Id,
       pageSize,

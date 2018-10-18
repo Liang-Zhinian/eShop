@@ -30,7 +30,7 @@ namespace SaaSEqt.eShop.Services.Schedule.API.Controllers
             ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        
+
         #region [availabilities]
 
         //POST api/v1/[controller]/availabilities
@@ -60,26 +60,17 @@ namespace SaaSEqt.eShop.Services.Schedule.API.Controllers
             return CreatedAtAction(nameof(Availabilities), new { siteId = item.SiteId, availabilityId = item.Id }, null);
         }
 
-        //GET api/v1/[controller]/sites/{siteId:guid}/locations/{locationId:guid}/availabilities/{availabilityId:guid}
+        //GET api/v1/[controller]/sites/{siteId:guid}/locations/{locationId:guid}/availabilities
         [HttpGet]
-        [Route("sites/{siteId:guid}/locations/{locationId:guid}/availabilities/{availabilityId:guid}")]
+        [Route("sites/{siteId:guid}/locations/{locationId:guid}/availabilities")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<Availability>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(IEnumerable<Availability>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Availabilities(Guid siteId, Guid locationId, Guid? availabilityId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> Availabilities(Guid siteId, Guid locationId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var root = (IQueryable<Availability>)_scheduleContext.Availabilities
                                                                     .Where(y => y.SiteId.Equals(siteId)
                                                                            && y.LocationId.Equals(locationId));
 
-
-            if (availabilityId.HasValue)
-            {
-                var item = await root.SingleOrDefaultAsync(ci => ci.Id == availabilityId);
-                if (item != null)
-                    return Ok(item);
-                return BadRequest();
-            }
 
             var totalItems = await root
                 .LongCountAsync();
@@ -94,6 +85,22 @@ namespace SaaSEqt.eShop.Services.Schedule.API.Controllers
                 pageIndex, pageSize, totalItems, itemsOnPage);
 
             return Ok(model);
+        }
+
+        //GET api/v1/[controller]/sites/{siteId:guid}/locations/{locationId:guid}/availabilities/{availabilityId:guid}
+        [HttpGet]
+        [Route("availabilities/{id:guid}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Availability), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Availabilities(Guid id)
+        {
+            var item = await _scheduleContext.Availabilities
+                                             .SingleOrDefaultAsync(y => y.Id.Equals(id));
+
+
+            if (item != null)
+                return Ok(item);
+            return BadRequest();
         }
 
         //POST api/v1/[controller]/unavailabilities
@@ -123,26 +130,17 @@ namespace SaaSEqt.eShop.Services.Schedule.API.Controllers
             return CreatedAtAction(nameof(Unavailabilities), new { siteId = item.SiteId, unavailabilityId = item.Id }, null);
         }
 
-        //GET api/v1/[controller]/sites/{siteId:guid}/locations/{locationId:guid}/unavailabilities/{unavailabilityId:guid}
+        //GET api/v1/[controller]/sites/{siteId:guid}/locations/{locationId:guid}/unavailabilities
         [HttpGet]
-        [Route("sites/{siteId:guid}/locations/{locationId:guid}/unavailabilities/{unavailabilityId:guid}")]
+        [Route("sites/{siteId:guid}/locations/{locationId:guid}/unavailabilities")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<Unavailability>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(IEnumerable<Unavailability>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Unavailabilities(Guid siteId, Guid locationId, Guid? unavailabilityId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> Unavailabilities(Guid siteId, Guid locationId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
-            var root = (IQueryable<Unavailability>)_scheduleContext.Availabilities
+            var root = (IQueryable<Unavailability>)_scheduleContext.Unavailabilities
                                                                   .Where(y => y.SiteId.Equals(siteId)
                                                                            && y.LocationId.Equals(locationId));
 
-
-            if (unavailabilityId.HasValue)
-            {
-                var item = await root.SingleOrDefaultAsync(ci => ci.Id == unavailabilityId);
-                if (item != null)
-                    return Ok(item);
-                return BadRequest();
-            }
 
             var totalItems = await root
                 .LongCountAsync();
@@ -157,6 +155,22 @@ namespace SaaSEqt.eShop.Services.Schedule.API.Controllers
                 pageIndex, pageSize, totalItems, itemsOnPage);
 
             return Ok(model);
+        }
+
+        //GET api/v1/[controller]/unavailabilities/{id:guid}
+        [HttpGet]
+        [Route("unavailabilities/{id:guid}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(Unavailability), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Unavailabilities(Guid id)
+        {
+            var item = await _scheduleContext.Unavailabilities
+                                             .SingleOrDefaultAsync(y => y.Id.Equals(id));
+
+
+            if (item != null)
+                return Ok(item);
+            return BadRequest();
         }
 
         #endregion

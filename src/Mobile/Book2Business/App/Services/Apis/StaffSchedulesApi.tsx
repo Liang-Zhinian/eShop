@@ -22,7 +22,7 @@ export default class StaffScheduleApi extends Api {
 
   async getStaffSchedules(siteId, locationId, staffId, appointmentTypeId, pageSize, pageIndex): Promise<{}> {
     // make the api call
-    const response = await this.apisauce.get(`/Schedule/sites/${siteId}/locations/${locationId}?pageSize=${pageSize}&pageIndex=${pageIndex}`)
+    const response = await this.apisauce.get(`/Schedule/sites/${siteId}/locations/${locationId}/availabilities?pageSize=${pageSize}&pageIndex=${pageIndex}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
