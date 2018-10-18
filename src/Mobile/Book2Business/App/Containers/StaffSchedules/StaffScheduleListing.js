@@ -68,10 +68,20 @@ class StaffScheduleListing extends Component {
   animatedContainerWithNavbar = null;
 
   render = () => {
-    const { staffSchedules } = this.props
+    const { staffSchedules, member, selectedAppointmentType } = this.props
     console.log(staffSchedules)
 
-    let listViewData = staffSchedules.staffSchedules ? staffSchedules.staffSchedules.Data : testData
+    let listViewData = staffSchedules.staffSchedules ? staffSchedules.staffSchedules.Data : null
+
+    if (listViewData !== null) {
+      listViewData = listViewData.map((item, index) => {
+        if (item.StaffId == member.Id
+          && item.LocationId == member.currentLocation.LocationId
+          && item.ServiceItemId == selectedAppointmentType.Id)
+          return item
+
+      })
+    }
 
     return (
       <List
@@ -111,10 +121,15 @@ class StaffScheduleListing extends Component {
   funcOrFalse = (func, val) => val ? () => func.call(this, val) : false
 
   renderItem = ({ item }) => {
+    const { staffSchedules, member, selectedAppointmentType } = this.props
+    const name = selectedAppointmentType.Name
+    const title = member.FirstName + ' ' + member.LastName + '\n'
+      + `from ${item.StartDateTime} to ${item.EndDateTime}`
+
     return (
       <Availability
-        name={`${item.ServiceItemId}`}
-        title={`from ${item.StartDateTime} to ${item.EndDateTime}`}
+        name={name}
+        title={title}
         onPress={() => { this.props.navigation.navigate('StaffSchedule', { schedule: item, ActionType: 'Add' }) }}
         onPressEdit={() => { }}
         onPressRemove={() => { }} />
