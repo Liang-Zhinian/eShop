@@ -1,5 +1,14 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Text, ScrollView, View, Image, FlatList, ActivityIndicator, RefreshControl as RNRefreshControl } from 'react-native'
+import {
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator,
+  RefreshControl as RNRefreshControl
+} from 'react-native'
 import PropTypes from 'prop-types'
 import {
   sum
@@ -33,6 +42,15 @@ export const ListFooterComponent = ({ isLoading, onPress }) => (
         </TouchableOpacity>
     }
   </View>
+)
+
+export const ListEmptyComponent = ({ onPress }) => (
+  <TouchableOpacity
+    activeOpacity={0.7}
+    style={styles.TouchableOpacity_style}
+    onPress={onPress}>
+    <Text style={styles.TouchableOpacity_Inside_Text}>Click to refresh</Text>
+  </TouchableOpacity>
 )
 
 const getItemLayout = (data, index) => {
@@ -81,7 +99,7 @@ class List extends Component {
 
   static defaultProps = {
     error: null,
-    success: null,
+    loading: false,
     headerTitle: '',
     navigation: null,
     extraData: null,
@@ -96,7 +114,7 @@ class List extends Component {
     loadingMore: false
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
@@ -104,7 +122,7 @@ class List extends Component {
     const { loading, error, refresh, refreshing, loadingMore, loadMore } = this.props
 
     // Loading
-    if (loading) return <Loading />
+    // if (loading) return <Loading />
 
     // Error
     if (error) return <Error content={error} />
@@ -118,17 +136,24 @@ class List extends Component {
         contentContainerStyle={[styles.listContent]}
         getItemLayout={this.props.getItemLayout}
         showsVerticalScrollIndicator={this.props.showsVerticalScrollIndicator}
+        ListEmptyComponent={(
+          !(loading || refreshing) && <ListEmptyComponent onPress={refresh} />
+        )}
         refreshControl={(
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={loading || refreshing}
             onRefresh={refresh}
           />
         )}
         ListFooterComponent={() => {
           return (
-            <ListFooterComponent
-              isLoading={loadingMore}
-              onPress={loadMore} />
+            this.props.extraData && this.props.extraData.length > 0
+              ?
+              <ListFooterComponent
+                isLoading={loadingMore}
+                onPress={loadMore} />
+              :
+              null
           )
         }}
       />

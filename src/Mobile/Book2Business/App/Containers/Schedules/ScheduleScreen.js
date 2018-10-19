@@ -22,7 +22,7 @@ import {
   sum,
   findIndex
 } from 'ramda'
-import Agenda from './Agenda'
+import Agenda from './Components/Agenda'
 import NotificationActions from '../../Redux/NotificationRedux'
 import Config from '../../Config/AppConfig'
 import { Images } from '../../Themes'
@@ -35,7 +35,7 @@ const addSpecials = (specialTalksList, talks) =>
   map((talk) => assoc('special', contains(talk.title, specialTalksList), talk), talks)
 
 class ScheduleScreen extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     const { schedule, specialTalks, currentTime } = props
@@ -86,7 +86,7 @@ class ScheduleScreen extends Component {
       : navigation.navigate('BreakDetail')
   }
 
-  componentDidMount () {
+  componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange)
 
     const { data } = this.state
@@ -98,7 +98,7 @@ class ScheduleScreen extends Component {
     })
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange)
   }
 
@@ -110,7 +110,7 @@ class ScheduleScreen extends Component {
     this.setState({ appState: nextAppState })
   }
 
-  componentWillReceiveProps (newProps) {
+  componentWillReceiveProps(newProps) {
     const { activeDay, eventsByDay } = this.state
     const { specialTalks, currentTime, schedule } = newProps
 
@@ -222,10 +222,44 @@ class ScheduleScreen extends Component {
     }
   }
 
-  render () {
+  render() {
     const { isCurrentDay, activeDay, data } = this.state
     return (
       <GradientView style={styles.linearGradient}>
+        <Agenda
+          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
+          renderDay={(day, item) => {
+            return (
+              <View />
+            )
+          }}
+          items={this.state.agendaData}
+          renderItem={(item) => {
+            return <ScheduleScreen navigation={this.props.navigation} />
+          }}
+          loadItemsForMonth={(month) => {
+            const time = month.timestamp
+            const strTime = this.timeToString(time)
+            if (!this.state.agendaData[strTime]) {
+              this.state.agendaData[strTime] = []
+              // const numItems = data.length;
+              // for (let j = 0; j < numItems; j++) {
+              //   this.state.agendaData[strTime].push({
+              //     name: data[j].title,
+              //     ...data[j]
+              //   });
+              // }
+              this.state.agendaData[strTime].push({
+                name: strTime
+              })
+            }
+            const newItems = {}
+            Object.keys(this.state.agendaData).forEach(key => { newItems[key] = this.state.agendaData[key] })
+            this.setState({
+              agendaData: newItems
+            })
+          }} />
+
         <DayToggle
           activeDay={activeDay}
           onPressIn={this.setActiveDay}
@@ -268,55 +302,3 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen)
 
-export class AgendaScreen extends Component {
-  constructor (props) {
-    super(props)
-    const appState = AppState.currentState
-
-    this.state = { agendaData: {} }
-  }
-
-  render () {
-    // const { isCurrentDay, activeDay, data } = this.state
-    return (
-      <Agenda
-          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
-        renderDay={(day, item) => {
-          return (
-            <View />
-          )
-        }}
-        items={this.state.agendaData}
-        renderItem={(item) => {
-          return <ScheduleScreen navigation={this.props.navigation} />
-        }}
-        loadItemsForMonth={(month) => {
-          const time = month.timestamp
-          const strTime = this.timeToString(time)
-          if (!this.state.agendaData[strTime]) {
-            this.state.agendaData[strTime] = []
-              // const numItems = data.length;
-              // for (let j = 0; j < numItems; j++) {
-              //   this.state.agendaData[strTime].push({
-              //     name: data[j].title,
-              //     ...data[j]
-              //   });
-              // }
-            this.state.agendaData[strTime].push({
-              name: strTime
-            })
-          }
-          const newItems = {}
-          Object.keys(this.state.agendaData).forEach(key => { newItems[key] = this.state.agendaData[key] })
-          this.setState({
-            agendaData: newItems
-          })
-        }} />
-    )
-  }
-
-  timeToString (time) {
-    const date = new Date(time)
-    return date.toISOString().split('T')[0]
-  }
-}

@@ -69,19 +69,21 @@ class StaffScheduleListing extends Component {
 
   render = () => {
     const { staffSchedules, member, selectedAppointmentType } = this.props
-    console.log(staffSchedules)
 
-    let listViewData = staffSchedules.staffSchedules ? staffSchedules.staffSchedules.Data : null
-
-    if (listViewData !== null) {
-      listViewData = listViewData.map((item, index) => {
+    const root = staffSchedules.staffSchedules ? staffSchedules.staffSchedules.Data : null
+    let listViewData = []
+    if (root !== null) {
+      root.map((item, index) => {
         if (item.StaffId == member.Id
           && item.LocationId == member.currentLocation.LocationId
-          && item.ServiceItemId == selectedAppointmentType.Id)
-          return item
-
+          && item.ServiceItemId == selectedAppointmentType.Id) {
+          listViewData.push(item)
+        }
       })
     }
+    console.log(listViewData)
+
+    const keyExtractor = listViewData ? (item, idx) => item.Id : null
 
     return (
       <List
@@ -89,7 +91,7 @@ class StaffScheduleListing extends Component {
         navigation={this.props.navigation}
         data={listViewData}
         renderItem={this.renderItem.bind(this)}
-        keyExtractor={(item, idx) => item.Id}
+        // keyExtractor={keyExtractor}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         refresh={this.fetchStaffSchedules.bind(this)}

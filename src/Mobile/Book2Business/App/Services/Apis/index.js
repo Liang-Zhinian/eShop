@@ -4,5 +4,14 @@ import StaffsApi from './StaffsApi'
 import ServiceCatalogApi from './ServiceCatalogApi'
 import StaffSchedulesApi from './StaffSchedulesApi'
 import IdentityAccessApi from './IdentityAccessApi'
+import AppointmentSchedulesApi from './AppointmentSchedulesApi'
 
-export {AuthApi, IdentityAccessApi, MemberApi, StaffsApi, ServiceCatalogApi, StaffSchedulesApi}
+export {
+    AuthApi, 
+    IdentityAccessApi, 
+    MemberApi, 
+    StaffsApi, 
+    ServiceCatalogApi, 
+    StaffSchedulesApi,
+    AppointmentSchedulesApi
+}
