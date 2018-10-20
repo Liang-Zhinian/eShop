@@ -1,27 +1,28 @@
 import React from 'react'
 import { View, FlatList, Text, StyleSheet } from 'react-native'
-import { 
-    format, 
-    addMinutes, 
-    addDays, 
+import {
+    format,
+    addMinutes,
+    addDays,
     differenceInMinutes,
     compareAsc,
     isSameDay,
     isWithinRange,
-    subMilliseconds 
+    subMilliseconds
 } from 'date-fns'
 import {
-  merge,
-  groupWith,
-  contains,
-  assoc,
-  map,
-  sum,
-  findIndex
+    merge,
+    groupWith,
+    contains,
+    assoc,
+    map,
+    sum,
+    findIndex
 } from 'ramda'
 
 import { TimeFormat, MinDate } from '../../../Constants/date'
 import components from '../../../../native-base-theme/components';
+import { ApplicationStyles, Metrics, Colors } from '../../../Themes'
 
 const minutesArray = ['00', '15', '30', '45'];
 
@@ -31,11 +32,12 @@ function formatTime(date) {
 
 function buildTimeslots(minutesDiff = 15) {
     let timeslots = []
-    let someDate = MinDate
-    let nextDate = addDays(MinDate, 1)
+    // let someDate = MinDate
+    let someDate = new Date('7/10/2017')
+    let nextDate = addDays(new Date('7/10/2017'), 1)
 
     while (someDate < nextDate) {
-        timeslots.push({ time: formatTime(someDate) })
+        timeslots.push({ time: formatTime(someDate), datetime: someDate })
         someDate = addMinutes(someDate, minutesDiff)
     }
     return timeslots
@@ -50,7 +52,7 @@ function calculateTop(time) {
     let beginOfTheDay = copiedDate
     let mins = differenceInMinutes(time, beginOfTheDay)
     let top = RowHeight * (mins / MinutesDiff)
-    console.log('mins ==> top', mins, top)
+
     return top
 }
 
@@ -65,30 +67,46 @@ const MinutesDiff = 15
 const timeslots = buildTimeslots(MinutesDiff)
 
 class ReservationList extends React.Component {
+    constructor(props) {
+        super(props)
 
-    list = null
+        const data = this.getEventsByDayFromSchedule(timeslots)
+
+        this.state = { data: data[0] }
+    }
+
+    // scheduleList = null
 
     componentDidMount() {
         // this.list.scrollToIndex({ index, animated: false })
-        // const { data } = this.state
-        const index = this.getActiveIndex(schedules)
+        const { data } = this.state
+        const index = this.getActiveIndex(data)
+        // console.log(index)
         // fixes https://github.com/facebook/react-native/issues/13202
-        const wait = new Promise((resolve) => setTimeout(resolve, 200))
+        const wait = new Promise((resolve) => setTimeout(resolve, 500))
         wait.then(() => {
-            this.refs.scheduleList.scrollToIndex({ index, animated: false })
+            console.log(this.refs.scheduleList)
+            this.refs.scheduleList.scrollToIndex({ index:20, animated: true })
         })
     }
 
     render() {
+        const { data } = this.state
+        // console.log(data)
         return (
-            <View>
+            <View style={styles.container}>
                 <FlatList
-                    ref={ref => this.list = ref}
-                    data={timeslots}
+                    style={{ flex: 1 }}
+                    ref='scheduleList'
+                    data={data}
+                    extraData={this.props}
                     renderItem={this.renderItem}
-                    keyExtractor={(item, index) => item.time}
+                    keyExtractor={(item, idx) => item.eventStart.toString()}
+                    contentContainerStyle={styles.listContent}
+                    getItemLayout={this.getItemLayout}
+                    showsVerticalScrollIndicator={false}
                 />
-                {this.renderReservations()}
+                {/* {this.renderReservations()} */}
             </View>
         )
     }
@@ -104,12 +122,24 @@ class ReservationList extends React.Component {
         )
     }
 
+    getItemLayout = (data, index) => {
+        // const item = data[index]
+        // const itemLength = (item, index) => {
+        //     return RowHeight
+        // }
+        // const length = itemLength(item)
+        // const offset = sum(data.slice(0, index).map(itemLength))
+        // return { length, offset, index }
+
+        return { length: 30, offset: 30 * index, index }
+    }
+
     renderReservations() {
         return schedules.map((schedule, index) => {
             const time = new Date(schedule.time)
             const duration = schedule.duration
             return (
-                <View style={[
+                <View key={schedule.speaker + '@' + schedule.time} style={[
                     styles.reservationContainer,
                     {
                         height: RowHeight * (duration / MinutesDiff),
@@ -129,7 +159,13 @@ class ReservationList extends React.Component {
 
     getActiveIndex = (data) => {
         // const { currentTime } = this.props
-        const currentTime = new Date('7/10/2017')
+        let initialTime = new Date()
+        const firstDay = new Date('7/10/2017')
+        initialTime.setFullYear(firstDay.getFullYear())
+        initialTime.setMonth(firstDay.getMonth())
+        initialTime.setDate(firstDay.getDate())
+        const currentTime = new Date(initialTime)
+
         const foundIndex = findIndex((i) => isWithinRange(currentTime, i.eventStart, i.eventEnd))(data)
 
         // handle pre-event and overscroll
@@ -141,11 +177,30 @@ class ReservationList extends React.Component {
             return foundIndex
         }
     }
+
+    getEventsByDayFromSchedule = (schedule) => {
+        const mergeTimes = (e) => {
+            const eventDuration = MinutesDiff //Number(e.duration)
+            const eventStart = new Date(e.datetime)
+            const eventFinal = addMinutes(eventStart, eventDuration)
+            // ends 1 millisecond before event
+            const eventEnd = subMilliseconds(eventFinal, 1)
+
+            return merge(e, { eventStart, eventEnd, eventDuration, eventFinal })
+        }
+        const sorted = [...schedule].map(mergeTimes).sort((a, b) => {
+            return compareAsc(a.eventStart, b.eventStart)
+        })
+        return groupWith((a, b) => isSameDay(a.eventStart, b.eventStart), sorted)
+    }
 }
 
 export default ReservationList
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     row: {
         flex: 1,
         flexDirection: 'row',
@@ -175,5 +230,9 @@ const styles = StyleSheet.create({
         borderColor: 'blue',
         borderRadius: 10,
         borderWidth: StyleSheet.hairlineWidth,
-    }
+    },
+    listContent: {
+        paddingTop: Metrics.baseMargin,
+        paddingBottom: Metrics.baseMargin * 8
+    },
 })

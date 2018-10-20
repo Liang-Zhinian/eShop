@@ -226,40 +226,6 @@ class ScheduleScreen extends Component {
     const { isCurrentDay, activeDay, data } = this.state
     return (
       <GradientView style={styles.linearGradient}>
-        <Agenda
-          // specify how each date should be rendered. day can be undefined if the item is not first in that day.
-          renderDay={(day, item) => {
-            return (
-              <View />
-            )
-          }}
-          items={this.state.agendaData}
-          renderItem={(item) => {
-            return <ScheduleScreen navigation={this.props.navigation} />
-          }}
-          loadItemsForMonth={(month) => {
-            const time = month.timestamp
-            const strTime = this.timeToString(time)
-            if (!this.state.agendaData[strTime]) {
-              this.state.agendaData[strTime] = []
-              // const numItems = data.length;
-              // for (let j = 0; j < numItems; j++) {
-              //   this.state.agendaData[strTime].push({
-              //     name: data[j].title,
-              //     ...data[j]
-              //   });
-              // }
-              this.state.agendaData[strTime].push({
-                name: strTime
-              })
-            }
-            const newItems = {}
-            Object.keys(this.state.agendaData).forEach(key => { newItems[key] = this.state.agendaData[key] })
-            this.setState({
-              agendaData: newItems
-            })
-          }} />
-
         <DayToggle
           activeDay={activeDay}
           onPressIn={this.setActiveDay}
