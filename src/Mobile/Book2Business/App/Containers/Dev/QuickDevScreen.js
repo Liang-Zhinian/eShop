@@ -83,7 +83,7 @@ class QuickDevScreen extends Component {
           handePickButton={(image) => {
           }} />
 
-          <Button title='Staff Schedule' onPress={() => { this.props.navigation.navigate('StaffSchedule') }} />
+          <Button title='Staff Schedule' onPress={() => { this.props.navigation.navigate('StaffSchedule', {ActionType: 'Add'}) }} />
 
         <Button title='Switch theme' onPress={() => { this.props.switchTheme('Lite') }} />
         <Button title='Auth' onPress={() => { this.props.switchTheme('Lite') }} />

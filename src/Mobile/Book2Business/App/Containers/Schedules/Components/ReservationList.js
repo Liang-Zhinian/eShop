@@ -25,6 +25,7 @@ import components from '../../../../native-base-theme/components';
 import { ApplicationStyles, Metrics, Colors } from '../../../Themes'
 
 const minutesArray = ['00', '15', '30', '45'];
+const reservationDate = '7/10/2017 08:00'
 
 function formatTime(date) {
     return `${format(date, TimeFormat)}`
@@ -33,8 +34,8 @@ function formatTime(date) {
 function buildTimeslots(minutesDiff = 15) {
     let timeslots = []
     // let someDate = MinDate
-    let someDate = new Date('7/10/2017')
-    let nextDate = addDays(new Date('7/10/2017'), 1)
+    let someDate = new Date(reservationDate)
+    let nextDate = addDays(new Date(reservationDate), 1)
 
     while (someDate < nextDate) {
         timeslots.push({ time: formatTime(someDate), datetime: someDate })
@@ -53,9 +54,15 @@ function calculateTop(time) {
     let mins = differenceInMinutes(time, beginOfTheDay)
     let top = RowHeight * (mins / MinutesDiff)
 
+    // console.log(top, time)
     return top
 }
 
+function calculateHeight(duration) {
+    let height = RowHeight * (duration / MinutesDiff)
+    console.log(height)
+    return height
+}
 
 const schedules = require('../../../Fixtures/schedule').schedule
 
@@ -85,14 +92,13 @@ class ReservationList extends React.Component {
         // fixes https://github.com/facebook/react-native/issues/13202
         const wait = new Promise((resolve) => setTimeout(resolve, 500))
         wait.then(() => {
-            console.log(this.refs.scheduleList)
-            this.refs.scheduleList.scrollToIndex({ index:20, animated: true })
+            this.refs.scheduleList.scrollToIndex({ index, animated: true })
         })
     }
 
     render() {
         const { data } = this.state
-        // console.log(data)
+        // console.log(schedules)
         return (
             <View style={styles.container}>
                 <FlatList
@@ -106,7 +112,7 @@ class ReservationList extends React.Component {
                     getItemLayout={this.getItemLayout}
                     showsVerticalScrollIndicator={false}
                 />
-                {/* {this.renderReservations()} */}
+                {this.renderReservations()}
             </View>
         )
     }
@@ -142,7 +148,7 @@ class ReservationList extends React.Component {
                 <View key={schedule.speaker + '@' + schedule.time} style={[
                     styles.reservationContainer,
                     {
-                        height: RowHeight * (duration / MinutesDiff),
+                        height: calculateHeight(duration),
                         top: calculateTop(time),
                     }
                 ]}>
@@ -160,7 +166,7 @@ class ReservationList extends React.Component {
     getActiveIndex = (data) => {
         // const { currentTime } = this.props
         let initialTime = new Date()
-        const firstDay = new Date('7/10/2017')
+        const firstDay = new Date(reservationDate)
         initialTime.setFullYear(firstDay.getFullYear())
         initialTime.setMonth(firstDay.getMonth())
         initialTime.setDate(firstDay.getDate())
@@ -200,6 +206,7 @@ export default ReservationList
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        // position: 'absolute',
     },
     row: {
         flex: 1,

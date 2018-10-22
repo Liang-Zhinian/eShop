@@ -2,51 +2,80 @@ import React, { Component } from 'react'
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  LayoutAnimation
 } from 'react-native'
-import { Agenda } from 'react-native-calendars'
+import HorizontalCalendarList from '../../../Components/HorizontalCalendarList'
 
 export default class AgendaScreen extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      items: {}
+      items: {},
+      calendarHeight: new Animated.Value(40),
+      showCalendarOptions: false,
     }
+
+    this.toggleCalendar = this.toggleCalendar.bind(this)
   }
 
-  // componentDidMount(){
-  //   this.setState({items:this.props.items});
-  // }
+  render() {
 
-  render () {
-    if (!this.props.items || this.props.items.length == 0) return <View />
+    const { calendarHeight } = this.state
+
     return (
-      <Agenda
-        items={this.props.items || {}}
-        loadItemsForMonth={this.props.loadItemsForMonth}
-        selected={'2017-05-16'}
-        renderItem={this.props.renderItem}
-        renderEmptyDate={this.renderEmptyDate.bind(this)}
-        rowHasChanged={this.rowHasChanged.bind(this)}
-        renderDay={this.props.renderDay}
-      // markingType={'period'}
-      // markedDates={{
-      //    '2017-05-08': {textColor: '#666'},
-      //    '2017-05-09': {textColor: '#666'},
-      //    '2017-05-14': {startingDay: true, endingDay: true, color: 'blue'},
-      //    '2017-05-21': {startingDay: true, color: 'blue'},
-      //    '2017-05-22': {endingDay: true, color: 'gray'},
-      //    '2017-05-24': {startingDay: true, color: 'gray'},
-      //    '2017-05-25': {color: 'gray'},
-      //    '2017-05-26': {endingDay: true, color: 'gray'}}}
-      // monthFormat={'yyyy'}
-      // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
-      // renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
-      />
+      // <Agenda
+      //   items={this.props.items || {}}
+      //   loadItemsForMonth={this.props.loadItemsForMonth}
+      //   selected={'2017-05-16'}
+      //   renderItem={this.props.renderItem}
+      //   renderEmptyDate={this.renderEmptyDate.bind(this)}
+      //   rowHasChanged={this.rowHasChanged.bind(this)}
+      //   renderDay={this.props.renderDay}
+      // />
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, height: calendarHeight }}>
+          <HorizontalCalendarList />
+        </View>
+        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+          <TouchableOpacity onPress={this.toggleCalendar} style={{ width: '50%', height: 15, backgroundColor: 'gray' }}></TouchableOpacity>
+        </View>
+        <View style={{ flex: 1 }}>
+          {this.props.renderItem()}
+        </View>
+      </View>
     )
   }
 
-  loadItems (day) {
+  toggleCalendar() {
+    const { showCalendarOptions } = this.state
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    let calendarHeight = 0
+
+    if (showCalendarOptions) {
+      this.setState({
+        showCalendarOptions: false,
+      })
+      calendarHeight = 40
+    } else {
+      this.setState({
+        showCalendarOptions: true,
+      })
+      calendarHeight = 370
+    }
+
+    const animate = Animated.timing;
+    const duration = 200
+    animate(this.state.calendarHeight, {
+      toValue: calendarHeight,
+      duration
+    })
+
+  }
+
+  loadItems(day) {
     setTimeout(() => {
       // for (let i = -15; i < 85; i++) {
       for (let i = 0; i < 1; i++) {
@@ -63,7 +92,7 @@ export default class AgendaScreen extends Component {
           }
         }
       }
-      
+
       const newItems = {}
       Object.keys(this.state.items).forEach(key => { newItems[key] = this.state.items[key] })
       this.setState({
@@ -73,23 +102,23 @@ export default class AgendaScreen extends Component {
     // console.log(`Load Items for ${day.year}-${day.month}`);
   }
 
-  renderItem (item) {
+  renderItem(item) {
     return (
       <View style={[styles.item, { height: item.height }]}><Text>{item.name}</Text></View>
     )
   }
 
-  renderEmptyDate () {
+  renderEmptyDate() {
     return (
       <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
     )
   }
 
-  rowHasChanged (r1, r2) {
+  rowHasChanged(r1, r2) {
     return r1.name !== r2.name
   }
 
-  timeToString (time) {
+  timeToString(time) {
     const date = new Date(time)
     return date.toISOString().split('T')[0]
   }
@@ -108,5 +137,6 @@ const styles = StyleSheet.create({
     height: 15,
     flex: 1,
     paddingTop: 30
-  }
+  },
+
 })

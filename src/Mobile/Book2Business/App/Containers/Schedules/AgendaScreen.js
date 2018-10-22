@@ -35,6 +35,8 @@ export default class AgendaScreen extends Component {
   }
 
   render () {
+    // return <ReservationList />
+    
     // const { isCurrentDay, activeDay, data } = this.state
     return (
       <Agenda
