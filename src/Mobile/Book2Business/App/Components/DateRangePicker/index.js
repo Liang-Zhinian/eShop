@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 import { Colors, Fonts, Images, } from '../../Themes/'
 import styles from './Styles'
-import HorizontalCalendarList from '../HorizontalCalendarList'
+import HorizontalCalendarList from '../CalendarList'
 import GradientHeader, { Header } from '../GradientHeader'
 import { MinDate, DateFormat } from '../../Constants/date'
 

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 
-import { CalendarList } from 'react-native-calendars';
+import { CalendarList as RNCalendarList } from 'react-native-calendars';
 import { View, Text, StyleSheet } from 'react-native';
 
 import styles from './Styles'
 
-export default class HorizontalCalendarList extends Component {
+export default class CalendarList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.horizontal = typeof(props.horizontal) != undefined ? props.horizontal : true
     this.onDayPress = this.onDayPress.bind(this);
   }
 
@@ -25,15 +26,15 @@ export default class HorizontalCalendarList extends Component {
     }
 
     if (this.props.markedDates) {
-      this.props.markedDates.map(date=>{
+      this.props.markedDates.map(date => {
         if (date) markedDates[date] = { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
       })
     }
 
     return (
-      <CalendarList
+      <RNCalendarList
         current={'2018-10-09'}
-        horizontal
+        horizontal={this.horizontal}
         pagingEnabledpagingEnabled={true}
         style={styles.calendar}
         onDayPress={this.onDayPress}
