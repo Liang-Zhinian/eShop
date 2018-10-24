@@ -9,8 +9,9 @@ export default class CalendarList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.horizontal = typeof(props.horizontal) != undefined ? props.horizontal : true
+    this.horizontal = typeof (props.horizontal) != undefined ? props.horizontal : true
     this.onDayPress = this.onDayPress.bind(this);
+    this.scrollToDay = this.scrollToDay.bind(this)
   }
 
   onDayPress(day) {
@@ -20,21 +21,45 @@ export default class CalendarList extends Component {
     this.props.onDayPress && this.props.onDayPress(day)
   }
 
+  scrollToDay(day, offset, animated){
+    this.calendar.scrollToDay(day, offset, animated)
+  }
+
   render() {
     let markedDates = {
       [this.state.selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
     }
 
     if (this.props.markedDates) {
-      this.props.markedDates.map(date => {
-        if (date) markedDates[date] = { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
-      })
+
+      if (this.props.markedDates instanceof Array) {
+        this.props.markedDates.map(date => {
+          if (date) markedDates[date] = { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
+        })
+      } else {
+        markedDates = this.props.markedDates
+      }
     }
+
+    const {
+      calendarWidth, 
+      onVisibleMonthsChange,
+      current,
+      scrollingEnabled,
+      hideExtraDays,
+      onLayout,
+    } = this.props
 
     return (
       <RNCalendarList
-        current={'2018-10-09'}
         horizontal={this.horizontal}
+        onLayout={onLayout}
+        calendarWidth={calendarWidth}
+        onVisibleMonthsChange={onVisibleMonthsChange}
+        ref={(c) => this.calendar = c}
+        current={current}
+        scrollingEnabled={scrollingEnabled}
+        hideExtraDays={hideExtraDays}
         pagingEnabledpagingEnabled={true}
         style={styles.calendar}
         onDayPress={this.onDayPress}

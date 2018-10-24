@@ -27,9 +27,8 @@ import {
     findIndex
 } from 'ramda'
 
-import { DateFormat, TimeFormat, MinDate } from '../../../Constants/date'
-import components from '../../../../native-base-theme/components';
-import { ApplicationStyles, Metrics, Colors } from '../../../Themes'
+import { TimeFormat } from '../../Constants/date'
+import { Metrics } from '../../Themes'
 
 function formatTime(date) {
     return `${format(date, TimeFormat)}`
@@ -53,14 +52,17 @@ class Grid extends React.Component {
     constructor(props) {
         super(props)
 
-        const timeslots = buildTimeslots(props.initialDate, props.duration)
+        const initialDate = props.initialDate || new Date()
+        const duration = props.duration || 15
+        const rowHeight = props.rowHeight || 30
+
+        const timeslots = buildTimeslots(initialDate, duration)
         const data = this.getEventsByDayFromSchedule(timeslots)
 
         this.state = {
             data: data[0],
-            rowHeight: props.rowHeight,
-            timeslotWidth: props.timeslotWidth,
-            initialDate: props.initialDate
+            rowHeight: rowHeight,
+            initialDate: initialDate
         }
 
     }
@@ -88,7 +90,7 @@ class Grid extends React.Component {
                 extraData={this.props}
                 renderItem={this.renderItem.bind(this)}
                 keyExtractor={(item, idx) => item.eventStart.toString()}
-                contentContainerStyle={styles.listContent}
+                // contentContainerStyle={styles.listContent}
                 getItemLayout={this.getItemLayout}
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={false}
@@ -97,10 +99,10 @@ class Grid extends React.Component {
     }
 
     renderItem({ item }) {
-        const {rowHeight, timeslotWidth} = this.state
+        const {rowHeight} = this.state
         return (
             <View style={[styles.row, { height: rowHeight }]}>
-                <View style={[styles.timeslot, { width: timeslotWidth }]}>
+                <View style={[styles.timeslot, { width: 80 }]}>
                     <Text style={styles.timeslot_text}>{item.time}</Text>
                 </View>
                 <View></View>
@@ -117,7 +119,7 @@ class Grid extends React.Component {
         // const offset = sum(data.slice(0, index).map(itemLength))
         // return { length, offset, index }
 
-        const {rowHeight, timeslotWidth} = this.state
+        const {rowHeight} = this.state
 
         return { length: rowHeight, offset: rowHeight * index, index }
     }

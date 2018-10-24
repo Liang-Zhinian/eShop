@@ -25,7 +25,7 @@ import {
     findIndex
 } from 'ramda'
 
-import Grid from './Grid'
+// import Grid from './Agenda/Grid'
 import { DateFormat, TimeFormat, MinDate } from '../../../Constants/date'
 import { ApplicationStyles, Metrics, Colors } from '../../../Themes'
 import Reservation from './Reservation'
@@ -86,12 +86,12 @@ class ReservationList extends React.Component {
                         columnWidth: (width - TimeslotWidth) / 2
                     })
                 }}>
-                <Grid
+                {/* <Grid
                     rowHeight={RowHeight}
                     timeslotWidth={TimeslotWidth}
                     duration={MinutesDiff}
                     initialDate={reservationDate}
-                />
+                /> */}
                 <View
                     style={[styles.contentRoot, {
                         width: (rootWidth - TimeslotWidth)

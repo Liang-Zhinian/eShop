@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import * as defaultStyle from '../Styles';
-import platformStyles from './platform-style';
+import * as defaultStyle from './default';
+import platformStyles from '../platform-style';
 
 const STYLESHEET_ID = 'stylesheet.agenda.main';
 
