@@ -1,10 +1,10 @@
 import React from 'react'
-import { 
-  View, 
-  TouchableWithoutFeedback, 
-  Animated, 
-  StyleProp, 
-  ViewStyle 
+import {
+  View,
+  TouchableWithoutFeedback,
+  Animated,
+  StyleProp,
+  ViewStyle
 } from 'react-native'
 import styles from './Styles'
 
@@ -54,14 +54,15 @@ export default class AnimatedTouchable extends React.Component<ButtonProps, Butt
     ]
 
     return (
-      <View>
+      <View style={[style]}>
         <TouchableWithoutFeedback
           onPressIn={this.handlePressIn}
           onPressOut={this.handlePressOut}
           onPress={this.props.onPress}
+          style={{ flex: 1, }}
         >
-          <Animated.View style={containerStyles}>
-            <View style={[styles.info, style]}>
+          <Animated.View style={[containerStyles, {  }]}>
+            <View style={[styles.info, {backgroundColor:'white'}]}>
               {children}
             </View>
           </Animated.View>

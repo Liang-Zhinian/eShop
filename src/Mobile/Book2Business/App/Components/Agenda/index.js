@@ -131,6 +131,14 @@ export default class Agenda extends Component {
     };
 
     let knob = (<View style={this.styles.knobContainer} />);
+    if (!this.props.hideKnob) {
+      const knobView = this.props.renderKnob ? this.props.renderKnob() : (<View style={this.styles.knob} />);
+      knob = this.state.calendarScrollable ? null : (
+        <View style={this.styles.knobContainer}>
+          <View ref={(c) => this.knob = c}>{knobView}</View>
+        </View>
+      );
+    }
     // <View style={this.styles.knobContainer}>
     //   <TouchableOpacity onPress={this.toggleCalendar} style={{/*styles.expandingBar*/}}>
     //   <View style={styles.expandingButton}></View>
@@ -158,7 +166,8 @@ export default class Agenda extends Component {
               markedDates={this.generateMarkings()}
               onDayPress={this._chooseDayFromCalendar.bind(this)}
               scrollingEnabled={this.state.calendarScrollable}
-              hideExtraDays={this.state.calendarScrollable} />
+              hideExtraDays={this.state.calendarScrollable}
+              theme={this.props.theme} />
 
             {/*
               <CalendarList
@@ -192,6 +201,7 @@ export default class Agenda extends Component {
         </Animated.View>
 
         <Animated.View style={weekdaysStyle}>
+          {this.props.showWeekNumbers && <Text allowFontScaling={false} style={this.styles.weekday} numberOfLines={1}></Text>}
           {weekdaysNames.map((day, index) => (
             <Text allowFontScaling={false} key={day + index} style={this.styles.weekday} numberOfLines={1}>{day}</Text>
           ))}

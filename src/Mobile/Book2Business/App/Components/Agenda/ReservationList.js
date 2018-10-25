@@ -25,6 +25,8 @@ import {
     sum,
     findIndex
 } from 'ramda'
+import PropTypes from 'prop-types';
+import XDate from 'xdate';
 
 import dateutils from './dateutils'
 import styleConstructor from './Styles/styleConstructor';
@@ -43,6 +45,31 @@ const reservationDate = '7/10/2017'
 const TimeslotWidth = 80
 
 class ReservationList extends React.Component {
+    static propTypes = {
+        // specify your item comparison function for increased performance
+        rowHasChanged: PropTypes.func,
+        // specify how each item should be rendered in agenda
+        renderItem: PropTypes.func,
+        // specify how each date should be rendered. day can be undefined if the item is not first in that day.
+        renderDay: PropTypes.func,
+        // specify how empty date content with no items should be rendered
+        renderEmptyDate: PropTypes.func,
+        // callback that gets called when day changes while scrolling agenda list
+        onDayChange: PropTypes.func,
+        // onScroll ListView event
+        onScroll: PropTypes.func,
+        // the list of items that have to be displayed in agenda. If you want to render item as empty date
+        // the value of date key kas to be an empty array []. If there exists no value for date key it is
+        // considered that the date in question is not yet loaded
+        reservations: PropTypes.object,
+
+        selectedDay: PropTypes.instanceOf(XDate),
+        topDay: PropTypes.instanceOf(XDate),
+        refreshControl: PropTypes.element,
+        refreshing: PropTypes.bool,
+        onRefresh: PropTypes.func,
+    };
+
     constructor(props) {
         super(props)
 
@@ -56,7 +83,7 @@ class ReservationList extends React.Component {
         initialDate.setMinutes(0)
         initialDate.setSeconds(0)
         const duration = props.duration || 15
-        const rowHeight = props.rowHeight || 30
+        const rowHeight = props.theme.gridCellHeight || 30
 
         const timeslots = buildTimeslots(initialDate, duration)
         const gridData = this.getEventsByDayFromSchedule(timeslots, duration)
@@ -73,7 +100,7 @@ class ReservationList extends React.Component {
             reservations: []
         };
 
-        console.log('reservations', props.reservations)
+        // console.log('reservations', props.reservations)
     }
 
     componentWillMount() {
@@ -282,7 +309,7 @@ class ReservationList extends React.Component {
     }
 
     renderItems() {
-        const { rootWidth, columnWidth, reservations } = this.state
+        const { rootWidth, columnWidth, reservations, gridRowHeight } = this.state
         return (
             <View
                 style={[styles.contentRoot, {
@@ -291,7 +318,6 @@ class ReservationList extends React.Component {
             >
                 {
                     reservations && reservations.map((schedule, index) => {
-                        console.log(schedule)
                         const reservation = schedule.reservation
                         if (!reservation) return null
 
@@ -305,18 +331,16 @@ class ReservationList extends React.Component {
                             // <View style={[styles.contentColumn, {
                             //     width: columnWidth
                             // }]}>
-                                <Reservation
-                                    style={{
-                                        height: calculateHeight(duration),
-                                        width: columnWidth - 10,
-                                        top: calculateTop(time),
-                                    }}
-                                    when={formatTime(time)}
-                                    who={reservation.speaker}
-                                    what={'Men\'s cut'}
-                                    where={'Green Room'}
-                                    onPress={() => null}
-                                />
+                            <Reservation
+                                style={{
+                                    height: calculateHeight(duration, gridRowHeight) - 5,
+                                    width: columnWidth - 10,
+                                    top: calculateTop(time, gridRowHeight) + 2,
+                                }}
+                                item={schedule}
+                                renderItem={this.props.renderItem}
+                                theme={this.props.theme}
+                            />
                             // </View>
                         )
                     })
@@ -367,13 +391,13 @@ const styles = StyleSheet.create({
     timeslot: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'gray',
-        borderColor: 'gray',
+        backgroundColor: '#00adf5',
+        borderColor: '#00adf5',
         borderWidth: 0,
         borderRightWidth: StyleSheet.hairlineWidth,
     },
     timeslot_text: {
-        // color: 'white'
+        color: 'white'
     },
     emptydata: {
         flex: 1,
