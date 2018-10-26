@@ -270,3 +270,9 @@ db/
 # MacOS
 **/.DS_Store
 .DS_Store
+src/Mobile/.DS_Store
+src/Mobile/.DS_Store
+src/BuildingBlocks/EventBus/.DS_Store
+src/BuildingBlocks/.DS_Store
+.DS_Store
+src/.DS_Store
