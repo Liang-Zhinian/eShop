@@ -150,10 +150,6 @@ services:
                     # The API Gateway redirects and access through the internal port (80).
     volumes:
       - ./src/ApiGateways/Mobile.Bff.Reservation/apigw:/app/configuration
-<<<<<<< HEAD
-
-=======
->>>>>>> 1bc41b23f8b83fc7d9812eb94eea25891c624370
 
   mobilereservationapigw:
     environment:

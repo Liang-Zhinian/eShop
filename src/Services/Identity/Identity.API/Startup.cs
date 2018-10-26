@@ -37,6 +37,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Identity.API.Infrastructure.Middlewares;
 using IdentityServer4.AccessTokenValidation;
 using Identity.API.Infrastructure.Filters;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using SaaSEqt.eShop.Services.Identity.API.Configuration;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -115,12 +118,16 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
             app.UseAuthentication();
 
+            SwaggerSupport.ConfigureSwaggerUI(app, Configuration);
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //app.UseMvcWithDefaultRoute();
         }
 
         private void RegisterAppInsights(IServiceCollection services)
@@ -196,6 +203,9 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 }
                 checks.AddMySQLCheck("Identity_Db", configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
             });
+
+            // Add framework services.
+            services.AddSwaggerSupport(configuration);
 
             return services;
         }

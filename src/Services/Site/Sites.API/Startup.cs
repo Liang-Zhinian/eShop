@@ -76,7 +76,7 @@
                     });
 
 
-            ConfigureAuthService(services);
+            // ConfigureAuthService(services);
 
             services.AddDbContext<SitesContext>(options =>
             {
@@ -175,7 +175,7 @@
 
             app.UseCors("CorsPolicy");
 
-            ConfigureAuth(app);
+            // ConfigureAuth(app);
 
             app.UseMvcWithDefaultRoute();
 

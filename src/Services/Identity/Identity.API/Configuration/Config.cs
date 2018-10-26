@@ -366,6 +366,22 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                 },
                 new Client
                 {
+                    ClientId = "identityswaggerui",
+                    ClientName = "Identity API Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["IdentityApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["IdentityApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "identity"
+                    }
+                },
+                new Client
+                {
                     ClientId = "native.code",
                     ClientName = "Native Client (Code with PKCE)",
                     RequireClientSecret = false,

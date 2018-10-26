@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
-using SaaSEqt.eShop.Services.Sites.API.Infrastructure.Filters;
+using SaaSEqt.eShop.Services.Identity.API.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace SaaSEqt.eShop.Services.Sites.API.Configurations
+namespace SaaSEqt.eShop.Services.Identity.API.Configuration
 {
     public static class SwaggerSupport
     {
@@ -19,13 +19,12 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
                 options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "eShop - Sites HTTP API",
+                    Title = "eShop - Identity HTTP API",
                     Version = "v1",
-                    Description = "The Sites Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
+                    Description = "The Identity Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
                     TermsOfService = "Terms Of Service"
                 });
 
-                /*
                 options.AddSecurityDefinition("oauth2", new OAuth2Scheme
                 {
                     Type = "oauth2",
@@ -34,12 +33,12 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
                     TokenUrl = $"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
                     Scopes = new Dictionary<string, string>()
                     {
-                        { "sites", "Sites API" }
+                        { "identity", "Identity API" }
                     }
                 });
 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
-*/
+
             });
         }
 
@@ -49,9 +48,9 @@ namespace SaaSEqt.eShop.Services.Sites.API.Configurations
             app.UseSwagger()
                   .UseSwaggerUI(c =>
                   {
-                      c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Sites.API V1");
-                      c.OAuthClientId("sitesswaggerui");
-                      c.OAuthAppName("Sites Swagger UI");
+                      c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Identity.API V1");
+                      c.OAuthClientId("identityswaggerui");
+                      c.OAuthAppName("Identity Swagger UI");
                   });
         }
     }

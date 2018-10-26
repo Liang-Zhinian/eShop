@@ -197,6 +197,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityManagement.API", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaaSEqt.IdentityAccess.API", "src\Services\IdentityAccess\IdentityAccess.API\SaaSEqt.IdentityAccess.API.csproj", "{92E964ED-DC5B-4C5E-BFAD-0204A643A9E1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme", "Readme", "{838E2D8E-2F05-4058-99B6-2A8E838E8A91}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.txt = Readme.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{42681D9D-750A-4DF7-BD9F-9292CFD5C253}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU

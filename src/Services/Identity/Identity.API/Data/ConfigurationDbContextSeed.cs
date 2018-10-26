@@ -30,6 +30,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
             clientUrls.Add("WebShoppingAgg", configuration.GetValue<string>("WebShoppingAggClient"));
             clientUrls.Add("MvceShop", configuration.GetValue<string>("MvceShopClient"));
 
+            clientUrls.Add("IdentityApi", configuration.GetValue<string>("identityUrl"));
             clientUrls.Add("CatalogApi", configuration.GetValue<string>("CatalogApiClient"));
             clientUrls.Add("AppointmentApi", configuration.GetValue<string>("AppointmentApiClient"));
             clientUrls.Add("SitesApi", configuration.GetValue<string>("SitesApiClient"));
