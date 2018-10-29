@@ -17,6 +17,7 @@ import Messages from '../../../Components/Messages'
 import Loading from '../../../Components/Loading'
 import Spacer from '../../../Components/Spacer'
 import ClientsSearchButton from '../../Clients/ClientsSearchButton';
+import AppointmentTypePicker from '../../AppointmentCatalog/Components/AppointmentTypePicker'
 
 const data = {
     Id: "9eeb8643-2e1a-4168-a5c4-fbf17162e3a6",
@@ -138,9 +139,15 @@ export default class AppointmentCategory extends React.Component {
                     <Form>
                         <Item stackedLabel>
                             <Label>
-                                Name
+                                Client
                             </Label>
                             <ClientsSearchButton />
+                        </Item>
+                        <Item stackedLabel>
+                            <Label>
+                                Appointment Type
+                            </Label>
+                            <AppointmentTypePicker />
                         </Item>
 
                         <Spacer size={20} />
