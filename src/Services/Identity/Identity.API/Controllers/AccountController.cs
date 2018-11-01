@@ -270,6 +270,8 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                if (model.User == null) model.User = ApplicationUser.Empty();
+
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,

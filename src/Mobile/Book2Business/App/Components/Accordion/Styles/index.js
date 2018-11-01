@@ -11,10 +11,11 @@ export default StyleSheet.create({
   },
   content: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    backgroundColor: '#EDEDED',
+    backgroundColor: 'gray',// '#EDEDED',
   },
   label: {
     fontFamily: 'Montserrat-Medium',

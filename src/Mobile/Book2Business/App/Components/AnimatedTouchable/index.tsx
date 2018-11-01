@@ -54,7 +54,7 @@ export default class AnimatedTouchable extends React.Component<ButtonProps, Butt
     ]
 
     return (
-      <View style={[style]}>
+      <View>
         <TouchableWithoutFeedback
           onPressIn={this.handlePressIn}
           onPressOut={this.handlePressOut}
@@ -62,7 +62,7 @@ export default class AnimatedTouchable extends React.Component<ButtonProps, Butt
           style={{ flex: 1, }}
         >
           <Animated.View style={[containerStyles, {  }]}>
-            <View style={[styles.info, {backgroundColor:'white'}]}>
+            <View style={[styles.info, style]}>
               {children}
             </View>
           </Animated.View>

@@ -133,7 +133,7 @@ class List extends Component {
         extraData={this.props.extraData}
         renderItem={this.props.renderItem}
         keyExtractor={this.props.keyExtractor}
-        contentContainerStyle={[styles.listContent]}
+        contentContainerStyle={[styles.listContent, this.props.contentContainerStyle]}
         getItemLayout={this.props.getItemLayout}
         showsVerticalScrollIndicator={this.props.showsVerticalScrollIndicator}
         ListEmptyComponent={(

@@ -7,32 +7,48 @@ import styles from './Styles/HeaderStyle'
 import { Images, Colors } from '../Themes'
 import BackButton from './BackButton'
 
-export const Header = ({ title, goBack }) => (
+export const Header = ({ title, goBack, left, right }) => (
   <View style={{ flex: 1, flexDirection: 'row' }}>
-
-    <BackButton onPress={goBack} />
     <View style={{
-      // flex: 1,
+      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-evenly'
+      justifyContent: 'center'
+    }}>
+      {left !== null && <BackButton onPress={goBack} />}
+    </View>
+    <View style={{
+      flex: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
     }}>
       <Text style={styles.title}>
         {title}
       </Text>
+    </View>
+    <View style={{
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+
     </View>
   </View>
 )
 
 Header.propTypes = {
   title: PropTypes.string,
-  content: PropTypes.string,
-  goBack: PropTypes.func
+  goBack: PropTypes.func,
+  right: PropTypes.any,
+  left: PropTypes.any,
 }
 
 Header.defaultProps = {
   title: 'Missing title',
-  content: '',
+  right: undefined,
+  left: undefined,
   goBack: () => { }
 }
 

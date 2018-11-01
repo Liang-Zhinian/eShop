@@ -28,11 +28,13 @@ class ReservationListItem extends Component {
             content = this.props.renderEmptyDate(date);
         }
         return (
-            <AnimatedTouchable style={[
-                this.styles.container,
-                styles.container,
-                this.props.style
-            ]}>
+            <AnimatedTouchable
+                // key={this.props.key}
+                style={[
+                    this.styles.container,
+                    styles.container,
+                    this.props.style
+                ]}>
                 {content}
 
             </AnimatedTouchable>

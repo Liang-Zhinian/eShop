@@ -11,6 +11,7 @@ export default StyleSheet.create({
     // marginHorizontal: Metrics.doubleBaseMargin + 10
   },
   listContent: {
+    // flex: 1,
     paddingTop: Metrics.baseMargin,
     paddingBottom: Metrics.baseMargin * 8
   },

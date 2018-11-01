@@ -4,8 +4,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Icon } from 'native-base'
 
+import GradientView from '../../Components/GradientView'
+import GradientHeader, { Header } from '../../Components/GradientHeader'
 import Layout from './Appointments/AppointmentSchedule'
 import { addOrUpdateAppointmentSchedule } from '../../Actions/appointmentSchedules'
+import styles from './Styles/AppointmentScheduleScreenStyle'
 
 class AppointmentScheduleScreen extends Component {
   static propTypes = {
@@ -36,25 +39,34 @@ class AppointmentScheduleScreen extends Component {
     const {
       member,
       appointmentCategories,
-      isLoading
+      isLoading,
+      navigation
     } = this.props
 
     const { successMessage, errorMessage } = this.state
 
     let appointmentSchedule = this.actionType == 'Update' ? appointmentSchedules.selectedAppointmentSchedule : {
       // ScheduleTypeId: 4,
-      SiteId: member.SiteId
+      SiteId: member.currentLocation.SiteId,
+      LocationId: member.currentLocation.LocationId
     }
 
     return (
-      <Layout
-        appointmentSchedule={appointmentSchedule}
-        loading={isLoading}
-        error={errorMessage}
-        success={successMessage}
-        onFormSubmit={this.onFormSubmit}
-        navigation={this.props.navigation}
-      />
+      <GradientView style={[styles.linearGradient, { flex: 1 }]}>
+        <GradientHeader>
+          <Header title='Book Appointment'
+            goBack={() => { navigation.goBack(null) }} />
+        </GradientHeader>
+        <Layout
+          member={member}
+          appointmentSchedule={appointmentSchedule}
+          loading={isLoading}
+          error={errorMessage}
+          success={successMessage}
+          onFormSubmit={this.onFormSubmit}
+          navigation={this.props.navigation}
+        />
+      </GradientView>
     )
   }
 }

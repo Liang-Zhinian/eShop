@@ -1,4 +1,8 @@
 import React from 'react'
+import {
+    TextInput,
+    StyleSheet
+} from 'react-native'
 import PropTypes from 'prop-types'
 import {
     Container,
@@ -10,14 +14,29 @@ import {
     Label,
     Input,
     Button,
-    Switch
+    Switch,
+    View
 } from 'native-base'
+import {
+    format,
+    addMinutes
+} from 'date-fns'
 
+import { TimeFormat } from '../../../Constants/date'
 import Messages from '../../../Components/Messages'
 import Loading from '../../../Components/Loading'
 import Spacer from '../../../Components/Spacer'
-import ClientsSearchButton from '../../Clients/ClientsSearchButton';
+
+import StaffPicker from '../../Staffs/StaffPicker';
+import ClientPicker from '../../Clients/ClientPicker';
 import AppointmentTypePicker from '../../AppointmentCatalog/Components/AppointmentTypePicker'
+import { DateTimePickerButton } from '../../../Components/DateTimePicker'
+import Styles from '../../../Components/AnimatedContainerWithNavbar/Styles';
+
+function formatTime(date) {
+    return `${format(date, TimeFormat)}`
+}
+
 
 const data = {
     Id: "9eeb8643-2e1a-4168-a5c4-fbf17162e3a6",
@@ -36,27 +55,28 @@ const data = {
     FirstAppointment: false,
 }
 
-export default class AppointmentCategory extends React.Component {
+export default class AppointmentSchedule extends React.Component {
     static propTypes = {
         error: PropTypes.string,
         success: PropTypes.string,
         loading: PropTypes.bool.isRequired,
         onFormSubmit: PropTypes.func.isRequired,
         appointmentSchedule: PropTypes.shape({
-            Id: String,
-            OrderDate: Date,
-            StartDateTime: Date,
-            EndDateTime: Date,
-            StaffId: String,
-            LocationId: String,
-            SiteId: String,
-            GenderPreference: String,
-            Duration: Number,
-            AppointmentStatusId: Number,
-            Notes: String,
-            StaffRequested: Boolean,
-            ClientId: String,
-            FirstAppointment: Boolean,
+            Id: PropTypes.string,
+            OrderDate: PropTypes.instanceOf(Date),
+            StartDateTime: PropTypes.instanceOf(Date),
+            EndDateTime: PropTypes.instanceOf(Date),
+            StaffId: PropTypes.string,
+            LocationId: PropTypes.string,
+            SiteId: PropTypes.string,
+            GenderPreference: PropTypes.string,
+            Duration: PropTypes.number,
+            AppointmentStatusId: PropTypes.number,
+            Notes: PropTypes.string,
+            StaffRequested: PropTypes.bool,
+            ClientId: PropTypes.string,
+            FirstAppointment: PropTypes.bool,
+            AppointmentServiceItems: PropTypes.arrayOf(PropTypes.shape({})),
         }).isRequired
     }
 
@@ -78,6 +98,7 @@ export default class AppointmentCategory extends React.Component {
             StaffRequested: props.appointmentSchedule.StaffRequested || true,
             ClientId: props.appointmentSchedule.ClientId || '',
             FirstAppointment: props.appointmentSchedule.FirstAppointment || false,
+            AppointmentServiceItems: props.appointmentSchedule.AppointmentServiceItems || [],
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -103,6 +124,35 @@ export default class AppointmentCategory extends React.Component {
             .catch(e => console.log(`Error: ${e}`))
     }
 
+    getDuration = (selectedAppointmentTypes) => {
+        if (selectedAppointmentTypes && selectedAppointmentTypes.length > 0) {
+            return selectedAppointmentTypes[0].DefaultTimeLength
+        }
+        return 0
+    }
+
+    setBookingDateTime = (date) => {
+        const {
+            AppointmentServiceItems,
+            StartDateTime,
+        } = this.state
+
+        if (!date) date = StartDateTime
+        let datetime = new Date(date)
+        const duration = this.getDuration(AppointmentServiceItems)
+        datetime = addMinutes(datetime, duration)
+
+        this.setState({ StartDateTime: date, EndDateTime: datetime })
+    }
+
+    getEndTime = () => {
+        const {
+            EndDateTime,
+        } = this.state
+
+        return formatTime(EndDateTime)
+    }
+
     render = () => {
         const { loading, error, success } = this.props
         const {
@@ -120,34 +170,109 @@ export default class AppointmentCategory extends React.Component {
             StaffRequested,
             ClientId,
             FirstAppointment,
+            AppointmentServiceItems
         } = this.state
 
+        console.log(this.state)
         // Loading
         if (loading) return <Loading />
 
         return (
             <Container style={{ backgroundColor: 'white' }}>
                 <Content padder>
-                    <Header
-                        title='Make an Appointment'
-                        content='Thanks for keeping your appointment up to date!'
-                    />
 
                     {error && <Messages message={error} />}
                     {success && <Messages message={success} type='success' />}
 
                     <Form>
-                        <Item stackedLabel>
+                        <Item fixedLabel>
                             <Label>
                                 Client
                             </Label>
-                            <ClientsSearchButton />
+                            <ClientPicker />
                         </Item>
-                        <Item stackedLabel>
+                        <Item fixedLabel>
                             <Label>
                                 Appointment Type
                             </Label>
-                            <AppointmentTypePicker />
+                            <AppointmentTypePicker onValueChanged={({ value }) => {
+                                this.setState({ AppointmentServiceItems: [value] }, () => {
+                                    this.setBookingDateTime(StartDateTime)
+                                })
+                            }} />
+                        </Item>
+                        <Item fixedLabel>
+                            <Label>
+                                Staff
+                            </Label>
+                            <StaffPicker onValueChanged={({ key, value }) => {
+                                this.setState({ StaffId: key })
+                            }} />
+                        </Item>
+                        <Item fixedLabel>
+                            <Label>
+                                Date
+                            </Label>
+                            <DateTimePickerButton
+                                mode='date'
+                                initialDate={new Date()}
+                                onValueChanged={({ value }) => {
+                                    this.setBookingDateTime(value)
+                                }} />
+                        </Item>
+                        <Item fixedLabel>
+                            <Label>
+                                Start Time
+                            </Label>
+                            <DateTimePickerButton
+                                mode='time'
+                                minuteInterval={15}
+                                initialDate={new Date()}
+                                onValueChanged={({ value }) => {
+                                    this.setBookingDateTime(value)
+                                }} />
+                        </Item>
+                        <Item fixedLabel>
+                            <Label>
+                                End Time
+                            </Label>
+                            <View>
+                                <Text style={{ paddingVertical: 16, }}>
+                                    {this.getEndTime()}
+                                </Text>
+                            </View>
+                        </Item>
+                        <Item fixedLabel>
+                            <Label>
+                                Duration
+                            </Label>
+                            <View>
+                                <Text style={{ paddingVertical: 16, }}>
+                                    {this.getDuration(AppointmentServiceItems) + ' mins'}
+                                </Text>
+                            </View>
+                        </Item>
+
+                        <Item fixedLabel>
+                            <Label>
+                                Resource
+                            </Label>
+                            <View>
+                                <Text style={{ paddingVertical: 16, }}>
+
+                                </Text>
+                            </View>
+                        </Item>
+
+                        <Item>
+                            <TextInput
+                                multiline={true}
+                                numberOfLines={20}
+                                placeholder='Appointment notes'
+                                style={styles.notes}
+                                onChangeText={value => {
+                                    this.setState({ Notes: value })
+                                }} />
                         </Item>
 
                         <Spacer size={20} />
@@ -163,3 +288,14 @@ export default class AppointmentCategory extends React.Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    notes: {
+        flex: 1, 
+        padding: 6, 
+        marginVertical: 16, 
+        height: 150, 
+        borderWidth: 1, 
+        borderColor: 'gray'
+    }
+})

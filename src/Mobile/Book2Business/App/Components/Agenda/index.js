@@ -366,6 +366,7 @@ export default class Agenda extends Component {
   renderReservations() {
     return (
       <ReservationList
+        keyExtractor={this.props.keyExtractor}
         refreshControl={this.props.refreshControl}
         refreshing={this.props.refreshing}
         onRefresh={this.props.onRefresh}

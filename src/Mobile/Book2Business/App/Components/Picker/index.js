@@ -6,18 +6,27 @@ import {
     Image,
     Text,
     UIManager,
-    Platform
+    Platform,
+    ViewPropTypes,
+    ScrollView,
 } from 'react-native'
-import { Container, Body } from 'native-base'
 import PropTypes from 'prop-types'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
-import { Colors, Fonts, Images, } from '../../Themes'
+import { Colors, Fonts, Images, Metrics } from '../../Themes'
 import styles from './Styles'
+import GradientView from '../GradientView'
 import GradientHeader, { Header } from '../GradientHeader'
+import AnimatedTouchable from '../AnimatedTouchable'
+import SearchBox from '../SearchBox'
+
+
+const viewPropTypes = ViewPropTypes || View.propTypes;
 
 export default class Picker extends React.Component {
     static propTypes = {
         onValueChanged: PropTypes.func.isRequired,
+        style: viewPropTypes.style,
     }
 
     static defaultProps = {
@@ -37,42 +46,49 @@ export default class Picker extends React.Component {
     }
 
     async _bootStrapAsync() {
-        this.props.ref && this.props.ref(this)
+        // this.props.ref && this.props.ref(this)
     }
 
     render() {
         const {
             value,
+            style,
+            searchEnabled
         } = this.props
+        const { width } = this.state
 
         return (
-            <View style={styles.mainContainer}>
-                <TouchableOpacity onPress={this.show} style={styles.button}>
-                    <Text style={styles.label}>
-                        {value}
-                    </Text>
-                    <Image
-                        style={[styles.icon]}
-                        source={Images.chevronRight}
-                        esizeMode='cover'
-                    />
-                </TouchableOpacity>
+            <View
+                style={[style]}
+                onLayout={this.onLayout.bind(this)}
+            >
+                <AnimatedTouchable onPress={this.show}>
+                    <View style={[styles.button]}>
+                        <Text style={styles.label}>
+                            {value}
+                        </Text>
+                        <View style={styles.icon}><Icon size={25} color='#000' name={'angle-right'} /></View>
+                    </View>
+                </AnimatedTouchable>
 
                 <Modal
                     animationType="slide"
                     visible={this.state.showModal}
                     onRequestClose={this.dismiss}>
-                    <Container>
+                    <GradientView style={[styles.linearGradient]}>
                         <GradientHeader>
                             <Header title={this.props.title}
                                 goBack={this.dismiss} />
                         </GradientHeader>
-                        <Body>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                {this.props.children}
-                            </View>
-                        </Body>
-                    </Container>
+                        {searchEnabled && <SearchBox />}
+                        <ScrollView
+                            scrollEventThrottle={10}
+                            scrollEnabled={true}
+                            style={{ flex: 1 }}
+                        >
+                            {this.props.children}
+                        </ScrollView>
+                    </GradientView>
                 </Modal>
             </View>
         )
@@ -84,5 +100,9 @@ export default class Picker extends React.Component {
 
     dismiss = () => {
         this.setState({ showModal: false })
+    }
+
+    onLayout = (e) => {
+        const viewWidth = e.nativeEvent.layout.width
     }
 }

@@ -68,6 +68,7 @@ class ReservationList extends React.Component {
         refreshControl: PropTypes.element,
         refreshing: PropTypes.bool,
         onRefresh: PropTypes.func,
+        keyExtractor: PropTypes.func,
     };
 
     constructor(props) {
@@ -141,21 +142,6 @@ class ReservationList extends React.Component {
 
     onRowLayoutChange(ind, event) {
         this.heights[ind] = event.nativeEvent.layout.height;
-    }
-
-    renderRow({ item, index }) {
-        return (
-            <View onLayout={this.onRowLayoutChange.bind(this, index)}>
-                <Reservation
-                    item={item}
-                    renderItem={this.props.renderItem}
-                    renderDay={this.props.renderDay}
-                    renderEmptyDate={this.props.renderEmptyDate}
-                    theme={this.props.theme}
-                    rowHasChanged={this.props.rowHasChanged}
-                />
-            </View>
-        );
     }
 
     getReservationsForDay(iterator, props) {
@@ -243,7 +229,7 @@ class ReservationList extends React.Component {
                         })
                     }}>
                     {this.renderGrid()}
-                    {this.renderItems()}
+                    {this.renderReservations()}
                 </ScrollView>
             </View>
         )
@@ -308,10 +294,10 @@ class ReservationList extends React.Component {
         return getEventsByDayFromSchedule(schedule, duration)
     }
 
-    renderItems() {
+    renderReservations() {
         const { rootWidth, columnWidth, reservations, gridRowHeight } = this.state
         return (
-            <View
+            <View key={'xx0001'}
                 style={[styles.contentRoot, {
                     width: (rootWidth - TimeslotWidth)
                 }]}
@@ -326,12 +312,14 @@ class ReservationList extends React.Component {
                         if (format(time, DateFormat) != format(new Date(reservationDate), DateFormat)) return null
 
                         const duration = reservation.duration
+                        let key = this.props.keyExtractor(reservation, index)
+                        // console.log({key})
                         return (
-
                             // <View style={[styles.contentColumn, {
                             //     width: columnWidth
                             // }]}>
                             <Reservation
+                                key={key}
                                 style={{
                                     height: calculateHeight(duration, gridRowHeight) - 5,
                                     width: columnWidth - 10,

@@ -48,7 +48,7 @@ class ScheduleScreen extends Component {
     return (
       <GradientView style={[styles.linearGradient, { flex: 1 }]}>
         <GradientHeader>
-          <Header title='Schedule' goBack={_ => null} />
+          <Header title='Schedule' left={null} />
         </GradientHeader>
         <Agenda
           items={this.state.items}
@@ -57,6 +57,7 @@ class ScheduleScreen extends Component {
           renderItem={this.renderItem.bind(this)}
           renderEmptyDate={this.renderEmptyDate.bind(this)}
           rowHasChanged={this.rowHasChanged.bind(this)}
+          keyExtractor={(item, index) => item.Id || ('xxx' + index)}
           theme={{
             gridCellHeight: 40
           }}

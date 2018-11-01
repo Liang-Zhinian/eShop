@@ -134,40 +134,33 @@ namespace Identity.API.Migrations.ApplicationDb
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("CardHolderName")
-                        .IsRequired();
+                    b.Property<string>("CardHolderName");
 
-                    b.Property<string>("CardNumber")
-                        .IsRequired();
+                    b.Property<string>("CardNumber");
 
                     b.Property<int>("CardType");
 
-                    b.Property<string>("City")
-                        .IsRequired();
+                    b.Property<string>("City");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Country")
-                        .IsRequired();
+                    b.Property<string>("Country");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("Expiration")
-                        .IsRequired();
+                    b.Property<string>("Expiration");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -181,24 +174,22 @@ namespace Identity.API.Migrations.ApplicationDb
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("SecurityNumber")
-                        .IsRequired();
+                    b.Property<string>("SecurityNumber");
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<string>("State")
-                        .IsRequired();
+                    b.Property<string>("State");
 
-                    b.Property<string>("Street")
-                        .IsRequired();
+                    b.Property<string>("Street");
 
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("ZipCode")
-                        .IsRequired();
+                    b.Property<string>("ZipCode");
+
+                    b.Property<byte[]>("AvatarImage").HasColumnType("MediumBlob");
 
                     b.HasKey("Id");
 

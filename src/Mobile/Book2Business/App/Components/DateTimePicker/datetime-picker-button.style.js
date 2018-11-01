@@ -1,16 +1,19 @@
-import { StyleSheet } from 'react-native'
-import { ApplicationStyles, Metrics, Colors, Fonts } from '../../../Themes/'
+import { StyleSheet } from "react-native";
+import { ApplicationStyles, Metrics, Colors, Fonts } from '../../Themes/'
 
 export default StyleSheet.create({
-  ...ApplicationStyles.screen,
-  linearGradient: ApplicationStyles.linearGradient,
+  container: {
+    // flex: 1,
+    // justifyContent: "center",
+    // alignItems: "center"
+  },
   button: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: "center",
     alignItems: 'center',
-    // justifyContent: 'space-around',
     paddingVertical: 16,
-
+    // margin: 16,
   },
   label: {
     fontFamily: 'Montserrat-Medium',
@@ -20,8 +23,11 @@ export default StyleSheet.create({
     color: Colors.darkPurple,
     marginRight: 10,
   },
+  text: {
+    marginVertical: 10
+  },
   icon: {
     // marginHorizontal: 10,
     // tintColor: 'black',
   },
-})
+});

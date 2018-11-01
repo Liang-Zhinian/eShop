@@ -1,45 +1,29 @@
-﻿using Autofac;
+﻿using System;
+using System.Reflection;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Identity.API.Infrastructure.Filters;
+using Identity.API.Infrastructure.Middlewares;
 using IdentityServer4.Services;
-using IdentityServer4.Models;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using SaaSEqt.eShop.Services.Identity.API.Certificates;
+using SaaSEqt.eShop.Services.Identity.API.Configuration;
 using SaaSEqt.eShop.Services.Identity.API.Data;
 using SaaSEqt.eShop.Services.Identity.API.Models;
 using SaaSEqt.eShop.Services.Identity.API.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.HealthChecks;
-using Microsoft.Extensions.Logging;
-using StackExchange.Redis;
-using System;
-using System.Reflection;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using IdentityModel;
-using System.Linq;
-using Identity.Utilities;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using IdentityServer4.Validation;
-using Identity.API.Validators;
-using System.IdentityModel.Tokens.Jwt;
-using Identity.API.Infrastructure.Middlewares;
-using IdentityServer4.AccessTokenValidation;
-using Identity.API.Infrastructure.Filters;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Collections.Generic;
-using SaaSEqt.eShop.Services.Identity.API.Configuration;
+using StackExchange.Redis;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -109,7 +93,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
             // Make work identity server redirections in Edge and lastest versions of browers. WARN: Not valid in a production environment.
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
+                //context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
                 await next();
             });
 

@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { Colors, Fonts, Images, } from '../../Themes/'
 import styles from './Styles'
 
@@ -33,12 +34,12 @@ export default class Accordion extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedIndex: 0,
+            selectedIndex: props.activeIndex || 0,
 
         }
 
         this._bootStrapAsync = this._bootStrapAsync.bind(this)
-        this.setSelectedIndex = this.setSelectedIndex.bind(this)
+        this.onPress = this.onPress.bind(this)
         this.renderItem = this.renderItem.bind(this)
 
         if (Platform.OS === 'android') {
@@ -75,21 +76,22 @@ export default class Accordion extends React.Component {
         return (
             <View style={styles.title}>
                 <Text style={[styles.label, styles.TouchableOpacityTitleText]}>
-                    {item.title}
+                    {this.props.titleExtractor && this.props.titleExtractor(item)}
                 </Text>
-                <Image
+                {/* <Image
                     style={[styles.icon, this.state.selectedIndex == index && styles.flip]}
                     source={Images.chevronIcon}
-                />
+                /> */}
+                <Icon size={25} color='#fff' name={this.state.selectedIndex == index ? 'angle-down' : 'angle-right'} />
             </View>
         )
     }
 
     renderItem({ item, index }) {
         return (
-            <View style={{flex: 1}}>
+            <View key={item.Id} style={{ flex: 1 }}>
                 <TouchableOpacity activeOpacity={0.7}
-                    onPress={() => this.setSelectedIndex(index)}
+                    onPress={() => this.onPress({ item, index })}
                     style={styles.TouchableOpacityStyle}>
                     {this.props.renderTitle ? this.props.renderTitle({ item, index }) : this.renderTitle({ item, index })}
                 </TouchableOpacity>
@@ -100,17 +102,14 @@ export default class Accordion extends React.Component {
         );
     }
 
-    setSelectedIndex = (index) => {
+    onPress = ({ item, index }) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
         this.setState({
             selectedIndex: index
         })
-
-
-        // this.setState({
-        //     singleDateCalendarHeight: 370,
-        // });
+        console.log(this.props)
+        this.props.onPress && this.props.onPress(item)
     }
 
     onValueReturned = () => {

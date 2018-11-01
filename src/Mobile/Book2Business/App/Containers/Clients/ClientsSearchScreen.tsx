@@ -175,8 +175,8 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
   render() {
     return (
       <GradientView style={[styles.linearGradient]}>
-        {this.renderHeader()}
-        {this.renderSearchBox()}
+        {/* {this.renderHeader()} */}
+        {/* {this.renderSearchBox()} */}
         {this.renderClientList()}
       </GradientView>
 

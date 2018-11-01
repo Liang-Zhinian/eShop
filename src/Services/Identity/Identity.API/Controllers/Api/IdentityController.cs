@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Identity.API.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SaaSEqt.eShop.Services.Identity.API.Models;
 using SaaSEqt.eShop.Services.Identity.API.Models.AccountViewModels;
+using System.IO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,11 +30,12 @@ namespace Identity.API.Controllers
         [Route("register")]
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
+                if (model.User == null) model.User = ApplicationUser.Empty();
+
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
@@ -64,7 +67,6 @@ namespace Identity.API.Controllers
 
         [Route("forgot-password")]
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword([FromQuery]ForgotPasswordViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
@@ -78,7 +80,6 @@ namespace Identity.API.Controllers
 
         [Route("reset-password")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel model)
         {
             ApplicationUser user = await _userManager.FindByNameAsync(model.Email);
@@ -101,7 +102,6 @@ namespace Identity.API.Controllers
 
         [Route("users")]
         [HttpPut]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateUser([FromBody]ApplicationUser userToUpdate)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(userToUpdate.Id);
@@ -122,6 +122,29 @@ namespace Identity.API.Controllers
             user.ZipCode = userToUpdate.ZipCode;
             user.PhoneNumber = userToUpdate.PhoneNumber;
             user.SecurityNumber = userToUpdate.SecurityNumber;
+
+            var updateUserResult = await _userManager.UpdateAsync(user);
+            if (!updateUserResult.Succeeded)
+            {
+                AddErrors(updateUserResult);
+                return BadRequest();
+            }
+
+            return Ok("User updated");
+        }
+
+        [Route("users/avatar")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserAvatar([FromForm]UploadUserAvatarVm userAvatarToUpload)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(userAvatarToUpload.UserId.ToString());
+            if (user == null) throw new InvalidOperationException("User does not exist");
+
+            using (var stream = new MemoryStream())
+            {
+                await userAvatarToUpload.Image.CopyToAsync(stream);
+                user.AvatarImage = stream.ToArray();
+            }
 
             var updateUserResult = await _userManager.UpdateAsync(user);
             if (!updateUserResult.Succeeded)
