@@ -27,6 +27,7 @@ export default class ClientPicker extends React.Component {
                     value={value}
                     title='Pick a Client'
                     // style={{ flex: 1 }}
+                    scrollEnabled={false}
                 >
                     <ClientsSearchScreen screenProps={{
                         hideModal: this.hideModal

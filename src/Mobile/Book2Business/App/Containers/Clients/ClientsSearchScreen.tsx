@@ -166,17 +166,22 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
 
   renderSearchBox() {
     return <SearchBox
-      onBeforeSearch={() => { }}
-      onSearch={() => { }}
-      onAfterSearch={() => { }}
+      onBeforeSearch={(searchText) => { }}
+      onSearch={this.onSearch.bind(this)}
+      onAfterSearch={(searchText) => { }}
     />
+  }
+
+  onSearch(searchText){
+    const {searchClients} = this.props
+    searchClients(searchText, 10, 0)
   }
 
   render() {
     return (
       <GradientView style={[styles.linearGradient]}>
         {/* {this.renderHeader()} */}
-        {/* {this.renderSearchBox()} */}
+        {this.renderSearchBox()}
         {this.renderClientList()}
       </GradientView>
 
@@ -187,7 +192,7 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
 const mapStateToProps = (state) => {
   return {
     // isLoading: state.status.loading || false,
-    nearbyData: state.nearby
+    clients: state.clients
   }
 }
 

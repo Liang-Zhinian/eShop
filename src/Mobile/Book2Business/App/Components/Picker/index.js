@@ -53,9 +53,13 @@ export default class Picker extends React.Component {
         const {
             value,
             style,
-            searchEnabled
+            searchEnabled,
         } = this.props
         const { width } = this.state
+
+        let scrollEnabled = this.props.scrollEnabled
+        if (typeof scrollEnabled == undefined)
+            scrollEnabled = true
 
         return (
             <View
@@ -83,7 +87,7 @@ export default class Picker extends React.Component {
                         {searchEnabled && <SearchBox />}
                         <ScrollView
                             scrollEventThrottle={10}
-                            scrollEnabled={true}
+                            scrollEnabled={scrollEnabled}
                             style={{ flex: 1 }}
                         >
                             {this.props.children}
