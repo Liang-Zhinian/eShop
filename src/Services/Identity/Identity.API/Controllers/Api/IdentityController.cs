@@ -10,6 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using SaaSEqt.eShop.Services.Identity.API.Models;
 using SaaSEqt.eShop.Services.Identity.API.Models.AccountViewModels;
 using System.IO;
+using System.Net;
+using Identity.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using SaaSEqt.eShop.Services.Identity.API.Extensions;
+using Microsoft.AspNetCore.Hosting;
+using SaaSEqt.eShop.Services.Identity.API;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,12 +26,17 @@ namespace Identity.API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class IdentityController : Controller
     {
-
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _env;
+        private readonly AppSettings _settings;
 
-        public IdentityController(UserManager<ApplicationUser> userManager)
+        public IdentityController(UserManager<ApplicationUser> userManager,
+                                  IHostingEnvironment env,
+                                  IOptionsSnapshot<AppSettings> settings)
         {
             _userManager = userManager;
+            _env = env;
+            _settings = settings.Value;
         }
 
         [Route("register")]
@@ -75,7 +87,7 @@ namespace Identity.API.Controllers
 
             var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            return Ok(passwordResetToken);    
+            return Ok(passwordResetToken);
         }
 
         [Route("reset-password")]
@@ -92,7 +104,8 @@ namespace Identity.API.Controllers
             }
 
             var resetPasswordResult = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (!resetPasswordResult.Succeeded){
+            if (!resetPasswordResult.Succeeded)
+            {
                 AddErrors(resetPasswordResult);
                 return BadRequest();
             }
@@ -146,6 +159,8 @@ namespace Identity.API.Controllers
                 user.AvatarImage = stream.ToArray();
             }
 
+            user.AvatarImageFileName = userAvatarToUpload.Image.FileName;
+
             var updateUserResult = await _userManager.UpdateAsync(user);
             if (!updateUserResult.Succeeded)
             {
@@ -156,6 +171,28 @@ namespace Identity.API.Controllers
             return Ok("User updated");
         }
 
+        [HttpGet]
+        [Route("users/{id:guid}/pic")]
+        public async Task<IActionResult> GetUserAvatar(Guid id)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user != null && user.AvatarImage != null)
+            {
+                var buffer = user.AvatarImage;
+
+                string mime = "image/jpeg";
+                if (!string.IsNullOrEmpty(user.AvatarImageFileName))
+                {
+                    string imageFileExtension = Path.GetExtension(user.AvatarImageFileName);
+                    mime = GetImageMimeTypeFromImageFileExtension(imageFileExtension);
+                }
+
+                return File(buffer, mime);
+            }
+
+            return Ok(null);
+        }
 
         [HttpGet]
         [Route("users/with-user-name/{username:minlength(1)}")]
@@ -163,7 +200,68 @@ namespace Identity.API.Controllers
         {
             ApplicationUser user = await _userManager.FindByNameAsync(username);
 
+            var baseUri = _settings.PicBaseUrl;
+            var azureStorageEnabled = _settings.AzureStorageEnabled;
+            user.FillUserAvatarUrl(baseUri, azureStorageEnabled);
+
             return Ok(user);
+        }
+
+        // GET api/v1/users?searchtext=demouser[&pagesize=10&pageindex=0]
+        [HttpGet]
+        [Route("users")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<ApplicationUserVm>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> SearchUsers([FromQuery]string searchText, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        {
+            var root = (IQueryable<ApplicationUser>)_userManager.Users;
+
+            if (root == null || root.Count() == 0) return NotFound();
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                root = root.Where(user => Contains(user.PhoneNumber, searchText)
+                                  || Contains(user.FullName, searchText)
+                                  || Contains(user.Email, searchText));
+            }
+
+            var totalItems = await root.LongCountAsync();
+
+            var itemsOnPage = root
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToList();
+
+            itemsOnPage = ChangeUserUriPlaceholder(itemsOnPage);
+
+            List<ApplicationUserVm> applicationUsers = new List<ApplicationUserVm>();
+            itemsOnPage.ForEach((item) =>
+            {
+                applicationUsers.Add(new ApplicationUserVm
+                {
+                    Id = Guid.Parse(item.Id),
+                    Street = item.Street,
+                    City = item.City,
+                    State = item.State,
+                    Country = item.Country,
+                    ZipCode = item.ZipCode,
+                    Name = item.Name,
+                    LastName = item.LastName,
+                    //AvatarImage = item.AvatarImage,
+                    Email = item.Email,
+                    PhoneNumber = item.PhoneNumber,
+                    AvatarImageUri = item.AvatarImageUri,
+                    AvatarImageFileName = item.AvatarImageFileName,
+                });
+            });
+
+
+
+            var model = new PaginatedItemsViewModel<ApplicationUserVm>(
+                pageIndex, pageSize, totalItems, applicationUsers);
+
+            return Ok(model);
         }
 
         private void AddErrors(IdentityResult result)
@@ -172,6 +270,65 @@ namespace Identity.API.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+        }
+
+        private bool Contains(string left, string right)
+        {
+            return !string.IsNullOrEmpty(left) && left.Contains(right);
+        }
+
+
+        private List<ApplicationUser> ChangeUserUriPlaceholder(List<ApplicationUser> users)
+        {
+            var baseUri = _settings.PicBaseUrl;
+            var azureStorageEnabled = _settings.AzureStorageEnabled;
+
+            foreach (var user in users)
+            {
+                user.FillUserAvatarUrl(baseUri, azureStorageEnabled: azureStorageEnabled);
+
+            }
+
+            return users;
+        }
+
+        private string GetImageMimeTypeFromImageFileExtension(string extension)
+        {
+            string mimetype;
+
+            switch (extension)
+            {
+                case ".png":
+                    mimetype = "image/png";
+                    break;
+                case ".gif":
+                    mimetype = "image/gif";
+                    break;
+                case ".jpg":
+                case ".jpeg":
+                    mimetype = "image/jpeg";
+                    break;
+                case ".bmp":
+                    mimetype = "image/bmp";
+                    break;
+                case ".tiff":
+                    mimetype = "image/tiff";
+                    break;
+                case ".wmf":
+                    mimetype = "image/wmf";
+                    break;
+                case ".jp2":
+                    mimetype = "image/jp2";
+                    break;
+                case ".svg":
+                    mimetype = "image/svg+xml";
+                    break;
+                default:
+                    mimetype = "application/octet-stream";
+                    break;
+            }
+
+            return mimetype;
         }
     }
 }

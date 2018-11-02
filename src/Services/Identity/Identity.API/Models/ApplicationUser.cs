@@ -43,7 +43,15 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
         //[Required]
         public string LastName { get; set; }
 
+        [NotMapped]
+        public string FullName { get { return Name + " " + LastName; } }
+
         public byte[] AvatarImage { get; set; }
+
+        public string AvatarImageFileName { get; set; }
+
+        [NotMapped]
+        public string AvatarImageUri { get; set; }
 
         public static ApplicationUser Empty()
         {
@@ -61,6 +69,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
             user.Name = string.Empty;
             user.LastName = string.Empty;
             user.AvatarImage = new byte[0];
+            user.AvatarImageFileName = string.Empty;
 
             return user;
         }

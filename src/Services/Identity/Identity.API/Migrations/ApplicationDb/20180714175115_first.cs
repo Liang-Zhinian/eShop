@@ -54,7 +54,8 @@ namespace Identity.API.Migrations.ApplicationDb
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     ZipCode = table.Column<string>(nullable: true),
-                    AvatarImage = table.Column<byte[]>(nullable: true)
+                    AvatarImage = table.Column<byte[]>(nullable: true),
+                    AvatarImageFileName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

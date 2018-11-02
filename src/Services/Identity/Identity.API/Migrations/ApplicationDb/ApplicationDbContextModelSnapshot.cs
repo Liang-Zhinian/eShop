@@ -190,6 +190,8 @@ namespace Identity.API.Migrations.ApplicationDb
                     b.Property<string>("ZipCode");
 
                     b.Property<byte[]>("AvatarImage").HasColumnType("MediumBlob");
+                    b.Property<string>("AvatarImageFileName");
+
 
                     b.HasKey("Id");
 

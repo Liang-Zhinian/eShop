@@ -13,6 +13,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.EntityConfigurations.C
         public static string String1000 = "NVarchar(1000)";
         public static string String2000 = "NVarchar(2000)";
         public static string String4000 = "NVarchar(4000)";
+        public static string MediumBlob = "NVarchar(8000)";
 
         public static string SiteTable { get; set; }
         public static string BrandingTable { get; private set; }
@@ -29,6 +30,8 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.EntityConfigurations.C
         public static string StaffContactTable { get; private set; }
         public static string StaffLoginLocationTable { get; private set; }
         public static string StaffLoginCredentialTable { get; private set; }
+
+        public static string ClientTable { get; private set; }
 
         public static string TimeZoneTable { get; set; }
         public static string RegionTable { get; set; }
@@ -51,6 +54,8 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.EntityConfigurations.C
             StaffLoginLocationTable = "StaffLoginLocation";
             StaffLoginCredentialTable = "StaffLoginCredential";
 
+            ClientTable = "Client";
+
             TimeZoneTable = "TimeZone";
             RegionTable = "Region";
 
@@ -62,7 +67,7 @@ namespace SaaSEqt.eShop.Services.Sites.API.Infrastructure.EntityConfigurations.C
             String1000 = "varchar(1000)";
             String2000 = "varchar(2000)";
             String4000 = "varchar(4000)";
-
+            MediumBlob = "MediumBlob";
         }
     }
 }
