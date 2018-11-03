@@ -9,6 +9,7 @@ import nearby from './nearby'
 import theme from './theme'
 import identityAccess from './identityAccess'
 import staffSchedules from './staffSchedules'
+import clients from './clients'
 
 const rehydrated = (state = false, action) => {
   switch (action.type) {
@@ -31,5 +32,6 @@ export default {
   appointmentTypes,
   staffs,
   identityAccess,
-  staffSchedules
+  staffSchedules,
+  clients
 }

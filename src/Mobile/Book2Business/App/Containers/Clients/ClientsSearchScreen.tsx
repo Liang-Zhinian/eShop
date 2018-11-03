@@ -13,6 +13,7 @@ import { connect } from 'react-redux'
 
 import List from '../../Components/List'
 
+import Client from './Components/Client_Lite'
 import AnimatedTouchable from '../../Components/AnimatedTouchable'
 import GradientView from '../../Components/GradientView'
 import GradientHeader from '../../Components/GradientHeader'
@@ -71,7 +72,7 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
 
   onRefresh = () => {
     this.setState({ reFetchingStatus: true })
-    this.searchClients(this.state.pageSize, 1)
+    this.searchClients(this.state.searchKeywords, this.state.pageSize, 0)
       .then(clients => {
         this.setState({
           data: clients.data,
@@ -93,16 +94,6 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
       pageIndex: pageIndex + 1,
       fetchingNextPageStatus: false
     })
-  }
-
-  searchClients = async (pageSize = 20, pageIndex = 1) => {
-    const { searchClients, showError } = this.props
-    return searchClients(this.state.searchKeywords, pageSize, pageIndex)
-      .then(json => json.data)
-      .catch((err) => {
-        console.log(`Error: ${err}`)
-        return showError(err)
-      })
   }
 
   renderClientList = () => {
@@ -131,50 +122,28 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
   renderRow({ item }) {
     const { address, title } = item
     return (
-      <AnimatedTouchable
-        onPress={() => {
-          this.onSelectRow(item)
-        }}
-        style={{
-          borderRadius: Metrics.cardRadius,
-          marginVertical: Metrics.baseMargin,
-          marginHorizontal: Metrics.doubleBaseMargin
-        }}
-      >
-
-      </AnimatedTouchable>
-    )
-  }
-
-  renderHeader() {
-    return (
-
-      <GradientHeader>
-        <View style={[styles.header]}>
-          <Left>
-            <BackButton onPress={this.props.screenProps.hideModal} />
-          </Left>
-          <Body>
-            <Title style={{ color: Colors.snow }}>Pick a location</Title>
-          </Body>
-          <Right>
-          </Right>
-        </View>
-      </GradientHeader>
+      <Client
+        name={item.FirstName + ' ' + item.LastName}
+        avatarURL={item.ImageUri || ''}
+        title={item.Bio}
+        onPress={() => { this.onSelectRow(item) }}
+      />
     )
   }
 
   renderSearchBox() {
     return <SearchBox
       onBeforeSearch={(searchText) => { }}
-      onSearch={this.onSearch.bind(this)}
-      onAfterSearch={(searchText) => { }}
+      onSearch={this.searchClients.bind(this)}
+      onAfterSearch={(searchText) => {
+        this.setState({ searchKeywords: searchText })
+      }}
     />
   }
 
-  onSearch(searchText){
-    const {searchClients} = this.props
-    searchClients(searchText, 10, 0)
+  searchClients(searchText, pageSize = 10, pageIndex = 0) {
+    const { searchClients } = this.props
+    return searchClients(searchText, pageSize, pageIndex)
   }
 
   render() {

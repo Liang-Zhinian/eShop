@@ -5,6 +5,7 @@ import ServiceCatalogApi from './ServiceCatalogApi'
 import StaffSchedulesApi from './StaffSchedulesApi'
 import IdentityAccessApi from './IdentityAccessApi'
 import AppointmentSchedulesApi from './AppointmentSchedulesApi'
+import ClientApi from './ClientApi'
 
 export {
     AuthApi, 
@@ -13,5 +14,6 @@ export {
     StaffsApi, 
     ServiceCatalogApi, 
     StaffSchedulesApi,
-    AppointmentSchedulesApi
+    AppointmentSchedulesApi,
+    ClientApi
 }
