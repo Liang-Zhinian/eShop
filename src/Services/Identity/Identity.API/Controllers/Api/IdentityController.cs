@@ -173,6 +173,7 @@ namespace Identity.API.Controllers
 
         [HttpGet]
         [Route("users/{id:guid}/pic")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserAvatar(Guid id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id.ToString());
