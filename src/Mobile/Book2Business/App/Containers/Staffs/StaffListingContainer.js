@@ -40,7 +40,6 @@ class StaffListingContainer extends Component {
 
   render() {
     const { navigation, staffs, member, Layout, setSelectedStaff } = this.props
-    console.log('staffs', staffs)
 
     let listViewData = staffs && staffs.staffs ? staffs.staffs : null
 

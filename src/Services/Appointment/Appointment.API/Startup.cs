@@ -42,7 +42,7 @@ namespace Appointment.API
 
             RegisterAppInsights(services);
 
-            ConfigureAuthService(services);
+            //ConfigureAuthService(services);
 
             services.AddMvc(options =>
             {
@@ -56,7 +56,7 @@ namespace Appointment.API
                 //不使用驼峰样式的key
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 //设置时间格式
-                options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+                //options.SerializerSettings.DateFormatString = "yyyy-MM-dd";
             });
 
             services.AddHealthChecks(checks =>
@@ -155,7 +155,7 @@ namespace Appointment.API
 
             app.UseCors("CorsPolicy");
 
-            ConfigureAuth(app);
+            //ConfigureAuth(app);
 
             app.UseMvcWithDefaultRoute();
 

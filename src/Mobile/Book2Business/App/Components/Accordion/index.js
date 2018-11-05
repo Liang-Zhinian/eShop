@@ -108,7 +108,7 @@ export default class Accordion extends React.Component {
         this.setState({
             selectedIndex: index
         })
-        console.log(this.props)
+        
         this.props.onPress && this.props.onPress(item)
     }
 

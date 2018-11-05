@@ -79,12 +79,15 @@ export function addOrUpdateAppointmentSchedule(formData: AppointmentSchedule) {
     StaffRequested,
     ClientId,
     FirstAppointment,
+    AppointmentServiceItems
   } = formData
+
+  console.log('addOrUpdateAppointmentSchedule', formData)
 
   return (dispatch, getState) => new Promise(async (resolve, reject) => {
 
     // Validation checks
-    
+
     await statusMessage(dispatch, 'loading', true)
 
     var api = new AppointmentSchedulesApi()
@@ -107,6 +110,7 @@ export function addOrUpdateAppointmentSchedule(formData: AppointmentSchedule) {
         StaffRequested,
         ClientId,
         FirstAppointment,
+        AppointmentServiceItems
       })
         .then(async (res) => {
           await statusMessage(dispatch, 'loading', false)

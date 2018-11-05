@@ -30,6 +30,7 @@ interface ClientsSearchScreenProps {
   style: StyleSheet
   showError(err): object
   searchClients(searchKeywords, pageSize, pageIndex): object
+  onValueChanged (item): void
 }
 
 interface ClientsSearchScreenState {
@@ -102,7 +103,7 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
         <List
           data={this.state.data}
           renderItem={this.renderRow.bind(this)}
-          keyExtractor={(item, idx) => item.id}
+          keyExtractor={(item, idx) => item.Id}
           error={this.state.error}
           loading={this.state.isLoading}
           refresh={this.onRefresh.bind(this)}
@@ -117,15 +118,16 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
     this.setState({
       selectedItem: item
     })
+    this.props.onValueChanged && this.props.onValueChanged({key: item.Id, value:item })
   }
 
   renderRow({ item }) {
     const { address, title } = item
     return (
       <Client
-        name={item.FirstName + ' ' + item.LastName}
-        avatarURL={item.ImageUri || ''}
-        title={item.Bio}
+        name={item.Name + ' ' + item.LastName}
+        avatarURL={item.AvatarImageUri || ''}
+        title={item.Email}
         onPress={() => { this.onSelectRow(item) }}
       />
     )
@@ -144,6 +146,11 @@ class ClientsSearchScreen extends React.Component<ClientsSearchScreenProps, Clie
   searchClients(searchText, pageSize = 10, pageIndex = 0) {
     const { searchClients } = this.props
     return searchClients(searchText, pageSize, pageIndex)
+      .then(res => {
+        this.setState({
+          data: res.data.Data,
+        })
+      })
   }
 
   render() {

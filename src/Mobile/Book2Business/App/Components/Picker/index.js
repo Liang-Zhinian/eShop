@@ -27,6 +27,7 @@ export default class Picker extends React.Component {
     static propTypes = {
         onValueChanged: PropTypes.func.isRequired,
         style: viewPropTypes.style,
+        isVisible: PropTypes.bool
     }
 
     static defaultProps = {
@@ -36,7 +37,7 @@ export default class Picker extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            showModal: props.showModal || false,
+            isVisible: props.isVisible || false,
         }
 
         if (Platform.OS === 'android') {
@@ -54,6 +55,7 @@ export default class Picker extends React.Component {
             value,
             style,
             searchEnabled,
+            touchableComponent
         } = this.props
         const { width } = this.state
 
@@ -67,17 +69,25 @@ export default class Picker extends React.Component {
                 onLayout={this.onLayout.bind(this)}
             >
                 <AnimatedTouchable onPress={this.show}>
-                    <View style={[styles.button]}>
-                        <Text style={styles.label}>
-                            {value}
-                        </Text>
-                        <View style={styles.icon}><Icon size={25} color='#000' name={'angle-right'} /></View>
-                    </View>
+                    {
+                        touchableComponent
+                            ?
+                            touchableComponent
+                            :
+                            (
+                                <View style={[styles.button]}>
+                                    <Text style={styles.label}>
+                                        {value}
+                                    </Text>
+                                    <View style={styles.icon}><Icon size={25} color='#000' name={'angle-right'} /></View>
+                                </View>
+                            )
+                    }
                 </AnimatedTouchable>
 
                 <Modal
                     animationType="slide"
-                    visible={this.state.showModal}
+                    visible={this.state.isVisible}
                     onRequestClose={this.dismiss}>
                     <GradientView style={[styles.linearGradient]}>
                         <GradientHeader>
@@ -99,11 +109,11 @@ export default class Picker extends React.Component {
     }
 
     show = () => {
-        this.setState({ showModal: true })
+        this.setState({ isVisible: true })
     }
 
     dismiss = () => {
-        this.setState({ showModal: false })
+        this.setState({ isVisible: false })
     }
 
     onLayout = (e) => {

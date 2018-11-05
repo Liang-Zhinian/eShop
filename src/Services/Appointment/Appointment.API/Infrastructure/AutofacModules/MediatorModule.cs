@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Appointment.API.CommandHandlers;
 using Appointment.API.Infrastructure.Behaviors;
 using Autofac;
 using MediatR;
+using SaaSEqt.eShop.Services.Appointment.API.Application.CommandHandlers;
 using SaaSEqt.eShop.Services.Appointment.Domain.Commands;
 
 namespace Appointment.API.Infrastructure.AutofacModules
@@ -20,7 +22,8 @@ namespace Appointment.API.Infrastructure.AutofacModules
             // Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
             builder.RegisterAssemblyTypes(typeof(MakeAnAppointmentCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
-            
+            builder.RegisterType<AppointmentCommandHandler>().AsImplementedInterfaces().InstancePerDependency();
+            //builder.RegisterType<IdentifiedCommandHandler<,>>().AsImplementedInterfaces().InstancePerDependency();
 
 
             // Register the DomainEventHandler classes (they implement INotificationHandler<>) in assembly holding the Domain Events

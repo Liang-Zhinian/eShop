@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Appointment.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class ValuesController : Controller
     {
         // GET api/values

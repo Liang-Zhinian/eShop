@@ -173,7 +173,8 @@ export default class AppointmentSchedule extends React.Component {
             AppointmentServiceItems
         } = this.state
 
-        console.log(this.state)
+        console.log('appointmentschedule', this.state)
+
         // Loading
         if (loading) return <Loading />
 
@@ -185,11 +186,14 @@ export default class AppointmentSchedule extends React.Component {
                     {success && <Messages message={success} type='success' />}
 
                     <Form>
-                        <Item fixedLabel>
-                            <Label>
+                        <Item>
+                            {/* <Label>
                                 Client
-                            </Label>
-                            <ClientPicker />
+                            </Label> */}
+                            <ClientPicker isVisible={true}
+                                onValueChanged={({ key, value }) => {
+                                    this.setState({ ClientId: key })
+                                }} />
                         </Item>
                         <Item fixedLabel>
                             <Label>
@@ -291,11 +295,11 @@ export default class AppointmentSchedule extends React.Component {
 
 const styles = StyleSheet.create({
     notes: {
-        flex: 1, 
-        padding: 6, 
-        marginVertical: 16, 
-        height: 150, 
-        borderWidth: 1, 
+        flex: 1,
+        padding: 6,
+        marginVertical: 16,
+        height: 150,
+        borderWidth: 1,
         borderColor: 'gray'
     }
 })

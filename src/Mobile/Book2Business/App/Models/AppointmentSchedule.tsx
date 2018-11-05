@@ -14,7 +14,8 @@ interface IAppointmentSchedule {
     Notes: string
     StaffRequested: boolean
     ClientId: string
-    FirstAppointment: boolean
+    FirstAppointment: boolean,
+    AppointmentServiceItems: []
     
 }
 
@@ -33,6 +34,7 @@ class AppointmentSchedule implements IAppointmentSchedule {
     StaffRequested: boolean;
     ClientId: string;
     FirstAppointment: boolean;
+    AppointmentServiceItems: [];
 }
 
 export default AppointmentSchedule

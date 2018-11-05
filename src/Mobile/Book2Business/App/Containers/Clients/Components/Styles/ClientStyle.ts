@@ -42,13 +42,14 @@ export default StyleSheet.create({
   title: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 17,
-    color: Colors.darkPurple,
+    color: Colors.lightText,
     letterSpacing: 0
   },
   name: {
     fontFamily: 'Montserrat-Light',
-    fontSize: 13,
-    color: Colors.lightText,
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: Colors.darkPurple,
     letterSpacing: 0,
     lineHeight: 18
   },

@@ -39,7 +39,8 @@ export default class Client_Lite extends React.Component<ClientProps, ClientStat
           justifyContent: 'center',
           alignItems: 'center',
           borderBottomWidth: StyleSheet.hairlineWidth,
-          borderBottomColor: 'gray'
+          borderBottomColor: 'gray',
+          backgroundColor: 'white'
         }}>
         <FadeIn>
           <Image style={[styles.avatar, {marginHorizontal: 5}]} source={{ uri: avatarURL }} />

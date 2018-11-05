@@ -57,11 +57,8 @@ class UpdateContact extends Component {
       isLoading
     } = this.props
 
-    console.log('UpdateLocationInfo', this)
 
     const { successMessage, errorMessage } = this.state
-
-    // return (<View />)
 
     return (
       <Layout

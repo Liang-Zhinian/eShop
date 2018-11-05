@@ -11,7 +11,7 @@ using SaaSEqt.eShop.Services.Appointment.Domain.Commands;
 
 namespace Appointment.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class AppointmentsController : Controller
     {
         private readonly IMediator _mediator;
@@ -39,7 +39,8 @@ namespace Appointment.API.Controllers
                 appointment.SiteId, 
                 appointment.LocationId, 
                 appointment.StaffId,
-                appointment.StartDateTime, appointment.EndDateTime, 
+                appointment.StartDateTime, 
+                appointment.EndDateTime, 
                 appointment.ClientId, 
                 appointment.GenderPreference,
                 appointment.Duration, 
