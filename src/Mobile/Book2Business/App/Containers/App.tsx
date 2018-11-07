@@ -1,4 +1,3 @@
-import '../Config'
 import PushConfig from '../Config/PushConfig'
 import DebugConfig from '../Config/DebugConfig'
 import React, { Component } from 'react'
@@ -7,6 +6,7 @@ import RootContainer from './RootContainer'
 import createStore from '../Redux'
 import SplashScreen from 'react-native-smart-splash-screen'
 import codePush from 'react-native-code-push'
+
 
 // Allow layoutanimations for android
 // import { UIManager } from 'NativeModules'

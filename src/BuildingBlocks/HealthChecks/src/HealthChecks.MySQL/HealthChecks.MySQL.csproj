@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>SaaSEqt.Infrastructure.HealthChecks.MySQL</RootNamespace>
+    <PackageId>HealthChecks.MySQL</PackageId>
+    <Authors>LiangZhinian</Authors>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Owners>LiangZhinian</Owners>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Description>Health Checks for MySql</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,5 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.11" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
   </ItemGroup>
 </Project>

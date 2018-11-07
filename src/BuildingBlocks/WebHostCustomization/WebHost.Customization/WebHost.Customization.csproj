@@ -2,12 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageId>SaaSEqt.WebHost.Customization</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>LiangZhinian</Authors>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Owners>LiangZhinian</Owners>
+    <Description>Db Migration Extensions for IWebHost</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Polly" Version="5.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="MySql.Data" Version="8.0.11" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
   </ItemGroup>
 
 </Project>

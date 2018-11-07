@@ -19,11 +19,25 @@ namespace Appointment.API.Infrastructure.AutofacModules
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
                 .AsImplementedInterfaces();
 
+            var mediatrOpenTypes = new[] { 
+                typeof(IRequestHandler<,>),
+                typeof(IRequestHandler<>),
+                typeof(INotificationHandler<>),
+            };
+
+            foreach (var mediatrOpenType in mediatrOpenTypes)
+            {
+                builder
+                    .RegisterAssemblyTypes(typeof(AppointmentCommandHandler).GetTypeInfo().Assembly)
+                    .AsClosedTypesOf(mediatrOpenType)
+                    .AsImplementedInterfaces();
+            }
+
             // Register all the Command classes (they implement IRequestHandler) in assembly holding the Commands
-            builder.RegisterAssemblyTypes(typeof(MakeAnAppointmentCommand).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IRequestHandler<,>));
-            builder.RegisterType<AppointmentCommandHandler>().AsImplementedInterfaces().InstancePerDependency();
-            //builder.RegisterType<IdentifiedCommandHandler<,>>().AsImplementedInterfaces().InstancePerDependency();
+            //builder.RegisterAssemblyTypes(typeof(MakeAnAppointmentCommand).GetTypeInfo().Assembly)
+            //    .AsClosedTypesOf(typeof(IRequestHandler<,>));
+            //builder.RegisterType<AppointmentCommandHandler>().AsImplementedInterfaces().InstancePerDependency();
+            builder.RegisterGeneric(typeof(IdentifiedCommandHandler<,>)).As(typeof(IRequestHandler<,>));
 
 
             // Register the DomainEventHandler classes (they implement INotificationHandler<>) in assembly holding the Domain Events

@@ -2,7 +2,12 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using SaaSEqt.eShop.Services.Appointment.API;
+using SaaSEqt.eShop.Services.Appointment.Infrastructure;
 
 namespace Appointment.API
 {
@@ -10,7 +15,16 @@ namespace Appointment.API
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            BuildWebHost(args)
+                .MigrateDbContext<AppointmentContext>((context, services) =>
+                {
+                    var env = services.GetService<IHostingEnvironment>();
+                    var settings = services.GetService<IOptions<AppointmentSettings>>();
+                    //var logger = services.GetService<ILogger<CatalogContextSeed>>();
+
+                })
+                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
+                .Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
@@ -29,7 +43,7 @@ namespace Appointment.API
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                }) 
+                })
                 .Build();
     }
 }

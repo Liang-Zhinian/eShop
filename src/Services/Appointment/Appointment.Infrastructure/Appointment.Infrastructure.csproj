@@ -10,9 +10,9 @@
     <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="EntityConfigurations\BuyerEntityTYpeConfiguration.cs" />
     <Compile Remove="Repositories\BuyerRepository.cs" />
     <Compile Remove="Class1.cs" />
+    <Compile Remove="EntityConfigurations\OrderEntityTypeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Appointment.Domain\Appointment.Domain.csproj" />

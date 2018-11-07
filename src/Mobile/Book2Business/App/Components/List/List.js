@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
-  RefreshControl as RNRefreshControl
+  RefreshControl
 } from 'react-native'
 import PropTypes from 'prop-types'
 import {
@@ -20,12 +20,12 @@ import Loading from '../Loading'
 import Error from '../Error'
 import { Colors } from '../../Themes'
 
-export const RefreshControl = ({ refreshing, onRefresh }) => (
-  <RNRefreshControl
-    refreshing={refreshing}
-    onRefresh={onRefresh}
-  />
-)
+// export const RefreshControl = ({ refreshing, onRefresh }) => (
+//   <RNRefreshControl
+//     refreshing={refreshing}
+//     onRefresh={onRefresh}
+//   />
+// )
 
 export const ListFooterComponent = ({ isLoading, onPress }) => (
   <View style={styles.footerStyle}>

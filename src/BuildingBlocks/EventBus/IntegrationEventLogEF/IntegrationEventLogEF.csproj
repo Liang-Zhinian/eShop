@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF</RootNamespace>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageId>IntegrationEventLogEF</PackageId>
+    <Authors>LiangZhinian</Authors>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <Owners>LiangZhinian</Owners>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Description>IntegrationEventLogEF</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +21,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
     <PackageReference Include="MySqlConnector" Version="0.42.3" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -30,7 +30,7 @@ export default (routes, headerMode) => {
             colors={ComponentStyles.navBar.colors}
             style={styles.headerGradient}
           >
-            <View>
+            <View style={Platform.OS === 'ios'?{}:{marginBottom: 20}}>
               <Header {...props} style={{ backgroundColor: 'transparent' }} />
             </View>
           </LinearGradient>

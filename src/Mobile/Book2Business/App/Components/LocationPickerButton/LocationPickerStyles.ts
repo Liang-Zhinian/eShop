@@ -1,3 +1,4 @@
+require("core-js")
 import { StyleSheet } from 'react-native'
 import { ApplicationStyles, Colors, Metrics } from '../../Themes/'
 import BackButtonStyles from '../BackButton/BackButtonStyle'
