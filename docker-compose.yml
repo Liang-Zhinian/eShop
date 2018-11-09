@@ -8,6 +8,12 @@ services:
       context: .
       dockerfile: src/Services/Identity/Api/Dockerfile
 
+  sms.api:
+    image: eshop/sms.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Sms/Sms.API/Dockerfile
+
   branding.api:
     image: eshop/branding.api:${TAG:-latest}
     build:
