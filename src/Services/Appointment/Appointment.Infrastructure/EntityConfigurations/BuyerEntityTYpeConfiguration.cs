@@ -17,8 +17,7 @@ namespace Appointment.Infrastructure.EntityConfigurations
 
             buyerConfiguration.Ignore(b => b.DomainEvents);
 
-            buyerConfiguration.Property(b => b.Id)
-                              .UseMySQLAutoIncrementColumn("buyerseq");
+            buyerConfiguration.Property(b => b.Id);
                 //.ForSqlServerUseSequenceHiLo("buyerseq", OrderingContext.DEFAULT_SCHEMA);
 
             buyerConfiguration.Property(b => b.IdentityGuid)

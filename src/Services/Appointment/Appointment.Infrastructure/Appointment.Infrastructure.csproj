@@ -2,24 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="EntityConfigurations\" />
     <Folder Include="Idempotency\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Repositories\BuyerRepository.cs" />
     <Compile Remove="Class1.cs" />
-    <Compile Remove="EntityConfigurations\OrderEntityTypeConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Appointment.Domain\Appointment.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.11">
       <Aliases>MySqlDataEfCoreAlias</Aliases>

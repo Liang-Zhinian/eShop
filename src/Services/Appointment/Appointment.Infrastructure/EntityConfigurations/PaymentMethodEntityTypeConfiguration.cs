@@ -18,10 +18,9 @@ namespace Appointment.Infrastructure.EntityConfigurations
 
             paymentConfiguration.Ignore(b => b.DomainEvents);
 
-            paymentConfiguration.Property(b => b.Id)
-                                .UseMySQLAutoIncrementColumn("paymentseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
+            paymentConfiguration.Property(b => b.Id);
 
-            paymentConfiguration.Property<int>("BuyerId")
+            paymentConfiguration.Property<Guid>("BuyerId")
                 .IsRequired();
 
             paymentConfiguration.Property<string>("CardHolderName")

@@ -8,12 +8,12 @@ using SaaSEqt.eShop.Services.Appointment.Domain.Seedwork;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Design;
 using Appointment.Infrastructure;
+using Appointment.Infrastructure.EntityConfigurations;
 
 namespace SaaSEqt.eShop.Services.Appointment.Infrastructure
 {
     public class AppointmentContext : DbContext, IUnitOfWork
     {
-        public const string DEFAULT_SCHEMA = "ordering";
         public DbSet<Domain.AggregatesModel.AppointmentAggregate.Appointment> Appointments { get; set; }
         public DbSet<AppointmentServiceItem> AppointmentServiceItems { get; set; }
         public DbSet<AppointmentResource> AppointmentResources { get; set; }
@@ -38,10 +38,10 @@ namespace SaaSEqt.eShop.Services.Appointment.Infrastructure
         {
             modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentMethodEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentServiceItemEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CardTypeEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderStatusEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentStatusEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuyerEntityTypeConfiguration()); 
         }
 
@@ -68,7 +68,7 @@ namespace SaaSEqt.eShop.Services.Appointment.Infrastructure
         public AppointmentContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppointmentContext>()
-                .UseMySql("Server=127.0.0.1;database=SaaSEqt_eShop_Services_AppointmentDb;uid=book2;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=192.168.0.200;database=SaaSEqt_eShop_Services_AppointmentDb;uid=book2;pwd=P@ssword;charset=utf8;port=33306;SslMode=None");
 
             return new AppointmentContext(optionsBuilder.Options, new NoMediator());
         }

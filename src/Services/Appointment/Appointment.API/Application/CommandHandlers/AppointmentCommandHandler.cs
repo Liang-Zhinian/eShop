@@ -9,15 +9,17 @@ using SaaSEqt.eShop.Services.Appointment.Domain.Commands;
 
 namespace Appointment.API.CommandHandlers
 {
-    public class AppointmentCommandHandler: CommandHandler, 
-                                            ICommandHandler<MakeAnAppointmentCommand>,
+    public class AppointmentCommandHandler: //CommandHandler, 
+                                            //ICommandHandler<MakeAnAppointmentCommand>,
                                             IRequestHandler<MakeAnAppointmentCommand, bool>
     {
+        private readonly IAppointmentRepository _appointmentRepository;
+
         //private readonly ISession _session;
-        public AppointmentCommandHandler(ISession session)
-            : base(session)
+        public AppointmentCommandHandler(/*ISession session*/IAppointmentRepository appointmentRepository)
         {
             //_session = session;
+            _appointmentRepository = appointmentRepository;
         }
 
         public async Task Handle(MakeAnAppointmentCommand message)
@@ -47,8 +49,8 @@ namespace Appointment.API.CommandHandlers
                 appointment.AddAppointmentResource(item.Id, item.Name, item.SiteId);
             }
 
-            await this.AddToSession(appointment);
-            await this.CommitSession();
+            //await this.AddToSession(appointment);
+            //await this.CommitSession();
         }
 
         public async Task<bool> Handle(MakeAnAppointmentCommand request, CancellationToken cancellationToken)
@@ -81,8 +83,11 @@ namespace Appointment.API.CommandHandlers
                 appointment.AddAppointmentResource(item.Id, item.Name, item.SiteId);
             }
 
-            await this.AddToSession(appointment);
-            await this.CommitSession();
+            _appointmentRepository.Add(appointment);
+            await _appointmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            //await this.AddToSession(appointment);
+            //await this.CommitSession();
 
             return true;
         }

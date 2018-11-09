@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AggregatesModel\" />
     <Folder Include="Events\" />
     <Folder Include="Exceptions\" />
     <Folder Include="SeedWork\" />

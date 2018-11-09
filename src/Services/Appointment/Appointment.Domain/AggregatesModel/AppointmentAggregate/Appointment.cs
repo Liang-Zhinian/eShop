@@ -8,7 +8,8 @@ using SaaSEqt.eShop.Services.Appointment.Domain.Seedwork;
 namespace SaaSEqt.eShop.Services.Appointment.Domain.AggregatesModel.AppointmentAggregate
 {
     public class Appointment
-        : AggregateRoot
+        //: AggregateRoot
+        : Entity, IAggregateRoot
     {
         #region ctor
 
@@ -49,22 +50,22 @@ namespace SaaSEqt.eShop.Services.Appointment.Domain.AggregatesModel.AppointmentA
             //this.AppointmentServiceItems = appointmentServiceItems;
             //this.AppointmentResources = resources;
 
-            ApplyChange(new AppointmentPlacedDomainEvent(
-                id,
-                appointmentId,
-                siteId,
-                locationId,
-                staffId,
-                startDateTime,
-                endDateTime,
-                clientId,
-                genderPreference,
-                duration,
-                staffRequested,
-                notes,
-                this.AppointmentServiceItems,
-                this.AppointmentResources
-            ));
+            //ApplyChange(new AppointmentPlacedDomainEvent(
+            //    id,
+            //    appointmentId,
+            //    siteId,
+            //    locationId,
+            //    staffId,
+            //    startDateTime,
+            //    endDateTime,
+            //    clientId,
+            //    genderPreference,
+            //    duration,
+            //    staffRequested,
+            //    notes,
+            //    this.AppointmentServiceItems,
+            //    this.AppointmentResources
+            //));
         }
 
         public void AddAppointmentResource(Guid id, string name, Guid siteId)
@@ -137,9 +138,8 @@ namespace SaaSEqt.eShop.Services.Appointment.Domain.AggregatesModel.AppointmentA
 
         /// Whether this is the client's first appointment at the site.
         public bool FirstAppointment { get; private set; }
-
-        /// The service on the client's account that is paying for this appointment.
-        //public PurchasedService ClientService { get; private set; }
+        
+        private Guid? _paymentMethodId;
 
         public ICollection<AppointmentServiceItem> AppointmentServiceItems { get; private set; }
 
