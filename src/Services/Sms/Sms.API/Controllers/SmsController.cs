@@ -15,7 +15,7 @@ namespace Sms.API.Controllers
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]string phoneNumber, string code)
+        public string Post(string phoneNumber, string code)
         {
             try
             {
