@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SaaSEqt.eShop.Services.Sites.API;
 using SaaSEqt.eShop.Services.Sites.API.Infrastructure;
 using SaaSEqt.eShop.Services.Sites.API.Model;
