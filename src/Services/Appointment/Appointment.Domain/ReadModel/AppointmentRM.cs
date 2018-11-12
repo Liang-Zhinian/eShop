@@ -26,8 +26,8 @@ namespace Appointment.Domain.ReadModel
         public bool FirstAppointment { get; set; }
         public Guid AggregateID { get; set; }
 
-        public ICollection<AppointmentServiceItemRM> AppointmentServiceItems { get; private set; }
+        public ICollection<AppointmentServiceItemRM> AppointmentServiceItems { get; set; }
 
-        public ICollection<AppointmentResourceRM> AppointmentResources { get; private set; }
+        public ICollection<AppointmentResourceRM> AppointmentResources { get; set; }
     }
 }
