@@ -20,6 +20,8 @@ using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using SaaSEqt.eShop.Services.Appointment.API;
 using SaaSEqt.eShop.Services.Appointment.API.Infrastructure.Middlewares;
 using SaaSEqt.eShop.Services.Appointment.Infrastructure;
 using SaaSEqt.Infrastructure.HealthChecks.MySQL;
@@ -100,6 +102,19 @@ namespace Appointment.API
 
                 options.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }, ServiceLifetime.Scoped);
+
+            services.AddDbContext<IntegrationEventLogContext>(options =>
+            {
+                options.UseMySql(Configuration["ConnectionString"],
+                                     mySqlOptionsAction: sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
+            });
+
+            services.Configure<AppointmentSettings>(Configuration);
 
             services.AddSwaggerSupport(Configuration);
 

@@ -2,7 +2,9 @@
 using Appointment.API.CommandHandlers;
 using Autofac;
 using CqrsFramework.Events;
+using SaaSEqt.eShop.Services.Appointment.Domain.AggregatesModel.AppointmentAggregate;
 using SaaSEqt.eShop.Services.Appointment.Infrastructure.Idempotency;
+using SaaSEqt.eShop.Services.Appointment.Infrastructure.Repositories;
 
 namespace Appointment.API.Infrastructure.AutofacModules
 {
@@ -22,13 +24,13 @@ namespace Appointment.API.Infrastructure.AutofacModules
         {
 
             //builder.Register(c => new OrderQueries(QueriesConnectionString))
-                //.As<IOrderQueries>()
-                //.InstancePerLifetimeScope();
+            //.As<IOrderQueries>()
+            //.InstancePerLifetimeScope();
 
-            //builder.RegisterType<TenantRepository>()
-            //       .As<ITenantRepository>()
-            //       .InstancePerLifetimeScope();
-            
+            builder.RegisterType<AppointmentRepository>()
+                   .As<IAppointmentRepository>()
+                   .InstancePerLifetimeScope();
+
             //builder.RegisterType<SiteRepository>()
             //       .As<ISiteRepository>()
             //    .InstancePerLifetimeScope();
@@ -42,8 +44,8 @@ namespace Appointment.API.Infrastructure.AutofacModules
             //       .InstancePerLifetimeScope();
 
             //builder.RegisterType<ServiceCategoryRepository>()
-                   //.As<IServiceCategoryRepository>()
-                   //.InstancePerLifetimeScope();
+            //.As<IServiceCategoryRepository>()
+            //.InstancePerLifetimeScope();
 
             //builder.RegisterType<Session>()
             //       .As<ISession>()
@@ -59,20 +61,20 @@ namespace Appointment.API.Infrastructure.AutofacModules
             //       .InstancePerLifetimeScope();
 
             //builder.Register<CacheRepository>(y => new CacheRepository(new Repository(y.Resolve<IEventStore>()),
-                   //                                                    y.Resolve<IEventStore>(),
-                   //                                                    y.Resolve<ICache>()
-                   //                                                   ))
-                   //.As<IRepository>()
-                   //.InstancePerLifetimeScope();
+            //                                                    y.Resolve<IEventStore>(),
+            //                                                    y.Resolve<ICache>()
+            //                                                   ))
+            //.As<IRepository>()
+            //.InstancePerLifetimeScope();
 
 
             // EfMySqlEventStore
             //services.AddScoped<IEventStore>(y => new MySqlEventStore(y.GetService<EventStoreDbContext>().Database.GetDbConnection(),
             //                                                            y.GetService<IEventPublisher>()));
-            
+
             //services.AddScoped<IRepository>(y => new CacheRepository(new Repository(y.GetService<IEventStore>()),
-                                                                     //y.GetService<IEventStore>(),
-                                                                     //y.GetService<ICache>()));
+            //y.GetService<IEventStore>(),
+            //y.GetService<ICache>()));
 
 
             builder.RegisterType<RequestManager>()

@@ -15,16 +15,16 @@ namespace Sms.API.Controllers
 
         // POST api/values
         [HttpPost]
-        public string Post(string phoneNumber, string code)
+        public IActionResult Post(string phoneNumber, string code)
         {
             try
             {
                 SmsSender sms = new SmsSender();
                 SendSmsResponse response = sms.Send(phoneNumber, code);
-                return response.Message;
+                return Ok(response);
             } catch(ClientException e) {
 
-                return e.Message;
+                return BadRequest(e);
             }
         }
     }

@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using SaaSEqt.eShop.Services.Appointment.Infrastructure;
 
-namespace SaaSEqt.eShop.Services.Ordering.Infrastructure.Repositories
+namespace SaaSEqt.eShop.Services.Appointment.Infrastructure.Repositories
 {
     public class AppointmentRepository
         : AppointmentAggregate.IAppointmentRepository

@@ -23,7 +23,7 @@ namespace Appointment.API
                     //var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
                 })
-                //.MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
+                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
                 .Run();
         }
 
