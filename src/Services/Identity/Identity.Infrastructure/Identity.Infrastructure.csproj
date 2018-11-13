@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Lib\aliyun-net-sdk-dysmsapi.dll" />
+    <None Remove=".DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aliyun.Net.SDK.Dysmsapi" Version="1.0.0" />
+  </ItemGroup>
+</Project>

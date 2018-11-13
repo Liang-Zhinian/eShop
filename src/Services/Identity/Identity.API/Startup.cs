@@ -4,6 +4,8 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Identity.API.Infrastructure.Filters;
 using Identity.API.Infrastructure.Middlewares;
+using Identity.API.Validators;
+using Identity.Infrastructure.Services;
 using IdentityServer4.Services;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
@@ -191,6 +193,8 @@ namespace SaaSEqt.eShop.Services.Identity.API
             // Add framework services.
             services.AddSwaggerSupport(configuration);
 
+            services.AddTransient<ISmsService, SmsService>();
+
             return services;
         }
 
@@ -204,9 +208,13 @@ namespace SaaSEqt.eShop.Services.Identity.API
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             // Adds IdentityServer
-            services.AddIdentityServer(x => x.IssuerUri = "null")
+            services.AddIdentityServer(x =>
+            {
+                x.IssuerUri = "null";
+                x.Events.RaiseErrorEvents = true;
+                x.Events.RaiseFailureEvents = true;
+            })
                     .AddSigningCredential(Certificate.Get())
-                //.AddTestUsers(null)
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddConfigurationStore(options =>
                 {
@@ -228,6 +236,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                     });
                 })
+                    .AddExtensionGrantValidator<PhoneNumberTokenGrantValidator>()
                     .Services.AddTransient<IProfileService, ProfileService>();
                          //.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
 

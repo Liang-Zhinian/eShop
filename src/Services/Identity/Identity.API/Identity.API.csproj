@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion>
     <UserSecretsId>aspnet-eShop.Identity-90487118-103c-4ff0-b9da-e5e26f7ab0c5</UserSecretsId>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
@@ -55,6 +55,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\HealthChecks\src\HealthChecks.MySQL\HealthChecks.MySQL.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\HealthChecks\src\Microsoft.Extensions.HealthChecks\Microsoft.Extensions.HealthChecks.csproj" />
+    <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -414,8 +414,42 @@ namespace SaaSEqt.eShop.Services.Identity.API.Configuration
                     ClientId = "ro.client",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     //AccessTokenType = AccessTokenType.Jwt,
-                    AccessTokenLifetime = 120, //86400,
-                    IdentityTokenLifetime = 120, //86400,
+                    AccessTokenLifetime = 86400,
+                    IdentityTokenLifetime = 86400,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    SlidingRefreshTokenLifetime = 30,
+                    AllowOfflineAccess = true,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    AlwaysSendClientClaims = true,
+                    Enabled = true,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        JwtClaimTypes.Role,
+                        "api1",
+                        "appointment",
+                        "catalog",
+                        "identity",
+                        "mobilereservationagg",
+                        "schedules",
+                        "sites",
+                        "identityaccess"
+                    }
+                },
+                // phone number token grant client
+                new Client
+                {
+                    ClientId = "phone_number_authentication.client",
+                    AllowedGrantTypes = new List<string> { "phone_number_token" },
+                    AccessTokenLifetime = 86400,
+                    IdentityTokenLifetime = 86400,
                     UpdateAccessTokenClaimsOnRefresh = true,
                     SlidingRefreshTokenLifetime = 30,
                     AllowOfflineAccess = true,
