@@ -146,6 +146,47 @@ namespace Identity.API.Controllers
             return Ok("User updated");
         }
 
+        [Route("users")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody]ApplicationUser userToCreate)
+        {
+            ApplicationUser user = new ApplicationUser();
+
+            user.UserName = userToCreate.UserName;
+            user.Email = userToCreate.Email;
+            user.CardHolderName = userToCreate.CardHolderName;
+            user.CardNumber = userToCreate.CardNumber;
+            user.CardType = userToCreate.CardType;
+            user.City = userToCreate.City;
+            user.Country = userToCreate.Country;
+            user.Expiration = userToCreate.Expiration;
+            user.LastName = userToCreate.LastName;
+            user.Name = userToCreate.Name;
+            user.Street = userToCreate.Street;
+            user.State = userToCreate.State;
+            user.ZipCode = userToCreate.ZipCode;
+            user.PhoneNumber = userToCreate.PhoneNumber;
+            user.SecurityNumber = userToCreate.SecurityNumber;
+
+            if (userToCreate.ExternalAccounts != null){
+                user.ExternalAccounts = new ExternalAccounts();
+                user.ExternalAccounts.WechatOpenId = userToCreate.ExternalAccounts.WechatOpenId;
+                user.ExternalAccounts.WechatUsername = userToCreate.ExternalAccounts.WechatUsername;
+                user.ExternalAccounts.AlipayOpenId = userToCreate.ExternalAccounts.AlipayOpenId;
+                user.ExternalAccounts.AlipayUsername = userToCreate.ExternalAccounts.AlipayUsername;
+            }
+
+            var updateUserResult = await _userManager.CreateAsync(user);
+
+            if (!updateUserResult.Succeeded)
+            {
+                AddErrors(updateUserResult);
+                return BadRequest();
+            }
+
+            return Ok("User updated");
+        }
+
         [Route("users/avatar")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserAvatar([FromForm]UploadUserAvatarVm userAvatarToUpload)

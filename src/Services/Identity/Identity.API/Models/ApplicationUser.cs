@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -53,6 +54,8 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
         [NotMapped]
         public string AvatarImageUri { get; set; }
 
+        public ExternalAccounts ExternalAccounts { get; set; }
+
         public static ApplicationUser Empty()
         {
             ApplicationUser user = new ApplicationUser();
@@ -73,5 +76,19 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
 
             return user;
         }
+    }
+
+    public class ExternalAccounts {
+        public Guid Id { get; set; }
+
+        public string FacebookEmail { get; set; }
+        public string TwitterUsername { get; set; }
+        public string WechatUsername { get; set; }
+        public string WechatOpenId { get; set; }
+        public string AlipayUsername { get; set; }
+        public string AlipayOpenId { get; set; }
+
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }
