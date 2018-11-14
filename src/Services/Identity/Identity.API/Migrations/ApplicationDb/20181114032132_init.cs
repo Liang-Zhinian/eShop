@@ -175,6 +175,7 @@ namespace Identity.API.Migrations.ApplicationDb
                     Id = table.Column<Guid>(nullable: false),
                     AlipayUserId = table.Column<string>(nullable: true),
                     FacebookEmail = table.Column<string>(nullable: true),
+                    Pay2OpenId = table.Column<string>(nullable: true),
                     TwitterUsername = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     WechatOpenId = table.Column<string>(nullable: true)

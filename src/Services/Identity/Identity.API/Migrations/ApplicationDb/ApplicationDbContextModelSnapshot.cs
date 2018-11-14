@@ -214,6 +214,8 @@ namespace Identity.API.Migrations.ApplicationDb
 
                     b.Property<string>("FacebookEmail");
 
+                    b.Property<string>("Pay2OpenId");
+
                     b.Property<string>("TwitterUsername");
 
                     b.Property<string>("UserId");

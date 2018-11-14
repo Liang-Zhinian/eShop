@@ -11,7 +11,7 @@ using System;
 namespace Identity.API.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181114022938_init")]
+    [Migration("20181114032132_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,8 @@ namespace Identity.API.Migrations.ApplicationDb
                     b.Property<string>("AlipayUserId");
 
                     b.Property<string>("FacebookEmail");
+
+                    b.Property<string>("Pay2OpenId");
 
                     b.Property<string>("TwitterUsername");
 
