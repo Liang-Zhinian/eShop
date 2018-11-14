@@ -11,7 +11,7 @@ using System;
 namespace Identity.API.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181114032132_init")]
+    [Migration("20181114035132_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +158,8 @@ namespace Identity.API.Migrations.ApplicationDb
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("Expiration");
+
+                    b.Property<int>("GenderId");
 
                     b.Property<string>("LastName");
 

@@ -158,6 +158,8 @@ namespace Identity.API.Migrations.ApplicationDb
 
                     b.Property<string>("Expiration");
 
+                    b.Property<int>("GenderId");
+
                     b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");

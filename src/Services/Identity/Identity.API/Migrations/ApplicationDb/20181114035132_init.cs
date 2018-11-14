@@ -40,6 +40,7 @@ namespace Identity.API.Migrations.ApplicationDb
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     Expiration = table.Column<string>(nullable: true),
+                    GenderId = table.Column<int>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),

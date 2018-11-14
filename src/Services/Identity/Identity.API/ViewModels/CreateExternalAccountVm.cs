@@ -13,5 +13,6 @@ namespace Identity.ViewModels
         public string WechatOpenId { get; set; }
         public string AlipayUserId { get; set; }
         public string Pay2OpenId { get; set; }
+        public int Gender { get; set; }
     }
 }

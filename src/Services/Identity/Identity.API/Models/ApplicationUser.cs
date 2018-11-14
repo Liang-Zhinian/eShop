@@ -5,6 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SaaSEqt.eShop.Services.Identity.API.Models
 {
+    /// <summary>
+    /// Gender. Male = 0, Female = 1, Other = 2, Unknown = 3
+    /// </summary>
+    public enum Gender
+    {
+        Male, Female, Other, Unknown
+    }
 
     public enum Continents
     {
@@ -45,6 +52,15 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
         public string LastName { get; set; }
 
         [NotMapped]
+        public Gender Gender
+        {
+            get => (Gender)GenderId;
+            set => GenderId = (int)value;
+        }
+
+        public int GenderId { get; set; } = 3;
+
+        [NotMapped]
         public string FullName { get { return Name + " " + LastName; } }
 
         public byte[] AvatarImage { get; set; }
@@ -73,6 +89,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
             user.LastName = string.Empty;
             user.AvatarImage = new byte[0];
             user.AvatarImageFileName = string.Empty;
+            user.Gender = Gender.Unknown;
 
             return user;
         }

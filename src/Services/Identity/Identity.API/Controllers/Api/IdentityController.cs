@@ -69,7 +69,8 @@ namespace Identity.API.Controllers
                     State = model.User.State,
                     ZipCode = model.User.ZipCode,
                     PhoneNumber = model.User.PhoneNumber,
-                    SecurityNumber = model.User.SecurityNumber
+                    SecurityNumber = model.User.SecurityNumber,
+                    Gender = model.User.Gender
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Errors.Count() > 0)
@@ -141,6 +142,7 @@ namespace Identity.API.Controllers
             user.ZipCode = userToUpdate.ZipCode;
             user.PhoneNumber = userToUpdate.PhoneNumber;
             user.SecurityNumber = userToUpdate.SecurityNumber;
+            user.Gender = userToUpdate.Gender;
 
             var updateUserResult = await _userManager.UpdateAsync(user);
             if (!updateUserResult.Succeeded)
@@ -163,6 +165,7 @@ namespace Identity.API.Controllers
             }
 
             ApplicationUser user = ApplicationUser.Empty();
+            user.GenderId = userToCreate.Gender;
             user.UserName = await _userManager.GenerateConcurrencyStampAsync(user);
 
             if (userToCreate != null){
