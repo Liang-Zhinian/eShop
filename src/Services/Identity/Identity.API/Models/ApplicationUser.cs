@@ -83,10 +83,9 @@ namespace SaaSEqt.eShop.Services.Identity.API.Models
 
         public string FacebookEmail { get; set; }
         public string TwitterUsername { get; set; }
-        public string WechatUsername { get; set; }
         public string WechatOpenId { get; set; }
-        public string AlipayUsername { get; set; }
-        public string AlipayOpenId { get; set; }
+        public string AlipayUserId { get; set; }
+        public string Pay2OpenId { get; set; }
 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }

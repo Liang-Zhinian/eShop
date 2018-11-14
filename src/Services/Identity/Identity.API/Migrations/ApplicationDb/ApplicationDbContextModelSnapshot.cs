@@ -210,9 +210,7 @@ namespace Identity.API.Migrations.ApplicationDb
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AlipayOpenId");
-
-                    b.Property<string>("AlipayUsername");
+                    b.Property<string>("AlipayUserId");
 
                     b.Property<string>("FacebookEmail");
 
@@ -221,8 +219,6 @@ namespace Identity.API.Migrations.ApplicationDb
                     b.Property<string>("UserId");
 
                     b.Property<string>("WechatOpenId");
-
-                    b.Property<string>("WechatUsername");
 
                     b.HasKey("Id");
 

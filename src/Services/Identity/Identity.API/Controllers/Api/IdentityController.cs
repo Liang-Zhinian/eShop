@@ -17,6 +17,7 @@ using SaaSEqt.eShop.Services.Identity.API.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using SaaSEqt.eShop.Services.Identity.API;
 using Microsoft.Extensions.Options;
+using SaaSEqt.eShop.Services.Identity.API.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,11 +30,15 @@ namespace Identity.API.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _env;
         private readonly AppSettings _settings;
+        private readonly ApplicationDbContext _context;
 
-        public IdentityController(UserManager<ApplicationUser> userManager,
+        public IdentityController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
                                   IHostingEnvironment env,
                                   IOptionsSnapshot<AppSettings> settings)
         {
+            _context = context;
             _userManager = userManager;
             _env = env;
             _settings = settings.Value;
@@ -79,6 +84,7 @@ namespace Identity.API.Controllers
 
         [Route("forgot-password")]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromQuery]ForgotPasswordViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
@@ -148,32 +154,21 @@ namespace Identity.API.Controllers
 
         [Route("users")]
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody]ApplicationUser userToCreate)
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateUser([FromBody]CreateExternalAccountVm userToCreate)
         {
-            ApplicationUser user = new ApplicationUser();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            user.UserName = userToCreate.UserName;
-            user.Email = userToCreate.Email;
-            user.CardHolderName = userToCreate.CardHolderName;
-            user.CardNumber = userToCreate.CardNumber;
-            user.CardType = userToCreate.CardType;
-            user.City = userToCreate.City;
-            user.Country = userToCreate.Country;
-            user.Expiration = userToCreate.Expiration;
-            user.LastName = userToCreate.LastName;
-            user.Name = userToCreate.Name;
-            user.Street = userToCreate.Street;
-            user.State = userToCreate.State;
-            user.ZipCode = userToCreate.ZipCode;
-            user.PhoneNumber = userToCreate.PhoneNumber;
-            user.SecurityNumber = userToCreate.SecurityNumber;
+            ApplicationUser user = ApplicationUser.Empty();
+            user.UserName = await _userManager.GenerateConcurrencyStampAsync(user);
 
-            if (userToCreate.ExternalAccounts != null){
+            if (userToCreate != null){
                 user.ExternalAccounts = new ExternalAccounts();
-                user.ExternalAccounts.WechatOpenId = userToCreate.ExternalAccounts.WechatOpenId;
-                user.ExternalAccounts.WechatUsername = userToCreate.ExternalAccounts.WechatUsername;
-                user.ExternalAccounts.AlipayOpenId = userToCreate.ExternalAccounts.AlipayOpenId;
-                user.ExternalAccounts.AlipayUsername = userToCreate.ExternalAccounts.AlipayUsername;
+                user.ExternalAccounts.WechatOpenId = userToCreate.WechatOpenId;
+                user.ExternalAccounts.AlipayUserId = userToCreate.AlipayUserId;
             }
 
             var updateUserResult = await _userManager.CreateAsync(user);
@@ -184,7 +179,7 @@ namespace Identity.API.Controllers
                 return BadRequest();
             }
 
-            return Ok("User updated");
+            return Ok("User created");
         }
 
         [Route("users/avatar")]
@@ -241,6 +236,52 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> FindByUsername(string username)
         {
             ApplicationUser user = await _userManager.FindByNameAsync(username);
+
+            var baseUri = _settings.PicBaseUrl;
+            var azureStorageEnabled = _settings.AzureStorageEnabled;
+            user.FillUserAvatarUrl(baseUri, azureStorageEnabled);
+
+            return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("users")]
+        public async Task<IActionResult> FindByExternalAccounts([FromQuery]string facebookEmail, 
+                                                                [FromQuery]string twitterUsername, 
+                                                                [FromQuery]string wechatOpenId, 
+                                                                [FromQuery]string alipayOpenId, 
+                                                                [FromQuery]string pay2OpenId)
+        {
+            var root = (IQueryable<ExternalAccounts>)_context.ExternalAccounts;
+
+            if (!string.IsNullOrEmpty(facebookEmail)){
+                root = root.Where(y => y.FacebookEmail.ToLower() == facebookEmail.ToLower());
+            }
+            if (!string.IsNullOrEmpty(twitterUsername))
+            {
+                root = root.Where(y => y.TwitterUsername.ToLower() == twitterUsername.ToLower());
+            }
+            if (!string.IsNullOrEmpty(wechatOpenId))
+            {
+                root = root.Where(y => y.WechatOpenId.ToLower() == wechatOpenId.ToLower());
+            }
+            if (!string.IsNullOrEmpty(alipayOpenId))
+            {
+                root = root.Where(y => y.AlipayUserId.ToLower() == alipayOpenId.ToLower());
+            }
+            if (!string.IsNullOrEmpty(pay2OpenId))
+            {
+                root = root.Where(y => y.Pay2OpenId.ToLower() == pay2OpenId.ToLower());
+            }
+
+            ExternalAccounts externalAccount = await root.SingleOrDefaultAsync(y=>true);
+
+            ApplicationUser user = await _userManager.FindByIdAsync(externalAccount.UserId);
+
+            if (user == null)
+            {
+                return null;
+            }
 
             var baseUri = _settings.PicBaseUrl;
             var azureStorageEnabled = _settings.AzureStorageEnabled;

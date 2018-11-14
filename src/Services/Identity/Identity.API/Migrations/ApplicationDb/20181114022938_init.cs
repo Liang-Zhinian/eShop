@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Identity.API.Migrations.ApplicationDb
 {
-    public partial class first : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,9 +29,11 @@ namespace Identity.API.Migrations.ApplicationDb
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    AvatarImage = table.Column<byte[]>(nullable: true),
+                    AvatarImageFileName = table.Column<string>(nullable: true),
                     CardHolderName = table.Column<string>(nullable: true),
                     CardNumber = table.Column<string>(nullable: true),
-                    CardType = table.Column<int>(nullable: true),
+                    CardType = table.Column<int>(nullable: false),
                     City = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Country = table.Column<string>(nullable: true),
@@ -53,9 +55,7 @@ namespace Identity.API.Migrations.ApplicationDb
                     Street = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    ZipCode = table.Column<string>(nullable: true),
-                    AvatarImage = table.Column<byte[]>(nullable: true),
-                    AvatarImageFileName = table.Column<string>(nullable: true)
+                    ZipCode = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,6 +168,28 @@ namespace Identity.API.Migrations.ApplicationDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ExternalAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    AlipayUserId = table.Column<string>(nullable: true),
+                    FacebookEmail = table.Column<string>(nullable: true),
+                    TwitterUsername = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    WechatOpenId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExternalAccounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExternalAccounts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -204,6 +226,12 @@ namespace Identity.API.Migrations.ApplicationDb
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalAccounts_UserId",
+                table: "ExternalAccounts",
+                column: "UserId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -222,6 +250,9 @@ namespace Identity.API.Migrations.ApplicationDb
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ExternalAccounts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -11,8 +11,8 @@ using System;
 namespace Identity.API.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180714175115_first")]
-    partial class first
+    [Migration("20181114022938_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,6 +135,10 @@ namespace Identity.API.Migrations.ApplicationDb
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<byte[]>("AvatarImage");
+
+                    b.Property<string>("AvatarImageFileName");
+
                     b.Property<string>("CardHolderName");
 
                     b.Property<string>("CardNumber");
@@ -190,9 +194,6 @@ namespace Identity.API.Migrations.ApplicationDb
 
                     b.Property<string>("ZipCode");
 
-                    b.Property<byte[]>("AvatarImage").HasColumnType("MediumBlob");
-                    b.Property<string>("AvatarImageFileName");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -203,6 +204,29 @@ namespace Identity.API.Migrations.ApplicationDb
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Identity.API.Models.ExternalAccounts", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AlipayUserId");
+
+                    b.Property<string>("FacebookEmail");
+
+                    b.Property<string>("TwitterUsername");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("WechatOpenId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("ExternalAccounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -248,6 +272,14 @@ namespace Identity.API.Migrations.ApplicationDb
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SaaSEqt.eShop.Services.Identity.API.Models.ExternalAccounts", b =>
+                {
+                    b.HasOne("SaaSEqt.eShop.Services.Identity.API.Models.ApplicationUser", "User")
+                        .WithOne("ExternalAccounts")
+                        .HasForeignKey("SaaSEqt.eShop.Services.Identity.API.Models.ExternalAccounts", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }
