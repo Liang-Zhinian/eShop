@@ -9,6 +9,10 @@ using Microsoft.Extensions.Options;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using SaaSEqt.eShop.Services.Identity.API.Models;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
+using Serilog;
 
 namespace SaaSEqt.eShop.Services.Identity.API
 {
@@ -47,9 +51,14 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .ConfigureAppConfiguration((builderContext, config) =>
+                   .ConfigureAppConfiguration((builderContext, builder) =>
                 {
-                    config.AddEnvironmentVariables();
+                    builder.AddEnvironmentVariables();
+                    //var config = builder.Build();
+                    //var tokenProvider = new AzureServiceTokenProvider();
+                    //var kvClient = new KeyVaultClient((authority, resource, scope) => tokenProvider.KeyVaultTokenCallback(authority, resource, scope));
+
+                    //builder.AddAzureKeyVault(config["KeyVault:BaseUrl"], kvClient, new DefaultKeyVaultSecretManager());
                 })
                 .ConfigureLogging((hostingContext, builder) =>
                 {
@@ -58,6 +67,29 @@ namespace SaaSEqt.eShop.Services.Identity.API
                     builder.AddDebug();
                 })
                 .UseApplicationInsights()
+
+                    //.UseSerilog((ctx, config) =>
+                    //{
+                    //    config.MinimumLevel.Debug()
+                    //        .MinimumLevel.Debug()
+                    //        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                    //        .MinimumLevel.Override("System", LogEventLevel.Warning)
+                    //        .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                    //        .Enrich.FromLogContext();
+
+                    //    if (ctx.HostingEnvironment.IsDevelopment())
+                    //    {
+                    //        config.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}");
+                    //    }
+                    //    else if (ctx.HostingEnvironment.IsProduction())
+                    //    {
+                    //        config.WriteTo.File(@"~/LogFiles/Application/identityserver.txt",
+                    //            fileSizeLimitBytes: 1_000_000,
+                    //            rollOnFileSizeLimit: true,
+                    //            shared: true,
+                    //            flushToDiskInterval: TimeSpan.FromSeconds(1));
+                    //    }
+                    //})
                 .Build();
     }
 }

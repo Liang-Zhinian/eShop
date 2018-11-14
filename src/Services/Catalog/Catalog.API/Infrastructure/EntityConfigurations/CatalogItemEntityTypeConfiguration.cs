@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MySql.Data.EntityFrameworkCore.Extensions;
 using SaaSEqt.eShop.Services.Catalog.API.Model;
@@ -35,6 +36,10 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.HasOne(ci => ci.CatalogType)
                 .WithMany()
                 .HasForeignKey(ci => ci.CatalogTypeId);
+
+
+            builder.Property<Guid>("GuidId").HasColumnType(Constants.DbConstants.KeyType);
+            builder.Property<Guid>("MerchantId").HasColumnType(Constants.DbConstants.KeyType);
         }
     }
 }

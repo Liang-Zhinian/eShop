@@ -32,6 +32,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.0.3" />
     <PackageReference Include="IdentityServer4" Version="2.1.2" />
     <PackageReference Include="BundlerMinifier.Core" Version="2.5.357" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.0.3" />
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">

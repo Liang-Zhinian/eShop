@@ -1,11 +1,35 @@
-﻿using Catalog.API.Infrastructure.Exceptions;
-using System;
+﻿using System;
+using Catalog.API.Infrastructure.Exceptions;
 
 namespace SaaSEqt.eShop.Services.Catalog.API.Model
 {
-    public class CatalogItem
+    public class Product
     {
-        public int Id { get; set; }
+        public Product()
+        {
+        }
+
+        public double TaxIncluded { get; set; }
+
+        public double TaxRate { get; set; }
+
+        public Guid GuidId { get; set; }
+
+        public Guid ProductTypeId { get; set; }
+
+        public ProductType ProductType { get; set; }
+
+        public double OnlinePrice { get; set; }
+
+        public string ShortDesc => Description;
+
+        public string LongDesc { get; set; }
+
+        public string Color { get; set; }
+
+        public string Size { get; set; }
+
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -17,13 +41,9 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
 
         public string PictureUri { get; set; }
 
-        public int CatalogTypeId { get; set; }
+        public Guid ProductBrandId { get; set; }
 
-        public CatalogType CatalogType { get; set; }
-
-        public int CatalogBrandId { get; set; }
-
-        public CatalogBrand CatalogBrand { get; set; }
+        public ProductBrand ProductBrand { get; set; }
 
         // Quantity in stock
         public int AvailableStock { get; set; }
@@ -40,10 +60,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
         /// </summary>
         public bool OnReorder { get; set; }
 
-        public Guid GuidId { get; set; }
-        public Guid MerchantId { get; set; }
-
-        public CatalogItem() { }
+        public Product() { }
 
 
         /// <summary>

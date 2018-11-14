@@ -10,13 +10,18 @@
 <div class="brand-header-block">
     <ul class="container">
         <li><a asp-area="" asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">REGISTER</a></li>
-        <li class="active" style="margin-right: 65px;">LOGIN</li>
+        <li class="active" style="        margin-right: 65px;">LOGIN</li>
     </ul>
 </div>
 <div class="container account-login-container">
     <div class="row">
-        <div class="col-md-12">
+        @if (Model.EnableLocalLogin)
+        {
+        <div class="col-md-6">
             <section>
+                <div class="panel-heading">
+                    <h3 class="panel-title">Local Login</h3>
+                </div>
                 <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                     <input type="hidden" asp-for="ReturnUrl" />
                     <h4>ARE YOU REGISTERED?</h4>
@@ -57,6 +62,44 @@
                 </form>
             </section>
         </div>
+        }
+
+        @if (Model.VisibleExternalProviders.Any())
+        {
+            <div class="col-md-6 col-sm-6 external-providers">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">External Login</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-inline">
+                            @foreach (var provider in Model.VisibleExternalProviders)
+                            {
+                                <li>
+                                    <a class="btn btn-default"
+                                       asp-controller="External"
+                                       asp-action="Challenge"
+                                       asp-route-provider="@provider.AuthenticationScheme"
+                                       asp-route-returnUrl="@Model.ReturnUrl">
+                                        @provider.DisplayName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        {
+            <div class="alert alert-warning">
+                <strong>Invalid login request</strong>
+                There are no login schemes configured for this client.
+            </div>
+        }
+
     </div>
 </div>
 

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SaaSEqt.eShop.Services.Catalog.API.Model;
 using MySql.Data.EntityFrameworkCore;
 using MySql.Data.EntityFrameworkCore.Extensions;
+using System;
 
 namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
 {
@@ -22,6 +23,9 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.Property(cb => cb.Brand)
                 .IsRequired()
                 .HasMaxLength(100);
+            
+            builder.Property<Guid>("GuidId").HasColumnType(Constants.DbConstants.KeyType);
+            builder.Property<Guid>("MerchantId").HasColumnType(Constants.DbConstants.KeyType);
         }
     }
 }

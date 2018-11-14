@@ -6,6 +6,7 @@ using Identity.API.Infrastructure.Filters;
 using Identity.API.Infrastructure.Middlewares;
 using Identity.API.Validators;
 using Identity.Infrastructure.Services;
+using IdentityServer4;
 using IdentityServer4.Services;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
@@ -83,7 +84,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
             app.UseCors("identity");
 
-            app.UseMiddleware<SerilogMiddleware>();
+            //app.UseMiddleware<SerilogMiddleware>();
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             app.Map("/liveness", lapp => lapp.Run(async ctx => ctx.Response.StatusCode = 200));
@@ -95,7 +96,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
             // Make work identity server redirections in Edge and lastest versions of browers. WARN: Not valid in a production environment.
             app.Use(async (context, next) =>
             {
-                //context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
+                context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
                 await next();
             });
 
@@ -238,7 +239,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
                 })
                     .AddExtensionGrantValidator<PhoneNumberTokenGrantValidator>()
                     .Services.AddTransient<IProfileService, ProfileService>();
-                         //.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
+            //.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
 
             return services;
         }
@@ -247,18 +248,64 @@ namespace SaaSEqt.eShop.Services.Identity.API
         {
             var identityUrl = configuration.GetValue<string>("IdentityUrl");
             //services
-                //.AddAuthentication()
-                //.AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, options =>
-                //{
-                //    options.Authority = identityUrl;
+            //.AddAuthentication()
+            //.AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, options =>
+            //{
+            //    options.Authority = identityUrl;
 
-                //    options.ApiName = "identity";
-                //    options.ApiSecret = "secret";
-                //    options.RequireHttpsMetadata = false;
-                //    options.SupportedTokens = SupportedTokens.Both;
-                //});
+            //    options.ApiName = "identity";
+            //    options.ApiSecret = "secret";
+            //    options.RequireHttpsMetadata = false;
+            //    options.SupportedTokens = SupportedTokens.Both;
+            //});
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddGoogle("Google", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+                    options.ClientId = configuration["Secret:GoogleClientId"];
+                    options.ClientSecret = configuration["Secret:GoogleClientSecret"];
+                })
+                .AddOpenIdConnect("oidc", "OpenID Connect", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                    options.Authority = configuration["identityUrl"];
+                    options.ClientId = "implicit";
+
+                    // The MetadataAddress or Authority must use HTTPS unless disabled for development by setting RequireHttpsMetadata=false.
+                    options.RequireHttpsMetadata = false;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+                })
+                    //.AddOpenIdConnect("aad", "Sign-in with Azure AD", options =>
+                    //{
+                    //    options.Authority = "https://login.microsoftonline.com/common";
+                    //    options.ClientId = "https://leastprivilegelabs.onmicrosoft.com/38196330-e766-4051-ad10-14596c7e97d3";
+
+                    //    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    //    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                    //    options.ResponseType = "id_token";
+                    //    options.CallbackPath = "/signin-aad";
+                    //    options.SignedOutCallbackPath = "/signout-callback-aad";
+                    //    options.RemoteSignOutPath = "/signout-aad";
+
+                    //    options.TokenValidationParameters = new TokenValidationParameters
+                    //    {
+                    //        ValidateIssuer = false,
+                    //        ValidAudience = "165b99fd-195f-4d93-a111-3e679246e6a9",
+
+                    //        NameClaimType = "name",
+                    //        RoleClaimType = "role"
+                    //    };
+                    //})
             .AddJwtBearer(options =>
             {
                 options.Authority = identityUrl;
@@ -289,7 +336,7 @@ namespace SaaSEqt.eShop.Services.Identity.API
 
         public static IServiceCollection AddHttpServices(this IServiceCollection services)
         {
-            
+
             return services;
         }
     }

@@ -16,6 +16,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Identity.API.Models;
 
 namespace SaaSEqt.eShop.Services.Identity.API.Controllers
 {
@@ -32,6 +33,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
         private readonly IClientStore _clientStore;
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthenticationSchemeProvider _schemeProvider;
 
         public AccountController(
 
@@ -39,12 +41,14 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
             ILoginService<ApplicationUser> loginService,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
+            IAuthenticationSchemeProvider schemeProvider,
             ILogger<AccountController> logger,
             UserManager<ApplicationUser> userManager)
         {
             _loginService = loginService;
             _interaction = interaction;
             _clientStore = clientStore;
+            _schemeProvider = schemeProvider;
             _logger = logger;
             _userManager = userManager;
         }
@@ -62,9 +66,15 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
                 return ExternalLogin(context.IdP, returnUrl);
             }
 
-            var vm = await BuildLoginViewModelAsync(returnUrl, context);
+            var vm = await BuildLoginViewModelAsync(returnUrl);
 
             ViewData["ReturnUrl"] = returnUrl;
+
+            if (vm.IsExternalLoginOnly)
+            {
+                // we only have one option for logging in and it's an external provider
+                return RedirectToAction("Challenge", "External", new { provider = vm.ExternalLoginScheme, returnUrl });
+            }
 
             return View(vm);
         }
@@ -74,7 +84,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginInputModel model)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +142,62 @@ namespace SaaSEqt.eShop.Services.Identity.API.Controllers
             };
         }
 
-        async Task<LoginViewModel> BuildLoginViewModelAsync(LoginViewModel model)
+        /*****************************************/
+        /* helper APIs for the AccountController */
+        /*****************************************/
+        private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
+        {
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            if (context?.IdP != null)
+            {
+                // this is meant to short circuit the UI and only trigger the one external IdP
+                return new LoginViewModel
+                {
+                    EnableLocalLogin = false,
+                    ReturnUrl = returnUrl,
+                    Email = context?.LoginHint,
+                    ExternalProviders = new ExternalProvider[] { new ExternalProvider { AuthenticationScheme = context.IdP } }
+                };
+            }
+
+            var schemes = await _schemeProvider.GetAllSchemesAsync();
+
+            var providers = schemes
+                .Where(x => x.DisplayName != null ||
+                            (x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                )
+                .Select(x => new ExternalProvider
+                {
+                    DisplayName = x.DisplayName,
+                    AuthenticationScheme = x.Name
+                }).ToList();
+
+            var allowLocal = true;
+            if (context?.ClientId != null)
+            {
+                var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId);
+                if (client != null)
+                {
+                    allowLocal = client.EnableLocalLogin;
+
+                    if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
+                    {
+                        providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
+                    }
+                }
+            }
+
+            return new LoginViewModel
+            {
+                AllowRememberLogin = AccountOptions.AllowRememberLogin,
+                EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
+                ReturnUrl = returnUrl,
+                Email = context?.LoginHint,
+                ExternalProviders = providers.ToArray()
+            };
+        }
+
+        async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
         {
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl, context);

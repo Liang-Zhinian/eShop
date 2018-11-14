@@ -80,6 +80,23 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
 
         }
 
+        private IActionResult GetItemsByGuidIds(string guids)
+        {
+            var guidIds = guids.Split(',')
+                              .Select(id => (Ok: Guid.TryParse(id, out Guid x), Value: x));
+            if (!guidIds.All(nid => nid.Ok))
+            {
+                return BadRequest("guidIds value invalid. Must be comma-separated list of numbers");
+            }
+
+            var idsToSelect = guidIds.Select(id => id.Value);
+            var items = _catalogContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.GuidId)).ToList();
+
+            items = ChangeUriPlaceholder(items);
+            return Ok(items);
+
+        }
+
         [HttpGet]
         [Route("items/{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
