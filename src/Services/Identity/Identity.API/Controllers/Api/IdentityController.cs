@@ -248,7 +248,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpGet]
-        [Route("users")]
+        [Route("users/with-external-accounts")]
         public async Task<IActionResult> FindByExternalAccounts([FromQuery]string facebookEmail, 
                                                                 [FromQuery]string twitterUsername, 
                                                                 [FromQuery]string wechatOpenId, 
