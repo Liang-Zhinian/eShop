@@ -28,7 +28,7 @@ namespace SaaSEqt.eShop.Services.Basket.API.IntegrationEvents.EventHandling
             }
         }
 
-        private async Task UpdatePriceInBasketItems(int productId, decimal newPrice, decimal oldPrice, CustomerBasket basket)
+        private async Task UpdatePriceInBasketItems(Guid productId, decimal newPrice, decimal oldPrice, CustomerBasket basket)
         {
             string match = productId.ToString();
             var itemsToUpdate = basket?.Items?.Where(x => x.ProductId == match).ToList();

@@ -14,5 +14,6 @@ namespace SaaSEqt.eShop.WebMVC.ViewModels
         public decimal OldUnitPrice { get; set; }
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
+        public string MerchantId { get; set; }
     }
 }

@@ -31,7 +31,9 @@ namespace WebMVC.Models
         public string Buyer { get; set; }
 
         [Required]
-        public Guid RequestId { get; set; }       
+        public Guid RequestId { get; set; }    
+
+        public string MerchantId { get; set; }
     }
 }
 

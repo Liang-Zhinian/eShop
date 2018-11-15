@@ -51,7 +51,7 @@ namespace WebMVC.Infrastructure
 
         public static class Catalog
         {
-            public static string GetAllCatalogItems(string baseUri, int page, int take, int? brand, int? type)
+            public static string GetAllCatalogItems(string baseUri, int page, int take, Guid? brand, Guid? type)
             {
                 var filterQs = "";
 

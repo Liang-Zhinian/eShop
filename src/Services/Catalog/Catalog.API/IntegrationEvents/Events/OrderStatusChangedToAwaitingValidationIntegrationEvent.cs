@@ -1,14 +1,15 @@
 ﻿namespace SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events
 {
     using BuildingBlocks.EventBus.Events;
+    using System;
     using System.Collections.Generic;
 
     public class OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
     {
-        public int OrderId { get; }
+        public Guid OrderId { get; }
         public IEnumerable<OrderStockItem> OrderStockItems { get; }
 
-        public OrderStatusChangedToAwaitingValidationIntegrationEvent(int orderId,
+        public OrderStatusChangedToAwaitingValidationIntegrationEvent(Guid orderId,
             IEnumerable<OrderStockItem> orderStockItems)
         {
             OrderId = orderId;
@@ -18,10 +19,10 @@
 
     public class OrderStockItem
     {
-        public int ProductId { get; }
+        public Guid ProductId { get; }
         public int Units { get; }
 
-        public OrderStockItem(int productId, int units)
+        public OrderStockItem(Guid productId, int units)
         {
             ProductId = productId;
             Units = units;

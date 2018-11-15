@@ -23,6 +23,8 @@ namespace SaaSEqt.eShop.WebMVC.ViewModels
 
         public string Description { get; set; }
 
+        public string MerchantId { get; set; }
+
         [Required]
         public string City { get; set; }
         [Required]

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebMVC.Infrastructure;
 using WebMVC.Models;
+using System;
 
 namespace SaaSEqt.eShop.WebMVC.Services
 {
@@ -98,7 +99,7 @@ namespace SaaSEqt.eShop.WebMVC.Services
 
 
 
-        public async Task AddItemToBasket(ApplicationUser user, int productId)
+        public async Task AddItemToBasket(ApplicationUser user, Guid productId)
         {
             var token = await GetUserTokenAsync();
             var updateBasketUri = API.Purchase.AddItemToBasket(_purchaseUrl);

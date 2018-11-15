@@ -137,7 +137,8 @@ namespace SaaSEqt.eShop.WebMVC.Services
                 CardSecurityNumber = order.CardSecurityNumber,
                 CardTypeId = 1,
                 Buyer = order.Buyer,
-                RequestId = order.RequestId
+                RequestId = order.RequestId,
+                MerchantId = order.MerchantId
             };
         }
 

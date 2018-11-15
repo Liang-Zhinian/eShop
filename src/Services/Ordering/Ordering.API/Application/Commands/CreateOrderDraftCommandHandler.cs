@@ -58,7 +58,8 @@
                     UnitPrice = oi.GetUnitPrice(),
                     PictureUrl = oi.GetPictureUri(),
                     Units = oi.GetUnits(),
-                    ProductName = oi.GetOrderItemProductName()
+                    ProductName = oi.GetOrderItemProductName(),
+                    MerchantId = oi.MerchantId
                 }),
                 Total = order.GetTotal()
             };

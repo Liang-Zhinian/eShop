@@ -63,6 +63,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             return Ok(model);
         }
 
+        /*
         private IActionResult GetItemsByIds(string ids)
         {
             var numIds = ids.Split(',')
@@ -78,11 +79,11 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             items = ChangeUriPlaceholder(items);
             return Ok(items);
 
-        }
+        }*/
 
-        private IActionResult GetItemsByGuidIds(string guids)
+        private IActionResult GetItemsByIds(string ids)
         {
-            var guidIds = guids.Split(',')
+            var guidIds = ids.Split(',')
                               .Select(id => (Ok: Guid.TryParse(id, out Guid x), Value: x));
             if (!guidIds.All(nid => nid.Ok))
             {
@@ -90,7 +91,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             }
 
             var idsToSelect = guidIds.Select(id => id.Value);
-            var items = _catalogContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.GuidId)).ToList();
+            var items = _catalogContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToList();
 
             items = ChangeUriPlaceholder(items);
             return Ok(items);
@@ -98,12 +99,12 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
         }
 
         [HttpGet]
-        [Route("items/{id:int}")]
+        [Route("items/{id:guid}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(CatalogItem), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetItemById(int id)
+        public async Task<IActionResult> GetItemById(Guid id)
         {
-            if (id <= 0)
+            if (id == Guid.Empty)
             {
                 return BadRequest();
             }
@@ -147,11 +148,11 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             return Ok(model);
         }
 
-        // GET api/v1/[controller]/items/type/1/brand/null[?pageSize=3&pageIndex=10]
+        // GET api/v1/[controller]/items/type/xxxxx/brand/null[?pageSize=3&pageIndex=10]
         [HttpGet]
         [Route("[action]/type/{catalogTypeId}/brand/{catalogBrandId}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Items(int? catalogTypeId, int? catalogBrandId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> Items(Guid? catalogTypeId, Guid? catalogBrandId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
 
@@ -273,7 +274,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
         [Route("{id}")]
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var product = _catalogContext.CatalogItems.SingleOrDefault(x => x.Id == id);
 

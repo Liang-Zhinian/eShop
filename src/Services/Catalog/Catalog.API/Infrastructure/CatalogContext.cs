@@ -36,7 +36,7 @@
         public CatalogContext CreateDbContext(string[] args)
         {
             var optionsBuilder =  new DbContextOptionsBuilder<CatalogContext>()
-                .UseMySql("Server=localhost;database=SaaSEqt_eShop_Services_CatalogDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=192.168.0.200;database=SaaSEqt_eShop_Services_CatalogDb;uid=book2;pwd=P@ssword;charset=utf8;port=33306;SslMode=None");
 
             return new CatalogContext(optionsBuilder.Options);
         }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace Ordering.API.Migrations
+namespace Ordering.Infrastructure.Migrations
 {
     public partial class init : Migration
     {
@@ -98,6 +98,7 @@ namespace Ordering.API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     BuyerId = table.Column<int>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    MerchantId = table.Column<Guid>(type: "char(36)", nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: false),
                     OrderStatusId = table.Column<int>(nullable: false),
                     PaymentMethodId = table.Column<int>(nullable: true),
@@ -137,9 +138,10 @@ namespace Ordering.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Discount = table.Column<decimal>(nullable: false),
+                    MerchantId = table.Column<Guid>(type: "char(36)", nullable: false),
                     OrderId = table.Column<int>(nullable: false),
                     PictureUrl = table.Column<string>(nullable: true),
-                    ProductId = table.Column<int>(nullable: false),
+                    ProductId = table.Column<Guid>(type: "char(36)", nullable: false),
                     ProductName = table.Column<string>(nullable: false),
                     UnitPrice = table.Column<decimal>(nullable: false),
                     Units = table.Column<int>(nullable: false)

@@ -30,6 +30,8 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
         // Draft orders have this set to true. Currently we don't check anywhere the draft status of an Order, but we could do it if needed
         private bool _isDraft;
 
+        public Guid MerchantId { get; set; }
+
         // DDD Patterns comment
         // Using a private collection field, better for DDD Aggregate's encapsulation
         // so OrderItems cannot be added from "outside the AggregateRoot" directly to the collection,
@@ -51,7 +53,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
             _isDraft = false;
         }
 
-        public Order(string userId, string userName, Address address, int cardTypeId, string cardNumber, string cardSecurityNumber,
+        public Order(Guid merchantId, string userId, string userName, Address address, int cardTypeId, string cardNumber, string cardSecurityNumber,
                 string cardHolderName, DateTime cardExpiration, int? buyerId = null, int? paymentMethodId = null) : this()
         {
             _buyerId = buyerId;
@@ -59,6 +61,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
             _orderStatusId = OrderStatus.Submitted.Id;
             _orderDate = DateTime.UtcNow;
             Address = address;
+            MerchantId = merchantId;
 
             // Add the OrderStarterDomainEvent to the domain events collection 
             // to be raised/dispatched when comitting changes into the Database [ After DbContext.SaveChanges() ]
@@ -70,7 +73,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
         // This Order AggregateRoot's method "AddOrderitem()" should be the only way to add Items to the Order,
         // so any behavior (discounts, etc.) and validations are controlled by the AggregateRoot 
         // in order to maintain consistency between the whole Aggregate. 
-        public void AddOrderItem(int productId, string productName, decimal unitPrice, decimal discount, string pictureUrl, int units = 1)
+        public void AddOrderItem(Guid productId, string productName, decimal unitPrice, decimal discount, string pictureUrl, int units = 1)
         {
             var existingOrderForProduct = _orderItems.Where(o => o.ProductId == productId)
                 .SingleOrDefault();
@@ -90,7 +93,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
             {
                 //add validated new order item
 
-                var orderItem = new OrderItem(productId, productName, unitPrice, discount, pictureUrl, units);
+                var orderItem = new OrderItem(this.MerchantId, productId, productName, unitPrice, discount, pictureUrl, units);
                 _orderItems.Add(orderItem);
             }
         }
@@ -161,7 +164,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
             AddDomainEvent(new OrderCancelledDomainEvent(this));
         }
 
-        public void SetCancelledStatusWhenStockIsRejected(IEnumerable<int> orderStockRejectedItems)
+        public void SetCancelledStatusWhenStockIsRejected(IEnumerable<Guid> orderStockRejectedItems)
         {
             if (_orderStatusId == OrderStatus.AwaitingValidation.Id)
             {

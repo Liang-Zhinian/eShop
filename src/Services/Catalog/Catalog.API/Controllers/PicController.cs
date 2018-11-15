@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,13 +28,13 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/catalog/items/{catalogItemId:int}/pic")]
+        [Route("api/v1/catalog/items/{catalogItemId:guid}/pic")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         // GET: /<controller>/
-        public async Task<IActionResult> GetImage(int catalogItemId)
+        public async Task<IActionResult> GetImage(Guid catalogItemId)
         {
-            if (catalogItemId <= 0)
+            if (catalogItemId == Guid.Empty)
             {
                 return BadRequest();
             }

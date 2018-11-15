@@ -25,14 +25,14 @@ namespace SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Services
             _urls = config.Value;
         }
 
-        public async Task<CatalogItem> GetCatalogItem(int id)
+        public async Task<CatalogItem> GetCatalogItem(Guid id)
         {
             var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.CatalogOperations.GetItemById(id));
             var item = JsonConvert.DeserializeObject<CatalogItem>(data);
             return item;
         }
 
-        public async Task<IEnumerable<CatalogItem>> GetCatalogItems(IEnumerable<int> ids)
+        public async Task<IEnumerable<CatalogItem>> GetCatalogItems(IEnumerable<Guid> ids)
         {
             var data = await _apiClient.GetStringAsync(_urls.Catalog + UrlsConfig.CatalogOperations.GetItemsById(ids));
             var item = JsonConvert.DeserializeObject<CatalogItem[]>(data);

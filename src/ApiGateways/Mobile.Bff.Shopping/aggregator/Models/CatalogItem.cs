@@ -7,12 +7,13 @@ namespace SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Models
 {
     public class CatalogItem
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
         public decimal Price { get; set; }
 
+        public Guid MerchantId { get; set; }
 
         public string PictureUri { get; set; }
 

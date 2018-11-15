@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebMVC.Infrastructure;
+using System;
 
 namespace SaaSEqt.eShop.WebMVC.Services
 {
@@ -28,7 +29,7 @@ namespace SaaSEqt.eShop.WebMVC.Services
             _remoteServiceBaseUrl = $"{_settings.Value.PurchaseUrl}/api/v1/c/catalog/";
         }
 
-        public async Task<Catalog> GetCatalogItems(int page, int take, int? brand, int? type)
+        public async Task<Catalog> GetCatalogItems(int page, int take, Guid? brand, Guid? type)
         {
             var allcatalogItemsUri = API.Catalog.GetAllCatalogItems(_remoteServiceBaseUrl, page, take, brand, type);
 

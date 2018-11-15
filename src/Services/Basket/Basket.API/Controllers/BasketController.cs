@@ -73,7 +73,8 @@ namespace SaaSEqt.eShop.Services.Basket.API.Controllers
 
             var eventMessage = new UserCheckoutAcceptedIntegrationEvent(userId, userName, basketCheckout.City, basketCheckout.Street,
                 basketCheckout.State, basketCheckout.Country, basketCheckout.ZipCode, basketCheckout.CardNumber, basketCheckout.CardHolderName,
-                basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer, basketCheckout.RequestId, basket);
+                basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer, 
+                                                                        basketCheckout.RequestId, basketCheckout.MerchantId, basket);
 
             // Once basket is checkout, sends an integration event to
             // ordering.api to convert basket to order and proceeds with

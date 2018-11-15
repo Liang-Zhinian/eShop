@@ -14,7 +14,8 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.ToTable("Catalog");
 
             builder.Property(ci => ci.Id)
-                   .UseMySQLAutoIncrementColumn("catalog_hilo")
+                   .HasColumnType(Constants.DbConstants.KeyType)
+                   .ValueGeneratedOnAdd()
                 .IsRequired();
 
             builder.Property(ci => ci.Name)
@@ -37,8 +38,6 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
                 .WithMany()
                 .HasForeignKey(ci => ci.CatalogTypeId);
 
-
-            builder.Property<Guid>("GuidId").HasColumnType(Constants.DbConstants.KeyType);
             builder.Property<Guid>("MerchantId").HasColumnType(Constants.DbConstants.KeyType);
         }
     }

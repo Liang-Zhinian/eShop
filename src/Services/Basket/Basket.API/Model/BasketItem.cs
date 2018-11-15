@@ -12,6 +12,7 @@ namespace SaaSEqt.eShop.Services.Basket.API.Model
         public decimal OldUnitPrice { get; set; }
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
+        public string MerchantId { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();

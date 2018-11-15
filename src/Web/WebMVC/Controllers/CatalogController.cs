@@ -15,7 +15,7 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
         public CatalogController(ICatalogService catalogSvc) => 
             _catalogSvc = catalogSvc;
 
-        public async Task<IActionResult> Index(int? BrandFilterApplied, int? TypesFilterApplied, int? page, [FromQuery]string errorMsg)
+        public async Task<IActionResult> Index(Guid? BrandFilterApplied, Guid? TypesFilterApplied, int? page, [FromQuery]string errorMsg)
         {
             var itemsPage = 10;
             var catalog = await _catalogSvc.GetCatalogItems(page ?? 0, itemsPage, BrandFilterApplied, TypesFilterApplied);
@@ -24,8 +24,8 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
                 CatalogItems = catalog.Data,
                 Brands = await _catalogSvc.GetBrands(),
                 Types = await _catalogSvc.GetTypes(),
-                BrandFilterApplied = BrandFilterApplied ?? 0,
-                TypesFilterApplied = TypesFilterApplied ?? 0,
+                BrandFilterApplied = BrandFilterApplied ?? Guid.Empty,
+                TypesFilterApplied = TypesFilterApplied ?? Guid.Empty,
                 PaginationInfo = new PaginationInfo()
                 {
                     ActualPage = page ?? 0,

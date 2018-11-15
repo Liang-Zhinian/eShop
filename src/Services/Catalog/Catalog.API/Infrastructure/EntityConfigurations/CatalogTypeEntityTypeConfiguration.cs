@@ -16,14 +16,14 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-                   .UseMySQLAutoIncrementColumn("catalog_type_hilo")
+                   .HasColumnType(Constants.DbConstants.KeyType)
+                   .ValueGeneratedOnAdd()
                .IsRequired();
 
             builder.Property(cb => cb.Type)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property<Guid>("GuidId").HasColumnType(Constants.DbConstants.KeyType);
             builder.Property<Guid>("MerchantId").HasColumnType(Constants.DbConstants.KeyType);
         }
     }

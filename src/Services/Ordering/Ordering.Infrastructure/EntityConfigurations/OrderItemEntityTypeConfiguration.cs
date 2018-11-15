@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MySql.Data.EntityFrameworkCore.Extensions;
 using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
@@ -26,8 +27,9 @@ namespace Ordering.Infrastructure.EntityConfigurations
             orderItemConfiguration.Property<decimal>("Discount")
                 .IsRequired();
 
-            orderItemConfiguration.Property<int>("ProductId")
-                .IsRequired();
+            orderItemConfiguration.Property<Guid>("ProductId")
+                                  .HasColumnType("char(36)")
+                                    .IsRequired();
 
             orderItemConfiguration.Property<string>("ProductName")
                 .IsRequired();
@@ -40,6 +42,10 @@ namespace Ordering.Infrastructure.EntityConfigurations
 
             orderItemConfiguration.Property<string>("PictureUrl")
                 .IsRequired(false);
+            
+            orderItemConfiguration.Property<Guid>("MerchantId")
+                                  .HasColumnType("char(36)")
+                                  .IsRequired();
         }
     }
 }

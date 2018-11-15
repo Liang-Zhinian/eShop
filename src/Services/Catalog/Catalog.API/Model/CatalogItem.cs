@@ -5,7 +5,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
 {
     public class CatalogItem
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -17,11 +17,11 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
 
         public string PictureUri { get; set; }
 
-        public int CatalogTypeId { get; set; }
+        public Guid CatalogTypeId { get; set; }
 
         public CatalogType CatalogType { get; set; }
 
-        public int CatalogBrandId { get; set; }
+        public Guid CatalogBrandId { get; set; }
 
         public CatalogBrand CatalogBrand { get; set; }
 
@@ -40,7 +40,6 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
         /// </summary>
         public bool OnReorder { get; set; }
 
-        public Guid GuidId { get; set; }
         public Guid MerchantId { get; set; }
 
         public CatalogItem() { }

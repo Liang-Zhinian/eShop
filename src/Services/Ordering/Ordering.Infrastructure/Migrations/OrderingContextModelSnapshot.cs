@@ -8,13 +8,12 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SaaSEqt.eShop.Services.Ordering.Infrastructure;
 using System;
 
-namespace Ordering.API.Migrations
+namespace Ordering.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20180723081336_init")]
-    partial class init
+    partial class OrderingContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,6 +94,9 @@ namespace Ordering.API.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("OrderDate");
 
                     b.Property<int>("OrderStatusId");
@@ -119,11 +121,15 @@ namespace Ordering.API.Migrations
 
                     b.Property<decimal>("Discount");
 
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("OrderId");
 
                     b.Property<string>("PictureUrl");
 
-                    b.Property<int>("ProductId");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("ProductName")
                         .IsRequired();

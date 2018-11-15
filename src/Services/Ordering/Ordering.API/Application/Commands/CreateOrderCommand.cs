@@ -25,6 +25,9 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
         private readonly List<OrderItemDTO> _orderItems;
 
         [DataMember]
+        public Guid MerchantId { get; private set; }
+
+        [DataMember]
         public string UserId { get; private set; }
 
         [DataMember]
@@ -68,11 +71,12 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
             _orderItems = new List<OrderItemDTO>();
         }
 
-        public CreateOrderCommand(List<BasketItem> basketItems, string userId, string userName, string city, string street, string state, string country, string zipcode,
+        public CreateOrderCommand(List<BasketItem> basketItems, Guid merchantId, string userId, string userName, string city, string street, string state, string country, string zipcode,
             string cardNumber, string cardHolderName, DateTime cardExpiration,
             string cardSecurityNumber, int cardTypeId) : this()
         {
             _orderItems = basketItems.ToOrderItemsDTO().ToList();
+            MerchantId = merchantId;
             UserId = userId;
             UserName = userName;
             City = city;
@@ -91,7 +95,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
 
         public class OrderItemDTO
         {
-            public int ProductId { get; set; }
+            public Guid ProductId { get; set; }
 
             public string ProductName { get; set; }
 
@@ -102,6 +106,8 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
             public int Units { get; set; }
 
             public string PictureUrl { get; set; }
+
+            public Guid MerchantId { get; set; }
         }
     }
 }

@@ -11,8 +11,8 @@ using System;
 namespace Catalog.API.Migrations.Catalog
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20181001075010_addServiceCatalog")]
-    partial class addServiceCatalog
+    [Migration("20181115061804_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,12 +23,16 @@ namespace Catalog.API.Migrations.Catalog
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.CatalogBrand", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -37,18 +41,22 @@ namespace Catalog.API.Migrations.Catalog
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.CatalogItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("AvailableStock");
 
-                    b.Property<int>("CatalogBrandId");
+                    b.Property<Guid>("CatalogBrandId");
 
-                    b.Property<int>("CatalogTypeId");
+                    b.Property<Guid>("CatalogTypeId");
 
                     b.Property<string>("Description");
 
                     b.Property<int>("MaxStockThreshold");
+
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -73,8 +81,12 @@ namespace Catalog.API.Migrations.Catalog
 
             modelBuilder.Entity("SaaSEqt.eShop.Services.Catalog.API.Model.CatalogType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("MerchantId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Type")
                         .IsRequired()

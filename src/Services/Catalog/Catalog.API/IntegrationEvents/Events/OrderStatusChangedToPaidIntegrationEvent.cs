@@ -1,14 +1,15 @@
 ﻿namespace SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events
 {
+    using System;
     using System.Collections.Generic;
     using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
 
     public class OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
     {
-        public int OrderId { get; }
+        public Guid OrderId { get; }
         public IEnumerable<OrderStockItem> OrderStockItems { get; }
 
-        public OrderStatusChangedToPaidIntegrationEvent(int orderId,
+        public OrderStatusChangedToPaidIntegrationEvent(Guid orderId,
             IEnumerable<OrderStockItem> orderStockItems)
         {
             OrderId = orderId;

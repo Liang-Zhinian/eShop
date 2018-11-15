@@ -1,6 +1,7 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.Events
 {
     using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+    using System;
     using System.Collections.Generic;
 
     public class OrderStockRejectedIntegrationEvent : IntegrationEvent
@@ -19,10 +20,10 @@
 
     public class ConfirmedOrderStockItem
     {
-        public int ProductId { get; }
+        public Guid ProductId { get; }
         public bool HasStock { get; }
 
-        public ConfirmedOrderStockItem(int productId, bool hasStock)
+        public ConfirmedOrderStockItem(Guid productId, bool hasStock)
         {
             ProductId = productId;
             HasStock = hasStock;

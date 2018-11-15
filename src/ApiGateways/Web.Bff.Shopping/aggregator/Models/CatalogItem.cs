@@ -7,7 +7,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
 {
     public class CatalogItem
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -15,6 +15,8 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
 
 
         public string PictureUri { get; set; }
+
+        public Guid MerchantId { get; set; }
 
     }
 }

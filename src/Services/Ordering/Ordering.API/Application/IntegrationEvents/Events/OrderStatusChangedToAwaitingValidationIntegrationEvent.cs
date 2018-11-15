@@ -1,5 +1,6 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.Events
 {
+    using System;
     using System.Collections.Generic;
     using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
 
@@ -22,10 +23,10 @@
 
     public class OrderStockItem
     {
-        public int ProductId { get; }
+        public Guid ProductId { get; }
         public int Units { get; }
 
-        public OrderStockItem(int productId, int units)
+        public OrderStockItem(Guid productId, int units)
         {
             ProductId = productId;
             Units = units;

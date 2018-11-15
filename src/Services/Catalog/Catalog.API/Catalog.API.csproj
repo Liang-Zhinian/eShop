@@ -12,6 +12,9 @@
 
 
   <ItemGroup>
+    <Compile Remove="Migrations\Catalog\20180714113211_init.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

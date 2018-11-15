@@ -35,6 +35,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
             orderConfiguration.Property<int>("OrderStatusId").IsRequired();
             orderConfiguration.Property<int?>("PaymentMethodId").IsRequired(false);
             orderConfiguration.Property<string>("Description").IsRequired(false);
+            orderConfiguration.Property<Guid>("MerchantId").HasColumnType("char(36)").IsRequired();
 
             var navigation = orderConfiguration.Metadata.FindNavigation(nameof(Order.OrderItems));
             
