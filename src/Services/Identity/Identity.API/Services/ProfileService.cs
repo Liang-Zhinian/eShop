@@ -106,7 +106,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Services
             if (!string.IsNullOrWhiteSpace(user.ZipCode))
                 claims.Add(new Claim("address_zip_code", user.ZipCode));
 
-            if (_userManager.SupportsUserEmail)
+            if (_userManager.SupportsUserEmail && !string.IsNullOrWhiteSpace(user.Email))
             {
                 claims.AddRange(new[]
                 {
