@@ -263,17 +263,3 @@ pub/
 /src/Web/WebMVC/wwwroot/css/site.min.css
 **/.kube/**
 .mfractor
-
-#Databases
-db/
-
-# MacOS
-**/.DS_Store
-.DS_Store
-src/Mobile/.DS_Store
-src/Mobile/.DS_Store
-src/BuildingBlocks/EventBus/.DS_Store
-src/BuildingBlocks/.DS_Store
-.DS_Store
-src/.DS_Store
-src/Web/WebMVC/.DS_Store
