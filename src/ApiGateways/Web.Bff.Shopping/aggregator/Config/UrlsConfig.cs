@@ -9,8 +9,8 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Config
     {
         public class CatalogOperations
         {
-            public static string GetItemById(Guid id) => $"/api/v1/catalog/items/{id}";
-            public static string GetItemsById(IEnumerable<Guid> ids) => $"/api/v1/catalog/items?ids={string.Join(',', ids)}";
+            public static string GetItemById(string id) => $"/api/v1/catalog/items/{id}";
+            public static string GetItemsById(IEnumerable<string> ids) => $"/api/v1/catalog/items?ids={string.Join(',', ids)}";
         }
 
         public class BasketOperations

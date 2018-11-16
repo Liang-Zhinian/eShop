@@ -8,8 +8,8 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Services
 {
     public interface ICatalogService
     {
-        Task<CatalogItem> GetCatalogItem(Guid id);
-        Task<IEnumerable<CatalogItem>> GetCatalogItems(IEnumerable<Guid> ids);
+        Task<CatalogItem> GetCatalogItem(string id);
+        Task<IEnumerable<CatalogItem>> GetCatalogItems(IEnumerable<string> ids);
 
         //Task<IEquatable<Sche>>
     }
