@@ -15,7 +15,13 @@ namespace Identity.API.Providers
         {
         }
 
-        public Provider Provider => _providerRepository.Get().FirstOrDefault(y => y.Name.ToLower() == "wechat");
+        public Provider Provider
+        {
+            get
+            {
+                return _providerRepository.Get().FirstOrDefault(y => y.Name.ToLower() == "wechat");
+            }
+        }
 
         public JObject GetUserInfo(string accessToken)
         {
