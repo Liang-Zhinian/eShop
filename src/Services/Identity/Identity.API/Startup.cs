@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Net.Http;
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Identity.API.Infrastructure.Filters;
-using Identity.API.Infrastructure.Middlewares;
+using Identity.API.Infrastucture.Processors;
+using Identity.API.Infrastucture.Repositories;
+using Identity.API.Providers;
 using Identity.API.Validators;
 using Identity.Infrastructure.Services;
 using IdentityServer4;
 using IdentityServer4.Services;
+using IdentityServer4.Validation;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -238,7 +242,11 @@ namespace SaaSEqt.eShop.Services.Identity.API
                                     });
                 })
                     .AddExtensionGrantValidator<PhoneNumberTokenGrantValidator>()
-                    .Services.AddTransient<IProfileService, ProfileService>();
+                    .AddExtensionGrantValidator<WechatTokenGrantValidator>()
+                    .Services.AddTransient<IProfileService, ProfileService>()
+                    .AddServices<ApplicationUser>()
+                    .AddRepositories()
+                    .AddProviders<ApplicationUser>();
             //.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
 
             return services;
@@ -337,6 +345,33 @@ namespace SaaSEqt.eShop.Services.Identity.API
         public static IServiceCollection AddHttpServices(this IServiceCollection services)
         {
 
+            return services;
+        }
+
+        public static IServiceCollection AddServices<TUser>(this IServiceCollection services) where TUser : IdentityUser, new()
+        {
+            services.AddScoped<INonEmailUserProcessor, NonEmailUserProcessor<TUser>>();
+            services.AddScoped<IEmailUserProcessor, EmailUserProcessor<TUser>>();
+            services.AddScoped<IExtensionGrantValidator, ExternalAuthenticationGrantValidator<TUser>>();
+            services.AddSingleton<HttpClient>();
+            return services;
+        }
+
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+
+            services.AddScoped<IProviderRepository, ProviderRepository>();
+            return services;
+        }
+
+        public static IServiceCollection AddProviders<TUser>(this IServiceCollection services) where TUser : IdentityUser, new()
+        {
+            //services.AddTransient<IFacebookAuthProvider, FacebookAuthProvider<TUser>>();
+            //services.AddTransient<ITwitterAuthProvider, TwitterAuthProvider<TUser>>();
+            //services.AddTransient<IGoogleAuthProvider, GoogleAuthProvider<TUser>>();
+            //services.AddTransient<ILinkedInAuthProvider, LinkedInAuthProvider<TUser>>();
+            //services.AddTransient<IGitHubAuthProvider, GitHubAuthProvider<TUser>>();
+            services.AddTransient<IWechatAuthProvider, WechatAuthProvider<TUser>>();
             return services;
         }
     }

@@ -13,7 +13,7 @@ namespace Identity.API.Configuration
                 new Provider{
                     ProviderId = 1,
                     Name = "Wechat",
-                    UserInfoEndPoint = "https://api.weixin.qq.com/sns/oauth2/access_token"
+                    UserInfoEndPoint = "https://api.weixin.qq.com/sns/userinfo"
                 }
             };
         }

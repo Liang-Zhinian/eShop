@@ -43,7 +43,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
 
             foreach (var bitem in data.Items)
             {
-                var catalogItem = catalogItems.SingleOrDefault(ci => ci.Id == bitem.ProductId);
+                var catalogItem = catalogItems.SingleOrDefault(ci => ci.Id == Guid.Parse(bitem.ProductId));
                 if (catalogItem == null)
                 {
                     return BadRequest($"Basket refers to a non-existing catalog item ({bitem.ProductId})");
@@ -106,7 +106,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
             }
 
             // Step 1: Get the item from catalog
-            var item = await _catalog.GetCatalogItem(data.CatalogItemId);
+            var item = await _catalog.GetCatalogItem(data.CatalogItemId.ToString());
 
             //item.PictureUri = 
 

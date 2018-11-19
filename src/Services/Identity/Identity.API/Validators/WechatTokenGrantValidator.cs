@@ -20,19 +20,16 @@ namespace Identity.API.Validators
     {
         //repository to get user from db
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly PhoneNumberTokenProvider<ApplicationUser> _phoneNumberTokenProvider;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEventService _events;
         private readonly ILogger<PhoneNumberTokenGrantValidator> _logger;
 
         public WechatTokenGrantValidator(UserManager<ApplicationUser> userManager,
-                                              PhoneNumberTokenProvider<ApplicationUser> phoneNumberTokenProvider,
                                               SignInManager<ApplicationUser> signInManager,
                                               IEventService events,
                                               ILogger<PhoneNumberTokenGrantValidator> logger)
         {
             _userManager = userManager; //DI
-            _phoneNumberTokenProvider = phoneNumberTokenProvider ?? throw new ArgumentNullException(nameof(phoneNumberTokenProvider));
             _signInManager = signInManager;
             _events = events;
             _logger = logger;
@@ -46,61 +43,65 @@ namespace Identity.API.Validators
                 var createUser = false;
                 var raw = context.Request.Raw;
                 var credential = raw.Get(OidcConstants.TokenRequest.GrantType);
-                if (credential == null || credential != "phone_number_token")
+                if (credential == null || credential != "wechat_token")
                 {
-                    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "invalid verify_phone_number_token credential");
+                    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "invalid verify_wechat_token credential");
                     return;
                 }
 
-                var phoneNumber = raw.Get("phone_number");
-                var verificationToken = raw.Get("verification_token");
+                var openid = raw.Get("openid");
 
                 //get your user model from db (by username - in my case its email)
-                var user = await _userManager.Users.SingleOrDefaultAsync(y => y.PhoneNumber == _userManager.NormalizeKey(phoneNumber));
+                var user = await _userManager.Users
+                                             .Include(y => y.ExternalAccounts)
+                                             .SingleOrDefaultAsync(y => y.ExternalAccounts.WechatOpenId == openid);
                 if (user == null)
                 {
                     user = new ApplicationUser
                     {
-                        UserName = phoneNumber,
-                        PhoneNumber = phoneNumber,
-                        SecurityStamp = phoneNumber.Sha256()
+                        UserName = openid,
+                        ExternalAccounts = new ExternalAccounts
+                        {
+                            WechatOpenId = openid
+                        }
                     };
+
                     createUser = true;
                 }
 
-                var result = await _phoneNumberTokenProvider.ValidateAsync("verify_number", verificationToken, _userManager, user);
-                if (!result)
-                {
-                    _logger.LogInformation("Authentication failed for token: {token}, reason: invalid token", verificationToken);
-                    await _events.RaiseAsync(new UserLoginFailureEvent(verificationToken, "invalid token or verification id", false));
-                    return;
-                }
+                //var result = await _phoneNumberTokenProvider.ValidateAsync("verify_number", verificationToken, _userManager, user);
+                //if (!result)
+                //{
+                //    _logger.LogInformation("Authentication failed for token: {token}, reason: invalid token", verificationToken);
+                //    await _events.RaiseAsync(new UserLoginFailureEvent(verificationToken, "invalid token or verification id", false));
+                //    return;
+                //}
 
                 if (createUser)
                 {
-                    user.PhoneNumberConfirmed = true;
+                    //user.PhoneNumberConfirmed = true;
                     var resultCreation = await _userManager.CreateAsync(user);
                     if (resultCreation != IdentityResult.Success)
                     {
-                        _logger.LogInformation("User creation failed: {username}, reason: invalid user", phoneNumber);
-                        await _events.RaiseAsync(new UserLoginFailureEvent(phoneNumber, resultCreation.Errors.Select(y => y.Description).Aggregate((a, b) => a + ", " + b), false));
+                        _logger.LogInformation("User creation failed: {openid}, reason: invalid user", openid);
+                        await _events.RaiseAsync(new UserLoginFailureEvent(openid, resultCreation.Errors.Select(y => y.Description).Aggregate((a, b) => a + ", " + b), false));
                         return;
                     }
                 }
 
-                _logger.LogInformation("Credentials validated for username: {phoneNumber}", phoneNumber);
-                await _events.RaiseAsync(new UserLoginSuccessEvent(phoneNumber, user.Id, phoneNumber, false));
+                _logger.LogInformation("Credentials validated for openid: {openid}", openid);
+                await _events.RaiseAsync(new UserLoginSuccessEvent(openid, user.Id, openid, false));
                 await _signInManager.SignInAsync(user, true);
                 context.Result = new GrantValidationResult(
                                             user.Id,
-                                            OidcConstants.AuthenticationMethods.ConfirmationBySms
+                                            "Wechat"
                                         );
                 return;
 
             }
             catch (Exception ex)
             {
-                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid phone number");
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid openid");
             }
         }
 
@@ -173,6 +174,6 @@ namespace Identity.API.Validators
             return claims;
         }
 
-        public string GrantType => "phone_number_token";
+        public string GrantType => "wechat_token";
     }
 }

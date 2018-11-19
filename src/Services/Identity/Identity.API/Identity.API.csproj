@@ -69,5 +69,6 @@
     <Folder Include="Filters\" />
     <Folder Include="Providers\" />
     <Folder Include="Infrastucture\Repositories\" />
+    <Folder Include="Infrastucture\Processors\" />
   </ItemGroup>
 </Project>
