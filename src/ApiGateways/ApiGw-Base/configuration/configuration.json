@@ -6,7 +6,7 @@
         "DownstreamHostAndPorts": [
           {
             "Host": "localhost",
-            "Port": 5133
+            "Port": 5105
           }
         ],
         "UpstreamPathTemplate": "/{everything}",
@@ -46,7 +46,7 @@
         "DownstreamHostAndPorts": [
           {
             "Host": "localhost",
-            "Port": 5103
+            "Port": 5121
           }
         ],
         "UpstreamPathTemplate": "/api/{version}/b/{everything}",
@@ -62,7 +62,7 @@
         "DownstreamHostAndPorts": [
           {
             "Host": "localhost",
-            "Port": 5103
+            "Port": 5121
           }
         ],
         "UpstreamPathTemplate": "/basket-api/{everything}",
