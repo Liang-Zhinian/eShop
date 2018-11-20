@@ -26,4 +26,7 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\Resilience\Resilience.Http\Resilience.Http.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Config\configuration.json" />
+  </ItemGroup>
 </Project>

@@ -56,7 +56,8 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                     ProductName = catalogItem.Name,
                     PictureUrl = catalogItem.PictureUri,
                     UnitPrice = catalogItem.Price,
-                    Quantity = bitem.Quantity
+                    Quantity = bitem.Quantity,
+                    MerchantId = catalogItem.MerchantId.ToString()
                 });
             }
 
@@ -120,7 +121,8 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                 ProductId = item.Id.ToString(),
                 ProductName = item.Name,
                 Quantity = data.Quantity,
-                Id = Guid.NewGuid().ToString()
+                Id = Guid.NewGuid().ToString(),
+                MerchantId = item.MerchantId
             });
 
             // Step 4: Update basket

@@ -56,7 +56,7 @@ namespace FunctionalTests.Services
                 else
                 {
                     //THEN the product price changes in the catalog 
-                    Assert.Equal(newPrice, modifiedCatalogProducts.Data.Single(it => it.Id == int.Parse(itemToModify.ProductId)).Price);
+                    Assert.Equal(newPrice, modifiedCatalogProducts.Data.Single(it => it.Id == Guid.Parse(itemToModify.ProductId)).Price);
 
                     // AND the products in the basket reflects the changed priced and the original price
                     Assert.Equal(newPrice, itemUpdated.UnitPrice);
@@ -102,7 +102,7 @@ namespace FunctionalTests.Services
 
         private string ChangePrice(BasketItem itemToModify, decimal newPrice, PaginatedItemsViewModel<CatalogItem> catalogProducts)
         {
-            var catalogProduct = catalogProducts.Data.Single(pr => pr.Id == int.Parse(itemToModify.ProductId));
+            var catalogProduct = catalogProducts.Data.Single(pr => pr.Id == Guid.Parse(itemToModify.ProductId));
             catalogProduct.Price = newPrice;
             return JsonConvert.SerializeObject(catalogProduct);
         }

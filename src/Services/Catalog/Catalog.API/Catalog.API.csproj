@@ -55,6 +55,7 @@
     <Content Remove="Pics\12.png" />
     <Content Remove="Pics\2.png" />
     <Content Remove="Pics\3.png" />
+    <Content Remove="Pics\4.png" />
   </ItemGroup>
 
 
