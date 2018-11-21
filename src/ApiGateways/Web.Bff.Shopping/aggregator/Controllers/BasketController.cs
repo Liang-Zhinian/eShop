@@ -122,7 +122,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                 ProductName = item.Name,
                 Quantity = data.Quantity,
                 Id = Guid.NewGuid().ToString(),
-                MerchantId = item.MerchantId
+                MerchantId = item.MerchantId.ToString()
             });
 
             // Step 4: Update basket
