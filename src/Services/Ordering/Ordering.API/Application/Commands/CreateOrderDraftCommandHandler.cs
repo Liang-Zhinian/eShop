@@ -47,20 +47,27 @@
     {
         public IEnumerable<OrderItemDTO> OrderItems { get; set; }
         public decimal Total { get; set; }
+        public Guid MerchantId { get; set; }
 
         public static OrderDraftDTO FromOrder(Order order)
         {
             return new OrderDraftDTO()
             {
-                OrderItems = order.OrderItems.Select(oi => new OrderItemDTO
+                MerchantId = order.MerchantId,
+                OrderItems = order.OrderItems.Select(oi =>
                 {
-                    Discount = oi.GetCurrentDiscount(),
-                    ProductId = oi.ProductId,
-                    UnitPrice = oi.GetUnitPrice(),
-                    PictureUrl = oi.GetPictureUri(),
-                    Units = oi.GetUnits(),
-                    ProductName = oi.GetOrderItemProductName(),
-                    MerchantId = oi.MerchantId
+                    var orderItemDTO = new OrderItemDTO
+                    {
+                        Discount = oi.GetCurrentDiscount(),
+                        ProductId = oi.ProductId,
+                        UnitPrice = oi.GetUnitPrice(),
+                        PictureUrl = oi.GetPictureUri(),
+                        Units = oi.GetUnits(),
+                        ProductName = oi.GetOrderItemProductName(),
+                        MerchantId = oi.MerchantId
+                    };
+
+                    return orderItemDTO;
                 }),
                 Total = order.GetTotal()
             };
