@@ -36,9 +36,9 @@ namespace Ordering.API.Application.IntegrationEvents.Events
 
         public CustomerBasket Basket { get; }
 
-        public Guid MerchantId { get; set; }
+        public string MerchantId { get; set; }
 
-        public UserCheckoutAcceptedIntegrationEvent(Guid merchantId, string userId, string userName, string city, string street,
+        public UserCheckoutAcceptedIntegrationEvent(string merchantId, string userId, string userName, string city, string street,
             string state, string country, string zipCode, string cardNumber, string cardHolderName,
             DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
             CustomerBasket basket)

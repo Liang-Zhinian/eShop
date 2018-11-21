@@ -42,7 +42,7 @@ namespace Ordering.API.Application.IntegrationEvents.EventHandling
             if (eventMsg.RequestId != Guid.Empty)
             {
                 var createOrderCommand = new 
-                    CreateOrderCommand(eventMsg.Basket.Items, eventMsg.MerchantId, eventMsg.UserId, eventMsg.UserName, eventMsg.City, eventMsg.Street, 
+                    CreateOrderCommand(eventMsg.Basket.Items, Guid.Parse(eventMsg.MerchantId), eventMsg.UserId, eventMsg.UserName, eventMsg.City, eventMsg.Street, 
                     eventMsg.State, eventMsg.Country, eventMsg.ZipCode,
                     eventMsg.CardNumber, eventMsg.CardHolderName, eventMsg.CardExpiration,
                     eventMsg.CardSecurityNumber, eventMsg.CardTypeId);

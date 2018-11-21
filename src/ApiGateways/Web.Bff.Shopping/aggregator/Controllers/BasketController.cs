@@ -49,7 +49,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                     return BadRequest($"Basket refers to a non-existing catalog item ({bitem.ProductId})");
                 }
 
-                newBasket.Items.Add(new BasketDataItem()
+                var nbitem = new BasketDataItem()
                 {
                     Id = bitem.Id,
                     ProductId = catalogItem.Id.ToString(),
@@ -58,20 +58,12 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                     UnitPrice = catalogItem.Price,
                     Quantity = bitem.Quantity,
                     MerchantId = catalogItem.MerchantId.ToString()
-                });
+                };
+                newBasket.Items.Add(nbitem);
 
-                if (null == newBasket.OrganizedItems[catalogItem.MerchantId.ToString()])
+                if (!currentBasket.OrganizedItems.ContainsKey(catalogItem.MerchantId.ToString()))
                     newBasket.OrganizedItems[catalogItem.MerchantId.ToString()] = new List<BasketDataItem>();
-                newBasket.OrganizedItems[catalogItem.MerchantId.ToString()].Add(new BasketDataItem()
-                {
-                    Id = bitem.Id,
-                    ProductId = catalogItem.Id.ToString(),
-                    ProductName = catalogItem.Name,
-                    PictureUrl = catalogItem.PictureUri,
-                    UnitPrice = catalogItem.Price,
-                    Quantity = bitem.Quantity,
-                    MerchantId = catalogItem.MerchantId.ToString()
-                });
+                newBasket.OrganizedItems[catalogItem.MerchantId.ToString()].Add(nbitem);
 
             }
 
@@ -105,10 +97,14 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                 }
                 basketItem.Quantity = update.NewQty;
 
-                var organizedBasketItem = currentBasket.OrganizedItems[basketItem.MerchantId.ToString()].SingleOrDefault(bitem => bitem.Id == update.BasketItemId);
+                if (!currentBasket.OrganizedItems.ContainsKey(basketItem.MerchantId))
+                    currentBasket.OrganizedItems[basketItem.MerchantId.ToString()] = new List<BasketDataItem>();
+                var organizedBasketItem = currentBasket.OrganizedItems[basketItem.MerchantId].SingleOrDefault(bitem => bitem.Id == update.BasketItemId);
                 if (organizedBasketItem == null)
                 {
-                    return BadRequest($"Basket item with id {update.BasketItemId} not found");
+                    organizedBasketItem = basketItem;
+
+                    currentBasket.OrganizedItems[basketItem.MerchantId].Add(organizedBasketItem);
                 }
                 organizedBasketItem.Quantity = update.NewQty;
 
@@ -136,7 +132,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
             // Step 2: Get current basket status
             var currentBasket = (await _basket.GetById(data.BasketId)) ?? new BasketData(data.BasketId);
             // Step 3: Merge current status with new product
-            currentBasket.Items.Add(new BasketDataItem()
+            var bitem = new BasketDataItem()
             {
                 UnitPrice = item.Price,
                 PictureUrl = item.PictureUri,
@@ -145,17 +141,13 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                 Quantity = data.Quantity,
                 Id = Guid.NewGuid().ToString(),
                 MerchantId = item.MerchantId.ToString()
-            });
-            currentBasket.OrganizedItems[item.MerchantId.ToString()].Add(new BasketDataItem()
-            {
-                UnitPrice = item.Price,
-                PictureUrl = item.PictureUri,
-                ProductId = item.Id.ToString(),
-                ProductName = item.Name,
-                Quantity = data.Quantity,
-                Id = Guid.NewGuid().ToString(),
-                MerchantId = item.MerchantId.ToString()
-            });
+            };
+            currentBasket.Items.Add(bitem);
+
+            if (!currentBasket.OrganizedItems.ContainsKey(item.MerchantId.ToString()))
+                currentBasket.OrganizedItems[item.MerchantId.ToString()] = new List<BasketDataItem>();
+
+            currentBasket.OrganizedItems[item.MerchantId.ToString()].Add(bitem);
 
             // Step 4: Update basket
             await _basket.Update(currentBasket);
