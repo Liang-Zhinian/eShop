@@ -59,6 +59,20 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                     Quantity = bitem.Quantity,
                     MerchantId = catalogItem.MerchantId.ToString()
                 });
+
+                if (null == newBasket.OrganizedItems[catalogItem.MerchantId.ToString()])
+                    newBasket.OrganizedItems[catalogItem.MerchantId.ToString()] = new List<BasketDataItem>();
+                newBasket.OrganizedItems[catalogItem.MerchantId.ToString()].Add(new BasketDataItem()
+                {
+                    Id = bitem.Id,
+                    ProductId = catalogItem.Id.ToString(),
+                    ProductName = catalogItem.Name,
+                    PictureUrl = catalogItem.PictureUri,
+                    UnitPrice = catalogItem.Price,
+                    Quantity = bitem.Quantity,
+                    MerchantId = catalogItem.MerchantId.ToString()
+                });
+
             }
 
             await _basket.Update(newBasket);
@@ -90,6 +104,14 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
                     return BadRequest($"Basket item with id {update.BasketItemId} not found");
                 }
                 basketItem.Quantity = update.NewQty;
+
+                var organizedBasketItem = currentBasket.OrganizedItems[basketItem.MerchantId.ToString()].SingleOrDefault(bitem => bitem.Id == update.BasketItemId);
+                if (organizedBasketItem == null)
+                {
+                    return BadRequest($"Basket item with id {update.BasketItemId} not found");
+                }
+                organizedBasketItem.Quantity = update.NewQty;
+
             }
 
             // Save the updated basket
@@ -115,6 +137,16 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Controllers
             var currentBasket = (await _basket.GetById(data.BasketId)) ?? new BasketData(data.BasketId);
             // Step 3: Merge current status with new product
             currentBasket.Items.Add(new BasketDataItem()
+            {
+                UnitPrice = item.Price,
+                PictureUrl = item.PictureUri,
+                ProductId = item.Id.ToString(),
+                ProductName = item.Name,
+                Quantity = data.Quantity,
+                Id = Guid.NewGuid().ToString(),
+                MerchantId = item.MerchantId.ToString()
+            });
+            currentBasket.OrganizedItems[item.MerchantId.ToString()].Add(new BasketDataItem()
             {
                 UnitPrice = item.Price,
                 PictureUrl = item.PictureUri,
