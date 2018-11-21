@@ -22,7 +22,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
         }
 
 
-        public async Task<Order> GetOrderAsync(int id)
+        public async Task<Order> GetOrderAsync(string id)
         {
             using (var connection = new MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlConnection(_connectionString))
             {
@@ -36,7 +36,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
                         FROM `orders` o
                         LEFT JOIN `orderItems` oi ON o.Id = oi.orderid 
                         LEFT JOIN `orderstatus` os on o.OrderStatusId = os.Id
-                        WHERE o.Id=@id"
+                        WHERE o.Id='@id'"
                         , new { id }
                     );
 

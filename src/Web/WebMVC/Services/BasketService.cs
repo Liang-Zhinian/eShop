@@ -94,7 +94,8 @@ namespace SaaSEqt.eShop.WebMVC.Services
             var token = await GetUserTokenAsync();
             var draftOrderUri = API.Purchase.GetOrderDraft(_purchaseUrl, basketId);
             var json = await _apiClient.GetStringAsync(draftOrderUri, token);
-            return JsonConvert.DeserializeObject<Order>(json);
+            var draftOrder = JsonConvert.DeserializeObject<Order>(json);
+            return draftOrder;
         }
 
 

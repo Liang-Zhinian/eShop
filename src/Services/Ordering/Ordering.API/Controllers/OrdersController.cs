@@ -63,11 +63,11 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
 
         }
 
-        [Route("{orderId:int}")]
+        [Route("{orderId:string}")]
         [HttpGet]
         [ProducesResponseType(typeof(Order),(int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetOrder(int orderId)
+        public async Task<IActionResult> GetOrder(string orderId)
         {
             try
             {

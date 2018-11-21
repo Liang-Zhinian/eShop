@@ -25,7 +25,8 @@ namespace Ordering.API.Application.Models
                 ProductName = item.ProductName,
                 PictureUrl = item.PictureUrl,
                 UnitPrice = item.UnitPrice,
-                Units = item.Quantity
+                Units = item.Quantity,
+                MerchantId = Guid.TryParse(item.MerchantId, out Guid merchantId) ? merchantId : Guid.Empty
             };
         }
     }

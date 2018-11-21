@@ -21,7 +21,7 @@
         private readonly IMediator _mediator;
 
         // Using DI to inject infrastructure persistence Repositories
-        public CreateOrderDraftCommandHandler(IMediator mediator,  IIdentityService identityService)
+        public CreateOrderDraftCommandHandler(IMediator mediator, IIdentityService identityService)
         {
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -32,6 +32,7 @@
 
             var order = Order.NewDraft();
             var orderItems = message.Items.Select(i => i.ToOrderItemDTO());
+            order.MerchantId = orderItems.Count() > 0 ? orderItems.First().MerchantId : Guid.Empty;
             foreach (var item in orderItems)
             {
                 order.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.Discount, item.PictureUrl, item.Units);

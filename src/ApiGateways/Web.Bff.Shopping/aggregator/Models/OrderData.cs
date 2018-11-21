@@ -23,6 +23,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
         public DateTime CardExpiration { get; set; }
         public string CardExpirationShort { get; set; }
         public string CardSecurityNumber { get; set; }
+        public string MerchantId { get; set; }
 
         public int CardTypeId { get; set; }
 

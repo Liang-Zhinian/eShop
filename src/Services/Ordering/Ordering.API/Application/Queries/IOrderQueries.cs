@@ -1,11 +1,12 @@
 ﻿namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public interface IOrderQueries
     {
-        Task<Order> GetOrderAsync(int id);
+        Task<Order> GetOrderAsync(string id);
 
         Task<IEnumerable<OrderSummary>> GetOrdersAsync();
 

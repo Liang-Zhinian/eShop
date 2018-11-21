@@ -144,8 +144,7 @@ namespace SaaSEqt.eShop.WebMVC.Services
 
         void SetFakeIdToProducts(Order order)
         {
-            var id = 1;
-            order.OrderItems.ForEach(x => { x.ProductId = id; id++; });
+            order.OrderItems.ForEach(x => { x.ProductId = Guid.NewGuid().ToString(); });
         }
 
         async Task<string> GetUserTokenAsync()
