@@ -63,7 +63,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
 
         }
 
-        [Route("{orderId:guid}")]
+        [Route("{orderId:minlength(1)}")]
         [HttpGet]
         [ProducesResponseType(typeof(Order),(int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
