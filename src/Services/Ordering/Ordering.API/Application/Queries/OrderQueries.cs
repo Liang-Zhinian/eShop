@@ -32,11 +32,11 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
                    @"select o.Id as ordernumber,o.OrderDate as date, o.Description as description,
                         o.Address_City as city, o.Address_Country as country, o.Address_State as state, o.Address_Street as street, o.Address_ZipCode as zipcode,
                         os.Name as status, 
-                        oi.ProductName as productname, oi.Units as units, oi.UnitPrice as unitprice, oi.PictureUrl as pictureurl
+                        oi.ProductName as productname, oi.Units as units, oi.UnitPrice as unitprice, oi.PictureUrl as pictureurl, o.MerchantId as merchantid
                         FROM `orders` o
                         LEFT JOIN `orderItems` oi ON o.Id = oi.orderid 
                         LEFT JOIN `orderstatus` os on o.OrderStatusId = os.Id
-                        WHERE o.Id='@id'"
+                        WHERE o.Id=@id"
                         , new { id }
                     );
 
@@ -76,7 +76,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
         {
             var order = new Order
             {
-                ordernumber = result[0].ordernumber,
+                ordernumber = result[0].ordernumber.ToString(),
                 date = result[0].date,
                 status = result[0].status,
                 description = result[0].description,
@@ -84,6 +84,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
                 city = result[0].city,
                 zipcode = result[0].zipcode,
                 country = result[0].country,
+                merchantid = result[0].merchantid.ToString(),
                 orderitems = new List<Orderitem>(),
                 total = 0
             };

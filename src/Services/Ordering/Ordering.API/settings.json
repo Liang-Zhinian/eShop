@@ -1,6 +1,6 @@
 ﻿{
-  "ConnectionString": "Server=localhost;database=SaaSEqt_eShop_Services_OrderingDb;uid=book2;pwd=P@ssword;charset=utf8;port=33306;SslMode=None;IgnoreCommandTransaction=true",
-  "IdentityUrl": "http://localhost:5105",
+  "ConnectionString": "Server=192.168.0.200;database=SaaSEqt_eShop_Services_OrderingDb;uid=book2;pwd=P@ssword;charset=utf8;port=33306;SslMode=None;IgnoreCommandTransaction=true",
+  "IdentityUrl": "http://192.168.0.200:5105",
   "UseCustomizationData": false,
   "Logging": {
     "IncludeScopes": false,

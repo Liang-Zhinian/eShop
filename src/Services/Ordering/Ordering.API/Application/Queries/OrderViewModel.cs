@@ -21,6 +21,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
         public string city { get; set; }
         public string zipcode { get; set; }
         public string country { get; set; }
+        public string merchantid { get; set; }
         public List<Orderitem> orderitems { get; set; }
         public decimal total { get; set; }
     }
@@ -31,6 +32,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
         public DateTime date { get; set; }
         public string status { get; set; }
         public double total { get; set; }
+        public string merchantid { get; set; }
     }
 
     public class CardType

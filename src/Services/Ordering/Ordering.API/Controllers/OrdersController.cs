@@ -63,6 +63,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
 
         }
 
+        [AllowAnonymous]
         [Route("{orderId:minlength(1)}")]
         [HttpGet]
         [ProducesResponseType(typeof(Order),(int)HttpStatusCode.OK)]
