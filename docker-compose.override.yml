@@ -420,11 +420,10 @@ services:
       MYSQL_MY_DATABASE: test
     restart: always
     volumes:
-      - ~/mysql/data:/var/lib/mysql
-      - ./mysql/config/my.cnf:/etc/my.cnf
-      - ./mysql/conf.d:/etc/mysql/conf.d
-      - ./mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
-      - ./mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./repos/mysql/data:/var/lib/mysql
+      - ./repos/mysql/conf.d:/etc/mysql/conf.d
+      - ./repos/mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
+      - ./repos/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     ports:
       - "33306:3306"    # Important: In a production environment your should remove the external port
 
