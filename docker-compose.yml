@@ -23,7 +23,7 @@ services:
       - sql.data
       - rabbitmq
     volumes:
-      - ~/eShop/Pics:/app/Pics
+      - ./repos/Pics:/app/Pics
 
   appointment.api:
     image: eshop/appointment.api:${TAG:-latest}
@@ -52,7 +52,7 @@ services:
       - sql.data
       - rabbitmq
     volumes:
-      - ~/eShop/Pics:/app/Pics
+      - ./repos/Pics:/app/Pics
 
   identityaccess.api:
     image: eshop/identityaccess.api:${TAG:-latest}
@@ -94,6 +94,8 @@ services:
     depends_on:
       - sql.data
       - rabbitmq
+    volumes:
+      - ./repos/Pics:/app/Pics
 
   identity.api:
     image: eshop/identity.api:${TAG:-latest}
@@ -174,10 +176,10 @@ services:
       MYSQL_HOST: localhost
     restart: always
     volumes:
-      - ~/mysql/data:/var/lib/mysql
-      - ~/mysql/conf.d:/etc/mysql/conf.d
-      - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
-      - ~/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./repos/mysql/data:/var/lib/mysql
+      - ./repos/mysql/conf.d:/etc/mysql/conf.d
+      - ./repos/mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
+      - ./repos/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
     ports:
       - "33306:3306"    # Important: In a production environment your should remove the external port
 
