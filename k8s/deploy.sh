@@ -17,7 +17,7 @@ set -euo pipefail
 usage()
 {
     cat <<END
-deploy.sh: deploys eShopOnContainers application to Kubernetes cluster
+deploy.sh: deploys eShop application to Kubernetes cluster
 Parameters:
   -r | --registry <container registry> 
     Specifies container registry (ACR) to use (required), e.g. myregistry.azurecr.io
@@ -40,7 +40,7 @@ https://docs.microsoft.com/en-us/azure/container-registry/container-registry-aut
 WARNING! THE SCRIPT WILL COMPLETELY DESTROY ALL DEPLOYMENTS AND SERVICES VISIBLE
 FROM THE CURRENT CONFIGURATION CONTEXT.
 It is recommended that you create a separate namespace and confguration context
-for the eShopOnContainers application, to isolate it from other applications on the cluster.
+for the eShop application, to isolate it from other applications on the cluster.
 For more information see https://kubernetes.io/docs/tasks/administer-cluster/namespaces/
 You can use eshop-namespace.yaml file (in the same directory) to create the namespace.
 
@@ -81,14 +81,14 @@ if [[ ! $container_registry ]]; then
 fi
 
 if [[ $build_solution ]]; then
-    echo "#################### Building eShopOnContainers solution ####################"
-    dotnet publish -o obj/Docker/publish ../eShopOnContainers-ServicesAndWebApps.sln
+    echo "#################### Building eShop solution ####################"
+    dotnet publish -o obj/Docker/publish ../eShop-ServicesAndWebApps.sln
 fi
 
 export TAG=$image_tag
 
 if [[ $build_images ]]; then
-    echo "#################### Building eShopOnContainers Docker images ####################"
+    echo "#################### Building eShop Docker images ####################"
     docker-compose -p .. -f ../docker-compose.yml build
 
     # Remove temporary images
@@ -209,4 +209,4 @@ kubectl rollout resume deployments/webstatus
 kubectl rollout resume deployments/webspa
 
 echo "WebSPA is exposed at http://$externalDns, WebMVC at http://$externalDns/webmvc, WebStatus at http://$externalDns/webstatus"
-echo "eShopOnContainers deployment is DONE"
+echo "eShop deployment is DONE"

@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Ordering.API.Application.Queries
+﻿namespace Eva.eShop.Services.Ordering.API.Application.Queries
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
 
     public interface IOrderQueries
     {
-        Task<Order> GetOrderAsync(string id);
+        Task<Order> GetOrderAsync(int id);
 
-        Task<IEnumerable<OrderSummary>> GetOrdersAsync();
+        Task<IEnumerable<OrderSummary>> GetOrdersFromUserAsync(Guid userId);
 
         Task<IEnumerable<CardType>> GetCardTypesAsync();
     }

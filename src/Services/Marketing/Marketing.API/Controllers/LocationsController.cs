@@ -1,10 +1,10 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Controllers
+namespace Eva.eShop.Services.Marketing.API.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using SaaSEqt.eShop.Services.Marketing.API.Dto;
-    using SaaSEqt.eShop.Services.Marketing.API.Infrastructure;
-    using SaaSEqt.eShop.Services.Marketing.API.Model;
+    using Eva.eShop.Services.Marketing.API.Dto;
+    using Eva.eShop.Services.Marketing.API.Infrastructure;
+    using Eva.eShop.Services.Marketing.API.Model;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;

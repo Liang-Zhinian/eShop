@@ -2,8 +2,8 @@
 {
     using Domain.Events;
     using MediatR;
-    using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-    using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+    using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+    using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
     using Microsoft.Extensions.Logging;
     using Ordering.API.Application.IntegrationEvents;
     using Ordering.API.Application.IntegrationEvents.Events;
@@ -46,7 +46,7 @@
 
             var orderStatusChangedToAwaitingValidationIntegrationEvent = new OrderStatusChangedToAwaitingValidationIntegrationEvent(
                 order.Id, order.OrderStatus.Name, buyer.Name, orderStockList);
-            await _orderingIntegrationEventService.PublishThroughEventBusAsync(orderStatusChangedToAwaitingValidationIntegrationEvent);
+            await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedToAwaitingValidationIntegrationEvent);
         }
     }  
 }

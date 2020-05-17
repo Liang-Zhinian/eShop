@@ -1,10 +1,10 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+﻿using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Events;
 using System;
 using System.Collections.Generic;
-using static SaaSEqt.eShop.BuildingBlocks.EventBus.InMemoryEventBusSubscriptionsManager;
+using static Eva.BuildingBlocks.EventBus.InMemoryEventBusSubscriptionsManager;
 
-namespace SaaSEqt.eShop.BuildingBlocks.EventBus
+namespace Eva.BuildingBlocks.EventBus
 {
     public interface IEventBusSubscriptionsManager
     {

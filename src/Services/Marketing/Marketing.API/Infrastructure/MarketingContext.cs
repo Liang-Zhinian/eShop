@@ -1,9 +1,9 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure
+﻿namespace Eva.eShop.Services.Marketing.API.Infrastructure
 {
     using EntityConfigurations;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
-    using SaaSEqt.eShop.Services.Marketing.API.Model;
+    using Eva.eShop.Services.Marketing.API.Model;
 
     public class MarketingContext : DbContext
     {
@@ -28,7 +28,7 @@
         public MarketingContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<MarketingContext>()
-                .UseMySql("Server=localhost;database=SaaSEqt_eShop_Services_MarketingDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=127.0.0.1;database=SaaSEqt_eShop_Services_MarketingDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
 
             return new MarketingContext(optionsBuilder.Options);
         }

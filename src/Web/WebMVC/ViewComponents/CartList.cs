@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.WebMVC.ViewModels;
-using SaaSEqt.eShop.WebMVC.Services;
+using Eva.eShop.WebMVC.ViewModels;
+using Eva.eShop.WebMVC.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Polly.CircuitBreaker;
 
-namespace SaaSEqt.eShop.WebMVC.ViewComponents
+namespace Eva.eShop.WebMVC.ViewComponents
 {
     public class CartList : ViewComponent
     {

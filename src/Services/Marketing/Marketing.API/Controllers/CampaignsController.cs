@@ -1,6 +1,6 @@
-﻿using SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Services;
+﻿using Eva.eShop.Services.Marketing.API.Infrastructure.Services;
 
-namespace SaaSEqt.eShop.Services.Marketing.API.Controllers
+namespace Eva.eShop.Services.Marketing.API.Controllers
 {
     using System;
     using System.Linq;
@@ -14,7 +14,7 @@ namespace SaaSEqt.eShop.Services.Marketing.API.Controllers
     using Dto;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Options;
-    using SaaSEqt.eShop.Services.Marketing.API.ViewModel;
+    using Eva.eShop.Services.Marketing.API.ViewModel;
     using Microsoft.AspNetCore.Http;
     using System.Net;
 

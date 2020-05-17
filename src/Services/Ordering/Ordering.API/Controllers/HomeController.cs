@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
+namespace Eva.eShop.Services.Ordering.API.Controllers
 {
     public class HomeController : Controller
     {

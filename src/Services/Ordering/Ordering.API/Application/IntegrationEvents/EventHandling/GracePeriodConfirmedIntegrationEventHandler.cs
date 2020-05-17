@@ -1,5 +1,7 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+﻿using MediatR;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Ordering.API.Application.Commands;
 using Ordering.API.Application.IntegrationEvents.Events;
 using System.Threading.Tasks;
 
@@ -7,11 +9,11 @@ namespace Ordering.API.Application.IntegrationEvents.EventHandling
 {
     public class GracePeriodConfirmedIntegrationEventHandler : IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IMediator _mediator;
 
-        public GracePeriodConfirmedIntegrationEventHandler(IOrderRepository orderRepository)
+        public GracePeriodConfirmedIntegrationEventHandler(IMediator mediator)
         {
-            _orderRepository = orderRepository;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -24,9 +26,8 @@ namespace Ordering.API.Application.IntegrationEvents.EventHandling
         /// <returns></returns>
         public async Task Handle(GracePeriodConfirmedIntegrationEvent @event)
         {
-            var orderToUpdate = await _orderRepository.GetAsync(@event.OrderId);
-            orderToUpdate.SetAwaitingValidationStatus();
-            await _orderRepository.UnitOfWork.SaveEntitiesAsync();
+            var command = new SetAwaitingValidationOrderStatusCommand(@event.OrderId);
+            await _mediator.Send(command);
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿using MediatR;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
 using Ordering.API.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using static SaaSEqt.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
+using static Eva.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
+namespace Eva.eShop.Services.Ordering.API.Application.Commands
 {
     public class CreateOrderDraftCommand :  IRequest<OrderDraftDTO>
     {

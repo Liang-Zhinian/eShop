@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Filters
+﻿namespace Eva.eShop.Web.Shopping.HttpAggregator.Filters
 {
     using Microsoft.AspNetCore.Authorization;
     using Swashbuckle.AspNetCore.Swagger;
@@ -24,7 +24,7 @@
                     operation.Security = new List<IDictionary<string, IEnumerable<string>>>();
                     operation.Security.Add(new Dictionary<string, IEnumerable<string>>
                 {
-                    { "oauth2", new [] { "SaaSEqt.eShop.Web.Shopping.HttpAggregator" } }
+                    { "oauth2", new [] { "Eva.eShop.Web.Shopping.HttpAggregator" } }
                 });
                 }
             }

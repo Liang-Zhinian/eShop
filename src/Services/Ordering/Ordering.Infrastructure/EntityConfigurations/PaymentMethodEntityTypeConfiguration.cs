@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure;
 using System;
+using MySql.Data.EntityFrameworkCore.Extensions;
 
 namespace Ordering.Infrastructure.EntityConfigurations
 {
@@ -19,7 +19,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
             paymentConfiguration.Ignore(b => b.DomainEvents);
 
             paymentConfiguration.Property(b => b.Id)
-                                .UseMySQLAutoIncrementColumn("paymentseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
+                .UseMySQLAutoIncrementColumn("paymentseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
 
             paymentConfiguration.Property<int>("BuyerId")
                 .IsRequired();

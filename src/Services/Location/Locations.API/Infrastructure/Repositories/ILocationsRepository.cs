@@ -1,6 +1,6 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.Repositories
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure.Repositories
 {
-    using SaaSEqt.eShop.Services.Locations.API.Model;
+    using Eva.eShop.Services.Locations.API.Model;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using ViewModel;

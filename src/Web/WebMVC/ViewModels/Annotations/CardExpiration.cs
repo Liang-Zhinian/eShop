@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels.Annotations
+namespace Eva.eShop.WebMVC.ViewModels.Annotations
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true)]
     public class CardExpirationAttribute : ValidationAttribute

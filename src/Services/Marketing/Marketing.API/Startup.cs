@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API
+﻿namespace Eva.eShop.Services.Marketing.API
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -25,7 +25,7 @@
     using Microsoft.ApplicationInsights.ServiceFabric;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore.Diagnostics;
-    using SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Middlewares;
+    using Eva.eShop.Services.Marketing.API.Infrastructure.Middlewares;
     using RabbitMQ.Client;
     using Swashbuckle.AspNetCore.Swagger;
     using System;
@@ -57,9 +57,9 @@
 
             services.Configure<MarketingSettings>(Configuration);
 
-            ConfigureAuthService(services);            
+            ConfigureAuthService(services);
 
-            services.AddHealthChecks(checks => 
+            services.AddHealthChecks(checks =>
             {
                 checks.AddValueTaskCheck("HTTP Endpoint", () => new ValueTask<IHealthCheckResult>(HealthCheckResult.Healthy("Ok")));
 
@@ -128,7 +128,7 @@
 
                     return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
                 });
-            }            
+            }
 
             // Add framework services.
             services.AddSwaggerGen(options =>
@@ -182,7 +182,7 @@
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddAzureWebAppDiagnostics();
             loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Trace);
@@ -210,7 +210,7 @@
                    c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Marketing.API V1");
                    c.OAuthClientId("marketingswaggerui");
                    c.OAuthAppName("Marketing Swagger UI");
-               });            
+               });
 
             ConfigureEventBus(app);
         }
@@ -238,17 +238,17 @@
             // prevent from mapping "sub" claim to nameidentifier.
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(options=>
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
             }).AddJwtBearer(options =>
-                {
-                    options.Authority = Configuration.GetValue<string>("IdentityUrl");
-                    options.Audience = "marketing";
-                    options.RequireHttpsMetadata = false;
-                });
+            {
+                options.Authority = Configuration.GetValue<string>("IdentityUrl");
+                options.Audience = "marketing";
+                options.RequireHttpsMetadata = false;
+            });
         }
 
         private void RegisterEventBus(IServiceCollection services)
@@ -262,7 +262,7 @@
                     var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
                     var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
                     var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();                    
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                     return new EventBusServiceBus(serviceBusPersisterConnection, logger,
                         eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);

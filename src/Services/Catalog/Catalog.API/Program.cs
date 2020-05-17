@@ -1,19 +1,37 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
+using Eva.BuildingBlocks.IntegrationEventLogEF;
+using Eva.eShop.Services.Catalog.API.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.IO;
-namespace SaaSEqt.eShop.Services.Catalog.API
+using Serilog;
+
+namespace Eva.eShop.Services.Catalog.API
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+            .Build();
+
         public static void Main(string[] args)
         {
-            BuildWebHost(args)
+            Log.Logger = new LoggerConfiguration()
+                            .ReadFrom.Configuration(Configuration)
+                            .CreateLogger();
+
+            Log.Information("Getting the motors running...");
+            try
+            {
+                Log.Information("Getting the motors running...");
+
+                BuildWebHost(args)
                 .MigrateDbContext<CatalogContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();
@@ -24,25 +42,44 @@ namespace SaaSEqt.eShop.Services.Catalog.API
                     .SeedAsync(context, env, settings, logger)
                     .Wait();
 
-                    new ServiceeCatalogContextSeed()
-                        .SeedAsync(context, env, settings, logger)
-                        .Wait();
                 })
                 .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
                 .Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-             //.UseUrls("http://*:8082")
-             .UseStartup<Startup>()
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseWebRoot("Pics")
+                .UseWebRoot("Media")
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
-                    config.AddEnvironmentVariables();
+                    var builtConfig = config.Build();
+
+                    var configurationBuilder = new ConfigurationBuilder();
+
+                    if (Convert.ToBoolean(builtConfig["UseVault"]))
+                    {
+                        configurationBuilder.AddAzureKeyVault(
+                            $"https://{builtConfig["Vault:Name"]}.vault.azure.net/",
+                            builtConfig["Vault:ClientId"],
+                            builtConfig["Vault:ClientSecret"]);
+                    }
+
+                    configurationBuilder.AddEnvironmentVariables();
+
+                    config.AddConfiguration(configurationBuilder.Build());
                 })
                 .ConfigureLogging((hostingContext, builder) =>
                 {
@@ -50,6 +87,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API
                     builder.AddConsole();
                     builder.AddDebug();
                 })
+                .UseSerilog()
                 .Build();
     }
 }

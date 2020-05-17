@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.WebMVC.Services;
-using SaaSEqt.eShop.WebMVC.ViewModels;
+using Eva.eShop.WebMVC.Services;
+using Eva.eShop.WebMVC.ViewModels;
 using Polly.CircuitBreaker;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.Controllers
+namespace Eva.eShop.WebMVC.Controllers
 {
     [Authorize]
     public class CartController : Controller
@@ -71,7 +71,6 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
                 {
                     var user = _appUserParser.Parse(HttpContext.User);
                     await _basketSvc.AddItemToBasket(user, productDetails.Id);
-                    //await _basketSvc.AddItemToBasket(user, product);
                 }
                 return RedirectToAction("Index", "Catalog");            
             }

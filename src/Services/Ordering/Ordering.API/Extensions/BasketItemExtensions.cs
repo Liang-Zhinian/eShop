@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static SaaSEqt.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
+using static Eva.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
 
 namespace Ordering.API.Application.Models
 {
@@ -21,12 +21,11 @@ namespace Ordering.API.Application.Models
         {
             return new OrderItemDTO()
             {
-                ProductId = Guid.TryParse(item.ProductId, out Guid id) ? id : Guid.Empty,
+                ProductId = int.TryParse(item.ProductId, out int id) ? id : -1,
                 ProductName = item.ProductName,
                 PictureUrl = item.PictureUrl,
                 UnitPrice = item.UnitPrice,
-                Units = item.Quantity,
-                MerchantId = Guid.TryParse(item.MerchantId, out Guid merchantId) ? merchantId : Guid.Empty
+                Units = item.Quantity
             };
         }
     }

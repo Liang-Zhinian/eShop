@@ -1,9 +1,9 @@
-﻿namespace SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.EventHandling
+﻿namespace Eva.eShop.Services.Catalog.API.IntegrationEvents.EventHandling
 {
     using BuildingBlocks.EventBus.Abstractions;
     using System.Threading.Tasks;
     using Infrastructure;
-    using SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events;
+    using Eva.eShop.Services.Catalog.API.IntegrationEvents.Events;
 
     public class OrderStatusChangedToPaidIntegrationEventHandler : 
         IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>

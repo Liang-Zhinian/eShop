@@ -2,7 +2,7 @@
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
-using SaaSEqt.eShop.Services.Identity.API.Models;
+using Eva.eShop.Services.Identity.API.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Services
+namespace Eva.eShop.Services.Identity.API.Services
 {
     public class ProfileService : IProfileService
     {
@@ -106,7 +106,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Services
             if (!string.IsNullOrWhiteSpace(user.ZipCode))
                 claims.Add(new Claim("address_zip_code", user.ZipCode));
 
-            if (_userManager.SupportsUserEmail && !string.IsNullOrWhiteSpace(user.Email))
+            if (_userManager.SupportsUserEmail)
             {
                 claims.AddRange(new[]
                 {
@@ -122,10 +122,6 @@ namespace SaaSEqt.eShop.Services.Identity.API.Services
                     new Claim(JwtClaimTypes.PhoneNumber, user.PhoneNumber),
                     new Claim(JwtClaimTypes.PhoneNumberVerified, user.PhoneNumberConfirmed ? "true" : "false", ClaimValueTypes.Boolean)
                 });
-            }
-
-            if (_userManager.SupportsUserRole){
-                claims.AddRange(_userManager.GetRolesAsync(user).Result.Select(y=>new Claim(JwtClaimTypes.Role, y)));
             }
 
             return claims;

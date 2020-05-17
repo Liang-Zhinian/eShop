@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Services
+﻿namespace Eva.eShop.Services.Marketing.API.Infrastructure.Services
 {
     using Microsoft.AspNetCore.Http;
     using System;

@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Model
+﻿namespace Eva.eShop.Services.Marketing.API.Model
 {
     public class UserLocationDetails
     {

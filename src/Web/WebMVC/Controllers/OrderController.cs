@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.WebMVC.Services;
-using SaaSEqt.eShop.WebMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using System.Net.Http;
+using Microsoft.AspNetCore.Mvc;
+using Eva.eShop.WebMVC.Services;
+using Eva.eShop.WebMVC.ViewModels;
 using Polly.CircuitBreaker;
-using WebMVC.Models;
+using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.Controllers
+namespace Eva.eShop.WebMVC.Controllers
 {
     [Authorize]
     public class OrderController : Controller
@@ -52,11 +47,12 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            catch(BrokenCircuitException)
+            catch (BrokenCircuitException)
             {
                 ModelState.AddModelError("Error", "It was not possible to create a new order, please try later on. (Business Msg Due to Circuit-Breaker)");
             }
-            return View("Create",  model);
+
+            return View("Create", model);
         }
 
         public async Task<IActionResult> Cancel(string orderId)

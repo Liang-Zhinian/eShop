@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Utilities;
-using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Events;
+using Eva.BuildingBlocks.IntegrationEventLogEF.Services;
+using Eva.BuildingBlocks.IntegrationEventLogEF.Utilities;
+using Eva.eShop.Services.Catalog.API.Infrastructure;
 using System;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -29,9 +29,16 @@ namespace Catalog.API.IntegrationEvents
 
         public async Task PublishThroughEventBusAsync(IntegrationEvent evt)
         {
-            _eventBus.Publish(evt);
-
-            await _eventLogService.MarkEventAsPublishedAsync(evt);
+            try
+            {
+                await _eventLogService.MarkEventAsInProgressAsync(evt.Id);
+                _eventBus.Publish(evt);
+                await _eventLogService.MarkEventAsPublishedAsync(evt.Id);
+            }
+            catch (Exception)
+            {
+                await _eventLogService.MarkEventAsFailedAsync(evt.Id);
+            }            
         }
 
         public async Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent evt)

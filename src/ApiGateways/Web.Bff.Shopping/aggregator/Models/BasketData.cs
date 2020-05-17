@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
+namespace Eva.eShop.Web.Shopping.HttpAggregator.Models
 {
     public class BasketData
     {
         public string BuyerId { get; set; }
         public List<BasketDataItem> Items { get; set; }
-        public Dictionary<string, List<BasketDataItem>> OrganizedItems { get; set; }
 
         public BasketData(string buyerId)
         {
             BuyerId = buyerId;
             Items = new List<BasketDataItem>();
-            OrganizedItems = new Dictionary<string, List<BasketDataItem>>();
         }
     }
 
@@ -28,7 +26,6 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
         public decimal OldUnitPrice { get; set; }
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
-        public string MerchantId { get; set; }
 
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.WebMVC.ViewModels.Pagination;
-using SaaSEqt.eShop.WebMVC.Services;
-using SaaSEqt.eShop.WebMVC.ViewModels.CatalogViewModels;
+using Eva.eShop.WebMVC.ViewModels.Pagination;
+using Eva.eShop.WebMVC.Services;
+using Eva.eShop.WebMVC.ViewModels.CatalogViewModels;
 using Microsoft.AspNetCore.Http;
 
-namespace SaaSEqt.eShop.WebMVC.Controllers
+namespace Eva.eShop.WebMVC.Controllers
 {
     public class CatalogController : Controller
     {
@@ -15,7 +15,7 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
         public CatalogController(ICatalogService catalogSvc) => 
             _catalogSvc = catalogSvc;
 
-        public async Task<IActionResult> Index(Guid? BrandFilterApplied, Guid? TypesFilterApplied, int? page, [FromQuery]string errorMsg)
+        public async Task<IActionResult> Index(int? BrandFilterApplied, int? TypesFilterApplied, int? page, [FromQuery]string errorMsg)
         {
             var itemsPage = 10;
             var catalog = await _catalogSvc.GetCatalogItems(page ?? 0, itemsPage, BrandFilterApplied, TypesFilterApplied);
@@ -24,8 +24,8 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
                 CatalogItems = catalog.Data,
                 Brands = await _catalogSvc.GetBrands(),
                 Types = await _catalogSvc.GetTypes(),
-                BrandFilterApplied = BrandFilterApplied ?? Guid.Empty,
-                TypesFilterApplied = TypesFilterApplied ?? Guid.Empty,
+                BrandFilterApplied = BrandFilterApplied ?? 0,
+                TypesFilterApplied = TypesFilterApplied ?? 0,
                 PaginationInfo = new PaginationInfo()
                 {
                     ActualPage = page ?? 0,

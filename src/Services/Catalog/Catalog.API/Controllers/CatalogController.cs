@@ -1,38 +1,42 @@
 ﻿using Catalog.API.IntegrationEvents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
-using SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events;
-using SaaSEqt.eShop.Services.Catalog.API.Model;
-using SaaSEqt.eShop.Services.Catalog.API.ViewModel;
+using Eva.eShop.Services.Catalog.API.Infrastructure;
+using Eva.eShop.Services.Catalog.API.IntegrationEvents.Events;
+using Eva.eShop.Services.Catalog.API.Model;
+using Eva.eShop.Services.Catalog.API.ViewModel;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
-namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
+namespace Eva.eShop.Services.Catalog.API.Controllers
 {
     [Route("api/v1/[controller]")]
-    [AllowAnonymous]
+    [ApiController]
     public class CatalogController : ControllerBase
     {
         private readonly CatalogContext _catalogContext;
         private readonly CatalogSettings _settings;
         private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
+        private readonly ILogger<CatalogController>/*ILoggerFactory*/ _logger;
 
-        public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICatalogIntegrationEventService catalogIntegrationEventService)
+        public CatalogController(CatalogContext context, 
+            IOptionsSnapshot<CatalogSettings> settings, 
+            ICatalogIntegrationEventService catalogIntegrationEventService,
+            ILogger<CatalogController>/*ILoggerFactory*/ logger)
         {
             _catalogContext = context ?? throw new ArgumentNullException(nameof(context));
             _catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
-
             _settings = settings.Value;
-            ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        }
 
-        #region [stockable catalog]
+            ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         // GET api/v1/[controller]/items[?pageSize=3&pageIndex=10]
         [HttpGet]
@@ -41,6 +45,15 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<CatalogItem>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Items([FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
         {
+            Serilog.Log.Debug("----- Debug");
+            _logger
+            //_logger.CreateLogger<CatalogController>()
+            .LogDebug(
+                "----- Query catalog items: {pageSize} - {pageIndex} - {ids}",
+                pageSize,
+                pageIndex,
+                ids);
+
             if (!string.IsNullOrEmpty(ids))
             {
                 return GetItemsByIds(ids);
@@ -63,48 +76,33 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             return Ok(model);
         }
 
-        /*
         private IActionResult GetItemsByIds(string ids)
         {
             var numIds = ids.Split(',')
                 .Select(id => (Ok: int.TryParse(id, out int x), Value: x));
+
             if (!numIds.All(nid => nid.Ok))
             {
                 return BadRequest("ids value invalid. Must be comma-separated list of numbers");
             }
 
-            var idsToSelect = numIds.Select(id => id.Value);
+            var idsToSelect = numIds
+                .Select(id => id.Value);
+
             var items = _catalogContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToList();
 
             items = ChangeUriPlaceholder(items);
+
             return Ok(items);
-
-        }*/
-
-        private IActionResult GetItemsByIds(string ids)
-        {
-            var guidIds = ids.Split(',')
-                              .Select(id => (Ok: Guid.TryParse(id, out Guid x), Value: x));
-            if (!guidIds.All(nid => nid.Ok))
-            {
-                return BadRequest("guidIds value invalid. Must be comma-separated list of numbers");
-            }
-
-            var idsToSelect = guidIds.Select(id => id.Value);
-            var items = _catalogContext.CatalogItems.Where(ci => idsToSelect.Contains(ci.Id)).ToList();
-
-            items = ChangeUriPlaceholder(items);
-            return Ok(items);
-
         }
 
         [HttpGet]
-        [Route("items/{id:guid}")]
+        [Route("items/{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(CatalogItem), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetItemById(Guid id)
+        public async Task<IActionResult> GetItemById(int id)
         {
-            if (id == Guid.Empty)
+            if (id <= 0)
             {
                 return BadRequest();
             }
@@ -148,18 +146,43 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             return Ok(model);
         }
 
-        // GET api/v1/[controller]/items/type/xxxxx/brand/null[?pageSize=3&pageIndex=10]
+        // GET api/v1/[controller]/items/type/1/brand[?pageSize=3&pageIndex=10]
         [HttpGet]
-        [Route("[action]/type/{catalogTypeId}/brand/{catalogBrandId}")]
+        [Route("[action]/type/{catalogTypeId}/brand/{catalogBrandId:int?}")]
         [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Items(Guid? catalogTypeId, Guid? catalogBrandId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        public async Task<IActionResult> Items(int catalogTypeId, int? catalogBrandId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
         {
             var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
 
-            if (catalogTypeId.HasValue)
+            root = root.Where(ci => ci.CatalogTypeId == catalogTypeId);
+
+            if (catalogBrandId.HasValue)
             {
-                root = root.Where(ci => ci.CatalogTypeId == catalogTypeId);
+                root = root.Where(ci => ci.CatalogBrandId == catalogBrandId);
             }
+
+            var totalItems = await root
+                .LongCountAsync();
+
+            var itemsOnPage = await root
+                .Skip(pageSize * pageIndex)
+                .Take(pageSize)
+                .ToListAsync();
+
+            itemsOnPage = ChangeUriPlaceholder(itemsOnPage);
+
+            var model = new PaginatedItemsViewModel<CatalogItem>(
+                pageIndex, pageSize, totalItems, itemsOnPage);
+
+            return Ok(model);
+        }
+        // GET api/v1/[controller]/items/type/all/brand[?pageSize=3&pageIndex=10]
+        [HttpGet]
+        [Route("[action]/type/all/brand/{catalogBrandId:int?}")]
+        [ProducesResponseType(typeof(PaginatedItemsViewModel<CatalogItem>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Items(int? catalogBrandId, [FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0)
+        {
+            var root = (IQueryable<CatalogItem>)_catalogContext.CatalogItems;
 
             if (catalogBrandId.HasValue)
             {
@@ -274,7 +297,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
         [Route("{id}")]
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = _catalogContext.CatalogItems.SingleOrDefault(x => x.Id == id);
 
@@ -302,8 +325,5 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
 
             return items;
         }
-
-        #endregion
-
     }
 }

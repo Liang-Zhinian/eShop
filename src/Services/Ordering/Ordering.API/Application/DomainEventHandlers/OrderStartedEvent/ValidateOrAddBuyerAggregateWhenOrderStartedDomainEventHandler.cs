@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using SaaSEqt.eShop.Services.Ordering.API.Infrastructure.Services;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.API.Infrastructure.Services;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
 using Microsoft.Extensions.Logging;
 using Ordering.API.Application.IntegrationEvents;
 using Ordering.API.Application.IntegrationEvents.Events;
@@ -59,7 +59,7 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderStartedEvent
                 .SaveEntitiesAsync();
 
             var orderStatusChangedTosubmittedIntegrationEvent = new OrderStatusChangedToSubmittedIntegrationEvent(orderStartedEvent.Order.Id, orderStartedEvent.Order.OrderStatus.Name, buyer.Name);
-            await _orderingIntegrationEventService.PublishThroughEventBusAsync(orderStatusChangedTosubmittedIntegrationEvent);
+            await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedTosubmittedIntegrationEvent);
 
             _logger.CreateLogger(nameof(ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler)).LogTrace($"Buyer {buyerUpdated.Id} and related payment method were validated or updated for orderId: {orderStartedEvent.Order.Id}.");
         }

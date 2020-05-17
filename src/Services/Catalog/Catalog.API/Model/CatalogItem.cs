@@ -1,11 +1,12 @@
 ﻿using Catalog.API.Infrastructure.Exceptions;
 using System;
+using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Services.Catalog.API.Model
+namespace Eva.eShop.Services.Catalog.API.Model
 {
     public class CatalogItem
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -17,13 +18,17 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
 
         public string PictureUri { get; set; }
 
-        public Guid CatalogTypeId { get; set; }
+        public int CatalogTypeId { get; set; }
 
         public CatalogType CatalogType { get; set; }
 
-        public Guid CatalogBrandId { get; set; }
+        public int CatalogBrandId { get; set; }
 
         public CatalogBrand CatalogBrand { get; set; }
+
+        public ICollection<CatalogMedia> CatalogMedias { get; set; }
+
+        //public bool InStock { get; set; }
 
         // Quantity in stock
         public int AvailableStock { get; set; }
@@ -39,8 +44,6 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Model
         /// True if item is on reorder
         /// </summary>
         public bool OnReorder { get; set; }
-
-        public Guid MerchantId { get; set; }
 
         public CatalogItem() { }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+﻿using Eva.BuildingBlocks.EventBus.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EventBus.Tests
 {
-    public class TestIntegrationEventHandler : IIntegrationEventHandler<TestIntegrationEvent>
+    public class TestIntegrationOtherEventHandler : IIntegrationEventHandler<TestIntegrationEvent>
     {
         public bool Handled { get; private set; }
 
-        public TestIntegrationEventHandler()
+        public TestIntegrationOtherEventHandler()
         {
             Handled = false;
         }

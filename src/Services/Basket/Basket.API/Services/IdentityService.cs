@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace SaaSEqt.eShop.Services.Basket.API.Services
+namespace Eva.eShop.Services.Basket.API.Services
 {
     public class IdentityService : IIdentityService
     {

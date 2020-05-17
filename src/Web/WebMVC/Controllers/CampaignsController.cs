@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.WebMVC.Controllers
+﻿namespace Eva.eShop.WebMVC.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;

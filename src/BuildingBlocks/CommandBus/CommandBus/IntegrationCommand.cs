@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.eShopOnContainers.BuildingBlocks.CommandBus
+namespace Eva.BuildingBlocks.CommandBus
 {
     public abstract class IntegrationCommand
     {

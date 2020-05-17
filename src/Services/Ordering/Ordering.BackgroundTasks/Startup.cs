@@ -3,10 +3,10 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.ServiceBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
-using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
+using Eva.BuildingBlocks.EventBus;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBusRabbitMQ;
+using Eva.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
@@ -16,7 +16,7 @@ using Ordering.BackgroundTasks.Configuration;
 using Ordering.BackgroundTasks.Tasks;
 using RabbitMQ.Client;
 using System;
-using SaaSEqt.Infrastructure.HealthChecks.MySQL;
+using Eva.BuildingBlocks.HealthChecks.MySQL;
 
 namespace Ordering.BackgroundTasks
 {
@@ -41,7 +41,7 @@ namespace Ordering.BackgroundTasks
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddMySQLCheck("OrderingDb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+                checks.AddMySqlCheck("OrderingDb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
             });
 
             //configure settings
@@ -111,7 +111,7 @@ namespace Ordering.BackgroundTasks
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously

@@ -2,8 +2,8 @@
 
 This is just a brief enumeration of the configuration files used to create the k8s objects. Use as reference to find where specific object is.
 
-- `deployments.yaml` Contains the definition of all deployments of the eShopOnContainers. Do not contain any infrastructure deployment (so no SQL, Redis, ...).
-- `services.yaml` Contains the definition of all services of the eShopOnContainers. Do not contain any infrastructure service (so no SQL, Redis, ...).
+- `deployments.yaml` Contains the definition of all deployments of the eShop. Do not contain any infrastructure deployment (so no SQL, Redis, ...).
+- `services.yaml` Contains the definition of all services of the eShop. Do not contain any infrastructure service (so no SQL, Redis, ...).
 - `basket-data.yaml` Contains the definition of the Redis (used by basket.api) deployment and service
 - `nosql-data.yaml` Contains the definition of the Mongodb (used by locations and marketing) deployment and service
 - `sql-data.yaml` Contains the definition of the SQL server deployment and service

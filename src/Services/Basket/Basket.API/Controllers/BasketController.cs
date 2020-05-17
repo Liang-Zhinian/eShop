@@ -2,14 +2,14 @@
 using Basket.API.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.Services.Basket.API.Model;
-using SaaSEqt.eShop.Services.Basket.API.Services;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.eShop.Services.Basket.API.Model;
+using Eva.eShop.Services.Basket.API.Services;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Basket.API.Controllers
+namespace Eva.eShop.Services.Basket.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [Authorize]
@@ -36,7 +36,7 @@ namespace SaaSEqt.eShop.Services.Basket.API.Controllers
             var basket = await _repository.GetBasketAsync(id);
             if (basket == null)
             {
-                return NotFound();
+                return Ok(new CustomerBasket(id) { });
             }
 
             return Ok(basket);
@@ -59,7 +59,7 @@ namespace SaaSEqt.eShop.Services.Basket.API.Controllers
         public async Task<IActionResult> Checkout([FromBody]BasketCheckout basketCheckout, [FromHeader(Name = "x-requestid")] string requestId)
         {
             var userId = _identitySvc.GetUserIdentity();
-            var userName = User.FindFirst(x => x.Type == "unique_name").Value;
+            
 
             basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
                 guid : basketCheckout.RequestId;
@@ -71,10 +71,11 @@ namespace SaaSEqt.eShop.Services.Basket.API.Controllers
                 return BadRequest();
             }
 
+            var userName = User.FindFirst(x => x.Type == "unique_name").Value;
+
             var eventMessage = new UserCheckoutAcceptedIntegrationEvent(userId, userName, basketCheckout.City, basketCheckout.Street,
                 basketCheckout.State, basketCheckout.Country, basketCheckout.ZipCode, basketCheckout.CardNumber, basketCheckout.CardHolderName,
-                basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer, 
-                                                                        basketCheckout.RequestId, basketCheckout.MerchantId, basket);
+                basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer, basketCheckout.RequestId, basket);
 
             // Once basket is checkout, sends an integration event to
             // ordering.api to convert basket to order and proceeds with

@@ -1,6 +1,6 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Model
+﻿namespace Eva.eShop.Services.Marketing.API.Model
 {
-    using SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Exceptions;
+    using Eva.eShop.Services.Marketing.API.Infrastructure.Exceptions;
     using System;
     using System.Collections.Generic;
     using System.Linq;

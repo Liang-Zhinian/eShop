@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using SaaSEqt.eShop.BuildingBlocks.EventBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+using Eva.BuildingBlocks.EventBus;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Events;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,7 +15,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ
+namespace Eva.BuildingBlocks.EventBusRabbitMQ
 {
     public class EventBusRabbitMQ : IEventBus, IDisposable
     {
@@ -217,14 +217,16 @@ namespace SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ
                         if (subscription.IsDynamic)
                         { 
                             var handler = scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
+                            if (handler == null) continue;
                             dynamic eventData = JObject.Parse(message);
                             await handler.Handle(eventData);
                         }
                         else
                         {
+                            var handler = scope.ResolveOptional(subscription.HandlerType);
+                            if (handler == null) continue;
                             var eventType = _subsManager.GetEventTypeByName(eventName);
                             var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-                            var handler = scope.ResolveOptional(subscription.HandlerType);
                             var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                             await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
+namespace Eva.eShop.Web.Shopping.HttpAggregator.Models
 {
     public class UpdateBasketRequest
     {
@@ -15,7 +15,7 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
     public class UpdateBasketRequestItemData
     {
         public string Id { get; set; }          // Basket id
-        public string ProductId { get; set; }      // Catalog item id
+        public int ProductId { get; set; }      // Catalog item id
         public int Quantity { get; set; }       // Quantity
     }
 }

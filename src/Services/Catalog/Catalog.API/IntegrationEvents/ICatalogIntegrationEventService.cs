@@ -1,4 +1,4 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+﻿using Eva.BuildingBlocks.EventBus.Events;
 using System.Threading.Tasks;
 
 namespace Catalog.API.IntegrationEvents

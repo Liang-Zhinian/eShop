@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Model
+﻿namespace Eva.eShop.Services.Marketing.API.Model
 {
     using System;
     using System.Collections.Generic;

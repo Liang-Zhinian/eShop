@@ -1,11 +1,11 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.Services
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure.Services
 {
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-    using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Exceptions;
-    using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Repositories;
-    using SaaSEqt.eShop.Services.Locations.API.IntegrationEvents.Events;
-    using SaaSEqt.eShop.Services.Locations.API.Model;
-    using SaaSEqt.eShop.Services.Locations.API.ViewModel;
+    using Eva.BuildingBlocks.EventBus.Abstractions;
+    using Eva.eShop.Services.Locations.API.Infrastructure.Exceptions;
+    using Eva.eShop.Services.Locations.API.Infrastructure.Repositories;
+    using Eva.eShop.Services.Locations.API.IntegrationEvents.Events;
+    using Eva.eShop.Services.Locations.API.Model;
+    using Eva.eShop.Services.Locations.API.ViewModel;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;

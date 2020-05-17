@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SaaSEqt.eShop.Services.Identity.API.Models;
+using Eva.eShop.Services.Identity.API.Models;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Services
+namespace Eva.eShop.Services.Identity.API.Services
 {
     public class EFLoginService : ILoginService<ApplicationUser>
     {

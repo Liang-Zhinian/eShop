@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Infrastructure
+namespace Eva.eShop.Mobile.Shopping.HttpAggregator.Infrastructure
 {
     public class HttpClientAuthorizationDelegatingHandler
         : DelegatingHandler

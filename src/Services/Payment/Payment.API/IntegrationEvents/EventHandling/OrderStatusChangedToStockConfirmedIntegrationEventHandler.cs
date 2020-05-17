@@ -1,7 +1,7 @@
 ﻿namespace Payment.API.IntegrationEvents.EventHandling
 {
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+    using Eva.BuildingBlocks.EventBus.Abstractions;
+    using Eva.BuildingBlocks.EventBus.Events;
     using Microsoft.Extensions.Options;
     using Payment.API.IntegrationEvents.Events;
     using System.Threading.Tasks;

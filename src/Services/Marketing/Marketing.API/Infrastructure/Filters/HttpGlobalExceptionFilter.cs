@@ -1,10 +1,10 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Filters
+﻿namespace Eva.eShop.Services.Marketing.API.Infrastructure.Filters
 {
     using Microsoft.AspNetCore.Mvc;
-    using global::SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Exceptions;
+    using global::Eva.eShop.Services.Marketing.API.Infrastructure.Exceptions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Filters;
-    using SaaSEqt.eShop.Services.Marketing.API.Infrastructure.ActionResults;
+    using Eva.eShop.Services.Marketing.API.Infrastructure.ActionResults;
     using Microsoft.Extensions.Logging;
     using System.Net;
 

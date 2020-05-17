@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.IO;
 
-namespace SaaSEqt.eShop.WebMVC
+namespace Eva.eShop.WebMVC
 {
     public class Program
     {

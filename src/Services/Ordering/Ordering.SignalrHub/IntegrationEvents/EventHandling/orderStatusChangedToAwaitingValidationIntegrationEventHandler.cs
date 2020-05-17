@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

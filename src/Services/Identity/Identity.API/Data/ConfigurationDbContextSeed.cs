@@ -2,14 +2,14 @@
 using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Services.Identity.API.Configuration;
+using Eva.eShop.Services.Identity.API.Configuration;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Data
+namespace Eva.eShop.Services.Identity.API.Data
 {
     public class ConfigurationDbContextSeed
     {
@@ -28,18 +28,6 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
             clientUrls.Add("OrderingApi", configuration.GetValue<string>("OrderingApiClient"));
             clientUrls.Add("MobileShoppingAgg", configuration.GetValue<string>("MobileShoppingAggClient"));
             clientUrls.Add("WebShoppingAgg", configuration.GetValue<string>("WebShoppingAggClient"));
-            clientUrls.Add("MvceShop", configuration.GetValue<string>("MvceShopClient"));
-
-            clientUrls.Add("IdentityApi", configuration.GetValue<string>("identityUrl"));
-            clientUrls.Add("CatalogApi", configuration.GetValue<string>("CatalogApiClient"));
-            clientUrls.Add("AppointmentApi", configuration.GetValue<string>("AppointmentApiClient"));
-            clientUrls.Add("SitesApi", configuration.GetValue<string>("SitesApiClient"));
-            clientUrls.Add("SchedulesApi", configuration.GetValue<string>("SchedulesApiClient"));
-            clientUrls.Add("MobileReservationAgg", configuration.GetValue<string>("MobileReservationAggClient"));
-            clientUrls.Add("NativeAppClient", configuration.GetValue<string>("NativeAppClient"));
-            clientUrls.Add("IdentityAccessApi", configuration.GetValue<string>("IdentityAccessApiClient"));
-
-
 
             if (!context.Clients.Any())
             {
@@ -52,7 +40,7 @@ namespace SaaSEqt.eShop.Services.Identity.API.Data
             // Checking always for old redirects to fix existing deployments
             // to use new swagger-ui redirect uri as of v3.0.0
             // There should be no problem for new ones
-            // ref: https://github.com/dotnet-architecture/eShopOnContainers/issues/586
+            // ref: https://github.com/dotnet-architecture/eShop/issues/586
             else
             {
                 List<ClientRedirectUri> oldRedirects = (await context.Clients.Include(c => c.RedirectUris).ToListAsync())

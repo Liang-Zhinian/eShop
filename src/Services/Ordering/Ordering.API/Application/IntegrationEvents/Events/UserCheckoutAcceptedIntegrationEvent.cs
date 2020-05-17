@@ -1,4 +1,4 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+﻿using Eva.BuildingBlocks.EventBus.Events;
 using Ordering.API.Application.Models;
 using System;
 
@@ -36,14 +36,11 @@ namespace Ordering.API.Application.IntegrationEvents.Events
 
         public CustomerBasket Basket { get; }
 
-        public string MerchantId { get; set; }
-
-        public UserCheckoutAcceptedIntegrationEvent(string merchantId, string userId, string userName, string city, string street,
+        public UserCheckoutAcceptedIntegrationEvent(string userId, string userName, string city, string street,
             string state, string country, string zipCode, string cardNumber, string cardHolderName,
             DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
             CustomerBasket basket)
         {
-            MerchantId = merchantId;
             UserId = userId;
             City = city;
             Street = street;

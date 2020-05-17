@@ -1,10 +1,10 @@
 ﻿using Dapper;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Ordering.BackgroundTasks.Configuration;
 using Ordering.BackgroundTasks.IntegrationEvents;
-using Ordering.BackgroundTasks.Tasks.Base;
 using System;
 using System.Collections.Generic;
 //using System.Data.SqlClient;
@@ -76,6 +76,9 @@ namespace Ordering.BackgroundTasks.Tasks
                 {
                     conn.Open();
                     orderIds = conn.Query<int>(
+                        //@"SELECT Id FROM [ordering].[orders] 
+                            //WHERE DATEDIFF(minute, [OrderDate], GETDATE()) >= @GracePeriodTime
+                            //AND [OrderStatusId] = 1",
                         @"SELECT Id FROM `orders` 
                             WHERE DATE_ADD(`OrderDate`, INTERVAL @GracePeriodTime MINUTE) <= now()
                             AND `OrderStatusId` = 1",

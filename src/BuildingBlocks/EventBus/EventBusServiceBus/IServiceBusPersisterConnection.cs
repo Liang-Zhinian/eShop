@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus
+﻿namespace Eva.BuildingBlocks.EventBusServiceBus
 {
     using Microsoft.Azure.ServiceBus;
     using System;

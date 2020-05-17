@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.Exceptions
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure.Exceptions
 {
     using System;
 

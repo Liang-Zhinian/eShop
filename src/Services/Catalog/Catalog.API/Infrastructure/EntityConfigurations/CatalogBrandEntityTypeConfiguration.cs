@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaaSEqt.eShop.Services.Catalog.API.Model;
-using MySql.Data.EntityFrameworkCore;
+using Eva.eShop.Services.Catalog.API.Model;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using System;
 
-namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
+namespace Eva.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
 {
     class CatalogBrandEntityTypeConfiguration
         : IEntityTypeConfiguration<CatalogBrand>
@@ -17,15 +15,12 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.HasKey(ci => ci.Id);
 
             builder.Property(ci => ci.Id)
-                   .HasColumnType(Constants.DbConstants.KeyType)
-                   .ValueGeneratedOnAdd()
+               .UseMySQLAutoIncrementColumn("catalog_brand_hilo")
                .IsRequired();
 
             builder.Property(cb => cb.Brand)
                 .IsRequired()
                 .HasMaxLength(100);
-            
-            builder.Property<Guid>("MerchantId").HasColumnType(Constants.DbConstants.KeyType);
         }
     }
 }

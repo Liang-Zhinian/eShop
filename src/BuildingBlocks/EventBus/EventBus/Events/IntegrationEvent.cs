@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaaSEqt.eShop.BuildingBlocks.EventBus.Events
+namespace Eva.BuildingBlocks.EventBus.Events
 {
     public class IntegrationEvent
     {

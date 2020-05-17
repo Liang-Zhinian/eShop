@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency
+namespace Eva.eShop.Services.Ordering.Infrastructure.Idempotency
 {
     public class ClientRequest
     {

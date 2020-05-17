@@ -1,8 +1,7 @@
-﻿namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
+﻿namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
 {
     using global::Ordering.Domain.Exceptions;
-    using Seedwork;
-    using SeedWork;
+    using Eva.eShop.Services.Ordering.Domain.SeedWork;
     using System;
     using System.Collections.Generic;
     using System.Linq;

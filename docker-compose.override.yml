@@ -1,4 +1,4 @@
-﻿version: '3.4'
+version: '3.4'
 
 # The default docker-compose.override file can use the "localhost" as the external name for testing web apps within the same dev machine. 
 # The ESHOP_EXTERNAL_DNS_NAME_OR_IP environment variable is taken, by default, from the ".env" file defined like: 
@@ -7,178 +7,87 @@
 # An external IP or DNS name has to be used (instead localhost and the 10.0.75.1 IP) when testing the Web apps and the Xamarin apps from remote machines/devices using the same WiFi, for instance.
 
 services:
-  test.api:
+  # seq:
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #   ports:
+  #     - "5340:80"
+      
+  sql-data:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5139:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-  sms.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5146:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-
-
-  appointment.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_AppointmentDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
-      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
-      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
-      - UseCustomizationData=True
-      - AzureServiceBusEnabled=False
-      - AzureStorageEnabled=False
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5141:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-
-  schedule.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_ScheduleDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
-      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
-      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
-      - UseCustomizationData=True
-      - AzureServiceBusEnabled=False
-      - AzureStorageEnabled=False
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5142:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-
-  branding.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_BrandingDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/br/branding/withtype/[0]/category/[1]/subcategory/[2]/language/[3]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
-      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
-      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
-      - UseCustomizationData=True
-      - AzureServiceBusEnabled=False
-      - AzureStorageEnabled=False
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5144:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-  sites.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_SitesDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5202/api/v1/c/catalog/items/[0]/pic}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - SiteLogoBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/s/sites/[0]/pic}
-      - LocationPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic}
-      - LocationAdditionalPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/s/locations/ofSiteId/[0]/locationId/[1]/pic}
-      - StaffPicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5216/api/v1/s/staffs/ofSiteId/[0]/staffId/[1]/pic}
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
-      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
-      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
-      - UseCustomizationData=True
-      - AzureServiceBusEnabled=False
-      - AzureStorageEnabled=False
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5143:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-  identityaccess.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_IdentityAccessDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
-      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
-      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
-      - UseCustomizationData=True
-      - AzureServiceBusEnabled=False
-      - AzureStorageEnabled=False
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5145:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
-
-
-  mobilereservationagg:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - urls__basket=http://basket.api
-      - urls__catalog=http://catalog.api
-      - urls__orders=http://appointment.api
-      - urls__appointment=http://appointment.api
-      - urls__servicecatalog=http://catalog.api
-      - urls__business=http://sites.api
-      - urls__identity=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-    ports:
-      - "5133:80"   # Important: In a production environment your should remove the external port (5120) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).
+      MYSQL_USER: root # These variables are used in conjunction to create a user and set that user's password, and the user is granted superuser permissions for the database specified by the MYSQL_DATABASE variable. Both MYSQL_USER and MYSQL_PASSWORD are required for a user to be created—if any of the two variables is not set, the other is ignored. If both variables are set but MYSQL_DATABASE is not, the user is created without any privileges.
+      MYSQL_PASSWORD: P@ssword
+      MYSQL_ROOT_PASSWORD: P@ssword # MYSQL_ROOT_PASSWORD is set or MYSQL_ALLOW_EMPTY_PASSWORD is set to true), the root user's password is set as expired and must be changed before MySQL can be used normally.
+      MYSQL_DATABASE: eva # This variable allows you to specify the name of a database to be created on image startup. 
+      MYSQL_ROOT_HOST: 172.*.*.* # By default, MySQL creates the 'root'@'localhost' account. This account can only be connected to from inside the container as described in Connecting to MySQL Server from within the Container. To allow root connections from other hosts, set this environment variable. For example, the value 172.17.0.1, which is the default Docker gateway IP, allows connections from the host machine that runs the container. 
+      # MYSQL_ROOT_HOST: %
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    restart: always
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
     volumes:
-      - ./src/ApiGateways/Mobile.Bff.Reservation/apigw:/app/configuration
-
-  mobilereservationapigw:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - mysqldata:/var/lib/mysql
+      # - mysqlconf:/etc/my.cnf
+      - mysqlconf:/etc/mysql/conf.d
+      - mysqlinit:/docker-entrypoint-initdb.d/
     ports:
-      - "5216:80"   
-    volumes:
-      - ./src/ApiGateways/Mobile.Bff.Reservation/apigw:/app/configuration
+      - "3306:3306"    # Important: In a production environment your should remove the external port
 
-  basket.api:
+  nosql-data:
+    ports:
+      - "27017:27017"  # Important: In a production environment your should remove the external port
+
+  basket-data:
+    ports:
+      - "6379:6379"    # Important: In a production environment your should remove the external port
+
+  rabbitmq:
+    ports:
+      - "15672:15672"  # Important: In a production environment your should remove the external port
+      - "5672:5672"    # Important: In a production environment your should remove the external port
+
+  identity-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_REDIS_BASKET_DB:-basket.data}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - SpaClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5104
+      - XamarinCallback=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105/xamarincallback      #localhost do not work for UWP login, so we have to use "external" IP always
+      - ConnectionString=${ESHOP_AZURE_IDENTITY_DB:-Server=sql-data;Database=Eva_eShop_Services_IdentityDb;uid=eva;pwd=P@ssword} 
+      - MvcClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5100              #Local: You need to open your local dev-machine firewall at range 5100-5110. 
+      - LocationApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5109
+      - MarketingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5110
+      - BasketApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
+      - OrderingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
+      - MobileShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5120
+      - WebShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
+      # - WebhooksApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5113
+      # - WebhooksWebClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5114
+      - UseCustomizationData=True  
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    ports:
+      - "5105:80"   
+
+  basket-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${ESHOP_AZURE_REDIS_BASKET_DB:-basket-data}
+      - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -187,19 +96,27 @@ services:
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - UseLoadTest=${USE_LOADTEST:-False}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
     ports:
       - "5103:80"   # Important: In a production environment your should remove the external port (5103) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80). 
 
-  catalog.api:
+  catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_CatalogDb;uid=book2;pwd=P@ssword}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5101/api/v1/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
+      - ConnectionString=${ESHOP_AZURE_CATALOG_DB:-Server=sql-data;Database=Eva_eShop_Services_CatalogDb;uid=eva;pwd=P@ssword}
+      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://localhost:5202/api/v1/c/catalog/items/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}         
@@ -210,52 +127,26 @@ services:
       - AzureStorageEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     ports:
       - "5101:80"   # Important: In a production environment your should remove the external port (5101) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
 
-  identity.api:
+  ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - identityUrl=http://identity.api
-      - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - PicBaseUrl=${ESHOP_AZURE_STORAGE_CATALOG_URL:-http://isd4u.com:5105/api/v1/identity/users/[0]/pic/}   #Local: You need to open your local dev-machine firewall at range 5100-5110.  
-      - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
-      - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
-      - AzureStorageEnabled=False
-
-      - SpaClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5104
-      - XamarinCallback=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105/xamarincallback      #localhost do not work for UWP login, so we have to use "external" IP always
-      - ConnectionString=${ESHOP_AZURE_IDENTITY_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_IdentityDb;uid=book2;pwd=P@ssword} 
-      - MvcClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5100              #Local: You need to open your local dev-machine firewall at range 5100-5110. 
-      - LocationApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5109
-      - MarketingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5110
-      - BasketApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
-      - OrderingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
-      - MobileShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5120
-      - WebShoppingAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
-      - MvceShopClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5135              #Local: You need to open your local dev-machine firewall at range 5100-5110. 
-      
-      - CatalogApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5101
-      - AppointmentApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5141
-      - SchedulesApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5142
-      - SitesApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5143
-      - MobileReservationAggClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5216
-      - NativeAppClient=io.identityserver.book2
-
-      - UseCustomizationData=True
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5105:80"   
-
-  ordering.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_ORDERING_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_OrderingDb;uid=book2;pwd=P@ssword;IgnoreCommandTransaction=true}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - ConnectionString=${ESHOP_AZURE_ORDERING_DB:-Server=sql-data;Database=Eva_eShop_Services_OrderingDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None;}
+      - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -263,20 +154,29 @@ services:
       - UseCustomizationData=True
       - AzureServiceBusEnabled=False
       - CheckUpdateTime=30000
-      - GracePeriodTime=1
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - UseLoadTest=${USE_LOADTEST:-False}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     ports:
       - "5102:80"   # Important: In a production environment your should remove the external port (5102) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
 
 
-  ordering.backgroundtasks:
+  ordering-backgroundtasks:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_ORDERING_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_OrderingDb;uid=book2;pwd=P@ssword}
+      - ConnectionString=${ESHOP_AZURE_ORDERING_DB:-Server=sql-data;Database=Eva_eShop_Services_OrderingDb;uid=eva;pwd=P@ssword}
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}          
@@ -287,20 +187,30 @@ services:
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - UseLoadTest=${USE_LOADTEST:-False}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     ports:
       - "5111:80"
 
-  marketing.api:
+  marketing-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_MARKETING_DB:-Server=sql.data;Database=SaaSEqt_eShop_Services_MarketingDb;uid=book2;pwd=P@ssword}
-      - MongoConnectionString=${ESHOP_AZURE_COSMOSDB:-mongodb://nosql.data}
+      - ConnectionString=${ESHOP_AZURE_MARKETING_DB:-Server=sql-data;Database=Eva_eShop_Services_MarketingDb;uid=eva;pwd=P@ssword}
+      - MongoConnectionString=${ESHOP_AZURE_COSMOSDB:-mongodb://nosql-data}
       - MongoDatabase=MarketingDb
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}          
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - CampaignDetailFunctionUri=${ESHOP_AZUREFUNC_CAMPAIGN_DETAILS_URI}
       - PicBaseUrl=${ESHOP_AZURE_STORAGE_MARKETING_URL:-http://localhost:5110/api/v1/campaigns/[0]/pic/}
@@ -311,64 +221,21 @@ services:
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - UseLoadTest=${USE_LOADTEST:-False}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     ports:
       - "5110:80"   # Important: In a production environment your should remove the external port (5110) kept here for microservice debugging purposes. 
-                    # The API Gateway redirects and access through the internal port (80).  
+                    # The API Gateway redirects and access through the internal port (80).
 
-  webmvc:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CatalogUrl=http://catalog.api
-      - OrderingUrl=http://ordering.api
-      - BasketUrl=http://basket.api
-      - LocationsUrl=http://locations.api
-      - PurchaseUrl=http://webshoppingapigw
-      - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105  # Local Mac: Use http://docker.for.mac.localhost:5105 || Local Windows:  Use 10.0.75.1 in a "Docker for Windows" environment, if using "localhost" from browser. || #Remote access: Use ${ESHOP_EXTERNAL_DNS_NAME_OR_IP} if using external IP or DNS name from browser.
-      - MarketingUrl=http://webmarketingapigw
-      - CatalogUrlHC=http://catalog.api/hc
-      - OrderingUrlHC=http://ordering.api/hc
-      - IdentityUrlHC=http://identity.api/hc     #Local: Use ${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}, if using external IP or DNS name from browser.          
-      - BasketUrlHC=http://basket.api/hc
-      - MarketingUrlHC=http://marketing.api/hc
-      - PaymentUrlHC=http://payment.api/hc
-      - SignalrHubUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
-      - UseCustomizationData=True
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-      - UseLoadTest=${USE_LOADTEST:-False}
-    ports:
-      - "5100:80"
-
-  webstatus:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CatalogUrl=http://catalog.api/hc
-      - OrderingUrl=http://ordering.api/hc
-      - OrderingBackgroundTasksUrl=http://ordering.backgroundtasks/hc
-      - BasketUrl=http://basket.api/hc
-      - IdentityUrl=http://identity.api/hc
-      - LocationsUrl=http://locations.api/hc
-      - MarketingUrl=http://marketing.api/hc
-      - PaymentUrl=http://payment.api/hc
-      - mvc=http://webmvc/hc
-      - spa=http://webspa/hc
-
-      - AppointmentUrl=http://appointment.api/hc
-      - ScheduleUrl=http://schedule.api/hc
-      - BrandingUrl=http://branding.api/hc
-      - SiteUrl=http://sites.api/hc
-      - CategoryUrl=http://category.api/hc
-      - TestApiUrl=http://test.api/hc
-
-
-      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-      - OrchestratorType=${ORCHESTRATOR_TYPE}
-    ports:
-      - "5107:80"
-
-  payment.api:
+  payment-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -378,17 +245,27 @@ services:
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     ports:
       - "5108:80"   # Important: In a production environment your should remove the external port (5108) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
 
-  locations.api:
+  locations-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${ESHOP_AZURE_COSMOSDB:-mongodb://nosql.data}
+      - ConnectionString=${ESHOP_AZURE_COSMOSDB:-mongodb://nosql-data}
       - Database=LocationsDb
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110. 
+      - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110. 
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -397,93 +274,115 @@ services:
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - UseLoadTest=${USE_LOADTEST:-False}
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     ports:
       - "5109:80"   # Important: In a production environment your should remove the external port (5109) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
-   
-
-#  sql.data:
-#    environment:
-#      - SA_PASSWORD=Pass@word
-#      - ACCEPT_EULA=Y
-#    ports:
-#      - "5433:1433"    # Important: In a production environment your should remove the external port
-
-  sql.data:
-    image: mysql:5.7
-#    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_USER: book2
-      MYSQL_PASSWORD: P@ssword
-      MYSQL_ROOT_PASSWORD: P@ssword
-#      MYSQL_HOST: localhost
-      MYSQL_MY_DATABASE: test
-    restart: always
-    volumes:
-      - ./repos/mysql/data:/var/lib/mysql
-      - ./repos/mysql/conf.d:/etc/mysql/conf.d
-      - ./repos/mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
-      - ./repos/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
-    ports:
-      - "33306:3306"    # Important: In a production environment your should remove the external port
-
-
-  nosql.data:
-    ports:
-      - "27017:27017"  # Important: In a production environment your should remove the external port
-
-  basket.data:
-    ports:
-      - "6379:6379"    # Important: In a production environment your should remove the external port
-      
-  rabbitmq:
-    ports:
-      - "15672:15672"  # Important: In a production environment your should remove the external port
-      - "5672:5672"    # Important: In a production environment your should remove the external port
+  # webhooks-api:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - ConnectionString=${ESHOP_AZURE_WEBHOOKS_DB:-Server=sql-data;Database=Eva_eShop_Services_WebhooksDb;uid=eva;pwd=P@ssword}
+  #     - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+  #     - EventBusUserName=${ESHOP_SERVICE_BUS_USERNAME}
+  #     - EventBusPassword=${ESHOP_SERVICE_BUS_PASSWORD}    
+  #     - IdentityUrl=http://identity-api  
+  #     - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
+  #   ports:
+  #     - "5113:80"   # Important: In a production environment your should remove the external port (5109) kept here for microservice debugging purposes. 
+  #                   # The API Gateway redirects and access through the internal port (80).
 
   mobileshoppingapigw:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - urls__basket=http://basket-api
+      - urls__catalog=http://catalog-api
+      - urls__orders=http://ordering-api
+      - urls__identity=http://identity-api
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
     ports:
       - "5200:80"   
     volumes:
-      - ./src/ApiGateways/Mobile.Bff.Shopping/apigw:/app/configuration
- 
+      - ./src/ApiGateways/Mobile.Bff.Shopping/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
+
   mobilemarketingapigw:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
     ports:
       - "5201:80"   
     volumes:
-      - ./src/ApiGateways/Mobile.Bff.Marketing/apigw:/app/configuration
+      - ./src/ApiGateways/Mobile.Bff.Marketing/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
 
   webshoppingapigw:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
     ports:
       - "5202:80"   
-    volumes:
-      - ./src/ApiGateways/Web.Bff.Shopping/apigw:/app/configuration
+    # volumes:
+    #   - ./src/ApiGateways/Web.Bff.Shopping/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
 
   webmarketingapigw:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - IdentityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
     ports:
       - "5203:80"   
     volumes:
-      - ./src/ApiGateways/Web.Bff.Marketing/apigw:/app/configuration
+      - ./src/ApiGateways/Web.Bff.Marketing/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
 
   mobileshoppingagg:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - urls__basket=http://basket.api
-      - urls__catalog=http://catalog.api
-      - urls__orders=http://ordering.api
-      - urls__identity=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - urls__basket=http://basket-api
+      - urls__catalog=http://catalog-api
+      - urls__orders=http://ordering-api
+      - urls__identity=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
     ports:
       - "5120:80"   # Important: In a production environment your should remove the external port (5120) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
@@ -491,14 +390,22 @@ services:
   webshoppingagg:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - urls__basket=http://basket.api
-      - urls__catalog=http://catalog.api
-      - urls__orders=http://ordering.api
-      - urls__identity=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - urls__basket=http://basket-api
+      - urls__catalog=http://catalog-api
+      - urls__orders=http://ordering-api
+      - urls__identity=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
     ports:
       - "5121:80"   # Important: In a production environment your should remove the external port (5121) kept here for microservice debugging purposes. 
                     # The API Gateway redirects and access through the internal port (80).
-  ordering.signalrhub:
+
+  ordering-signalrhub:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -508,7 +415,119 @@ services:
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
-      - identityUrl=http://identity.api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - identityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
     ports:
       - "5112:80"
 
+
+  webstatus:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - CatalogUrl=http://catalog-api/hc
+      - OrderingUrl=http://ordering-api/hc
+      - OrderingBackgroundTasksUrl=http://ordering-backgroundtasks/hc
+      - BasketUrl=http://basket-api/hc
+      - IdentityUrl=http://identity-api/hc
+      - LocationsUrl=http://locations-api/hc
+      - MarketingUrl=http://marketing-api/hc
+      - PaymentUrl=http://payment-api/hc
+      - mvc=http://webmvc/hc
+      - spa=http://webspa/hc
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+    ports:
+      - "5107:80"
+
+  # webstatus:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Production
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - HealthChecks-UI__HealthChecks__1__Name=WebMVC HTTP Check
+  #     - HealthChecks-UI__HealthChecks__1__Uri=http://webmvc/hc
+  #     - HealthChecks-UI__HealthChecks__2__Name=WebSPA HTTP Check
+  #     - HealthChecks-UI__HealthChecks__2__Uri=http://webspa/hc
+  #     - HealthChecks-UI__HealthChecks__3__Name=Web Shopping Aggregator GW HTTP Check
+  #     - HealthChecks-UI__HealthChecks__3__Uri=http://webshoppingagg/hc
+  #     - HealthChecks-UI__HealthChecks__4__Name=Mobile Shopping Aggregator HTTP Check
+  #     - HealthChecks-UI__HealthChecks__4__Uri=http://mobileshoppingagg/hc
+  #     - HealthChecks-UI__HealthChecks__5__Name=Mobile Shopping API GW HTTP Check
+  #     - HealthChecks-UI__HealthChecks__5__Uri=http://mobileshoppingapigw/hc
+  #     - HealthChecks-UI__HealthChecks__6__Name=Mobile Marketing API GW HTTP Check
+  #     - HealthChecks-UI__HealthChecks__6__Uri=http://mobilemarketingapigw/hc
+  #     - HealthChecks-UI__HealthChecks__7__Name=Web Shopping API GW HTTP Check
+  #     - HealthChecks-UI__HealthChecks__7__Uri=http://webshoppingapigw/hc
+  #     - HealthChecks-UI__HealthChecks__8__Name=Web Marketing API GW HTTP Check
+  #     - HealthChecks-UI__HealthChecks__8__Uri=http://webmarketingapigw/hc
+  #     - HealthChecks-UI__HealthChecks__9__Name=Ordering HTTP Check
+  #     - HealthChecks-UI__HealthChecks__9__Uri=http://ordering-api/hc
+  #     - HealthChecks-UI__HealthChecks__10__Name=Ordering HTTP Background Check
+  #     - HealthChecks-UI__HealthChecks__10__Uri=http://ordering-backgroundtasks/hc
+  #     - HealthChecks-UI__HealthChecks__11__Name=Basket HTTP Check
+  #     - HealthChecks-UI__HealthChecks__11__Uri=http://basket-api/hc
+  #     - HealthChecks-UI__HealthChecks__12__Name=Catalog HTTP Check
+  #     - HealthChecks-UI__HealthChecks__12__Uri=http://catalog-api/hc
+  #     - HealthChecks-UI__HealthChecks__13__Name=Identity HTTP Check
+  #     - HealthChecks-UI__HealthChecks__13__Uri=http://identity-api/hc
+  #     - HealthChecks-UI__HealthChecks__14__Name=Marketing HTTP Check
+  #     - HealthChecks-UI__HealthChecks__14__Uri=http://marketing-api/hc
+  #     - HealthChecks-UI__HealthChecks__15__Name=Locations HTTP Check
+  #     - HealthChecks-UI__HealthChecks__15__Uri=http://locations-api/hc
+  #     - HealthChecks-UI__HealthChecks__16__Name=Payments HTTP Check
+  #     - HealthChecks-UI__HealthChecks__16__Uri=http://payment-api/hc
+  #     - HealthChecks-UI__HealthChecks__17__Name=Ordering SignalRHub HTTP Check
+  #     - HealthChecks-UI__HealthChecks__17__Uri=http://ordering.signalrhub/hc      
+  #     - OrderingBackgroundTasksUrl=http://ordering-backgroundtasks/hc
+  #     - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+  #     - OrchestratorType=${ORCHESTRATOR_TYPE}
+  #   ports:
+  #     - "5107:80"
+
+  # webspa:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105              #Local: You need to open your local dev-machine firewall at range 5100-5105.  at range 5100-5105. 
+  #     - PurchaseUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
+  #     - MarketingUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5203   
+  #     - PurchaseUrlHC=http://webshoppingapigw/hc
+  #     - MarketingUrlHC=http://webmarketingapigw/hc
+  #     - IdentityUrlHC=http://identity-api/hc
+  #     - UseCustomizationData=True
+  #     - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+  #     - OrchestratorType=${ORCHESTRATOR_TYPE}
+  #     - SignalrHubUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
+  #   ports:
+  #     - "5104:80"
+
+  webmvc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PurchaseUrl=http://webshoppingapigw
+      - IdentityUrl=http://192.168.99.106:5105  # Local Mac: Use http://docker.for.mac.localhost:5105 || Local Windows:  Use 10.0.75.1 in a "Docker for Windows" environment, if using "localhost" from browser. || #Remote access: Use ${ESHOP_EXTERNAL_DNS_NAME_OR_IP} if using external IP or DNS name from browser.
+      - MarketingUrl=http://webmarketingapigw                                                          
+      - SignalrHubUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - BasketUrlHC=http://basket-api/hc
+      - IdentityUrlHC=http://identity-api/hc
+      - PurchaseUrlHC=http://webshoppingapigw/hc
+      - MarketingUrlHC=http://webmarketingapigw/hc 
+      - UseCustomizationData=True
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - UseLoadTest=${USE_LOADTEST:-False}
+    ports:
+      - "5100:80"
+
+  # webhooks-client:
+  #   environment:
+  #     - ASPNETCORE_URLS=http://0.0.0.0:80
+  #     - Token=6168DB8D-DC58-4094-AF24-483278923590      # Webhooks are registered with this token (any value is valid) but the client won't check it
+  #     - IdentityUrl=http://10.0.75.1:5105
+  #     - CallBackUrl=http://localhost:5114
+  #     - WebhooksUrl=http://webhooks-api
+  #     - SelfUrl=http://webhooks-client/
+  #   ports:
+  #     - "5114:80"

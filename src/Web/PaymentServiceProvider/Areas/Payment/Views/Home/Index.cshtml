@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Payment Page";
+}
+
+<div class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">&nbsp;</div>
+        <div class="col-6">
+            User..........<input type="text" id="userInput" />
+            <br />
+            Message...<input type="text" id="messageInput" />
+            <input type="button" id="sendButton" value="Send Message" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">&nbsp;</div>
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/chat.js"></script>
+    <script lang="javascript">
+        function setPaid(){
+            var callbackUrl = '@ViewBag.CallBackUrl';
+            callbackUrl && setTimeout(function(){location.href = callbackUrl;}, 3000);
+        }
+    </script>
+}

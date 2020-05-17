@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Commands;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency;
+using Eva.eShop.Services.Ordering.API.Application.Commands;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
 using System.Threading;
 using System.Threading.Tasks;
 

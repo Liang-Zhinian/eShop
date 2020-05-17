@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency;
+using Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
+namespace Eva.eShop.Services.Ordering.API.Application.Commands
 {
     /// <summary>
     /// Provides a base implementation for handling duplicate request and ensuring idempotent updates, in the cases where

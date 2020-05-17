@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.ViewModel
+﻿namespace Eva.eShop.Services.Locations.API.ViewModel
 {
     public class LocationRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API
+﻿namespace Eva.eShop.Services.Marketing.API
 {
     public class MarketingSettings
     {

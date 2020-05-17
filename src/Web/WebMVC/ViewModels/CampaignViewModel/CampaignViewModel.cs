@@ -1,8 +1,8 @@
 ﻿namespace WebMVC.ViewModels
 {
     using System.Collections.Generic;
-    using SaaSEqt.eShop.WebMVC.ViewModels;
-    using SaaSEqt.eShop.WebMVC.ViewModels.Pagination;
+    using Eva.eShop.WebMVC.ViewModels;
+    using Eva.eShop.WebMVC.ViewModels.Pagination;
     using WebMVC.ViewModels.Annotations;
     using Newtonsoft.Json;
     using System.ComponentModel.DataAnnotations;

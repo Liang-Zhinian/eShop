@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.ServiceBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
-using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
-using SaaSEqt.eShop.Services.Locations.API.Infrastructure;
-using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Filters;
-using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Middlewares;
-using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Repositories;
-using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Services;
+using Eva.BuildingBlocks.EventBus;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBusRabbitMQ;
+using Eva.BuildingBlocks.EventBusServiceBus;
+using Eva.eShop.Services.Locations.API.Infrastructure;
+using Eva.eShop.Services.Locations.API.Infrastructure.Filters;
+using Eva.eShop.Services.Locations.API.Infrastructure.Middlewares;
+using Eva.eShop.Services.Locations.API.Infrastructure.Repositories;
+using Eva.eShop.Services.Locations.API.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Locations.API
+namespace Eva.eShop.Services.Locations.API
 {
     public class Startup
     {
@@ -107,7 +107,7 @@ namespace SaaSEqt.eShop.Services.Locations.API
                 options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
-                    Title = "eShopOnContainers - Location HTTP API",
+                    Title = "eShop - Location HTTP API",
                     Version = "v1",
                     Description = "The Location Microservice HTTP API. This is a Data-Driven/CRUD microservice sample",
                     TermsOfService = "Terms Of Service"

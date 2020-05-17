@@ -1,8 +1,8 @@
-﻿using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+﻿using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using Ordering.Domain.Exceptions;
 using System;
 
-namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate
+namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate
 {
     public class PaymentMethod
         : Entity

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Models;
-using SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Services;
+using Eva.eShop.Mobile.Shopping.HttpAggregator.Models;
+using Eva.eShop.Mobile.Shopping.HttpAggregator.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Mobile.Shopping.HttpAggregator.Controllers
+namespace Eva.eShop.Mobile.Shopping.HttpAggregator.Controllers
 {
     [Route("api/v1/[controller]")]
     [Authorize]

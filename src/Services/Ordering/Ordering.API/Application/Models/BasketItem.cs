@@ -14,6 +14,5 @@ namespace Ordering.API.Application.Models
         public decimal OldUnitPrice { get; set; }
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
-        public string MerchantId { get; set; }
     }
 }

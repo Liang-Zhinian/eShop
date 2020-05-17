@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.ActionResults
+namespace Eva.eShop.Services.Locations.API.Infrastructure.ActionResults
 {
     public class InternalServerErrorObjectResult : ObjectResult
     {

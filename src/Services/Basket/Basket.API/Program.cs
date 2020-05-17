@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 
-namespace SaaSEqt.eShop.Services.Basket.API
+namespace Eva.eShop.Services.Basket.API
 {
     public class Program
     {
@@ -26,7 +27,21 @@ namespace SaaSEqt.eShop.Services.Basket.API
                 .UseStartup<Startup>()
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
-                    config.AddEnvironmentVariables();
+                    var builtConfig = config.Build();
+
+                    var configurationBuilder = new ConfigurationBuilder();
+
+                    if (Convert.ToBoolean(builtConfig["UseVault"]))
+                    {
+                        configurationBuilder.AddAzureKeyVault(
+                            $"https://{builtConfig["Vault:Name"]}.vault.azure.net/",
+                            builtConfig["Vault:ClientId"],
+                            builtConfig["Vault:ClientSecret"]);
+                    }
+
+                    configurationBuilder.AddEnvironmentVariables();
+
+                    config.AddConfiguration(configurationBuilder.Build());
                 })
                 .ConfigureLogging((hostingContext, builder) =>
                 {

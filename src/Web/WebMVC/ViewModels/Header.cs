@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels
+namespace Eva.eShop.WebMVC.ViewModels
 {
     public class Header
     {

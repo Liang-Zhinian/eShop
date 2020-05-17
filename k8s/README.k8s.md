@@ -1,5 +1,5 @@
-# eShopOnContainers on Kubernetes
-The k8s directory contains Kubernetes configuration for the eShopOnContainers app and a PowerShell script to deploy it to a cluster. Each eShopOnContainers microservice has a deployment configuration in `deployments.yaml`, and is exposed to the cluster by a service in `services.yaml`. The microservices are exposed externally on individual routes (`/basket-api`, `/webmvc`, etc.) by an nginx reverse proxy specified in `frontend.yaml` and `nginx.conf`.
+# eShop on Kubernetes
+The k8s directory contains Kubernetes configuration for the eShop app and a PowerShell script to deploy it to a cluster. Each eShop microservice has a deployment configuration in `deployments.yaml`, and is exposed to the cluster by a service in `services.yaml`. The microservices are exposed externally on individual routes (`/basket-api`, `/webmvc`, etc.) by an nginx reverse proxy specified in `frontend.yaml` and `nginx.conf`.
 
 ## Prerequisites
 * A Kubernetes cluster. Follow Azure Container Service's [walkthrough](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough) to create one. 
@@ -29,7 +29,7 @@ For ACS:
     * This can be installed with the `az` tool as described in the Azure Container Service [walkthrough](https://docs.microsoft.com/en-us/azure/container-service/container-service-kubernetes-walkthrough). `az` is also helpful for getting the credentials `kubectl` needs to access your cluster. For other installation options, and information about configuring `kubectl` yourself, see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/kubectl/install/).
 
 ## Deploy the application with the deployment script
-1. Open a PowerShell command line at the `k8s` directory of your local eShopOnContainers repository.
+1. Open a PowerShell command line at the `k8s` directory of your local eShop repository.
 1. Ensure `docker`, `docker-compose`, and `kubectl` are on the path, and configured for your Docker machine and Kubernetes cluster.
 1. Run `deploy.ps1` with your registry information. The Docker username and password are provided by Azure Container Registry, and can be retrieved from the Azure portal. Optionally, ACR credentials can be obtained by running the following command:
 
@@ -66,7 +66,7 @@ The script accepts following parameters:
 + `imageTag`: Tag of the images to deploy to k8s. If not passed the name of the current branch is used.
 + `externalDns`: External DNS name of the k8s. This is only needed if you have configured a DNS that points to your k8s external IP. If you don't have any DNS configured do not pass this parameter.
 + `deployCI`: If `true` means that script is running under the context of a VSTS Hosted Build Agent. **You should never use this parameter from CLI**
-+ `buildBits`: means that the source code of eShopOnContainers will be built. If you have built your code (and have all projects published in `obj/Docker/publish`) do not pass this parameter. Default value is `false`
++ `buildBits`: means that the source code of eShop will be built. If you have built your code (and have all projects published in `obj/Docker/publish`) do not pass this parameter. Default value is `false`
 + `buildImages`: If `true` (default value) Docker images are built and pushed in the Docker registry. If you set this parameter to `false`, Docker images won't be built nor pushed in the Docker registry (but k8s' deployments and services will be redeployed).
 + `deployInfrastructure`: If `true` infrastructure containers (rabbitmq, mongo, redis, sql) will be deployed in k8s. If `false` those containers (and its related deployments and services in k8s) won't be deployed.
 + `dockerOrg`: Name of the organization in the registry where the images are (or will be pushed). Default value is `eshop` (which has images provided by Microsoft)

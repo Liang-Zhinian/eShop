@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
-using SaaSEqt.eShop.Services.Ordering.API.Infrastructure;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
+using Eva.BuildingBlocks.IntegrationEventLogEF;
+using Eva.eShop.Services.Ordering.API.Infrastructure;
+using Eva.eShop.Services.Ordering.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.IO;
 
-namespace SaaSEqt.eShop.Services.Ordering.API
+namespace Eva.eShop.Services.Ordering.API
 {
     public class Program
     {
@@ -37,8 +38,21 @@ namespace SaaSEqt.eShop.Services.Ordering.API
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
-                    config.AddJsonFile("settings.json");
-                    config.AddEnvironmentVariables();
+                    var builtConfig = config.Build();
+
+                    var configurationBuilder = new ConfigurationBuilder();
+                    
+                    if (Convert.ToBoolean(builtConfig["UseVault"]))
+                    {
+                        configurationBuilder.AddAzureKeyVault(
+                            $"https://{builtConfig["Vault:Name"]}.vault.azure.net/",
+                            builtConfig["Vault:ClientId"],
+                            builtConfig["Vault:ClientSecret"]);
+                    }
+
+                    configurationBuilder.AddEnvironmentVariables();
+
+                    config.AddConfiguration(configurationBuilder.Build());
                 })
                 .ConfigureLogging((hostingContext, builder) =>
                 {

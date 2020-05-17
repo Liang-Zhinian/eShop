@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using eShopOnContainers.Core.Services.Catalog;
+using eShop.Core.Services.Catalog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 
-namespace Microsoft.eShopOnContainers.Catalog.WebForms.Modules
+namespace Eva.eShop.Catalog.WebForms.Modules
 {
     // Using DI with WebForms is not yet implemented.
     // This implementation has been adapted from this post:

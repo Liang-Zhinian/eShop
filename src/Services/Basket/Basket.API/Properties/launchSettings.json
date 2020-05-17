@@ -1,4 +1,4 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -16,10 +16,10 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SaaSEqt.eShop.Services.Basket.API": {
+    "Eva.eShop.Services.Basket.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5103/",
+      "launchUrl": "http://localhost:55103/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

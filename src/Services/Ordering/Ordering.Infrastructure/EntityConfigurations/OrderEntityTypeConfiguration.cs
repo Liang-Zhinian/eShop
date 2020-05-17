@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure;
 using System;
+using MySql.Data.EntityFrameworkCore.Extensions;
 
 namespace Ordering.Infrastructure.EntityConfigurations
 {
@@ -19,23 +19,16 @@ namespace Ordering.Infrastructure.EntityConfigurations
             orderConfiguration.Ignore(b => b.DomainEvents);
 
             orderConfiguration.Property(o => o.Id)
-                              .UseMySQLAutoIncrementColumn("orderseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
+                .UseMySQLAutoIncrementColumn("orderseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
 
             //Address value object persisted as owned entity type supported since EF Core 2.0
-            orderConfiguration.OwnsOne(o => o.Address, y=>{
-                y.Property(_ => _.Street);
-                y.Property(_ => _.City);
-                y.Property(_ => _.State);
-                y.Property(_ => _.Country);
-                y.Property(_ => _.ZipCode);
-            });
+            orderConfiguration.OwnsOne(o => o.Address);
 
             orderConfiguration.Property<DateTime>("OrderDate").IsRequired();
             orderConfiguration.Property<int?>("BuyerId").IsRequired(false);
             orderConfiguration.Property<int>("OrderStatusId").IsRequired();
             orderConfiguration.Property<int?>("PaymentMethodId").IsRequired(false);
             orderConfiguration.Property<string>("Description").IsRequired(false);
-            orderConfiguration.Property<Guid>("MerchantId").HasColumnType("char(36)").IsRequired();
 
             var navigation = orderConfiguration.Metadata.FindNavigation(nameof(Order.OrderItems));
             

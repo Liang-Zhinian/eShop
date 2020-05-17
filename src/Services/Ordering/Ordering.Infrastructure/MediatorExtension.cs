@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
+using Eva.eShop.Services.Ordering.Domain.Seedwork;
+using Eva.eShop.Services.Ordering.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Commands;
+using Eva.eShop.Services.Ordering.API.Application.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SaaSEqt.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
+using static Eva.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
 
 namespace Ordering.API.Application.Validations
 {

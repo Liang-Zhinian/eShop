@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
+namespace Eva.eShop.Web.Shopping.HttpAggregator.Models
 {
     public class UpdateBasketItemsRequest
     {

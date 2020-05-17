@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using eShopOnContainers.WebSPA;
+using eShop.WebSPA;
 
 namespace eShopConContainers.WebSPA.Server.Controllers
 {

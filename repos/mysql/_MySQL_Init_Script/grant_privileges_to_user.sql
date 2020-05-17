@@ -1,2 +1,0 @@
-CREATE USER 'book2'@'%' IDENTIFIED BY 'P@ssword';
-GRANT ALL PRIVILEGES ON *.* TO 'book2'@'%';

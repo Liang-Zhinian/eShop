@@ -1,40 +1,35 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using SaaSEqt.eShop.Services.Catalog.API.Infrastructure;
-using System;
+using Eva.eShop.Services.Catalog.API.Infrastructure;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
-{
+namespace Eva.eShop.Services.Catalog.API.Controllers
+{ 
     public class PicController : Controller
     {
         private readonly IHostingEnvironment _env;
         private readonly CatalogContext _catalogContext;
-        private readonly ILogger<PicController> _logger;
 
         public PicController(IHostingEnvironment env,
-                             CatalogContext catalogContext,
-                             ILogger<PicController> logger)
+            CatalogContext catalogContext)
         {
             _env = env;
             _catalogContext = catalogContext;
-            _logger = logger;
         }
 
         [HttpGet]
-        [Route("api/v1/catalog/items/{catalogItemId:guid}/pic")]
+        [Route("api/v1/catalog/items/{catalogItemId:int}/pic")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         // GET: /<controller>/
-        public async Task<IActionResult> GetImage(Guid catalogItemId)
+        public async Task<IActionResult> GetImage(int catalogItemId)
         {
-            if (catalogItemId == Guid.Empty)
+            if (catalogItemId <= 0)
             {
                 return BadRequest();
             }
@@ -45,8 +40,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Controllers
             if (item != null)
             {
                 var webRoot = _env.WebRootPath;
-                var path = Path.Combine(webRoot, item.PictureFileName);
-                _logger.LogDebug("path: " + path);
+                var path = Path.Combine(webRoot, "Pics", item.PictureFileName);
 
                 string imageFileExtension = Path.GetExtension(item.PictureFileName);
                 string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);

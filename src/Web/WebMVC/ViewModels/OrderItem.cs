@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels
+namespace Eva.eShop.WebMVC.ViewModels
 {
     public class OrderItem
     {
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
 
         public string ProductName { get; set; }
 
@@ -18,7 +18,5 @@ namespace SaaSEqt.eShop.WebMVC.ViewModels
         public int Units { get; set; }
 
         public string PictureUrl { get; set; }
-
-        public string MerchantId { get; set; }
     }
 }

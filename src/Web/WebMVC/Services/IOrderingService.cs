@@ -1,11 +1,11 @@
-﻿using SaaSEqt.eShop.WebMVC.ViewModels;
+﻿using Eva.eShop.WebMVC.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebMVC.Models;
 
-namespace SaaSEqt.eShop.WebMVC.Services
+namespace Eva.eShop.WebMVC.Services
 {
     public interface IOrderingService
     {

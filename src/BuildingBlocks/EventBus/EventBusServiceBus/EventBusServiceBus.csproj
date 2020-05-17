@@ -2,22 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus</RootNamespace>
-    <Authors>LiangZhinian</Authors>
-    <DevelopmentDependency>true</DevelopmentDependency>
-    <Owners>LiangZhinian</Owners>
-    <PackOnBuild>true</PackOnBuild>
-    <PackageId>EventBusServiceBus</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Description>EventBusServiceBus</Description>
+    <RootNamespace>Eva.BuildingBlocks.EventBusServiceBus</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="2.0.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
-    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.0.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

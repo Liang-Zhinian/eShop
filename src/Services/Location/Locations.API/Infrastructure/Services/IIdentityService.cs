@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.Services
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure.Services
 {
     public interface IIdentityService
     {

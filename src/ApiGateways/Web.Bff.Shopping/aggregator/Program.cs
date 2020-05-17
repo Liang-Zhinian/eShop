@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator
+namespace Eva.eShop.Web.Shopping.HttpAggregator
 {
     public class Program
     {

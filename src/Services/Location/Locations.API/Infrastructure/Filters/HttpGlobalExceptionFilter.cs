@@ -1,10 +1,10 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.Filters
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure.Filters
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Filters;
-    using SaaSEqt.eShop.Services.Locations.API.Infrastructure.ActionResults;
-    using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Exceptions;
+    using Eva.eShop.Services.Locations.API.Infrastructure.ActionResults;
+    using Eva.eShop.Services.Locations.API.Infrastructure.Exceptions;
     using Microsoft.Extensions.Logging;
     using System.Net;
 

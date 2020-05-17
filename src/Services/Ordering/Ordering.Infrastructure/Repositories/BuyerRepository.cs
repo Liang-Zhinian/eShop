@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.Infrastructure.Repositories
+namespace Eva.eShop.Services.Ordering.Infrastructure.Repositories
 {
     public class BuyerRepository
         : IBuyerRepository

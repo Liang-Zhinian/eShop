@@ -11,14 +11,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.ServiceBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
-using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
-using SaaSEqt.eShop.Services.Basket.API.IntegrationEvents.EventHandling;
-using SaaSEqt.eShop.Services.Basket.API.IntegrationEvents.Events;
-using SaaSEqt.eShop.Services.Basket.API.Model;
-using SaaSEqt.eShop.Services.Basket.API.Services;
+using Eva.BuildingBlocks.EventBus;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBusRabbitMQ;
+using Eva.BuildingBlocks.EventBusServiceBus;
+using Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling;
+using Eva.eShop.Services.Basket.API.IntegrationEvents.Events;
+using Eva.eShop.Services.Basket.API.Model;
+using Eva.eShop.Services.Basket.API.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Basket.API
+namespace Eva.eShop.Services.Basket.API
 {
     public class Startup
     {

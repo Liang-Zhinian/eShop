@@ -1,236 +1,259 @@
 version: '3.4'
+            
+
+volumes:
+  mysqldata:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=172.20.10.3,rw"
+      device: ":/Users/sprite/Documents/docker_data_storage/mysql/data"
+  mysqlconf:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=172.20.10.3,rw"
+      device: ":/Users/sprite/Documents/docker_data_storage/mysql/conf"
+  mysqlinit:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=172.20.10.3,rw"
+      device: ":/Users/sprite/Documents/docker_data_storage/mysql/init"
+     
 
 services:
+  # seq:
+  #   image: datalust/seq:latest
+    
+  sql-data:
+    image: mysql/mysql-server:5.7
 
-  test.api:
-    image: eshop/test.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Identity/Api/Dockerfile
+  nosql-data:
+    image: mongo
 
-  sms.api:
-    image: eshop/sms.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Sms/Sms.API/Dockerfile
+  basket-data:
+    image: redis:alpine
 
-  branding.api:
-    image: eshop/branding.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Branding/Branding.API/Dockerfile    
-    depends_on:
-      - sql.data
-      - rabbitmq
-    volumes:
-      - ./repos/Pics:/app/Pics
+  rabbitmq:
+    image: rabbitmq:3.7-management-alpine
 
-  appointment.api:
-    image: eshop/appointment.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Appointment/Appointment.API/Dockerfile    
-    depends_on:
-      - sql.data
-      - rabbitmq
-
-  schedule.api:
-    image: eshop/schedule.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Schedule/Schedule.API/Dockerfile    
-    depends_on:
-      - sql.data
-      - rabbitmq
-
-  sites.api:
-    image: eshop/sites.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Site/Sites.API/Dockerfile    
-    depends_on:
-      - sql.data
-      - rabbitmq
-    volumes:
-      - ./repos/Pics:/app/Pics
-
-  identityaccess.api:
-    image: eshop/identityaccess.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/IdentityAccess/IdentityAccess.API/Dockerfile    
-    depends_on:
-      - sql.data
-      - rabbitmq
-
-  mobilereservationagg:
-    image: eshop/mobilereservationagg:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/ApiGateways/Mobile.Bff.Reservation/aggregator/Dockerfile
-
-  mobilereservationapigw:
-    image: eshop/ocelotapigw:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-
-
-  basket.api:
-    image: eshop/basket.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Basket/Basket.API/Dockerfile    
-    depends_on:
-      - basket.data
-      - identity.api
-      - rabbitmq
-
-  catalog.api:
-    image: eshop/catalog.api:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
-    depends_on:
-      - sql.data
-      - rabbitmq
-    volumes:
-      - ./repos/Pics:/app/Pics
-
-  identity.api:
-    image: eshop/identity.api:${TAG:-latest}
+  identity-api:
+    image: ${REGISTRY:-eshop}/identity.api:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Identity/Identity.API/Dockerfile    
     depends_on:
-      - sql.data
+      - sql-data
 
-  ordering.api:
-    image: eshop/ordering.api:${TAG:-latest}
+  basket-api:
+    image: ${REGISTRY:-eshop}/basket.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Basket/Basket.API/Dockerfile    
+    depends_on:
+      - basket-data
+      - identity-api
+      - rabbitmq
+
+  catalog-api:
+    image: ${REGISTRY:-eshop}/catalog.api:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
+    depends_on:
+      - sql-data
+      - rabbitmq
+
+  ordering-api:
+    image: ${REGISTRY:-eshop}/ordering.api:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Ordering/Ordering.API/Dockerfile    
     depends_on:
-      - sql.data
+      - sql-data
       - rabbitmq
 
-  ordering.backgroundtasks:
-    image: eshop/ordering.backgroundtasks:${TAG:-latest}
+  ordering-backgroundtasks:
+    image: ${REGISTRY:-eshop}/ordering.backgroundtasks:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Ordering/Ordering.BackgroundTasks/Dockerfile    
     depends_on:
-      - sql.data
+      - sql-data
       - rabbitmq
 
-  marketing.api:
-    image: eshop/marketing.api:${TAG:-latest}
+  marketing-api:
+    image: ${REGISTRY:-eshop}/marketing.api:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Marketing/Marketing.API/Dockerfile    
     depends_on:
-      - sql.data
-      - nosql.data
-      - identity.api
+      - sql-data
+      - nosql-data
+      - identity-api
       - rabbitmq
 
-  webmvc:
-    image: eshop/webmvc:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Web/WebMVC/Dockerfile    
-    depends_on:
-      - catalog.api
-      - ordering.api
-      - identity.api
-      - basket.api
-      - marketing.api
-
-  webstatus:
-    image: eshop/webstatus:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Web/WebStatus/Dockerfile
-
-  payment.api:
-    image: eshop/payment.api:${TAG:-latest}
+  payment-api:
+    image: ${REGISTRY:-eshop}/payment.api:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Payment/Payment.API/Dockerfile
     depends_on:
       - rabbitmq    
-    
-  locations.api:
-    image: eshop/locations.api:${TAG:-latest}
+
+  locations-api:
+    image: ${REGISTRY:-eshop}/locations.api:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Location/Locations.API/Dockerfile
     depends_on:
-      - nosql.data
+      - nosql-data
       - rabbitmq
 
-  sql.data:
-    image: mysql/mysql-server:${TAG:-latest}
-    environment:
-      MYSQL_ROOT_PASSWORD: P@ssword
-      MYSQL_HOST: localhost
-    restart: always
-    volumes:
-      - ./repos/mysql/data:/var/lib/mysql
-      - ./repos/mysql/conf.d:/etc/mysql/conf.d
-      - ./repos/mysql/_MySQL_Init_Script:/docker-entrypoint-initdb.d
-      - ./repos/mysql/conf.d/custom.cnf:/etc/mysql/conf.d/custom.cnf
-    ports:
-      - "33306:3306"    # Important: In a production environment your should remove the external port
-
-  nosql.data:
-    image: mongo
-
-  basket.data:
-    image: redis:alpine
-      
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
+  # webhooks-api:
+  #   image: ${REGISTRY:-eshop}/webhooks.api:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/Services/Webhooks/Webhooks.API/Dockerfile
+  #   depends_on:
+  #     - sql-data    
 
   mobileshoppingapigw:
-    image: eshop/ocelotapigw:${TAG:-latest}
+    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
     build:
       context: .
       dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
- 
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
+
   mobilemarketingapigw:
-    image: eshop/ocelotapigw:${TAG:-latest}
+    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
     build:
       context: .
       dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
- 
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
+
   webshoppingapigw:
-    image: eshop/ocelotapigw:${TAG:-latest}
+    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
     build:
       context: .
       dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
 
   webmarketingapigw:
-    image: eshop/ocelotapigw:${TAG:-latest}
+    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
     build:
       context: .
       dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
 
   mobileshoppingagg:
-    image: eshop/mobileshoppingagg:${TAG:-latest}
+    image: ${REGISTRY:-eshop}/mobileshoppingagg:${TAG:-latest}
     build:
       context: .
       dockerfile: src/ApiGateways/Mobile.Bff.Shopping/aggregator/Dockerfile
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
 
   webshoppingagg:
-    image: eshop/webshoppingagg:${TAG:-latest}
+    image: ${REGISTRY:-eshop}/webshoppingagg:${TAG:-latest}
     build:
       context: .
       dockerfile: src/ApiGateways/Web.Bff.Shopping/aggregator/Dockerfile
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
 
-  ordering.signalrhub:
-    image: eshop/ordering.signalrhub:${TAG:-latest}
+  ordering-signalrhub:
+    image: ${REGISTRY:-eshop}/ordering.signalrhub:${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Ordering/Ordering.SignalrHub/Dockerfile
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
 
+  webstatus:
+    image: ${REGISTRY:-eshop}/webstatus:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Web/WebStatus/Dockerfile
+
+  # webspa:
+  #   image: ${REGISTRY:-eshop}/webspa:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/Web/WebSPA/Dockerfile    
+#    depends_on:
+#      - webshoppingagg
+#      - webshoppingapigw
+#      - webmarketingapigw
+
+  webmvc:
+    image: ${REGISTRY:-eshop}/webmvc:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Web/WebMVC/Dockerfile    
+    depends_on:
+      - webshoppingagg
+      - webshoppingapigw
+      - webmarketingapigw
+
+  # webhooks-client:
+  #   image: ${REGISTRY:-eshop}/webhooks.client:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/Web/WebhookClient/Dockerfile
+  #   depends_on:
+  #     - webhooks-api    

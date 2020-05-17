@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels
+namespace Eva.eShop.WebMVC.ViewModels
 {
     public class BasketItem
     {
@@ -14,6 +14,5 @@ namespace SaaSEqt.eShop.WebMVC.ViewModels
         public decimal OldUnitPrice { get; set; }
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
-        public string MerchantId { get; set; }
     }
 }

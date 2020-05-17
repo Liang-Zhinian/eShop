@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Eva.eShop.Services.Marketing.API.Model;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Services.Marketing.API.Model;
 
-namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.EntityConfigurations
+namespace Eva.eShop.Services.Marketing.API.Infrastructure.EntityConfigurations
 {
     class CampaignEntityTypeConfiguration
         : IEntityTypeConfiguration<Campaign>
@@ -15,7 +15,7 @@ namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.EntityConfiguratio
             builder.HasKey(m => m.Id);
 
             builder.Property(m => m.Id)
-                   .UseMySQLAutoIncrementColumn("campaign_hilo")
+                .UseMySQLAutoIncrementColumn("campaign_hilo")
                 .IsRequired();
 
             builder.Property(m => m.Name)

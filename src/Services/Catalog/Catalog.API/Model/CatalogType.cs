@@ -1,13 +1,9 @@
-﻿using System;
-
-namespace SaaSEqt.eShop.Services.Catalog.API.Model
+﻿namespace Eva.eShop.Services.Catalog.API.Model
 {
     public class CatalogType
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string Type { get; set; }
-
-        public Guid MerchantId { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SaaSEqt.eShop.Services.Basket.API.Controllers
+namespace Eva.eShop.Services.Basket.API.Controllers
 {
     public class HomeController : Controller
     {

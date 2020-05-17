@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SaaSEqt.eShop.Services.Marketing.API.Dto
+namespace Eva.eShop.Services.Marketing.API.Dto
 {
     public class UserLocationDTO
     {

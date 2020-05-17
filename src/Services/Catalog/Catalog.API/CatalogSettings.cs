@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Catalog.API
+﻿namespace Eva.eShop.Services.Catalog.API
 {
     public class CatalogSettings
     {

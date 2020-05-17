@@ -1,6 +1,6 @@
 ﻿using Basket.API.IntegrationEvents.Events;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.Services.Basket.API.Model;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.eShop.Services.Basket.API.Model;
 using System;
 using System.Threading.Tasks;
 

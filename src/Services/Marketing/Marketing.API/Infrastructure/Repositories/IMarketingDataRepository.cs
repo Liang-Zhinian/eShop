@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Repositories
+﻿namespace Eva.eShop.Services.Marketing.API.Infrastructure.Repositories
 {
     using Model;
     using System.Threading.Tasks;

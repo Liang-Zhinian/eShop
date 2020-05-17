@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure;
 
 namespace Ordering.Infrastructure.EntityConfigurations
 {

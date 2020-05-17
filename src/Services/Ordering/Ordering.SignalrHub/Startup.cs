@@ -3,10 +3,10 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.ServiceBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ;
-using SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus;
+using Eva.BuildingBlocks.EventBus;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBusRabbitMQ;
+using Eva.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -134,7 +134,7 @@ namespace Ordering.SignalrHub
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotificationsHub>("/notificationhub", options =>
-                    options.Transports = Microsoft.AspNetCore.Http.Connections.TransportType.All);
+                    options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransports.All);
             });
 
             ConfigureEventBus(app);

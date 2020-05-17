@@ -7,7 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.Extensions
+namespace Eva.eShop.WebMVC.Extensions
 {
     public static class HttpClientExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency;
+using Eva.eShop.Services.Ordering.Infrastructure;
+using Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
 
 namespace Ordering.Infrastructure.EntityConfigurations
 {

@@ -1,6 +1,6 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure
 {
-    using SaaSEqt.eShop.Services.Locations.API.Model;
+    using Eva.eShop.Services.Locations.API.Model;
     using Microsoft.Extensions.Options;
     using MongoDB.Driver;
 

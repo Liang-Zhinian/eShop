@@ -1,10 +1,10 @@
-﻿using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+﻿using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using Ordering.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate
+namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate
 {
     public class Buyer
       : Entity, IAggregateRoot

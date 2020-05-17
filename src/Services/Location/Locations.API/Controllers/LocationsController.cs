@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Services.Locations.API.Infrastructure.Services;
-using SaaSEqt.eShop.Services.Locations.API.Model;
-using SaaSEqt.eShop.Services.Locations.API.ViewModel;
+using Eva.eShop.Services.Locations.API.Infrastructure.Services;
+using Eva.eShop.Services.Locations.API.Model;
+using Eva.eShop.Services.Locations.API.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Net;

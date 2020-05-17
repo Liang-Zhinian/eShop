@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Models.AccountViewModels
+namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {

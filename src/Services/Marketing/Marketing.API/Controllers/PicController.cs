@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Controllers
+﻿namespace Eva.eShop.Services.Marketing.API.Controllers
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;

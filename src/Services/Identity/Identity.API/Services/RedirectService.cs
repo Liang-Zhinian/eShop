@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Services
+namespace Eva.eShop.Services.Identity.API.Services
 {
     public class RedirectService : IRedirectService
     {

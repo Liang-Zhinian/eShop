@@ -1,6 +1,5 @@
-﻿namespace SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Catalog.API.IntegrationEvents.Events
 {
-    using System;
     using BuildingBlocks.EventBus.Events;
 
     // Integration Events notes: 
@@ -8,13 +7,13 @@
     // An Integration Event is an event that can cause side effects to other microsrvices, Bounded-Contexts or external systems.
     public class ProductPriceChangedIntegrationEvent : IntegrationEvent
     {        
-        public Guid ProductId { get; private set; }
+        public int ProductId { get; private set; }
 
         public decimal NewPrice { get; private set; }
 
         public decimal OldPrice { get; private set; }
 
-        public ProductPriceChangedIntegrationEvent(Guid productId, decimal newPrice, decimal oldPrice)
+        public ProductPriceChangedIntegrationEvent(int productId, decimal newPrice, decimal oldPrice)
         {
             ProductId = productId;
             NewPrice = newPrice;

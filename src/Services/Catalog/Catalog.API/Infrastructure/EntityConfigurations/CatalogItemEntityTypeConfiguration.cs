@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Eva.eShop.Services.Catalog.API.Model;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Services.Catalog.API.Model;
 
-namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
+namespace Eva.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
 {
     class CatalogItemEntityTypeConfiguration
         : IEntityTypeConfiguration<CatalogItem>
@@ -14,8 +13,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.ToTable("Catalog");
 
             builder.Property(ci => ci.Id)
-                   .HasColumnType(Constants.DbConstants.KeyType)
-                   .ValueGeneratedOnAdd()
+                .UseMySQLAutoIncrementColumn("catalog_hilo")
                 .IsRequired();
 
             builder.Property(ci => ci.Name)
@@ -37,8 +35,6 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.HasOne(ci => ci.CatalogType)
                 .WithMany()
                 .HasForeignKey(ci => ci.CatalogTypeId);
-
-            builder.Property<Guid>("MerchantId").HasColumnType(Constants.DbConstants.KeyType);
         }
     }
 }

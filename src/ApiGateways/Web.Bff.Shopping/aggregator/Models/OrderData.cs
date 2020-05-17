@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
+namespace Eva.eShop.Web.Shopping.HttpAggregator.Models
 {
     public class OrderData
     {
@@ -23,7 +23,6 @@ namespace SaaSEqt.eShop.Web.Shopping.HttpAggregator.Models
         public DateTime CardExpiration { get; set; }
         public string CardExpirationShort { get; set; }
         public string CardSecurityNumber { get; set; }
-        public string MerchantId { get; set; }
 
         public int CardTypeId { get; set; }
 

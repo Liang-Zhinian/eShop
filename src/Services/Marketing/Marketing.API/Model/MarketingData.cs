@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Services.Marketing.API.Model
+namespace Eva.eShop.Services.Marketing.API.Model
 {
     public class MarketingData
     {

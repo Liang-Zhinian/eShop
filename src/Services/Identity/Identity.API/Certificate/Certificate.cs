@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Certificates
+namespace Eva.eShop.Services.Identity.API.Certificates
 {
     static class Certificate
     {

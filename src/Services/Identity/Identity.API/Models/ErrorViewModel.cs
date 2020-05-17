@@ -4,7 +4,7 @@
 
 using IdentityServer4.Models;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Models
+namespace Eva.eShop.Services.Identity.API.Models
 {
     public class ErrorViewModel
     {

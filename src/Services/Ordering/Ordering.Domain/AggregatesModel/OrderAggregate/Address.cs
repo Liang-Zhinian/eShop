@@ -1,8 +1,8 @@
-﻿using SaaSEqt.eShop.Services.Ordering.Domain.SeedWork;
+﻿using Eva.eShop.Services.Ordering.Domain.SeedWork;
 using System;
 using System.Collections.Generic;
 
-namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
+namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
 {
     public class Address : ValueObject
     {

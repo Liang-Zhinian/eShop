@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Dto
+﻿namespace Eva.eShop.Services.Marketing.API.Dto
 {
     using System;
 

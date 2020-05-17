@@ -1,16 +1,18 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+using Microsoft.EntityFrameworkCore.Storage;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.EntityConfigurations;
 using System;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.Infrastructure
+namespace Eva.eShop.Services.Ordering.Infrastructure
 {
     public class OrderingContext : DbContext, IUnitOfWork
     {
@@ -23,8 +25,11 @@ namespace SaaSEqt.eShop.Services.Ordering.Infrastructure
         public DbSet<OrderStatus> OrderStatus { get; set; }
 
         private readonly IMediator _mediator;
+        private IDbContextTransaction _currentTransaction;
 
         private OrderingContext(DbContextOptions<OrderingContext> options) : base (options) { }
+
+        public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
 
         public OrderingContext(DbContextOptions<OrderingContext> options, IMediator mediator) : base(options)
         {
@@ -56,11 +61,54 @@ namespace SaaSEqt.eShop.Services.Ordering.Infrastructure
             await _mediator.DispatchDomainEventsAsync(this);
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
-            // performed throught the DbContext will be commited
+            // performed through the DbContext will be committed
             var result = await base.SaveChangesAsync();
 
             return true;
-        }        
+        }
+
+        public async Task BeginTransactionAsync()
+        {
+            _currentTransaction = _currentTransaction ?? await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            try
+            {
+                await SaveChangesAsync();
+                _currentTransaction?.Commit();
+            }
+            catch
+            {
+                RollbackTransaction();
+                throw;
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
+        }
+
+        public void RollbackTransaction()
+        {
+            try
+            {
+                _currentTransaction?.Rollback();
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
+        }
     }
 
     public class OrderingContextDesignFactory : IDesignTimeDbContextFactory<OrderingContext>
@@ -68,7 +116,7 @@ namespace SaaSEqt.eShop.Services.Ordering.Infrastructure
         public OrderingContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<OrderingContext>()
-                .UseMySql("Server=127.0.0.1;database=SaaSEqt_eShop_Services_OrderingDb;uid=book2;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=127.0.0.1;database=SaaSEqt_eShop_Services_OrderingDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
 
             return new OrderingContext(optionsBuilder.Options,new NoMediator());
         }

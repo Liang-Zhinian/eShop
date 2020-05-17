@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Locations.API
+namespace Eva.eShop.Services.Locations.API
 {
     public class LocationSettings
     {

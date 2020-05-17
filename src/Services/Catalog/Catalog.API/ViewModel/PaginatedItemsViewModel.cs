@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Catalog.API.ViewModel
+﻿namespace Eva.eShop.Services.Catalog.API.ViewModel
 {
     using System.Collections.Generic;
 

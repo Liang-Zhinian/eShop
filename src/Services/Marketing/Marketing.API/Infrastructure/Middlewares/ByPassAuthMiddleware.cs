@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Middlewares
+namespace Eva.eShop.Services.Marketing.API.Infrastructure.Middlewares
 {
     class ByPassAuthMiddleware
     {

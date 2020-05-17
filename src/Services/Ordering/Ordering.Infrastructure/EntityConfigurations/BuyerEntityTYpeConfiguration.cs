@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
 
 namespace Ordering.Infrastructure.EntityConfigurations
 {
@@ -18,8 +18,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
             buyerConfiguration.Ignore(b => b.DomainEvents);
 
             buyerConfiguration.Property(b => b.Id)
-                              .UseMySQLAutoIncrementColumn("buyerseq");
-                //.ForSqlServerUseSequenceHiLo("buyerseq", OrderingContext.DEFAULT_SCHEMA);
+                .UseMySQLAutoIncrementColumn("buyerseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
 
             buyerConfiguration.Property(b => b.IdentityGuid)
                 .HasMaxLength(200)

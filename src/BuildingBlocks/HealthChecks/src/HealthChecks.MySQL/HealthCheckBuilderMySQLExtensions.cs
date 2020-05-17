@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Microsoft.Extensions.HealthChecks;
 using MySql.Data.MySqlClient;
 
-namespace SaaSEqt.Infrastructure.HealthChecks.MySQL
+namespace Eva.BuildingBlocks.HealthChecks.MySQL
 {
     public static class HealthCheckBuilderMySQLExtensions
     {
-        public static HealthCheckBuilder AddMySQLCheck(this HealthCheckBuilder builder, string name, string connectionString)
+        public static HealthCheckBuilder AddMySqlCheck(this HealthCheckBuilder builder, string name, string connectionString)
         {
             Guard.ArgumentNotNull(nameof(builder), builder);
 
-            return AddMySQLCheck(builder, name, connectionString, builder.DefaultCacheDuration);
+            return AddMySqlCheck(builder, name, connectionString, builder.DefaultCacheDuration);
         }
 
-        public static HealthCheckBuilder AddMySQLCheck(this HealthCheckBuilder builder, string name, string connectionString, TimeSpan cacheDuration)
+        public static HealthCheckBuilder AddMySqlCheck(this HealthCheckBuilder builder, string name, string connectionString, TimeSpan cacheDuration)
         {
             builder.AddCheck($"MySqlCheck({name})", async () =>
             {
@@ -39,7 +40,9 @@ namespace SaaSEqt.Infrastructure.HealthChecks.MySQL
                 }
                 catch (Exception ex)
                 {
-                    return HealthCheckResult.Unhealthy($"MySqlCheck({name}): Exception during check: {ex.GetType().FullName}");
+                    Dictionary<string, object> data = new Dictionary<string, object>();
+                    data["Exception"] = ex;
+                    return HealthCheckResult.Unhealthy($"MySqlCheck({name}): Exception during check: {ex.GetType().FullName}", data);
                 }
             }, cacheDuration);
 

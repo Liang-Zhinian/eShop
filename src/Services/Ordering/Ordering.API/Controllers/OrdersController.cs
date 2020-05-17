@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Commands;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Queries;
-using SaaSEqt.eShop.Services.Ordering.API.Infrastructure.Services;
+using Eva.eShop.Services.Ordering.API.Application.Commands;
+using Eva.eShop.Services.Ordering.API.Application.Queries;
+using Eva.eShop.Services.Ordering.API.Infrastructure.Services;
 using Ordering.API.Application.Commands;
-using Ordering.API.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
+namespace Eva.eShop.Services.Ordering.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [Authorize]
+    [ApiController]
     public class OrdersController : Controller
     {
         private readonly IMediator _mediator;
@@ -63,12 +63,11 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
 
         }
 
-        [AllowAnonymous]
-        [Route("{orderId:minlength(1)}")]
+        [Route("{orderId:int}")]
         [HttpGet]
         [ProducesResponseType(typeof(Order),(int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetOrder(string orderId)
+        public async Task<IActionResult> GetOrder(int orderId)
         {
             try
             {
@@ -88,8 +87,8 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<OrderSummary>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetOrders()
         {
-            var orders = await _orderQueries.GetOrdersAsync();
-
+            var userid = _identityService.GetUserIdentity();
+            var orders = await _orderQueries.GetOrdersFromUserAsync(Guid.Parse(userid));
             return Ok(orders);
         }
 

@@ -1,10 +1,11 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+﻿using Eva.BuildingBlocks.EventBus.Events;
 using System.Threading.Tasks;
 
 namespace Ordering.API.Application.IntegrationEvents
 {
     public interface IOrderingIntegrationEventService
     {
-        Task PublishThroughEventBusAsync(IntegrationEvent evt);
+        Task PublishEventsThroughEventBusAsync();
+        Task AddAndSaveEventAsync(IntegrationEvent evt);
     }
 }

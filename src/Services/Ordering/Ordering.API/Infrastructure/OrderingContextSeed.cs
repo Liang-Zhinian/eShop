@@ -1,21 +1,18 @@
-﻿extern alias MySqlConnectorAlias;
-
-namespace SaaSEqt.eShop.Services.Ordering.API.Infrastructure
+﻿namespace Eva.eShop.Services.Ordering.API.Infrastructure
 {
-    using Microsoft.AspNetCore.Builder;
     using global::Ordering.API.Extensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
-    using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-    using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-    using Microsoft.Extensions.DependencyInjection;
+    using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+    using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+    using Eva.eShop.Services.Ordering.Domain.SeedWork;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Ordering.Infrastructure;
     using Polly;
     using System;
     using System.Collections.Generic;
-    //using System.Data.SqlClient;
+    using System.Data.SqlClient;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -99,14 +96,9 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Infrastructure
             return new CardType(id++, value.Trim('"').Trim());
         }
 
-        private  IEnumerable<CardType> GetPredefinedCardTypes()
+        private IEnumerable<CardType> GetPredefinedCardTypes()
         {
-            return new List<CardType>()
-            {
-                CardType.Amex,
-                CardType.Visa,
-                CardType.MasterCard
-            };
+            return Enumeration.GetAll<CardType>();
         }
 
         private IEnumerable<OrderStatus> GetOrderStatusFromFile(string contentRootPath, ILogger<OrderingContextSeed> log)
@@ -184,7 +176,7 @@ namespace SaaSEqt.eShop.Services.Ordering.API.Infrastructure
      
         private Policy CreatePolicy( ILogger<OrderingContextSeed> logger, string prefix, int retries =3)
         {
-            return Policy.Handle<MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlException>().
+            return Policy.Handle<SqlException>().
                 WaitAndRetryAsync(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

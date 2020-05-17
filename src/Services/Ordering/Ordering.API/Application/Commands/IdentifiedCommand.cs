@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
+namespace Eva.eShop.Services.Ordering.API.Application.Commands
 {
     public class IdentifiedCommand<T, R> : IRequest<R>
         where T : IRequest<R>

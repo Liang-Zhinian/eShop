@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Abstractions;
 using Ordering.SignalrHub.IntegrationEvents;
 using System;
 using System.Collections.Generic;

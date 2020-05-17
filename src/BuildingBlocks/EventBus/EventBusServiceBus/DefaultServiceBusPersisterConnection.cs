@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace SaaSEqt.eShop.BuildingBlocks.EventBusServiceBus
+namespace Eva.BuildingBlocks.EventBusServiceBus
 {
     public class DefaultServiceBusPersisterConnection :IServiceBusPersisterConnection
     {

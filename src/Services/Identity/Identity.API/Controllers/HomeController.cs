@@ -1,12 +1,12 @@
 ﻿
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Services.Identity.API.Models;
-using SaaSEqt.eShop.Services.Identity.API.Services;
+using Eva.eShop.Services.Identity.API.Models;
+using Eva.eShop.Services.Identity.API.Services;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Controllers
+namespace Eva.eShop.Services.Identity.API.Controllers
 {
     public class HomeController : Controller
     {

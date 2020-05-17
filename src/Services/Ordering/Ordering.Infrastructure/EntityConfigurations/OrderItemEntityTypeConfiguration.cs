@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure;
 using MySql.Data.EntityFrameworkCore.Extensions;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure;
 
 namespace Ordering.Infrastructure.EntityConfigurations
 {
@@ -19,7 +18,7 @@ namespace Ordering.Infrastructure.EntityConfigurations
             orderItemConfiguration.Ignore(b => b.DomainEvents);
 
             orderItemConfiguration.Property(o => o.Id)
-                                  .UseMySQLAutoIncrementColumn("orderitemseq");
+                .UseMySQLAutoIncrementColumn("orderitemseq");
 
             orderItemConfiguration.Property<int>("OrderId")
                 .IsRequired();
@@ -27,9 +26,8 @@ namespace Ordering.Infrastructure.EntityConfigurations
             orderItemConfiguration.Property<decimal>("Discount")
                 .IsRequired();
 
-            orderItemConfiguration.Property<Guid>("ProductId")
-                                  .HasColumnType("char(36)")
-                                    .IsRequired();
+            orderItemConfiguration.Property<int>("ProductId")
+                .IsRequired();
 
             orderItemConfiguration.Property<string>("ProductName")
                 .IsRequired();
@@ -42,10 +40,6 @@ namespace Ordering.Infrastructure.EntityConfigurations
 
             orderItemConfiguration.Property<string>("PictureUrl")
                 .IsRequired(false);
-            
-            orderItemConfiguration.Property<Guid>("MerchantId")
-                                  .HasColumnType("char(36)")
-                                  .IsRequired();
         }
     }
 }

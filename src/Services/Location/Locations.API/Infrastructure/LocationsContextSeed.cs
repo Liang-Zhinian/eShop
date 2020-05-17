@@ -1,7 +1,7 @@
-﻿namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure
+﻿namespace Eva.eShop.Services.Locations.API.Infrastructure
 {
     using Microsoft.AspNetCore.Builder;
-    using SaaSEqt.eShop.Services.Locations.API.Model;
+    using Eva.eShop.Services.Locations.API.Model;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;

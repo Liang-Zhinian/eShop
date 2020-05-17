@@ -1,11 +1,11 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.Services.Basket.API.IntegrationEvents.Events;
-using SaaSEqt.eShop.Services.Basket.API.Model;
+﻿using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.eShop.Services.Basket.API.IntegrationEvents.Events;
+using Eva.eShop.Services.Basket.API.Model;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Basket.API.IntegrationEvents.EventHandling
+namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 {
     public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>
     {
@@ -28,7 +28,7 @@ namespace SaaSEqt.eShop.Services.Basket.API.IntegrationEvents.EventHandling
             }
         }
 
-        private async Task UpdatePriceInBasketItems(Guid productId, decimal newPrice, decimal oldPrice, CustomerBasket basket)
+        private async Task UpdatePriceInBasketItems(int productId, decimal newPrice, decimal oldPrice, CustomerBasket basket)
         {
             string match = productId.ToString();
             var itemsToUpdate = basket?.Items?.Where(x => x.ProductId == match).ToList();

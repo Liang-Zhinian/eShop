@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Ordering.API
+﻿namespace Eva.eShop.Services.Ordering.API
 {
     public class OrderingSettings
     {
@@ -6,8 +6,6 @@
         public string ConnectionString { get; set; }
 
         public string EventBusConnection { get; set; }
-
-        public int GracePeriodTime { get; set; }
 
         public int CheckUpdateTime { get; set; }
     }

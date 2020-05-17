@@ -1,9 +1,9 @@
-﻿using SaaSEqt.eShop.Services.Marketing.API.Model;
+﻿using Eva.eShop.Services.Marketing.API.Model;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Repositories
+namespace Eva.eShop.Services.Marketing.API.Infrastructure.Repositories
 {
     public class MarketingDataRepository
         : IMarketingDataRepository

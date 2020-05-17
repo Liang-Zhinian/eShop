@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4.Models;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Models.AccountViewModels
+namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
     public class ConsentViewModel : ConsentInputModel
     {

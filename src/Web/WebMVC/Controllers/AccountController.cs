@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace SaaSEqt.eShop.WebMVC.Controllers
+namespace Eva.eShop.WebMVC.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -38,7 +38,7 @@ namespace SaaSEqt.eShop.WebMVC.Controllers
             // https://github.com/aspnet/Mvc/issues/5853
             var homeUrl = Url.Action(nameof(CatalogController.Index), "Catalog");
             return new SignOutResult(OpenIdConnectDefaults.AuthenticationScheme, 
-                                     new Microsoft.AspNetCore.Authentication.AuthenticationProperties { RedirectUri = homeUrl });
+                new Microsoft.AspNetCore.Authentication.AuthenticationProperties { RedirectUri = homeUrl });
         }
     }
 }

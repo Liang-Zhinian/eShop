@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 
-namespace SaaSEqt.eShop.BuildingBlocks.EventBusRabbitMQ
+namespace Eva.BuildingBlocks.EventBusRabbitMQ
 {
     public class DefaultRabbitMQPersistentConnection
        : IRabbitMQPersistentConnection

@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.WebMVC.Services
+﻿namespace Eva.eShop.WebMVC.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

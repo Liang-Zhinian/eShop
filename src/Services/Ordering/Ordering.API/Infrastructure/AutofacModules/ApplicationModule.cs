@@ -1,14 +1,14 @@
 ﻿using Autofac;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Commands;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Queries;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency;
-using SaaSEqt.eShop.Services.Ordering.Infrastructure.Repositories;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.eShop.Services.Ordering.API.Application.Commands;
+using Eva.eShop.Services.Ordering.API.Application.Queries;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
+using Eva.eShop.Services.Ordering.Infrastructure.Repositories;
 using System.Reflection;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Infrastructure.AutofacModules
+namespace Eva.eShop.Services.Ordering.API.Infrastructure.AutofacModules
 {
 
     public class ApplicationModule

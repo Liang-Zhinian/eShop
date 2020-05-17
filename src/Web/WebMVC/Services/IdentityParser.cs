@@ -1,4 +1,4 @@
-﻿using SaaSEqt.eShop.WebMVC.ViewModels;
+﻿using Eva.eShop.WebMVC.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.Services
+namespace Eva.eShop.WebMVC.Services
 {
     public class IdentityParser:IIdentityParser<ApplicationUser>
     {

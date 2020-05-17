@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
+using Eva.BuildingBlocks.EventBus.Events;
+using Eva.BuildingBlocks.IntegrationEventLogEF.Services;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
-namespace SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Utilities
+namespace Eva.BuildingBlocks.IntegrationEventLogEF.Utilities
 {
     public class ResilientTransaction
     {
@@ -32,11 +31,6 @@ namespace SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Utilities
                     await action();
                     transaction.Commit();
                 }
-
-                //using (var ts = new TransactionScope(TransactionScopeOption.RequiresNew)) { 
-                //    await action();
-                //    ts.Complete();
-                //}
             });
         }
     }

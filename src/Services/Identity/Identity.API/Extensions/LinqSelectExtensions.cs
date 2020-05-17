@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Extensions
+namespace Eva.eShop.Services.Identity.API.Extensions
 {
     public static class LinqSelectExtensions
     {

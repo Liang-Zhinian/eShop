@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels.CartViewModels
+namespace Eva.eShop.WebMVC.ViewModels.CartViewModels
 {
     public class CartComponentViewModel
     {

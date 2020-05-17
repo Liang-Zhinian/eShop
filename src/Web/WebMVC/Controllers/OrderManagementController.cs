@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
-using SaaSEqt.eShop.WebMVC.Services;
-using SaaSEqt.eShop.WebMVC.ViewModels;
+using Eva.eShop.WebMVC.Services;
+using Eva.eShop.WebMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebMVC.Controllers

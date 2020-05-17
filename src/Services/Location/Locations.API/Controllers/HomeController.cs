@@ -2,7 +2,7 @@
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace SaaSEqt.eShop.Services.Locations.API.Controllers
+namespace Eva.eShop.Services.Locations.API.Controllers
 {
     public class HomeController : Controller
     {

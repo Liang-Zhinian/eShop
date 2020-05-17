@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SaaSEqt.eShop.Services.Locations.API.Infrastructure.Filters
+namespace Eva.eShop.Services.Locations.API.Infrastructure.Filters
 {
     internal class AuthorizeCheckOperationFilter : IOperationFilter
     {

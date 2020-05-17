@@ -1,6 +1,6 @@
 ﻿namespace Payment.API.IntegrationEvents.Events
 {
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+    using Eva.BuildingBlocks.EventBus.Events;
 
     public class OrderPaymentSuccededIntegrationEvent : IntegrationEvent
     {

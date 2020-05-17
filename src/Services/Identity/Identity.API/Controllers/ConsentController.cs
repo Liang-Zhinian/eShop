@@ -2,12 +2,12 @@
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
-using SaaSEqt.eShop.Services.Identity.API.Models.AccountViewModels;
+using Eva.eShop.Services.Identity.API.Models.AccountViewModels;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Identity.API.Controllers
+namespace Eva.eShop.Services.Identity.API.Controllers
 {
     /// <summary>
     /// This controller implements the consent logic

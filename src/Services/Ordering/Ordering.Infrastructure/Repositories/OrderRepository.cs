@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using Ordering.Domain.Exceptions;
 using System;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.Infrastructure.Repositories
+namespace Eva.eShop.Services.Ordering.Infrastructure.Repositories
 {
     public class OrderRepository
         : IOrderRepository

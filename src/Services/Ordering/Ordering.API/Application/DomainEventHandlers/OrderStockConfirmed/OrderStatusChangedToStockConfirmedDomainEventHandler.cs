@@ -2,8 +2,8 @@
 {
     using Domain.Events;
     using MediatR;
-    using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-    using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+    using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+    using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
     using Microsoft.Extensions.Logging;
     using Ordering.API.Application.IntegrationEvents;
     using Ordering.API.Application.IntegrationEvents.Events;
@@ -41,7 +41,7 @@
             var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
             var orderStatusChangedToStockConfirmedIntegrationEvent = new OrderStatusChangedToStockConfirmedIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name);
-            await _orderingIntegrationEventService.PublishThroughEventBusAsync(orderStatusChangedToStockConfirmedIntegrationEvent);            
+            await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedToStockConfirmedIntegrationEvent);            
         }
     }  
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SaaSEqt.eShop.Services.Basket.API.Model
+namespace Eva.eShop.Services.Basket.API.Model
 {
     public class BasketItem : IValidatableObject
     {
@@ -12,7 +12,6 @@ namespace SaaSEqt.eShop.Services.Basket.API.Model
         public decimal OldUnitPrice { get; set; }
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
-        public string MerchantId { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();

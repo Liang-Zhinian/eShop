@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF;
+using Eva.BuildingBlocks.IntegrationEventLogEF;
 
 namespace Ordering.API.Infrastructure.IntegrationEventMigrations
 {
@@ -16,7 +16,7 @@ namespace Ordering.API.Infrastructure.IntegrationEventMigrations
                 .HasAnnotation("ProductVersion", "1.1.1")
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.IntegrationEventLogEntry", b =>
+            modelBuilder.Entity("Eva.BuildingBlocks.IntegrationEventLogEF.IntegrationEventLogEntry", b =>
                 {
                     b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd();

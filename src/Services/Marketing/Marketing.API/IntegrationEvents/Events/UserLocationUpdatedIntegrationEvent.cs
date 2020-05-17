@@ -1,7 +1,7 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Marketing.API.IntegrationEvents.Events
 {
     using Marketing.API.Model;
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+    using Eva.BuildingBlocks.EventBus.Events;
     using System.Collections.Generic;
 
     public class UserLocationUpdatedIntegrationEvent : IntegrationEvent

@@ -1,8 +1,7 @@
 ﻿namespace Ordering.API.Application.IntegrationEvents.Events
 {
-    using System;
     using System.Collections.Generic;
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+    using Eva.BuildingBlocks.EventBus.Events;
 
     public class OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
     {
@@ -23,10 +22,10 @@
 
     public class OrderStockItem
     {
-        public Guid ProductId { get; }
+        public int ProductId { get; }
         public int Units { get; }
 
-        public OrderStockItem(Guid productId, int units)
+        public OrderStockItem(int productId, int units)
         {
             ProductId = productId;
             Units = units;

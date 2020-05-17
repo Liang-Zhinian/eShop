@@ -1,9 +1,0 @@
-app_identifier "com.atpath.book2business" # The bundle identifier of your app
-apple_id "lzhinian@mac.com" # Your Apple email address
-
-team_id "7DB3EKX3GE" # Developer Portal Team ID
-
-itc_team_id "2079189"
-
-# you can even provide different app identifiers, Apple IDs and team names per lane:
-# More information: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md

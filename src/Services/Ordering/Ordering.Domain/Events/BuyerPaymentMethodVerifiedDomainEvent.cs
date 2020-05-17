@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Ordering.Domain.Events
 {

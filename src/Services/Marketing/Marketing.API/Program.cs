@@ -1,11 +1,12 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API
+﻿namespace Eva.eShop.Services.Marketing.API
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore;
-    using SaaSEqt.eShop.Services.Marketing.API.Infrastructure;
+    using Eva.eShop.Services.Marketing.API.Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using System;
     using System.IO;
 
     public class Program
@@ -33,7 +34,21 @@
                 .UseWebRoot("Pics")
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
-                    config.AddEnvironmentVariables();
+                    var builtConfig = config.Build();
+
+                    var configurationBuilder = new ConfigurationBuilder();
+
+                    if (Convert.ToBoolean(builtConfig["UseVault"]))
+                    {
+                        configurationBuilder.AddAzureKeyVault(
+                            $"https://{builtConfig["Vault:Name"]}.vault.azure.net/",
+                            builtConfig["Vault:ClientId"],
+                            builtConfig["Vault:ClientSecret"]);
+                    }
+
+                    configurationBuilder.AddEnvironmentVariables();
+
+                    config.AddConfiguration(configurationBuilder.Build());
                 })
                 .ConfigureLogging((hostingContext, builder) =>
                 {

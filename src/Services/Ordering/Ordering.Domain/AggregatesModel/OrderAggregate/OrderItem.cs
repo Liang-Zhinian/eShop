@@ -1,8 +1,8 @@
-﻿using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+﻿using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using Ordering.Domain.Exceptions;
 using System;
 
-namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
+namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
 {
     public class OrderItem
         : Entity
@@ -16,13 +16,11 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
         private decimal _discount;
         private int     _units;
 
-        public Guid ProductId { get; private set; }
-
-        public Guid MerchantId { get; private set; }
+        public int ProductId { get; private set; }
 
         protected OrderItem() { }
 
-        public OrderItem(Guid merchantId, Guid productId, string productName, decimal unitPrice, decimal discount, string PictureUrl, int units = 1)
+        public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, string PictureUrl, int units = 1)
         {
             if (units <= 0)
             {
@@ -34,7 +32,6 @@ namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
                 throw new OrderingDomainException("The total of order item is lower than applied discount");
             }
 
-            MerchantId = merchantId;
             ProductId = productId;
 
             _productName = productName;

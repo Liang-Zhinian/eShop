@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.WebMVC.ViewModels
+﻿namespace Eva.eShop.WebMVC.ViewModels
 {
     using System;
 

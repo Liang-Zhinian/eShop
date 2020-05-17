@@ -1,6 +1,6 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure
+﻿namespace Eva.eShop.Services.Marketing.API.Infrastructure
 {
-    using SaaSEqt.eShop.Services.Marketing.API.Model;
+    using Eva.eShop.Services.Marketing.API.Model;
     using Microsoft.Extensions.Options;
     using MongoDB.Driver;
 

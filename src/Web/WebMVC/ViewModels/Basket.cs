@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels
+namespace Eva.eShop.WebMVC.ViewModels
 {
     public class Basket
     {
@@ -13,11 +13,10 @@ namespace SaaSEqt.eShop.WebMVC.ViewModels
         // for read/write properties.
         public List<BasketItem> Items { get; set; } = new List<BasketItem>();
         public string BuyerId { get; set; }
-        public Dictionary<string, List<BasketItem>> OrganizedItems { get; set; } = new Dictionary<string, List<BasketItem>>();
 
         public decimal Total()
         {
-            return Math.Round(Items.Sum(x => x.UnitPrice * x.Quantity), 2);
+            return Math.Round(Items.Sum(x => x.UnitPrice * x.Quantity),2);
         }
     }
 }

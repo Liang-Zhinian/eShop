@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF
+namespace Eva.BuildingBlocks.IntegrationEventLogEF
 {
     public class IntegrationEventLogContext : DbContext
     {       

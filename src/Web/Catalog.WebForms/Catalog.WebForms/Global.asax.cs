@@ -3,7 +3,7 @@ using System.Web;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace Microsoft.eShopOnContainers.Catalog.WebForms
+namespace Eva.eShop.Catalog.WebForms
 {
     public class Global : HttpApplication
     {

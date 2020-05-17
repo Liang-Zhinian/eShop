@@ -1,7 +1,7 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+﻿using Eva.BuildingBlocks.EventBus.Events;
 using System;
 
-namespace SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions
+namespace Eva.BuildingBlocks.EventBus.Abstractions
 {
     public interface IEventBus
     {

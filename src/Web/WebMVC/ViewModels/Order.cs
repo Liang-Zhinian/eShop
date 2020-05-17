@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using SaaSEqt.eShop.WebMVC.ViewModels.Annotations;
+using Eva.eShop.WebMVC.ViewModels.Annotations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebMVC.Models;
 
-namespace SaaSEqt.eShop.WebMVC.ViewModels
+namespace Eva.eShop.WebMVC.ViewModels
 {
     public class Order
     {
@@ -19,11 +19,9 @@ namespace SaaSEqt.eShop.WebMVC.ViewModels
 
         public string Status { get; set; }
 
-        public decimal Total { get; set; }
+        public decimal Total {get;set;}
 
         public string Description { get; set; }
-
-        public string MerchantId { get; set; }
 
         [Required]
         public string City { get; set; }

@@ -1,16 +1,16 @@
-﻿namespace SaaSEqt.eShop.Services.Ordering.API.Application.Commands
+﻿namespace Eva.eShop.Services.Ordering.API.Application.Commands
 {
     using Domain.AggregatesModel.OrderAggregate;
     using global::Ordering.API.Application.Models;
     using MediatR;
-    using SaaSEqt.eShop.Services.Ordering.API.Infrastructure.Services;
-    using SaaSEqt.eShop.Services.Ordering.Infrastructure.Idempotency;
+    using Eva.eShop.Services.Ordering.API.Infrastructure.Services;
+    using Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using static SaaSEqt.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
+    using static Eva.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
 
     // Regular CommandHandler
     public class CreateOrderDraftCommandHandler
@@ -21,7 +21,7 @@
         private readonly IMediator _mediator;
 
         // Using DI to inject infrastructure persistence Repositories
-        public CreateOrderDraftCommandHandler(IMediator mediator, IIdentityService identityService)
+        public CreateOrderDraftCommandHandler(IMediator mediator,  IIdentityService identityService)
         {
             _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -32,7 +32,6 @@
 
             var order = Order.NewDraft();
             var orderItems = message.Items.Select(i => i.ToOrderItemDTO());
-            order.MerchantId = orderItems.Count() > 0 ? orderItems.First().MerchantId : Guid.Empty;
             foreach (var item in orderItems)
             {
                 order.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.Discount, item.PictureUrl, item.Units);
@@ -47,27 +46,19 @@
     {
         public IEnumerable<OrderItemDTO> OrderItems { get; set; }
         public decimal Total { get; set; }
-        public Guid MerchantId { get; set; }
 
         public static OrderDraftDTO FromOrder(Order order)
         {
             return new OrderDraftDTO()
             {
-                MerchantId = order.MerchantId,
-                OrderItems = order.OrderItems.Select(oi =>
+                OrderItems = order.OrderItems.Select(oi => new OrderItemDTO
                 {
-                    var orderItemDTO = new OrderItemDTO
-                    {
-                        Discount = oi.GetCurrentDiscount(),
-                        ProductId = oi.ProductId,
-                        UnitPrice = oi.GetUnitPrice(),
-                        PictureUrl = oi.GetPictureUri(),
-                        Units = oi.GetUnits(),
-                        ProductName = oi.GetOrderItemProductName(),
-                        MerchantId = oi.MerchantId
-                    };
-
-                    return orderItemDTO;
+                    Discount = oi.GetCurrentDiscount(),
+                    ProductId = oi.ProductId,
+                    UnitPrice = oi.GetUnitPrice(),
+                    PictureUrl = oi.GetPictureUri(),
+                    Units = oi.GetUnits(),
+                    ProductName = oi.GetOrderItemProductName()
                 }),
                 Total = order.GetTotal()
             };

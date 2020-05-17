@@ -1,9 +1,9 @@
-﻿namespace SaaSEqt.eShop.Services.Marketing.API.IntegrationEvents.Handlers
+﻿namespace Eva.eShop.Services.Marketing.API.IntegrationEvents.Handlers
 {
     using Marketing.API.IntegrationEvents.Events;
     using Marketing.API.Model;
-    using SaaSEqt.eShop.BuildingBlocks.EventBus.Abstractions;
-    using SaaSEqt.eShop.Services.Marketing.API.Infrastructure.Repositories;
+    using Eva.BuildingBlocks.EventBus.Abstractions;
+    using Eva.eShop.Services.Marketing.API.Infrastructure.Repositories;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;

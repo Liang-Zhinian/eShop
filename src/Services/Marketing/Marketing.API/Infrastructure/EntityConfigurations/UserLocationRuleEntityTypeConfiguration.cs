@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaaSEqt.eShop.Services.Marketing.API.Model;
+using Eva.eShop.Services.Marketing.API.Model;
 
-namespace SaaSEqt.eShop.Services.Marketing.API.Infrastructure.EntityConfigurations
+namespace Eva.eShop.Services.Marketing.API.Infrastructure.EntityConfigurations
 {
     class UserLocationRuleEntityTypeConfiguration
        : IEntityTypeConfiguration<UserLocationRule>

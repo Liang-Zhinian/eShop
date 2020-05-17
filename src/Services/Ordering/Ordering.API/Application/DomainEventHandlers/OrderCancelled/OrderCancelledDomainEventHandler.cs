@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
-using SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
+using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
 using Microsoft.Extensions.Logging;
 using Ordering.API.Application.IntegrationEvents;
 using Ordering.API.Application.IntegrationEvents.Events;
@@ -28,6 +28,7 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderCancelled
             _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _buyerRepository = buyerRepository ?? throw new ArgumentNullException(nameof(buyerRepository));
+            _orderingIntegrationEventService = orderingIntegrationEventService;
         }
 
         public async Task Handle(OrderCancelledDomainEvent orderCancelledDomainEvent, CancellationToken cancellationToken)
@@ -40,7 +41,7 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderCancelled
             var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
             var orderStatusChangedToCancelledIntegrationEvent = new OrderStatusChangedToCancelledIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name);
-            await _orderingIntegrationEventService.PublishThroughEventBusAsync(orderStatusChangedToCancelledIntegrationEvent);
+            await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedToCancelledIntegrationEvent);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿extern alias MySqlConnectorAlias;
-
-namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
+﻿namespace Eva.eShop.Services.Catalog.API.Infrastructure
 {
     using Microsoft.Extensions.Logging;
     using global::Catalog.API.Extensions;
@@ -10,30 +8,16 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
     using Polly;
     using System;
     using System.Collections.Generic;
-    //using System.Data.SqlClient;
+    using System.Data.SqlClient;
     using System.Globalization;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using MySql.Data.MySqlClient;
 
     public class CatalogContextSeed
     {
-        private Guid MerchantId = Guid.Parse("aa879796-630b-44a6-bc6c-c0a39853786c");
-
-        private Guid CatalogTypeId1 = Guid.Parse("fe6ed08d-3543-4f60-ae4d-8c3604dcaa62");
-        private Guid CatalogTypeId2 = Guid.Parse("660526d4-410e-4cbd-b19b-ef83a502302e");
-        private Guid CatalogTypeId3 = Guid.Parse("d28a2ff0-d610-4746-9b79-12c471bd8e6c");
-        private Guid CatalogTypeId4 = Guid.Parse("dff7ef75-2086-4416-be7f-de848dd37b92");
-
-        private Guid CatalogBrandId1 = Guid.Parse("8494bcb0-3194-426b-a4a4-3ea3db4b0af8");
-        private Guid CatalogBrandId2 = Guid.Parse("b6114cc6-25d4-4aa2-a611-c54b47ea9a97");
-        private Guid CatalogBrandId3 = Guid.Parse("5353cd3d-3d79-4b87-a310-5cf7de92d0d4");
-        private Guid CatalogBrandId4 = Guid.Parse("e4445fbb-6184-4e14-ac29-f3ea013e3b02");
-        private Guid CatalogBrandId5 = Guid.Parse("c84291df-9939-4197-aa05-e54bbb042902");
-
         public async Task SeedAsync(CatalogContext context,IHostingEnvironment env,IOptions<CatalogSettings> settings,ILogger<CatalogContextSeed> logger)
         {
             var policy = CreatePolicy(logger, nameof(CatalogContextSeed));
@@ -46,21 +30,29 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
 
                 if (!context.CatalogBrands.Any())
                 {
-                    await context.CatalogBrands.AddRangeAsync(GetPreconfiguredCatalogBrands());
+                    await context.CatalogBrands.AddRangeAsync(useCustomizationData
+                        ? GetCatalogBrandsFromFile(contentRootPath, logger)
+                        : GetPreconfiguredCatalogBrands());
 
                     await context.SaveChangesAsync();
                 }
 
                 if (!context.CatalogTypes.Any())
                 {
-                    await context.CatalogTypes.AddRangeAsync(GetPreconfiguredCatalogTypes());
+                    await context.CatalogTypes.AddRangeAsync(useCustomizationData
+                        ? GetCatalogTypesFromFile(contentRootPath, logger)
+                        : GetPreconfiguredCatalogTypes());
+
+                    await context.CatalogTypes.AddRangeAsync(GetPreconfiguredMediaCatalogTypes());
 
                     await context.SaveChangesAsync();
                 }
 
                 if (!context.CatalogItems.Any())
                 {
-                    await context.CatalogItems.AddRangeAsync(GetPreconfiguredItems());
+                    await context.CatalogItems.AddRangeAsync(useCustomizationData
+                        ? GetCatalogItemsFromFile(contentRootPath, context, logger)
+                        : GetPreconfiguredItems());
 
                     await context.SaveChangesAsync();
 
@@ -68,7 +60,16 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
                 }
             });
         }
-        /*
+
+        private IEnumerable<CatalogType> GetPreconfiguredMediaCatalogTypes()
+        {
+            return new List<CatalogType>()
+            {
+                new CatalogType() { Type = "Audio"},
+                new CatalogType() { Type = "Video" }
+            };
+        }
+
         private IEnumerable<CatalogBrand> GetCatalogBrandsFromFile(string contentRootPath, ILogger<CatalogContextSeed> logger)
         {
             string csvFileCatalogBrands = Path.Combine(contentRootPath, "Setup", "CatalogBrands.csv");
@@ -95,7 +96,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
                                         .SelectTry(x => CreateCatalogBrand(x))
                                         .OnCaughtException(ex => { logger.LogError(ex.Message); return null; })
                                         .Where(x => x != null);
-        }*/
+        }
 
         private CatalogBrand CreateCatalogBrand(string brand)
         {
@@ -116,14 +117,14 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
         {
             return new List<CatalogBrand>()
             {
-                new CatalogBrand() { Id = CatalogBrandId1, Brand = "Azure", MerchantId=MerchantId },
-                new CatalogBrand() { Id = CatalogBrandId2, Brand = ".NET", MerchantId=MerchantId },
-                new CatalogBrand() { Id = CatalogBrandId3, Brand = "Visual Studio", MerchantId=MerchantId },
-                new CatalogBrand() { Id = CatalogBrandId4, Brand = "SQL Server", MerchantId=MerchantId },
-                new CatalogBrand() { Id = CatalogBrandId5, Brand = "Other", MerchantId=MerchantId }
+                new CatalogBrand() { Brand = "Azure"},
+                new CatalogBrand() { Brand = ".NET" },
+                new CatalogBrand() { Brand = "Visual Studio" },
+                new CatalogBrand() { Brand = "SQL Server" },
+                new CatalogBrand() { Brand = "Other" }
             };
         }
-        /*
+
         private IEnumerable<CatalogType> GetCatalogTypesFromFile(string contentRootPath, ILogger<CatalogContextSeed> logger)
         {
             string csvFileCatalogTypes = Path.Combine(contentRootPath, "Setup", "CatalogTypes.csv");
@@ -150,7 +151,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
                                         .SelectTry(x => CreateCatalogType(x))
                                         .OnCaughtException(ex => { logger.LogError(ex.Message); return null; })
                                         .Where(x => x != null);
-        }*/
+        }
 
         private CatalogType CreateCatalogType(string type)
         {
@@ -171,13 +172,13 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
         {
             return new List<CatalogType>()
             {
-                new CatalogType() { Id=CatalogTypeId1, Type = "Mug", MerchantId=MerchantId},
-                new CatalogType() { Id=CatalogTypeId2, Type = "T-Shirt", MerchantId=MerchantId },
-                new CatalogType() { Id=CatalogTypeId3, Type = "Sheet", MerchantId=MerchantId },
-                new CatalogType() { Id=CatalogTypeId4, Type = "USB Memory Stick", MerchantId=MerchantId }
+                new CatalogType() { Type = "Mug"},
+                new CatalogType() { Type = "T-Shirt" },
+                new CatalogType() { Type = "Sheet" },
+                new CatalogType() { Type = "USB Memory Stick" }
             };
         }
-        /*
+
         private IEnumerable<CatalogItem> GetCatalogItemsFromFile(string contentRootPath, CatalogContext context, ILogger<CatalogContextSeed> logger)
         {
             string csvFileCatalogItems = Path.Combine(contentRootPath, "Setup", "CatalogItems.csv");
@@ -211,7 +212,7 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
                         .Where(x => x != null);
         }
 
-        private CatalogItem CreateCatalogItem(string[] column, string[] headers, Dictionary<String, Guid> catalogTypeIdLookup, Dictionary<String, Guid> catalogBrandIdLookup)
+        private CatalogItem CreateCatalogItem(string[] column, string[] headers, Dictionary<String, int> catalogTypeIdLookup, Dictionary<String, int> catalogBrandIdLookup)
         {
             if (column.Count() != headers.Count())
             {
@@ -316,24 +317,23 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
 
             return catalogItem;
         }
-        */
 
         private IEnumerable<CatalogItem> GetPreconfiguredItems()
         {
             return new List<CatalogItem>()
             {
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId2, AvailableStock = 100, Description = ".NET Bot Black Hoodie", Name = ".NET Bot Black Hoodie", Price = 19.5M, PictureFileName = "1.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId1, CatalogBrandId = CatalogBrandId2, AvailableStock = 100, Description = ".NET Black & White Mug", Name = ".NET Black & White Mug", Price= 8.50M, PictureFileName = "2.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId5, AvailableStock = 100, Description = "Prism White T-Shirt", Name = "Prism White T-Shirt", Price = 12, PictureFileName = "3.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId2, AvailableStock = 100, Description = ".NET Foundation T-shirt", Name = ".NET Foundation T-shirt", Price = 12, PictureFileName = "4.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId3, CatalogBrandId = CatalogBrandId5, AvailableStock = 100, Description = "Roslyn Red Sheet", Name = "Roslyn Red Sheet", Price = 8.5M, PictureFileName = "5.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId2, AvailableStock = 100, Description = ".NET Blue Hoodie", Name = ".NET Blue Hoodie", Price = 12, PictureFileName = "6.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId5, AvailableStock = 100, Description = "Roslyn Red T-Shirt", Name = "Roslyn Red T-Shirt", Price = 12, PictureFileName = "7.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId5, AvailableStock = 100, Description = "Kudu Purple Hoodie", Name = "Kudu Purple Hoodie", Price = 8.5M, PictureFileName = "8.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId1, CatalogBrandId = CatalogBrandId5, AvailableStock = 100, Description = "Cup<T> White Mug", Name = "Cup<T> White Mug", Price = 12, PictureFileName = "9.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId3, CatalogBrandId = CatalogBrandId2, AvailableStock = 100, Description = ".NET Foundation Sheet", Name = ".NET Foundation Sheet", Price = 12, PictureFileName = "10.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId3, CatalogBrandId = CatalogBrandId2, AvailableStock = 100, Description = "Cup<T> Sheet", Name = "Cup<T> Sheet", Price = 8.5M, PictureFileName = "11.png", MerchantId=MerchantId },
-                new CatalogItem { CatalogTypeId = CatalogTypeId2, CatalogBrandId = CatalogBrandId5, AvailableStock = 100, Description = "Prism White TShirt", Name = "Prism White TShirt", Price = 12, PictureFileName = "12.png", MerchantId=MerchantId },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 2, AvailableStock = 100, Description = ".NET Bot Black Hoodie", Name = ".NET Bot Black Hoodie", Price = 19.5M, PictureFileName = "1.png" },
+                new CatalogItem { CatalogTypeId = 1, CatalogBrandId = 2, AvailableStock = 100, Description = ".NET Black & White Mug", Name = ".NET Black & White Mug", Price= 8.50M, PictureFileName = "2.png" },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 5, AvailableStock = 100, Description = "Prism White T-Shirt", Name = "Prism White T-Shirt", Price = 12, PictureFileName = "3.png" },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 2, AvailableStock = 100, Description = ".NET Foundation T-shirt", Name = ".NET Foundation T-shirt", Price = 12, PictureFileName = "4.png" },
+                new CatalogItem { CatalogTypeId = 3, CatalogBrandId = 5, AvailableStock = 100, Description = "Roslyn Red Sheet", Name = "Roslyn Red Sheet", Price = 8.5M, PictureFileName = "5.png" },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 2, AvailableStock = 100, Description = ".NET Blue Hoodie", Name = ".NET Blue Hoodie", Price = 12, PictureFileName = "6.png" },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 5, AvailableStock = 100, Description = "Roslyn Red T-Shirt", Name = "Roslyn Red T-Shirt", Price = 12, PictureFileName = "7.png" },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 5, AvailableStock = 100, Description = "Kudu Purple Hoodie", Name = "Kudu Purple Hoodie", Price = 8.5M, PictureFileName = "8.png" },
+                new CatalogItem { CatalogTypeId = 1, CatalogBrandId = 5, AvailableStock = 100, Description = "Cup<T> White Mug", Name = "Cup<T> White Mug", Price = 12, PictureFileName = "9.png" },
+                new CatalogItem { CatalogTypeId = 3, CatalogBrandId = 2, AvailableStock = 100, Description = ".NET Foundation Sheet", Name = ".NET Foundation Sheet", Price = 12, PictureFileName = "10.png" },
+                new CatalogItem { CatalogTypeId = 3, CatalogBrandId = 2, AvailableStock = 100, Description = "Cup<T> Sheet", Name = "Cup<T> Sheet", Price = 8.5M, PictureFileName = "11.png" },
+                new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 5, AvailableStock = 100, Description = "Prism White TShirt", Name = "Prism White TShirt", Price = 12, PictureFileName = "12.png" },
             };
         }
 
@@ -367,19 +367,22 @@ namespace SaaSEqt.eShop.Services.Catalog.API.Infrastructure
 
         private void GetCatalogItemPictures(string contentRootPath, string picturePath)
         {
-            DirectoryInfo directory = new DirectoryInfo(picturePath);
-            foreach (FileInfo file in directory.GetFiles())
+            if (picturePath != null)
             {
-                file.Delete();
-            }
+                DirectoryInfo directory = new DirectoryInfo(picturePath);
+                foreach (FileInfo file in directory.GetFiles())
+                {
+                    file.Delete();
+                }
 
-            string zipFileCatalogItemPictures = Path.Combine(contentRootPath, "Setup", "CatalogItems.zip");
-            ZipFile.ExtractToDirectory(zipFileCatalogItemPictures, picturePath);
+                string zipFileCatalogItemPictures = Path.Combine(contentRootPath, "Setup", "CatalogItems.zip");
+                ZipFile.ExtractToDirectory(zipFileCatalogItemPictures, picturePath);
+            }
         }
 
         private Policy CreatePolicy( ILogger<CatalogContextSeed> logger, string prefix,int retries = 3)
         {
-            return Policy.Handle<MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlException>().
+            return Policy.Handle<SqlException>().
                 WaitAndRetryAsync(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

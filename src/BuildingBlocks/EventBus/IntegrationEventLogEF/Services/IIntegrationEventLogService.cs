@@ -1,15 +1,18 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
+﻿using Eva.BuildingBlocks.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.BuildingBlocks.IntegrationEventLogEF.Services
+namespace Eva.BuildingBlocks.IntegrationEventLogEF.Services
 {
     public interface IIntegrationEventLogService
     {
+        Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync();
         Task SaveEventAsync(IntegrationEvent @event, DbTransaction transaction);
-        Task MarkEventAsPublishedAsync(IntegrationEvent @event);
+        Task MarkEventAsPublishedAsync(Guid eventId);
+        Task MarkEventAsInProgressAsync(Guid eventId);
+        Task MarkEventAsFailedAsync(Guid eventId);
     }
 }

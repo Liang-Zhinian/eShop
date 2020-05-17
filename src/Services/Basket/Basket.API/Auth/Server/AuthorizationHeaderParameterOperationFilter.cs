@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SaaSEqt.eShop.Services.Basket.API.Auth.Server
+namespace Eva.eShop.Services.Basket.API.Auth.Server
 {
     public class AuthorizationHeaderParameterOperationFilter : IOperationFilter
     {

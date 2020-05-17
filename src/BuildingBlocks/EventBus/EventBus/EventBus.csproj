@@ -2,19 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Microsoft.eShopOnContainers.BuildingBlocks.EventBus</RootNamespace>
-    <PackOnBuild>true</PackOnBuild>
-    <PackageId>SaaSEqt.EventBus</PackageId>
-    <Authors>LiangZhinian</Authors>
-    <DevelopmentDependency>true</DevelopmentDependency>
-    <Owners>LiangZhinian</Owners>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Description>EventBus .Net</Description>
+    <RootNamespace>Eva.BuildingBlocks.EventBus</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>

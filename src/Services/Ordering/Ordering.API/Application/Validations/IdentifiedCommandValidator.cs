@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SaaSEqt.eShop.Services.Ordering.API.Application.Commands;
+using Eva.eShop.Services.Ordering.API.Application.Commands;
 
 namespace Ordering.API.Application.Validations
 {

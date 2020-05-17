@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
-using eShopOnContainers.Core.Models.Catalog;
-using eShopOnContainers.Core.Services.Catalog;
+using eShop.Core.Models.Catalog;
+using eShop.Core.Services.Catalog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Microsoft.eShopOnContainers.Catalog.WebForms
+namespace Eva.eShop.Catalog.WebForms
 {
     public partial class _Default : Page
     {

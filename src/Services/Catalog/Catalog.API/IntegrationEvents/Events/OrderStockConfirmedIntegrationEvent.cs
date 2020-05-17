@@ -1,12 +1,11 @@
-﻿namespace SaaSEqt.eShop.Services.Catalog.API.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Catalog.API.IntegrationEvents.Events
 {
-    using System;
     using BuildingBlocks.EventBus.Events;
 
     public class OrderStockConfirmedIntegrationEvent : IntegrationEvent
     {
-        public Guid OrderId { get; }
+        public int OrderId { get; }
 
-        public OrderStockConfirmedIntegrationEvent(Guid orderId) => OrderId = orderId;
+        public OrderStockConfirmedIntegrationEvent(int orderId) => OrderId = orderId;
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.API.Infrastructure.Services
+namespace Eva.eShop.Services.Ordering.API.Infrastructure.Services
 {
     public class IdentityService : IIdentityService
     {

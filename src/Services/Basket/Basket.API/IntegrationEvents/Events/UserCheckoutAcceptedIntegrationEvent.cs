@@ -1,5 +1,5 @@
-﻿using SaaSEqt.eShop.BuildingBlocks.EventBus.Events;
-using SaaSEqt.eShop.Services.Basket.API.Model;
+﻿using Eva.BuildingBlocks.EventBus.Events;
+using Eva.eShop.Services.Basket.API.Model;
 using System;
 
 namespace Basket.API.IntegrationEvents.Events
@@ -36,14 +36,12 @@ namespace Basket.API.IntegrationEvents.Events
 
         public Guid RequestId { get; set; }
 
-        public string MerchantId { get; set; }
-
         public CustomerBasket Basket { get; }
 
         public UserCheckoutAcceptedIntegrationEvent(string userId, string userName, string city, string street,
             string state, string country, string zipCode, string cardNumber, string cardHolderName,
             DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
-                                                    string merchantId, CustomerBasket basket)
+            CustomerBasket basket)
         {
             UserId = userId;
             UserName = userName;
@@ -60,7 +58,6 @@ namespace Basket.API.IntegrationEvents.Events
             Buyer = buyer;
             Basket = basket;
             RequestId = requestId;
-            MerchantId = merchantId;
         }
 
     }

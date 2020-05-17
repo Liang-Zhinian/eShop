@@ -1,7 +1,7 @@
-﻿using SaaSEqt.eShop.Services.Ordering.Domain.Seedwork;
+﻿using Eva.eShop.Services.Ordering.Domain.Seedwork;
 using System.Threading.Tasks;
 
-namespace SaaSEqt.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate
+namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate
 {
     //This is just the RepositoryContracts or Interface defined at the Domain Layer
     //as requisite for the Buyer Aggregate

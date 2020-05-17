@@ -1,4 +1,4 @@
-﻿namespace SaaSEqt.eShop.Services.Ordering.API.Infrastructure.ActionResults
+﻿namespace Eva.eShop.Services.Ordering.API.Infrastructure.ActionResults
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

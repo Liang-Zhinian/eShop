@@ -1,55 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using SaaSEqt.eShop.BuildingBlocks.Resilience.Http;
-using SaaSEqt.eShop.WebMVC.ViewModels;
+using Eva.eShop.WebMVC.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WebMVC.Infrastructure;
-using System;
 
-namespace SaaSEqt.eShop.WebMVC.Services
+namespace Eva.eShop.WebMVC.Services
 {
     public class CatalogService : ICatalogService
     {
-        private readonly IOptionsSnapshot<AppSettings> _settings;
-        private readonly IHttpClient _apiClient;
+        private readonly IOptions<AppSettings> _settings;
+        private readonly HttpClient _httpClient;
         private readonly ILogger<CatalogService> _logger;
 
         private readonly string _remoteServiceBaseUrl;
 
-        public CatalogService(IOptionsSnapshot<AppSettings> settings, IHttpClient httpClient, ILogger<CatalogService> logger)
+        public CatalogService(HttpClient httpClient, ILogger<CatalogService> logger, IOptions<AppSettings> settings)
         {
+            _httpClient = httpClient;
             _settings = settings;
-            _apiClient = httpClient;
             _logger = logger;
 
             _remoteServiceBaseUrl = $"{_settings.Value.PurchaseUrl}/api/v1/c/catalog/";
         }
 
-        public async Task<Catalog> GetCatalogItems(int page, int take, Guid? brand, Guid? type)
+        public async Task<Catalog> GetCatalogItems(int page, int take, int? brand, int? type)
         {
-            var allcatalogItemsUri = API.Catalog.GetAllCatalogItems(_remoteServiceBaseUrl, page, take, brand, type);
+            var uri = API.Catalog.GetAllCatalogItems(_remoteServiceBaseUrl, page, take, brand, type);
 
-            var dataString = await _apiClient.GetStringAsync(allcatalogItemsUri);
+            var responseString = await _httpClient.GetStringAsync(uri);
 
-            var response = JsonConvert.DeserializeObject<Catalog>(dataString);
+            var catalog = JsonConvert.DeserializeObject<Catalog>(responseString);
 
-            return response;
+            return catalog;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetBrands()
         {
-            var getBrandsUri = API.Catalog.GetAllBrands(_remoteServiceBaseUrl);
+            var uri = API.Catalog.GetAllBrands(_remoteServiceBaseUrl);
 
-            var dataString = await _apiClient.GetStringAsync(getBrandsUri);
+            var responseString = await _httpClient.GetStringAsync(uri);
 
             var items = new List<SelectListItem>();
+
             items.Add(new SelectListItem() { Value = null, Text = "All", Selected = true });
 
-            var brands = JArray.Parse(dataString);
+            var brands = JArray.Parse(responseString);
 
             foreach (var brand in brands.Children<JObject>())
             {
@@ -65,14 +65,14 @@ namespace SaaSEqt.eShop.WebMVC.Services
 
         public async Task<IEnumerable<SelectListItem>> GetTypes()
         {
-            var getTypesUri = API.Catalog.GetAllTypes(_remoteServiceBaseUrl);
+            var uri = API.Catalog.GetAllTypes(_remoteServiceBaseUrl);
 
-            var dataString = await _apiClient.GetStringAsync(getTypesUri);
+            var responseString = await _httpClient.GetStringAsync(uri);
 
             var items = new List<SelectListItem>();
             items.Add(new SelectListItem() { Value = null, Text = "All", Selected = true });
 
-            var brands = JArray.Parse(dataString);
+            var brands = JArray.Parse(responseString);
             foreach (var brand in brands.Children<JObject>())
             {
                 items.Add(new SelectListItem()
@@ -81,6 +81,7 @@ namespace SaaSEqt.eShop.WebMVC.Services
                     Text = brand.Value<string>("type")
                 });
             }
+
             return items;
         }
     }
