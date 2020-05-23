@@ -10,7 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Eva.BuildingBlocks.RESTApiResponseWrapper;
+//using Eva.BuildingBlocks.RESTApiResponseWrapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Reflection;
+using Sequence;
 
 namespace Demo.API
 {
@@ -26,6 +30,10 @@ namespace Demo.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSequenceDbContext(Configuration["ConnectionString"])
+                    .UseSequence();
+
             services.AddMvc(options => options.Filters.Add(new HttpResponseExceptionFilter()))
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -43,7 +51,7 @@ namespace Demo.API
             //    app.UseExceptionHandler("/Error");
             //}
 
-            app.UseApiResponseAndExceptionWrapper();
+            //app.UseApiResponseAndExceptionWrapper();
             app.UseMvc();
         }
     }

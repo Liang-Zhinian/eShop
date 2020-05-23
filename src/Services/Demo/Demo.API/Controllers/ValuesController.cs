@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Demo.API.Exceptions;
 using Eva.BuildingBlocks.RESTApiResponseWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc;
+using Sequence.Services;
 
 namespace Demo.API.Controllers
 {
@@ -14,11 +9,27 @@ namespace Demo.API.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private IKeyAllocService _keyAllocService;
+
+        public ValuesController(IKeyAllocService keyAllocService)
+        {
+            _keyAllocService = keyAllocService;
+        }
+
         // GET api/values
         [HttpGet]
         public ApiResponse Get()
         {
             return new ApiResponse(ResponseMessageEnum.Success.ToString(), new string[] { "value1", "value2" });
+        }
+
+        // GET api/values
+        [HttpGet]
+        [Route("Key")]
+        public ActionResult<long> Key()
+        {
+            var seqName = DateTime.Now.ToString("yyyy-MM-dd");
+            return _keyAllocService.GetKey(seqName).Result;
         }
 
         // GET api/values/5
