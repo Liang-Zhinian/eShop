@@ -7,6 +7,6 @@ namespace Sequence.Services
 {
     public interface IKeyAllocService
     {
-        Task<long> GetKey(string seqName);
+        ValueTask<long> GetKey(string seqName);
     }
 }

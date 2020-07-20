@@ -13,6 +13,7 @@
         public static OrderStatus AwaitingValidation = new OrderStatus(2, nameof(AwaitingValidation).ToLowerInvariant());
         public static OrderStatus StockConfirmed = new OrderStatus(3, nameof(StockConfirmed).ToLowerInvariant());
         // TODO: OrderStatus - on-hold (we're awaiting the payment).
+        public static OrderStatus AwaitingForPayment = new OrderStatus(7, nameof(AwaitingForPayment).ToLowerInvariant());
 
         public static OrderStatus Paid = new OrderStatus(4, nameof(Paid).ToLowerInvariant());
         public static OrderStatus Shipped = new OrderStatus(5, nameof(Shipped).ToLowerInvariant());
@@ -28,7 +29,7 @@
         }
 
         public static IEnumerable<OrderStatus> List() =>
-            new[] { Submitted, AwaitingValidation, StockConfirmed, Paid, Shipped, Cancelled };
+            new[] { Submitted, AwaitingValidation, StockConfirmed, AwaitingForPayment, Paid, Shipped, Cancelled };
 
         public static OrderStatus FromName(string name)
         {

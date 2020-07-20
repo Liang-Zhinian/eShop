@@ -16,7 +16,7 @@ namespace Sequence.Services
             _seqContext = seqContext;
         }
 
-        public async Task<long> GetKey(string seqName)
+        public async ValueTask<long> GetKey(string seqName)
         {
             var value = 1L;
             var strategy = _seqContext.Database.CreateExecutionStrategy();

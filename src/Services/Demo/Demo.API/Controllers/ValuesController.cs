@@ -26,10 +26,11 @@ namespace Demo.API.Controllers
         // GET api/values
         [HttpGet]
         [Route("Key")]
-        public ActionResult<long> Key()
+        public ActionResult<string> Key()
         {
             var seqName = DateTime.Now.ToString("yyyy-MM-dd");
-            return _keyAllocService.GetKey(seqName).Result;
+            var key = _keyAllocService.GetKey(seqName).Result;
+            return key.ToString("D4");
         }
 
         // GET api/values/5

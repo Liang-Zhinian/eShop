@@ -55,5 +55,6 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
+    <Folder Include="Application\DomainEventHandlers\OrderOnHold\" />
   </ItemGroup>
 </Project>

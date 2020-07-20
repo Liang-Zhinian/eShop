@@ -26,7 +26,7 @@ namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
 
         private string _description;
 
-       
+
         // Draft orders have this set to true. Currently we don't check anywhere the draft status of an Order, but we could do it if needed
         private bool _isDraft;
 
@@ -46,7 +46,8 @@ namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
             return order;
         }
 
-        protected Order() {
+        protected Order()
+        {
             _orderItems = new List<OrderItem>();
             _isDraft = false;
         }
@@ -125,9 +126,21 @@ namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
             }
         }
 
-        public void SetPaidStatus()
+        public void SetAwaitingForPaymentStatus()
         {
             if (_orderStatusId == OrderStatus.StockConfirmed.Id)
+            {
+                AddDomainEvent(new OrderStatusChangedToAwaitingForPaymentDomainEvent(Id, OrderItems));
+
+                _orderStatusId = OrderStatus.AwaitingForPayment.Id;
+                _description = "The order is awaiting for payment.";
+            }
+        }
+
+        public void SetPaidStatus()
+        {
+            //if (_orderStatusId == OrderStatus.StockConfirmed.Id)
+            if (_orderStatusId == OrderStatus.AwaitingForPayment.Id)
             {
                 AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
 
