@@ -24,7 +24,7 @@ namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 
         public async Task Handle(ProductPriceChangedIntegrationEvent @event)
         {
-            using (LogContext.PushProperty("IntegrationEventId", @event.Id))
+            using (LogContext.PushProperty("IntegrationEventIdContext", @event.Id))
             {
                 _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", @event.Id, Program.AppShortName, @event);
 

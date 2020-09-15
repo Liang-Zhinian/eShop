@@ -78,20 +78,17 @@ namespace Eva.eShop.Services.Basket.API.Controllers
             // Once basket is checkout, sends an integration event to
             // ordering.api to convert basket to order and proceeds with
             // order creation process
-            using (LogContext.PushProperty("IntegrationEventId", eventMessage.Id))
+            try
             {
-                try
-                {
-                    _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppShortName, eventMessage);
+                _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppShortName, eventMessage);
 
-                    _eventBus.Publish(eventMessage);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "----- ERROR Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppShortName, eventMessage);
+                _eventBus.Publish(eventMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "----- ERROR Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppShortName, eventMessage);
 
-                    throw;
-                }
+                throw;
             }
 
             return Accepted();
