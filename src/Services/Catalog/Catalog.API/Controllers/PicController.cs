@@ -40,7 +40,7 @@ namespace Eva.eShop.Services.Catalog.API.Controllers
             if (item != null)
             {
                 var webRoot = _env.WebRootPath;
-                var path = Path.Combine(webRoot, "Pics", item.PictureFileName);
+                var path = Path.Combine(webRoot, item.PictureFileName);
 
                 string imageFileExtension = Path.GetExtension(item.PictureFileName);
                 string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);

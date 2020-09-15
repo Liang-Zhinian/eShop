@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace Eva.eShop.Services.Catalog.API.Controllers
 {
@@ -22,20 +21,14 @@ namespace Eva.eShop.Services.Catalog.API.Controllers
         private readonly CatalogContext _catalogContext;
         private readonly CatalogSettings _settings;
         private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
-        private readonly ILogger<CatalogController>/*ILoggerFactory*/ _logger;
 
-        public CatalogController(CatalogContext context, 
-            IOptionsSnapshot<CatalogSettings> settings, 
-            ICatalogIntegrationEventService catalogIntegrationEventService,
-            ILogger<CatalogController>/*ILoggerFactory*/ logger)
+        public CatalogController(CatalogContext context, IOptionsSnapshot<CatalogSettings> settings, ICatalogIntegrationEventService catalogIntegrationEventService)
         {
             _catalogContext = context ?? throw new ArgumentNullException(nameof(context));
             _catalogIntegrationEventService = catalogIntegrationEventService ?? throw new ArgumentNullException(nameof(catalogIntegrationEventService));
             _settings = settings.Value;
 
             ((DbContext)context).ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         // GET api/v1/[controller]/items[?pageSize=3&pageIndex=10]
@@ -45,15 +38,6 @@ namespace Eva.eShop.Services.Catalog.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<CatalogItem>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Items([FromQuery]int pageSize = 10, [FromQuery]int pageIndex = 0, [FromQuery] string ids = null)
         {
-            Serilog.Log.Debug("----- Debug");
-            _logger
-            //_logger.CreateLogger<CatalogController>()
-            .LogDebug(
-                "----- Query catalog items: {pageSize} - {pageIndex} - {ids}",
-                pageSize,
-                pageIndex,
-                ids);
-
             if (!string.IsNullOrEmpty(ids))
             {
                 return GetItemsByIds(ids);
