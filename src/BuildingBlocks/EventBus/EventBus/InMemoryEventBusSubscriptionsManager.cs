@@ -1,10 +1,8 @@
-﻿using Eva.BuildingBlocks.EventBus.Abstractions;
-using Eva.BuildingBlocks.EventBus.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
+using Eva.BuildingBlocks.EventBus.Abstractions;
+using Eva.BuildingBlocks.EventBus.Events;
 
 namespace Eva.BuildingBlocks.EventBus
 {
@@ -37,8 +35,13 @@ namespace Eva.BuildingBlocks.EventBus
             where TH : IIntegrationEventHandler<T>
         {
             var eventName = GetEventKey<T>();
+
             DoAddSubscription(typeof(TH), eventName, isDynamic: false);
-            _eventTypes.Add(typeof(T));
+
+            if (!_eventTypes.Contains(typeof(T)))
+            {
+                _eventTypes.Add(typeof(T));
+            }
         }
 
         private void DoAddSubscription(Type handlerType, string eventName, bool isDynamic)
