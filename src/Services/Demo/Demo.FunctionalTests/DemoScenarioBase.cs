@@ -1,7 +1,7 @@
 using System.IO;
 using System.Reflection;
 using Demo.API;
-using Demo.API.Infrastructure;
+//using Demo.API.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -26,17 +26,17 @@ namespace Demo.FunctionalTests
 
             var testServer = new TestServer(hostBuilder);
 
-            testServer.Host
-                .MigrateDbContext<SeqContext>((context, services) =>
-                {
-                    var env = services.GetService<IHostingEnvironment>();
-                    //var settings = services.GetService<IOptions<CatalogSettings>>();
-                    //var logger = services.GetService<ILogger<CatalogContextSeed>>();
+            //testServer.Host
+                //.MigrateDbContext<SeqContext>((context, services) =>
+                //{
+                //    var env = services.GetService<IHostingEnvironment>();
+                //    //var settings = services.GetService<IOptions<CatalogSettings>>();
+                //    //var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
-                    //new CatalogContextSeed()
-                    //.SeedAsync(context, env, settings, logger)
-                    //.Wait();
-                });
+                //    //new CatalogContextSeed()
+                //    //.SeedAsync(context, env, settings, logger)
+                //    //.Wait();
+                //});
 
             return testServer;
         }
