@@ -4,6 +4,7 @@ using Eva.BuildingBlocks.EventBus.Abstractions;
 using Eva.BuildingBlocks.EventBus.Events;
 using Eva.BuildingBlocks.IntegrationEventLogEF.Services;
 using Eva.BuildingBlocks.IntegrationEventLogEF.Utilities;
+using Eva.eShop.Services.Catalog.API;
 using Eva.eShop.Services.Catalog.API.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -40,7 +41,7 @@ namespace Catalog.API.IntegrationEvents
             {
                 try
                 {
-                    _logger.LogInformation("----- CatalogIntegrationEventService - Publishing integration event: {IntegrationEventId} ({@IntegrationEvent})", evt.Id, evt);
+                    _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", evt.Id, Program.AppShortName, evt);
 
                     await _eventLogService.MarkEventAsInProgressAsync(evt.Id);
                     _eventBus.Publish(evt);
@@ -48,7 +49,7 @@ namespace Catalog.API.IntegrationEvents
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "----- CatalogIntegrationEventService - ERROR Publishing integration event");
+                    _logger.LogError(ex, "----- ERROR Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", evt.Id, Program.AppShortName, evt);
                     await _eventLogService.MarkEventAsFailedAsync(evt.Id);
                 }
             }          

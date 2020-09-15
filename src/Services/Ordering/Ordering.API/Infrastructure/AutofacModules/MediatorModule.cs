@@ -7,7 +7,7 @@ using Eva.eShop.Services.Ordering.API.Application.Commands;
 using Ordering.API.Application.Behaviors;
 using Ordering.API.Application.DomainEventHandlers.OrderStartedEvent;
 using Ordering.API.Application.Validations;
-using Ordering.API.Infrastructure.Behaviors;
+using Ordering.API.Application.Behaviors;
 
 namespace Eva.eShop.Services.Ordering.API.Infrastructure.AutofacModules
 {
