@@ -28,7 +28,7 @@
         public MarketingContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<MarketingContext>()
-                .UseMySql("Server=127.0.0.1;database=SaaSEqt_eShop_Services_MarketingDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=localhost;Database=Eva_eShop_Services_MarketingDb;uid=eva;pwd=P@ssword");
 
             return new MarketingContext(optionsBuilder.Options);
         }

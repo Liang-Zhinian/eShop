@@ -24,9 +24,9 @@ namespace Basket.API.IntegrationEvents.EventHandling
 
         public async Task Handle(OrderStartedIntegrationEvent @event)
         {
-            using (LogContext.PushProperty("IntegrationEventIdContext", @event.Id))
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
             {
-                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", @event.Id, Program.AppShortName, @event);
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
 
                 await _repository.DeleteBasketAsync(@event.UserId.ToString());
             }

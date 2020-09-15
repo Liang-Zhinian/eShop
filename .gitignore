@@ -263,3 +263,9 @@ pub/
 /src/Web/WebMVC/wwwroot/css/site.min.css
 **/.kube/**
 .mfractor
+src/Services/Basket/Basket.API/Infrastructure/.DS_Store
+src/Services/Basket/Basket.API/IntegrationEvents/.DS_Store
+src/Services/Basket/Basket.FunctionalTests/.DS_Store
+src/Services/Basket/Basket.UnitTests/.DS_Store
+src/Services/Catalog/.DS_Store
+src/Services/Catalog/Catalog.API/.DS_Store

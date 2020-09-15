@@ -4,6 +4,8 @@
     using EntityConfigurations;
     using Model;
     using Microsoft.EntityFrameworkCore.Design;
+    using Eva.BuildingBlocks.IntegrationEventLogEF;
+    using Microsoft.EntityFrameworkCore.Metadata;
 
     public class CatalogContext : DbContext
     {
@@ -16,11 +18,12 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
+            //builder.HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
             builder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
             builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
             builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
-            builder.ApplyConfiguration(new CatalogMediaEntityTypeConfiguration());
-
         }     
     }
 
@@ -30,9 +33,20 @@
         public CatalogContext CreateDbContext(string[] args)
         {
             var optionsBuilder =  new DbContextOptionsBuilder<CatalogContext>()
-                .UseMySql("Server=192.168.99.106;database=Eva_eShop_Services_CatalogDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySQL("Server=localhost;Database=Eva_eShop_Services_CatalogDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None;");
 
             return new CatalogContext(optionsBuilder.Options);
+        }
+    }
+
+    public class IntegrationEventLogContextDesignFactory : IDesignTimeDbContextFactory<IntegrationEventLogContext>
+    {
+        public IntegrationEventLogContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<IntegrationEventLogContext>()
+                .UseMySql("Server=127.0.0.1;database=Eva_eShop_Services_CatalogDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+
+            return new IntegrationEventLogContext(optionsBuilder.Options);
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using Eva.BuildingBlocks.EventBus.Abstractions;
 using Eva.eShop.Services.Basket.API.IntegrationEvents.Events;
 using Eva.eShop.Services.Basket.API.Model;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Serilog.Context;
 
 namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 {
@@ -24,9 +24,9 @@ namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 
         public async Task Handle(ProductPriceChangedIntegrationEvent @event)
         {
-            using (LogContext.PushProperty("IntegrationEventIdContext", @event.Id))
+            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{Program.AppName}"))
             {
-                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", @event.Id, Program.AppShortName, @event);
+                _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, Program.AppName, @event);
 
                 var userIds = _repository.GetUsers();
 
@@ -50,15 +50,15 @@ namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 
                 foreach (var item in itemsToUpdate)
                 {
-                    if(item.UnitPrice == oldPrice)
-                    { 
+                    if (item.UnitPrice == oldPrice)
+                    {
                         var originalPrice = item.UnitPrice;
                         item.UnitPrice = newPrice;
                         item.OldUnitPrice = originalPrice;
                     }
                 }
                 await _repository.UpdateBasketAsync(basket);
-            }         
+            }
         }
     }
 }

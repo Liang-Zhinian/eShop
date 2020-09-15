@@ -46,7 +46,7 @@ namespace UnitTest.Basket.Application
 
             //Act
             var basketController = new BasketController(
-            _loggerMock.Object,
+                _loggerMock.Object,
                 _basketRepositoryMock.Object,
                 _identityServiceMock.Object,
                 _serviceBusMock.Object);
@@ -79,10 +79,10 @@ namespace UnitTest.Basket.Application
 
             var actionResult = await basketController.UpdateBasketAsync(fakeCustomerBasket);
 
-            //Assert            
+            //Assert
             Assert.Equal((actionResult.Result as OkObjectResult).StatusCode, (int)System.Net.HttpStatusCode.OK);
             Assert.Equal(((CustomerBasket)actionResult.Value).BuyerId, fakeCustomerId);
-        }        
+        }
 
         [Fact]
         public async Task Doing_Checkout_Without_Basket_Should_Return_Bad_Request()
@@ -138,7 +138,7 @@ namespace UnitTest.Basket.Application
         }
 
         private CustomerBasket GetCustomerBasketFake(string fakeCustomerId)
-        {            
+        {
             return new CustomerBasket(fakeCustomerId)
             {
                 Items = new List<BasketItem>()

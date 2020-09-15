@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Eva.eShop.Services.Catalog.API.Model;
+using MySql.Data.EntityFrameworkCore;
 using MySql.Data.EntityFrameworkCore.Extensions;
 
 namespace Eva.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
@@ -13,7 +14,8 @@ namespace Eva.eShop.Services.Catalog.API.Infrastructure.EntityConfigurations
             builder.ToTable("Catalog");
 
             builder.Property(ci => ci.Id)
-                .UseMySQLAutoIncrementColumn("catalog_hilo")
+                .ValueGeneratedOnAdd()
+                   .UseMySQLAutoIncrementColumn("catalog_hilo")
                 .IsRequired();
 
             builder.Property(ci => ci.Name)

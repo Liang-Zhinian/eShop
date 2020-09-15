@@ -13,7 +13,7 @@
       "launchBrowser": true,
       "launchUrl": "/swagger",
       "environmentVariables": {
-        "ConnectionString": "Server=192.168.99.106;database=Eva_eShop_Services_CatalogDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None",
+        "ConnectionString": "server=localhost;Database=Eva_eShop_Services_CatalogDb;uid=eva;pwd=P@ssword",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "EventBusConnection": "localhost",
         "Serilog:SeqServerUrl": "http://locahost:5340"

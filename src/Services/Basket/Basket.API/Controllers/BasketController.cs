@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Eva.BuildingBlocks.EventBus.Abstractions;
 using Eva.eShop.Services.Basket.API.Model;
 using Eva.eShop.Services.Basket.API.Services;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Serilog.Context;
 
 namespace Eva.eShop.Services.Basket.API.Controllers
 {
@@ -80,13 +80,13 @@ namespace Eva.eShop.Services.Basket.API.Controllers
             // order creation process
             try
             {
-                _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppShortName, eventMessage);
+                _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} from {AppName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppName, eventMessage);
 
                 _eventBus.Publish(eventMessage);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "----- ERROR Publishing integration event: {IntegrationEventId} at {AppShortName} - ({@IntegrationEvent})", eventMessage.Id, Program.AppShortName, eventMessage);
+                _logger.LogError(ex, "ERROR Publishing integration event: {IntegrationEventId} from {AppName}", eventMessage.Id, Program.AppName);
 
                 throw;
             }

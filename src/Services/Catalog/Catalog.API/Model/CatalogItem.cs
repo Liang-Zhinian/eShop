@@ -1,6 +1,5 @@
 ﻿using Catalog.API.Infrastructure.Exceptions;
 using System;
-using System.Collections.Generic;
 
 namespace Eva.eShop.Services.Catalog.API.Model
 {
@@ -25,10 +24,6 @@ namespace Eva.eShop.Services.Catalog.API.Model
         public int CatalogBrandId { get; set; }
 
         public CatalogBrand CatalogBrand { get; set; }
-
-        public ICollection<CatalogMedia> CatalogMedias { get; set; }
-
-        //public bool InStock { get; set; }
 
         // Quantity in stock
         public int AvailableStock { get; set; }
