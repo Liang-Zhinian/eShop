@@ -13,7 +13,10 @@
       "launchBrowser": true,
       "launchUrl": "/swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ConnectionString": "Server=192.168.99.106;database=Eva_eShop_Services_CatalogDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EventBusConnection": "localhost",
+        "Serilog:SeqServerUrl": "http://locahost:5340"
       }
     },
     "Eva.eShop.Services.Catalog.API": {

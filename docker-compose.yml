@@ -23,8 +23,8 @@ volumes:
      
 
 services:
-  # seq:
-  #   image: datalust/seq:latest
+  seq:
+    image: datalust/seq:latest
     
   sql-data:
     image: mysql/mysql-server:5.7

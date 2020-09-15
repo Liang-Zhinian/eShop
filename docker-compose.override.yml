@@ -7,11 +7,11 @@ version: '3.4'
 # An external IP or DNS name has to be used (instead localhost and the 10.0.75.1 IP) when testing the Web apps and the Xamarin apps from remote machines/devices using the same WiFi, for instance.
 
 services:
-  # seq:
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #   ports:
-  #     - "5340:80"
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
       
   sql-data:
     environment:

@@ -4,27 +4,38 @@ using Eva.eShop.Services.Basket.API.Model;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 
 namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 {
     public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>
     {
+        private readonly ILogger<ProductPriceChangedIntegrationEventHandler> _logger;
         private readonly IBasketRepository _repository;
 
-        public ProductPriceChangedIntegrationEventHandler(IBasketRepository repository)
+        public ProductPriceChangedIntegrationEventHandler(
+            ILogger<ProductPriceChangedIntegrationEventHandler> logger,
+            IBasketRepository repository)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public async Task Handle(ProductPriceChangedIntegrationEvent @event)
         {
-            var userIds = _repository.GetUsers();
-            
-            foreach (var id in userIds)
+            using (LogContext.PushProperty("IntegrationEventId", @event.Id))
             {
-                var basket = await _repository.GetBasketAsync(id);
+                _logger.LogInformation("----- ProductPriceChangedIntegrationEventHandler - Handling integration event: {IntegrationEventId} ({@IntegrationEvent})", @event.Id, @event);
 
-                await UpdatePriceInBasketItems(@event.ProductId, @event.NewPrice, @event.OldPrice, basket);                      
+                var userIds = _repository.GetUsers();
+
+                foreach (var id in userIds)
+                {
+                    var basket = await _repository.GetBasketAsync(id);
+
+                    await UpdatePriceInBasketItems(@event.ProductId, @event.NewPrice, @event.OldPrice, basket);
+                }
             }
         }
 
@@ -35,6 +46,8 @@ namespace Eva.eShop.Services.Basket.API.IntegrationEvents.EventHandling
 
             if (itemsToUpdate != null)
             {
+                _logger.LogInformation("----- ProductPriceChangedIntegrationEventHandler - Updating items in basket for user: {BuyerId} ({@Items})", basket.BuyerId, itemsToUpdate);
+
                 foreach (var item in itemsToUpdate)
                 {
                     if(item.UnitPrice == oldPrice)

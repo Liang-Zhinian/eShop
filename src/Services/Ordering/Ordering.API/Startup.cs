@@ -73,8 +73,8 @@
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddAzureWebAppDiagnostics();
-            loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Trace);
+            //loggerFactory.AddAzureWebAppDiagnostics();
+            //loggerFactory.AddApplicationInsights(app.ApplicationServices, LogLevel.Trace);
 
             var pathBase = Configuration["PATH_BASE"];
             if (!string.IsNullOrEmpty(pathBase))

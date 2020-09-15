@@ -14,25 +14,22 @@ namespace Eva.eShop.Services.Catalog.API
 {
     public class Program
     {
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-            .Build();
+        public static readonly string AppName = typeof(Program).Namespace;
+        public static readonly string ShortAppName = AppName.Substring(AppName.LastIndexOf('.', AppName.LastIndexOf('.') - 1) + 1);
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                            .ReadFrom.Configuration(Configuration)
-                            .CreateLogger();
+            var configuration = GetConfiguration();
 
-            Log.Information("Getting the motors running...");
+            Log.Logger = CreateSerilogLogger(configuration);
+
             try
             {
-                Log.Information("Getting the motors running...");
+                Log.Information("Configuring web host ({Application})...", AppName);
+                var host = BuildWebHost(configuration, args);
 
-                BuildWebHost(args)
-                .MigrateDbContext<CatalogContext>((context, services) =>
+                Log.Information("Applying migrations ({Application})...", AppName);
+                host.MigrateDbContext<CatalogContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();
                     var settings = services.GetService<IOptions<CatalogSettings>>();
@@ -41,14 +38,18 @@ namespace Eva.eShop.Services.Catalog.API
                     new CatalogContextSeed()
                     .SeedAsync(context, env, settings, logger)
                     .Wait();
-
                 })
-                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
-                .Run();
+                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+
+                Log.Information("Starting web host ({Application})...", AppName);
+                host.Run();
+
+                return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                Log.Fatal(ex, "Program terminated unexpectedly ({Application})!", AppName);
+                return 1;
             }
             finally
             {
@@ -56,38 +57,50 @@ namespace Eva.eShop.Services.Catalog.API
             }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        private static IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
-                .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseWebRoot("Media")
-                .ConfigureAppConfiguration((builderContext, config) =>
-                {
-                    var builtConfig = config.Build();
-
-                    var configurationBuilder = new ConfigurationBuilder();
-
-                    if (Convert.ToBoolean(builtConfig["UseVault"]))
-                    {
-                        configurationBuilder.AddAzureKeyVault(
-                            $"https://{builtConfig["Vault:Name"]}.vault.azure.net/",
-                            builtConfig["Vault:ClientId"],
-                            builtConfig["Vault:ClientSecret"]);
-                    }
-
-                    configurationBuilder.AddEnvironmentVariables();
-
-                    config.AddConfiguration(configurationBuilder.Build());
-                })
-                .ConfigureLogging((hostingContext, builder) =>
-                {
-                    builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    builder.AddConsole();
-                    builder.AddDebug();
-                })
+                .UseConfiguration(configuration)
                 .UseSerilog()
                 .Build();
+
+        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+        {
+            var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+
+            return new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.WithMachineName()
+                .Enrich.WithProperty("Application", AppName)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+        }
+
+        private static IConfiguration GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            var config = builder.Build();
+
+            if (config.GetValue<bool>("UseVault", false))
+            {
+                builder.AddAzureKeyVault(
+                    $"https://{config["Vault:Name"]}.vault.azure.net/",
+                    config["Vault:ClientId"],
+                    config["Vault:ClientSecret"]);
+            }
+
+            return builder.Build();
+        }
     }
 }
