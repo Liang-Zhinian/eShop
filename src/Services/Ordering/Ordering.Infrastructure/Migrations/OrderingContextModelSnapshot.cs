@@ -208,8 +208,6 @@ namespace Ordering.Infrastructure.Migrations
 
                             b1.Property<string>("ZipCode");
 
-                            b1.HasKey("OrderId");
-
                             b1.ToTable("orders");
 
                             b1.HasOne("Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order")

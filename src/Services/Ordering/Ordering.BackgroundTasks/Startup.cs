@@ -9,15 +9,14 @@ using Eva.BuildingBlocks.EventBusRabbitMQ;
 using Eva.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Ordering.BackgroundTasks.Configuration;
 using Ordering.BackgroundTasks.Tasks;
 using RabbitMQ.Client;
 using System;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Eva.BuildingBlocks.HealthChecks.MySQL;
 
 namespace Ordering.BackgroundTasks
 {
@@ -34,7 +33,18 @@ namespace Ordering.BackgroundTasks
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //add health check for this service
-            services.AddCustomHealthCheck(Configuration);
+            services.AddHealthChecks(checks =>
+            {
+                var minutes = 1;
+
+                if (int.TryParse(Configuration["HealthCheck:Timeout"], out var minutesParsed))
+                {
+                    minutes = minutesParsed;
+                }
+                checks.AddMySqlCheck("OrderingTaskDB-check", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+
+            });
+
 
             //configure settings
 
@@ -103,18 +113,12 @@ namespace Ordering.BackgroundTasks
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            app.UseHealthChecks("/hc", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
 
-            app.UseHealthChecks("/liveness", new HealthCheckOptions
-            {
-                Predicate = r => r.Name.Contains("self")
-            });
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            app.Map("/liveness", lapp => lapp.Run(async ctx => ctx.Response.StatusCode = 200));
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         }
 
 
@@ -155,53 +159,6 @@ namespace Ordering.BackgroundTasks
             }
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-        }
-    }
-
-    public static class CustomExtensionMethods
-    {
-        public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
-        {
-            var hcBuilder = services.AddHealthChecks();
-
-            hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
-
-            //hcBuilder
-                //.AddSqlServer(
-                    //configuration["ConnectionString"],
-                    //name: "OrderingTaskDB-check",
-                    //tags: new string[] { "orderingtaskdb" });
-
-            services.AddHealthChecks(checks =>
-            {
-                var minutes = 1;
-
-                if (int.TryParse(configuration["HealthCheck:Timeout"], out var minutesParsed))
-                {
-                    minutes = minutesParsed;
-                }
-                checks.AddMySQLCheck("OrderingTaskDB-check", configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
-            });
-
-            if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
-            {
-                hcBuilder
-                    .AddAzureServiceBusTopic(
-                        configuration["EventBusConnection"],
-                        topicName: "eshop_event_bus",
-                        name: "orderingtask-servicebus-check",
-                        tags: new string[] { "servicebus" });
-            }
-            else
-            {
-                hcBuilder
-                    .AddRabbitMQ(
-                        $"amqp://{configuration["EventBusConnection"]}",
-                        name: "orderingtask-rabbitmqbus-check",
-                        tags: new string[] { "rabbitmqbus" });
-            }
-
-            return services;
         }
     }
 }

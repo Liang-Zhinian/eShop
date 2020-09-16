@@ -60,52 +60,8 @@ namespace Eva.eShop.Services.Ordering.API.Application.Commands
                 await _requestManager.CreateRequestForCommandAsync<T>(message.Id);
                 try
                 {
-                    var command = message.Command;
-                    var commandName = command.GetGenericTypeName();
-                    var idProperty = string.Empty;
-                    var commandId = string.Empty;
-
-                    switch (command)
-                    {
-                        case CreateOrderCommand createOrderCommand:
-                            idProperty = nameof(createOrderCommand.UserId);
-                            commandId = createOrderCommand.UserId;
-                            break;
-
-                        case CancelOrderCommand cancelOrderCommand:
-                            idProperty = nameof(cancelOrderCommand.OrderNumber);
-                            commandId = $"{cancelOrderCommand.OrderNumber}";
-                            break;
-
-                        case ShipOrderCommand shipOrderCommand:
-                            idProperty = nameof(shipOrderCommand.OrderNumber);
-                            commandId = $"{shipOrderCommand.OrderNumber}";
-                            break;
-
-                        default:
-                            idProperty = "Id?";
-                            commandId = "n/a";
-                            break;
-                    }
-
-                    _logger.LogInformation(
-                        "----- Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                        commandName,
-                        idProperty,
-                        commandId,
-                        command);
-
                     // Send the embeded business command to mediator so it runs its related CommandHandler 
-                    var result = await _mediator.Send(command);
-
-                    _logger.LogInformation(
-                        "----- Command result: {@Result} - {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                        result,
-                        commandName,
-                        idProperty,
-                        commandId,
-                        command);
-
+                    var result = await _mediator.Send(message.Command);
                     return result;
                 }
                 catch
