@@ -27,9 +27,11 @@ namespace Eva.eShop.Services.Ordering.Infrastructure
         private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
-        private OrderingContext(DbContextOptions<OrderingContext> options) : base (options) { }
+        private OrderingContext(DbContextOptions<OrderingContext> options) : base(options) { }
 
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
+
+        public bool HasActiveTransaction => _currentTransaction != null;
 
         public OrderingContext(DbContextOptions<OrderingContext> options, IMediator mediator) : base(options)
         {
@@ -47,7 +49,7 @@ namespace Eva.eShop.Services.Ordering.Infrastructure
             modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CardTypeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new OrderStatusEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new BuyerEntityTypeConfiguration()); 
+            modelBuilder.ApplyConfiguration(new BuyerEntityTypeConfiguration());
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -67,17 +69,24 @@ namespace Eva.eShop.Services.Ordering.Infrastructure
             return true;
         }
 
-        public async Task BeginTransactionAsync()
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            _currentTransaction = _currentTransaction ?? await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            if (_currentTransaction != null) return null;
+
+            _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+
+            return _currentTransaction;
         }
 
-        public async Task CommitTransactionAsync()
+        public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+
             try
             {
                 await SaveChangesAsync();
-                _currentTransaction?.Commit();
+                transaction.Commit();
             }
             catch
             {
@@ -116,9 +125,9 @@ namespace Eva.eShop.Services.Ordering.Infrastructure
         public OrderingContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<OrderingContext>()
-                .UseMySql("Server=127.0.0.1;database=SaaSEqt_eShop_Services_OrderingDb;uid=eva;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+                .UseMySql("Server=127.0.0.1;database=Eva_eShop_Services_OrderingDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
 
-            return new OrderingContext(optionsBuilder.Options,new NoMediator());
+            return new OrderingContext(optionsBuilder.Options, new NoMediator());
         }
 
         class NoMediator : IMediator

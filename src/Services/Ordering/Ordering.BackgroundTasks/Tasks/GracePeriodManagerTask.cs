@@ -7,10 +7,9 @@ using Ordering.BackgroundTasks.Configuration;
 using Ordering.BackgroundTasks.IntegrationEvents;
 using System;
 using System.Collections.Generic;
-//using System.Data.SqlClient;
+using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
 
 namespace Ordering.BackgroundTasks.Tasks
 {
@@ -21,9 +20,10 @@ namespace Ordering.BackgroundTasks.Tasks
         private readonly BackgroundTaskSettings _settings;
         private readonly IEventBus _eventBus;
 
-        public GracePeriodManagerService(IOptions<BackgroundTaskSettings> settings,
-                                         IEventBus eventBus,
-                                         ILogger<GracePeriodManagerService> logger)
+        public GracePeriodManagerService(
+            IOptions<BackgroundTaskSettings> settings,
+            IEventBus eventBus,
+            ILogger<GracePeriodManagerService> logger)
         {
             _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
             _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
@@ -33,33 +33,35 @@ namespace Ordering.BackgroundTasks.Tasks
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogDebug($"GracePeriodManagerService is starting.");
+            _logger.LogDebug("GracePeriodManagerService is starting.");
 
-            stoppingToken.Register(() => _logger.LogDebug($"#1 GracePeriodManagerService background task is stopping."));
+            stoppingToken.Register(() => _logger.LogDebug("#1 GracePeriodManagerService background task is stopping."));
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogDebug($"GracePeriodManagerService background task is doing background work.");
+                _logger.LogDebug("GracePeriodManagerService background task is doing background work.");
 
                 CheckConfirmedGracePeriodOrders();
 
                 await Task.Delay(_settings.CheckUpdateTime, stoppingToken);
             }
 
-            _logger.LogDebug($"GracePeriodManagerService background task is stopping.");
+            _logger.LogDebug("GracePeriodManagerService background task is stopping.");
 
             await Task.CompletedTask;
         }
 
         private void CheckConfirmedGracePeriodOrders()
         {
-            _logger.LogDebug($"Checking confirmed grace period orders");
+            _logger.LogDebug("Checking confirmed grace period orders");
 
             var orderIds = GetConfirmedGracePeriodOrders();
 
             foreach (var orderId in orderIds)
             {
                 var confirmGracePeriodEvent = new GracePeriodConfirmedIntegrationEvent(orderId);
+
+                _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} from {AppName} - ({@IntegrationEvent})", confirmGracePeriodEvent.Id, Program.AppName, confirmGracePeriodEvent);
 
                 _eventBus.Publish(confirmGracePeriodEvent);
             }
@@ -69,8 +71,7 @@ namespace Ordering.BackgroundTasks.Tasks
         {
             IEnumerable<int> orderIds = new List<int>();
 
-            //using (var conn = new SqlConnection(_settings.ConnectionString))
-            using (var conn = new MySqlConnection(_settings.ConnectionString))
+            using (var conn = new SqlConnection(_settings.ConnectionString))
             {
                 try
                 {
@@ -84,9 +85,9 @@ namespace Ordering.BackgroundTasks.Tasks
                             AND `OrderStatusId` = 1",
                         new { GracePeriodTime = _settings.GracePeriodTime });
                 }
-                catch (MySqlException exception)
+                catch (SqlException exception)
                 {
-                    _logger.LogCritical($"FATAL ERROR: Database connections could not be opened: {exception.Message}");
+                    _logger.LogCritical(exception, "FATAL ERROR: Database connections could not be opened: {Message}", exception.Message);
                 }
 
             }

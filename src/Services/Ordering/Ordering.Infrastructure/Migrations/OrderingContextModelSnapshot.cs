@@ -3,6 +3,7 @@ using System;
 using Eva.eShop.Services.Ordering.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ordering.Infrastructure.Migrations
@@ -14,8 +15,8 @@ namespace Ordering.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity("Eva.eShop.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
                 {
@@ -195,7 +196,7 @@ namespace Ordering.Infrastructure.Migrations
 
                     b.OwnsOne("Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Address", "Address", b1 =>
                         {
-                            b1.Property<int?>("OrderId");
+                            b1.Property<int>("OrderId");
 
                             b1.Property<string>("City");
 
@@ -206,6 +207,8 @@ namespace Ordering.Infrastructure.Migrations
                             b1.Property<string>("Street");
 
                             b1.Property<string>("ZipCode");
+
+                            b1.HasKey("OrderId");
 
                             b1.ToTable("orders");
 

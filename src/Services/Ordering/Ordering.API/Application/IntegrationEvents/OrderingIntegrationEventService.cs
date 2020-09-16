@@ -5,6 +5,7 @@ using Eva.BuildingBlocks.EventBus.Events;
 using Eva.BuildingBlocks.IntegrationEventLogEF;
 using Eva.BuildingBlocks.IntegrationEventLogEF.Services;
 using Eva.BuildingBlocks.IntegrationEventLogEF.Utilities;
+using Eva.eShop.Services.Ordering.API;
 using Eva.eShop.Services.Ordering.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,7 +25,7 @@ namespace Ordering.API.Application.IntegrationEvents
         private readonly IIntegrationEventLogService _eventLogService;
         private readonly ILogger<OrderingIntegrationEventService> _logger;
 
-        public OrderingIntegrationEventService(IEventBus eventBus, 
+        public OrderingIntegrationEventService(IEventBus eventBus,
             OrderingContext orderingContext,
             IntegrationEventLogContext eventLogContext,
             Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory,
@@ -41,9 +42,10 @@ namespace Ordering.API.Application.IntegrationEvents
         public async Task PublishEventsThroughEventBusAsync()
         {
             var pendindLogEvents = await _eventLogService.RetrieveEventLogsPendingToPublishAsync();
+
             foreach (var logEvt in pendindLogEvents)
             {
-                _logger.LogInformation("----- Publishing integration event {IntegrationEventId} ({@IntegrationEvent})", logEvt.EventId, logEvt);
+                _logger.LogInformation("----- Publishing integration event: {IntegrationEventId} from {AppName} - ({@IntegrationEvent})", logEvt.EventId, Program.AppName, logEvt.IntegrationEvent);
 
                 try
                 {
@@ -51,16 +53,18 @@ namespace Ordering.API.Application.IntegrationEvents
                     _eventBus.Publish(logEvt.IntegrationEvent);
                     await _eventLogService.MarkEventAsPublishedAsync(logEvt.EventId);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    _logger.LogError(ex, "ERROR publishing integration event: {IntegrationEventId} from {AppName}", logEvt.EventId, Program.AppName);
+
                     await _eventLogService.MarkEventAsFailedAsync(logEvt.EventId);
-                }                
+                }
             }
         }
 
         public async Task AddAndSaveEventAsync(IntegrationEvent evt)
         {
-            _logger.LogInformation("----- Saving integration event {IntegrationEventId} to repository ({@IntegrationEvent})", evt.Id, evt);
+            _logger.LogInformation("----- Enqueuing integration event {IntegrationEventId} to repository ({@IntegrationEvent})", evt.Id, evt);
 
             await _eventLogService.SaveEventAsync(evt, _orderingContext.GetCurrentTransaction.GetDbTransaction());
         }

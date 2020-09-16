@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Eva.BuildingBlocks.EventBus.Extensions;
 using Eva.eShop.Services.Ordering.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Ordering.API.Application.IntegrationEvents;
+using Serilog.Context;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,24 +28,31 @@ namespace Ordering.API.Application.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            TResponse response = default(TResponse);
-            var typeName = request.GetTypeName();
+            var response = default(TResponse);
+            var typeName = request.GetGenericTypeName();
 
             try
             {
+                if (_dbContext.HasActiveTransaction)
+                {
+                    return await next();
+                }
+
                 var strategy = _dbContext.Database.CreateExecutionStrategy();
 
                 await strategy.ExecuteAsync(async () =>
                 {
-                    _logger.LogInformation("----- Begin transaction for {CommandName} ({@Command})", typeName, request);
+                    using (var transaction = await _dbContext.BeginTransactionAsync())
+                    using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
+                    {
+                        _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, request);
 
-                    await _dbContext.BeginTransactionAsync();
+                        response = await next();
 
-                    response = await next();
+                        _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
 
-                    await _dbContext.CommitTransactionAsync();
-
-                    _logger.LogInformation("----- Transaction commited for {CommandName}", typeName);
+                        await _dbContext.CommitTransactionAsync(transaction);
+                    }
 
                     await _orderingIntegrationEventService.PublishEventsThroughEventBusAsync();
                 });
@@ -54,9 +61,8 @@ namespace Ordering.API.Application.Behaviors
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "----- ERROR Handling transaction for {CommandName} ({@Command})", typeName, request);
+                _logger.LogError(ex, "ERROR Handling transaction for {CommandName} ({@Command})", typeName, request);
 
-                _dbContext.RollbackTransaction();
                 throw;
             }
         }

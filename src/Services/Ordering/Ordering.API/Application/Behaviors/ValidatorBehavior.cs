@@ -2,10 +2,10 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Domain.Exceptions;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Eva.BuildingBlocks.EventBus.Extensions;
 
 namespace Ordering.API.Application.Behaviors
 {
@@ -22,7 +22,7 @@ namespace Ordering.API.Application.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            var typeName = request.GetTypeName();
+            var typeName = request.GetGenericTypeName();
 
             _logger.LogInformation("----- Validating command {CommandType}", typeName);
 
@@ -34,7 +34,7 @@ namespace Ordering.API.Application.Behaviors
 
             if (failures.Any())
             {
-                _logger.LogWarning("----- Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}", typeName, request, failures);
+                _logger.LogWarning("Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}", typeName, request, failures);
 
                 throw new OrderingDomainException(
                     $"Command Validation Errors for type {typeof(TRequest).Name}", new ValidationException("Validation exception", failures));

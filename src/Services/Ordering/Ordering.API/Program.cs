@@ -15,8 +15,8 @@ namespace Eva.eShop.Services.Ordering.API
 {
     public class Program
     {
-        public static readonly string AppName = typeof(Program).Namespace;
-        public static readonly string AppShortName = AppName.Substring(AppName.LastIndexOf('.', AppName.LastIndexOf('.') - 1) + 1);
+        public static readonly string Namespace = typeof(Program).Namespace;
+        public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
         public static int Main(string[] args)
         {
@@ -26,10 +26,10 @@ namespace Eva.eShop.Services.Ordering.API
 
             try
             {
-                Log.Information("Configuring web host ({Application})...", AppName);
+                Log.Information("Configuring web host ({ApplicationContext})...", AppName);
                 var host = BuildWebHost(configuration, args);
 
-                Log.Information("Applying migrations ({Application})...", AppName);
+                Log.Information("Applying migrations ({ApplicationContext})...", AppName);
                 host.MigrateDbContext<OrderingContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();
@@ -42,14 +42,14 @@ namespace Eva.eShop.Services.Ordering.API
                 })
                 .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
-                Log.Information("Starting web host ({Application})...", AppName);
+                Log.Information("Starting web host ({ApplicationContext})...", AppName);
                 host.Run();
 
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Program terminated unexpectedly ({Application})!", AppName);
+                Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", AppName);
                 return 1;
             }
             finally
@@ -74,7 +74,7 @@ namespace Eva.eShop.Services.Ordering.API
 
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
-                .Enrich.WithProperty("Application", AppName)
+                .Enrich.WithProperty("ApplicationContext", AppName)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)

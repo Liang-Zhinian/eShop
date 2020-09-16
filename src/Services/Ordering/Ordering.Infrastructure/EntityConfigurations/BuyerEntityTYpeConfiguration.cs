@@ -18,7 +18,8 @@ namespace Ordering.Infrastructure.EntityConfigurations
             buyerConfiguration.Ignore(b => b.DomainEvents);
 
             buyerConfiguration.Property(b => b.Id)
-                .UseMySQLAutoIncrementColumn("buyerseq"/*, OrderingContext.DEFAULT_SCHEMA*/);
+                              .UseMySQLAutoIncrementColumn("buyerseq");
+                //.ForSqlServerUseSequenceHiLo("buyerseq", OrderingContext.DEFAULT_SCHEMA);
 
             buyerConfiguration.Property(b => b.IdentityGuid)
                 .HasMaxLength(200)

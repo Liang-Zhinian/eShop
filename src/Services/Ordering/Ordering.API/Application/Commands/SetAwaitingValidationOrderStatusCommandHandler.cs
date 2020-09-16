@@ -2,6 +2,7 @@
 using Eva.eShop.Services.Ordering.API.Application.Commands;
 using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
 using Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,7 +41,11 @@ namespace Ordering.API.Application.Commands
     // Use for Idempotency in Command process
     public class SetAwaitingValidationIdentifiedOrderStatusCommandHandler : IdentifiedCommandHandler<SetAwaitingValidationOrderStatusCommand, bool>
     {
-        public SetAwaitingValidationIdentifiedOrderStatusCommandHandler(IMediator mediator, IRequestManager requestManager) : base(mediator, requestManager)
+        public SetAwaitingValidationIdentifiedOrderStatusCommandHandler(
+            IMediator mediator,
+            IRequestManager requestManager,
+            ILogger<IdentifiedCommandHandler<SetAwaitingValidationOrderStatusCommand, bool>> logger)
+            : base(mediator, requestManager, logger)
         {
         }
 
