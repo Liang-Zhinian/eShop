@@ -2,6 +2,7 @@
 using Eva.BuildingBlocks.EventBus;
 using Eva.BuildingBlocks.EventBus.Abstractions;
 using Eva.BuildingBlocks.EventBus.Events;
+using Eva.BuildingBlocks.EventBus.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -107,6 +108,8 @@ namespace Eva.BuildingBlocks.EventBusRabbitMQ
         public void SubscribeDynamic<TH>(string eventName)
             where TH : IDynamicIntegrationEventHandler
         {
+            _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+
             DoInternalSubscription(eventName);
             _subsManager.AddDynamicSubscription<TH>(eventName);
         }
@@ -117,6 +120,9 @@ namespace Eva.BuildingBlocks.EventBusRabbitMQ
         {
             var eventName = _subsManager.GetEventKey<T>();
             DoInternalSubscription(eventName);
+
+            _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+
             _subsManager.AddSubscription<T, TH>();
         }
 
@@ -140,9 +146,13 @@ namespace Eva.BuildingBlocks.EventBusRabbitMQ
         }
 
         public void Unsubscribe<T, TH>()
-            where TH : IIntegrationEventHandler<T>
             where T : IntegrationEvent
+            where TH : IIntegrationEventHandler<T>
         {
+            var eventName = _subsManager.GetEventKey<T>();
+
+            _logger.LogInformation("Unsubscribing from event {EventName}", eventName);
+
             _subsManager.RemoveSubscription<T, TH>();
         }
 
@@ -215,7 +225,7 @@ namespace Eva.BuildingBlocks.EventBusRabbitMQ
                     foreach (var subscription in subscriptions)
                     {
                         if (subscription.IsDynamic)
-                        { 
+                        {
                             var handler = scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
                             if (handler == null) continue;
                             dynamic eventData = JObject.Parse(message);
