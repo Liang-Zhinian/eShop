@@ -1,4 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,14 +11,14 @@ namespace Microsoft.Extensions.HealthChecks
 
     public static class HealthCheckBuilderSqlServerExtensions
     {
-        public static HealthCheckBuilder AddMySqlCheck(this HealthCheckBuilder builder, string name, string connectionString)
+        public static HealthCheckBuilder AddSqlCheck(this HealthCheckBuilder builder, string name, string connectionString)
         {
             Guard.ArgumentNotNull(nameof(builder), builder);
 
-            return AddMySqlCheck(builder, name, connectionString, builder.DefaultCacheDuration);
+            return AddSqlCheck(builder, name, connectionString, builder.DefaultCacheDuration);
         }
 
-        public static HealthCheckBuilder AddMySqlCheck(this HealthCheckBuilder builder, string name, string connectionString, TimeSpan cacheDuration)
+        public static HealthCheckBuilder AddSqlCheck(this HealthCheckBuilder builder, string name, string connectionString, TimeSpan cacheDuration)
         {
             builder.AddCheck($"SqlCheck({name})", async () =>
             {
