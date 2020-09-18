@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>Eva.BuildingBlocks.HealthChecks.MySQL</RootNamespace>
+    <AssemblyName>HealthChecks.MySQL</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
