@@ -7,9 +7,10 @@ using Ordering.BackgroundTasks.Configuration;
 using Ordering.BackgroundTasks.IntegrationEvents;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace Ordering.BackgroundTasks.Tasks
 {
@@ -71,7 +72,8 @@ namespace Ordering.BackgroundTasks.Tasks
         {
             IEnumerable<int> orderIds = new List<int>();
 
-            using (var conn = new SqlConnection(_settings.ConnectionString))
+            //using (var conn = new SqlConnection(_settings.ConnectionString))
+            using (var conn = new MySqlConnection(_settings.ConnectionString))
             {
                 try
                 {
@@ -85,7 +87,7 @@ namespace Ordering.BackgroundTasks.Tasks
                             AND `OrderStatusId` = 1",
                         new { GracePeriodTime = _settings.GracePeriodTime });
                 }
-                catch (SqlException exception)
+                catch (MySqlException exception)
                 {
                     _logger.LogCritical(exception, "FATAL ERROR: Database connections could not be opened: {Message}", exception.Message);
                 }
