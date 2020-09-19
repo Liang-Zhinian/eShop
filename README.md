@@ -2,18 +2,49 @@
 Sample .NET Core reference application, powered by Microsoft, based on a simplified microservices architecture and Docker containers.
 
 ## Build and deploy the app on the swarm node
+### Get the IP address of the swarm node
 ```
 $ docker-machine env [docker-machine-name]
 $ eval $(docker-machine env [docker-machine-name])
 $ docker-machine ip [docker-machine-name]
 192.168.99.109
 
+```
+
+### Config NFS with Docker "Local"​ volume driver
+```
+===== config nfs-server =====
+
+$ sudo nano /etc/exports
+/Users/sprite/Documents/docker_data_storage/mysql/data -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
+/Users/sprite/Documents/docker_data_storage/mysql/conf -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
+/Users/sprite/Documents/docker_data_storage/mysql/init -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
+```
+
+```
+===== update nfs-server =====
+
+$ sudo nfsd update
+$ showmount -e
+```
+
+```
+===== start nfs-client =====
+
+$ docker-machine ssh [docker-machine-name] "sudo /usr/local/etc/init.d/nfs-client start"
+```
+
+### Export the needed env
+```
 $ export TAG=2.1.505
 $ export REGISTRY=eva
 $ export ESHOP_EXTERNAL_DNS_NAME_OR_IP=192.168.99.109
 $ export ESHOP_AZURE_STORAGE_CATALOG_URL=http://192.168.99.109:5202/api/v1/c/catalog/items/[0]/pic/
 $ export ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP=192.168.99.109
+```
 
+### Build and deploy the app
+```
 $ docker-compose build
 $ docker stack deploy  --compose-file=docker-compose.yml --compose-file=docker-compose.override.yml eshop_stack
 ```
