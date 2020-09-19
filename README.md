@@ -8,7 +8,7 @@ $ eval $(docker-machine env [docker-machine-name])
 $ docker-machine ip [docker-machine-name]
 192.168.99.109
 $ export TAG=2.1.505
-$ export REGISTRY=2.1.505
+$ export REGISTRY=eva
 $ export ESHOP_EXTERNAL_DNS_NAME_OR_IP=192.168.99.109
 $ export ESHOP_AZURE_STORAGE_CATALOG_URL=http://192.168.99.109:5202/api/v1/c/catalog/items/[0]/pic/
 $ export ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP=192.168.99.109
