@@ -12,8 +12,16 @@ $ docker-machine ip [docker-machine-name]
 ```
 
 ### Config NFS with Docker "Local"​ volume driver
-```
 ===== config nfs-server =====
+```
+$ cd /Users/sprite/Documents
+$ mkdir docker_data_storage
+$ cd docker_data_storage
+$ mkdir mysql
+$ cd mysql
+$ mkdir data
+$ mkdir conf
+$ mkdir init
 
 $ sudo nano /etc/exports
 /Users/sprite/Documents/docker_data_storage/mysql/data -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
@@ -21,18 +29,35 @@ $ sudo nano /etc/exports
 /Users/sprite/Documents/docker_data_storage/mysql/init -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
 ```
 
-```
 ===== update nfs-server =====
-
+```
 $ sudo nfsd update
 $ showmount -e
 ```
 
-```
 ===== start nfs-client =====
-
+```
 $ docker-machine ssh [docker-machine-name] "sudo /usr/local/etc/init.d/nfs-client start"
 ```
+
+### MySQL conf and init-scripts
+===== my.cnf =====
+```
+[mysqld]
+character-set-server=utf8
+collation-server=utf8_unicode_ci
+skip-character-set-client-handshake
+```
+===== Copy this file **my.cnf** to the folder **conf** created above =====
+
+===== grant_privileges_to_user.sql =====
+```
+CREATE USER 'eva'@'%' IDENTIFIED BY 'P@ssword';
+GRANT ALL PRIVILEGES ON *.* TO 'eva'@'%';
+CREATE USER 'eva'@'localhost' IDENTIFIED BY 'P@ssword';
+GRANT ALL PRIVILEGES ON *.* TO 'eva'@'localhost';
+```
+===== Copy this file **grant_privileges_to_user.sql** to the folder **init** created above =====
 
 ### Export the needed env
 ```
