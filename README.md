@@ -3,9 +3,9 @@ Sample .NET Core reference application, powered by Microsoft, based on a simplif
 
 ## Build and run in docker swarm mode
 ```
-$ docker-machine env [vm-name]
-$ eval $(docker-machine env [vm-name])
-$ docker-machine ip [vm-name]
+$ docker-machine env [docker-machine-name]
+$ eval $(docker-machine env [docker-machine-name])
+$ docker-machine ip [docker-machine-name]
 192.168.99.109
 $ export TAG=2.1.505
 $ export REGISTRY=2.1.505
