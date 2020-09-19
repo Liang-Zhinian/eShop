@@ -27,7 +27,7 @@
                     @"select o.Id as ordernumber,o.OrderDate as date, o.Description as description,
                         o.Address_City as city, o.Address_Country as country, o.Address_State as state, o.Address_Street as street, o.Address_ZipCode as zipcode,
                         os.Name as status, 
-                        oi.ProductName as productname, oi.Units as units, oi.UnitPrice as unitprice, oi.PictureUrl as pictureurl, o.MerchantId as merchantid
+                        oi.ProductName as productname, oi.Units as units, oi.UnitPrice as unitprice, oi.PictureUrl as pictureurl
                         FROM `orders` o
                         LEFT JOIN `orderItems` oi ON o.Id = oi.orderid 
                         LEFT JOIN `orderstatus` os on o.OrderStatusId = os.Id
