@@ -1,4 +1,4 @@
-# eShop - Microservices Architecture and Containers based Reference Application (**BETA state** - Visual Studio 2017 and CLI environments compatible)
+# eShop - Microservices Architecture and Containers based Reference Application
 Sample .NET Core reference application, powered by Microsoft, based on a simplified microservices architecture and Docker containers.
 
 ## Build and deploy the app on the swarm node
