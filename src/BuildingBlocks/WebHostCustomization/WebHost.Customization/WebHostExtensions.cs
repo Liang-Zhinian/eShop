@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Microsoft.AspNetCore.Hosting
 {
@@ -40,7 +40,7 @@ namespace Microsoft.AspNetCore.Hosting
                     }
                     else
                     {
-                        var retry = Policy.Handle<SqlException>()
+                        var retry = Policy.Handle<DbException>()
                              .WaitAndRetry(new TimeSpan[]
                              {
                              TimeSpan.FromSeconds(3),

@@ -1,4 +1,6 @@
-﻿namespace Eva.eShop.Services.Ordering.API.Infrastructure
+﻿extern alias MySqlConnectorAlias;
+
+namespace Eva.eShop.Services.Ordering.API.Infrastructure
 {
     using global::Ordering.API.Extensions;
     using Microsoft.AspNetCore.Hosting;
@@ -12,7 +14,6 @@
     using Polly;
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -176,8 +177,8 @@
      
         private Policy CreatePolicy( ILogger<OrderingContextSeed> logger, string prefix, int retries =3)
         {
-            return Policy.Handle<SqlException>().
-                WaitAndRetryAsync(
+            return Policy.Handle<MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlException>().
+                   WaitAndRetryAsync(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),
                     onRetry: (exception, timeSpan, retry, ctx) =>

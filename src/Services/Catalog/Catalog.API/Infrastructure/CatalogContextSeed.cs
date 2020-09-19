@@ -1,8 +1,9 @@
-﻿namespace Eva.eShop.Services.Catalog.API.Infrastructure
+﻿extern alias MySqlConnectorAlias;
+
+namespace Eva.eShop.Services.Catalog.API.Infrastructure
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
     using System.Globalization;
     using System.IO;
     using System.IO.Compression;
@@ -15,6 +16,7 @@
     using Microsoft.Extensions.Options;
     using Model;
     using Polly;
+    using MySql.Data.MySqlClient;
 
     public class CatalogContextSeed
     {
@@ -382,7 +384,7 @@
 
         private Policy CreatePolicy( ILogger<CatalogContextSeed> logger, string prefix,int retries = 3)
         {
-            return Policy.Handle<SqlException>().
+            return Policy.Handle<MySqlConnectorAlias::MySql.Data.MySqlClient.MySqlException>().
                 WaitAndRetryAsync(
                     retryCount: retries,
                     sleepDurationProvider: retry => TimeSpan.FromSeconds(5),
