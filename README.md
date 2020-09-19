@@ -89,10 +89,38 @@ scvmhjqg7pji8vpha6sogttz7   eshop_stack_webshoppingagg.1             eva/webshop
 ```
 $ docker-compose build ordering-api
 $ docker service update --force eshop_stack_ordering-api
+eshop_stack_ordering-api
+overall progress: 1 out of 1 tasks 
+1/1: running   [==================================================>] 
+verify: Service converged
 ```
 
 ## REMOVE STACK
 ```
 $ docker stack remove eshop_stack
+Removing service eshop_stack_basket-api
+Removing service eshop_stack_basket-data
+Removing service eshop_stack_catalog-api
+Removing service eshop_stack_identity-api
+Removing service eshop_stack_locations-api
+Removing service eshop_stack_marketing-api
+Removing service eshop_stack_mobilemarketingapigw
+Removing service eshop_stack_mobileshoppingagg
+Removing service eshop_stack_mobileshoppingapigw
+Removing service eshop_stack_nosql-data
+Removing service eshop_stack_ordering-api
+Removing service eshop_stack_ordering-backgroundtasks
+Removing service eshop_stack_ordering-signalrhub
+Removing service eshop_stack_payment-api
+Removing service eshop_stack_rabbitmq
+Removing service eshop_stack_seq
+Removing service eshop_stack_sql-data
+Removing service eshop_stack_webmarketingapigw
+Removing service eshop_stack_webmvc
+Removing service eshop_stack_webshoppingagg
+Removing service eshop_stack_webshoppingapigw
+Removing service eshop_stack_webstatus
+Removing network eshop_stack_default
+
 ```
 
