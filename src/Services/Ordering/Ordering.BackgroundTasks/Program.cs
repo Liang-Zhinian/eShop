@@ -44,6 +44,7 @@ namespace Ordering.BackgroundTasks
             WebHost.CreateDefaultBuilder(args)
                 .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
+                .UseHealthChecks("/hc")
                 .UseConfiguration(configuration)
                 .UseSerilog()
                 .Build();

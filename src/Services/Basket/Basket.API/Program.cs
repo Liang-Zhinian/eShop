@@ -49,6 +49,7 @@ namespace Eva.eShop.Services.Basket.API
                     options.ConfigPath = "/Failing")
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(configuration)
                 .UseSerilog()

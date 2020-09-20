@@ -63,6 +63,7 @@ namespace Eva.eShop.Services.Ordering.API
                 .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(configuration)
                 .UseSerilog()

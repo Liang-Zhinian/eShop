@@ -46,6 +46,7 @@ namespace Eva.eShop.Services.Locations.API
                 .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(configuration)
                 .UseSerilog()

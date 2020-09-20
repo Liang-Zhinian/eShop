@@ -62,6 +62,7 @@ namespace Eva.eShop.Services.Catalog.API
                 .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseWebRoot("Pics")
                 .UseConfiguration(configuration)

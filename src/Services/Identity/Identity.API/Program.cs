@@ -68,6 +68,7 @@ namespace Eva.eShop.Services.Identity.API
                 .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseHealthChecks("/hc")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(configuration)
                 .UseSerilog()
