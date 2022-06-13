@@ -38,9 +38,7 @@ CREATE USER 'eva'@'localhost' IDENTIFIED BY 'P@ssword';
 GRANT ALL PRIVILEGES ON *.* TO 'eva'@'localhost';
 
 $ sudo nano /etc/exports
-/Users/sprite/Documents/docker_data_storage/mysql/data -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
-/Users/sprite/Documents/docker_data_storage/mysql/conf -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
-/Users/sprite/Documents/docker_data_storage/mysql/init -alldirs -rw -maproot=root:wheel -network 172.20.10.0 -mask 255.255.255.0
+/Users/sprite/Documents/docker_data -alldirs -rw -maproot=root:wheel -network 192.168.2.0 -mask 255.255.255.0
 ```
 
 ===== update nfs-server =====
@@ -174,4 +172,31 @@ Removing service eshop_stack_webstatus
 Removing network eshop_stack_default
 
 ```
+```
 
+## Service and Port
+```
+seq                         5340
+sql-data                    3306
+nosql-data                  27017
+basket-data                 6379
+rabbitmq                    15672. 5672
+identity-api                5105
+basket-api                  5103
+catalog-api                 5101
+ordering-api                5192
+marketing-api               5110
+ordering-backgroundtasks    5111
+payment-api                 5108
+locations-api               5109
+mobileshoppingapigw         5200
+mobilemarketingapigw        5201
+webshoppingapigw            5202
+webmarketingapigw           5203
+mobileshoppingagg           5120
+webshoppingagg              5121
+ordering-signalrhub         5112
+webstatus                   5107
+webmvc                      5110
+
+```

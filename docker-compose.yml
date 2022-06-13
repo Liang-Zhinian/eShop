@@ -6,20 +6,20 @@ volumes:
     driver: local
     driver_opts:
       type: "nfs"
-      o: "addr=172.20.10.3,rw"
-      device: ":/Users/sprite/Documents/docker_data_storage/mysql/data"
+      o: "addr=192.168.2.59,rw,nolock,nfsvers=3,vers=3"
+      device: ":/Users/sprite/Documents/docker_data/mysql/data"
   mysqlconf:
     driver: local
     driver_opts:
       type: "nfs"
-      o: "addr=172.20.10.3,rw"
-      device: ":/Users/sprite/Documents/docker_data_storage/mysql/conf"
+      o: "addr=192.168.2.59,rw,nolock,nfsvers=3,vers=3"
+      device: ":/Users/sprite/Documents/docker_data/mysql/conf"
   mysqlinit:
     driver: local
     driver_opts:
       type: "nfs"
-      o: "addr=172.20.10.3,rw"
-      device: ":/Users/sprite/Documents/docker_data_storage/mysql/init"
+      o: "addr=192.168.2.59,rw,nolock,nfsvers=3,vers=3"
+      device: ":/Users/sprite/Documents/docker_data/mysql/init"
      
 
 services:

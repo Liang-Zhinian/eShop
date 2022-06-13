@@ -1,12 +1,12 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM mcr.microsoft.com/dotnet/sdk:2.1 AS build
 WORKDIR /src
 COPY . .
 WORKDIR /src/src/Web/WebStatus
-RUN dotnet restore -nowarn:msb3202,nu1503
+RUN dotnet restore --interactive -nowarn:msb3202,nu1503
 RUN dotnet build --no-restore -c Release -o /app
 
 FROM build AS publish

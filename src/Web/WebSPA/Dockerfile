@@ -1,9 +1,9 @@
 ARG NODE_IMAGE=node:8.11
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/aspnet:2.1 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.1-sdk as dotnet-build
+FROM mcr.microsoft.com/dotnet/sdk:2.1 as dotnet-build
 WORKDIR /src
 
 FROM ${NODE_IMAGE} as node-build
