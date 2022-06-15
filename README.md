@@ -181,14 +181,16 @@ sql-data                    3306
 nosql-data                  27017
 basket-data                 6379
 rabbitmq                    15672. 5672
-identity-api                5105
-basket-api                  5103
+
 catalog-api                 5101
-ordering-api                5192
-marketing-api               5110
-ordering-backgroundtasks    5111
+ordering-api                5102
+basket-api                  5103
+identity-api                5105
+webstatus                   5107
 payment-api                 5108
 locations-api               5109
+marketing-api               5110
+ordering-backgroundtasks    5111
 mobileshoppingapigw         5200
 mobilemarketingapigw        5201
 webshoppingapigw            5202
@@ -196,7 +198,22 @@ webmarketingapigw           5203
 mobileshoppingagg           5120
 webshoppingagg              5121
 ordering-signalrhub         5112
-webstatus                   5107
 webmvc                      5110
 
 ```
+
+liangzhinian2018/identity.api               2.1.505                 2dddcf603005        44 minutes ago      273MB
+liangzhinian2018/payment.api                2.1.505                 46468570cde6        3 hours ago         258MB
+liangzhinian2018/marketing.api              2.1.505                 a21b012f11ed        3 hours ago         275MB
+liangzhinian2018/locations.api              2.1.505                 19b5cc22fa39        3 hours ago         271MB
+liangzhinian2018/basket.api                 2.1.505                 61cdee28bf2d        3 hours ago         270MB
+liangzhinian2018/catalog.api                2.1.505                 1addf3970c69        4 hours ago         309MB
+liangzhinian2018/ordering.api               2.1.505                 0ea6a6b55ad5        4 hours ago         272MB
+liangzhinian2018/ordering.backgroundtasks   2.1.505                 e212bd75c94c        4 hours ago         258MB
+liangzhinian2018/webshoppingagg             2.1.505                 fcd7cd1977f2        3 hours ago         266MB
+liangzhinian2018/mobileshoppingagg          2.1.505                 af5ce61405e5        3 hours ago         266MB
+liangzhinian2018/ocelotapigw                2.1.505                 3df0e43fcfaf        3 hours ago         254MB
+liangzhinian2018/webmvc                     2.1.505                 9836fdd5689a        2 hours ago         259MB
+liangzhinian2018/ordering.signalrhub        2.1.505                 d0f2d3ec1edc        2 hours ago         258MB
+liangzhinian2018/webstatus                  2.1.505                 4717cc574863        20 minutes ago      255MB
+

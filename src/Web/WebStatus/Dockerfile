@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:2.1 AS build
 WORKDIR /src
 COPY . .
 WORKDIR /src/src/Web/WebStatus
-RUN dotnet restore --interactive -nowarn:msb3202,nu1503
+RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build --no-restore -c Release -o /app
 
 FROM build AS publish
