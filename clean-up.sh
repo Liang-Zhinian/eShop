@@ -5,7 +5,7 @@ set -e
 eval $(docker-machine env eshop)
 
 docker stack rm eshop_stack
-docker rmi $(docker images | grep "eshop/")
+docker rmi $(docker images | grep "liangzhinian2018/")
 
 # docker volume rm --force eshop_stack_rabbitmq || echo "Stacks already removed"
 # docker volume rm --force eshop_stack_mysqlinit || echo "Stacks already removed"

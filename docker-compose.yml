@@ -6,19 +6,19 @@ volumes:
     driver: local
     driver_opts:
       type: "nfs"
-      o: "addr=192.168.2.59,rw,nolock,nfsvers=3,vers=3"
+      o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
       device: ":/Users/sprite/Documents/docker_data/mysql/data"
   mysqlconf:
     driver: local
     driver_opts:
       type: "nfs"
-      o: "addr=192.168.2.59,rw,nolock,nfsvers=3,vers=3"
+      o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
       device: ":/Users/sprite/Documents/docker_data/mysql/conf"
   mysqlinit:
     driver: local
     driver_opts:
       type: "nfs"
-      o: "addr=192.168.2.59,rw,nolock,nfsvers=3,vers=3"
+      o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
       device: ":/Users/sprite/Documents/docker_data/mysql/init"
      
 
@@ -119,35 +119,35 @@ services:
   #   depends_on:
   #     - sql-data    
 
-  mobileshoppingapigw:
-    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-    depends_on:
-      - nosql-data
-      - sql-data
-      - identity-api
-      - rabbitmq
-      - ordering-api
-      - marketing-api
-      - catalog-api
-      - basket-api
+  # mobileshoppingapigw:
+  #   image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+  #   depends_on:
+  #     - nosql-data
+  #     - sql-data
+  #     - identity-api
+  #     - rabbitmq
+  #     - ordering-api
+  #     - marketing-api
+  #     - catalog-api
+  #     - basket-api
 
-  mobilemarketingapigw:
-    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-    depends_on:
-      - nosql-data
-      - sql-data
-      - identity-api
-      - rabbitmq
-      - ordering-api
-      - marketing-api
-      - catalog-api
-      - basket-api
+  # mobilemarketingapigw:
+  #   image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+  #   depends_on:
+  #     - nosql-data
+  #     - sql-data
+  #     - identity-api
+  #     - rabbitmq
+  #     - ordering-api
+  #     - marketing-api
+  #     - catalog-api
+  #     - basket-api
 
   webshoppingapigw:
     image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
@@ -164,35 +164,35 @@ services:
       - catalog-api
       - basket-api
 
-  webmarketingapigw:
-    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-    depends_on:
-      - nosql-data
-      - sql-data
-      - identity-api
-      - rabbitmq
-      - ordering-api
-      - marketing-api
-      - catalog-api
-      - basket-api
+  # webmarketingapigw:
+  #   image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+  #   depends_on:
+  #     - nosql-data
+  #     - sql-data
+  #     - identity-api
+  #     - rabbitmq
+  #     - ordering-api
+  #     - marketing-api
+  #     - catalog-api
+  #     - basket-api
 
-  mobileshoppingagg:
-    image: ${REGISTRY:-eshop}/mobileshoppingagg:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/ApiGateways/Mobile.Bff.Shopping/aggregator/Dockerfile
-    depends_on:
-      - nosql-data
-      - sql-data
-      - identity-api
-      - rabbitmq
-      - ordering-api
-      - marketing-api
-      - catalog-api
-      - basket-api
+  # mobileshoppingagg:
+  #   image: ${REGISTRY:-eshop}/mobileshoppingagg:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/ApiGateways/Mobile.Bff.Shopping/aggregator/Dockerfile
+  #   depends_on:
+  #     - nosql-data
+  #     - sql-data
+  #     - identity-api
+  #     - rabbitmq
+  #     - ordering-api
+  #     - marketing-api
+  #     - catalog-api
+  #     - basket-api
 
   webshoppingagg:
     image: ${REGISTRY:-eshop}/webshoppingagg:${TAG:-latest}
@@ -240,15 +240,15 @@ services:
 #      - webshoppingapigw
 #      - webmarketingapigw
 
-  webmvc:
-    image: ${REGISTRY:-eshop}/webmvc:${TAG:-latest}
-    build:
-      context: .
-      dockerfile: src/Web/WebMVC/Dockerfile    
-    depends_on:
-      - webshoppingagg
-      - webshoppingapigw
-      - webmarketingapigw
+  # webmvc:
+  #   image: ${REGISTRY:-eshop}/webmvc:${TAG:-latest}
+  #   build:
+  #     context: .
+  #     dockerfile: src/Web/WebMVC/Dockerfile    
+  #   depends_on:
+  #     - webshoppingagg
+  #     - webshoppingapigw
+  #     - webmarketingapigw
 
   # webhooks-client:
   #   image: ${REGISTRY:-eshop}/webhooks.client:${TAG:-latest}

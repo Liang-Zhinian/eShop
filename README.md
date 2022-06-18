@@ -7,7 +7,7 @@ Sample .NET Core reference application, powered by Microsoft, based on a simplif
 $ docker-machine env [docker-machine-name]
 $ eval $(docker-machine env [docker-machine-name])
 $ docker-machine ip [docker-machine-name]
-192.168.99.109
+192.168.99.114
 
 ```
 
@@ -43,6 +43,11 @@ $ sudo nano /etc/exports
 
 ===== update nfs-server =====
 ```
+$ sudo nfsd disable
+$ sudo nfsd enable
+$ sudo nfsd stop
+$ sudo nfsd start
+$ sudo nfsd status
 $ sudo nfsd update
 $ showmount -e
 ```
@@ -56,9 +61,9 @@ $ docker-machine ssh [docker-machine-name] "sudo /usr/local/etc/init.d/nfs-clien
 ```
 $ export TAG=2.1.505
 $ export REGISTRY=eva
-$ export ESHOP_EXTERNAL_DNS_NAME_OR_IP=192.168.99.109
-$ export ESHOP_AZURE_STORAGE_CATALOG_URL=http://192.168.99.109:5202/api/v1/c/catalog/items/[0]/pic/
-$ export ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP=192.168.99.109
+$ export ESHOP_EXTERNAL_DNS_NAME_OR_IP=192.168.99.114
+$ export ESHOP_AZURE_STORAGE_CATALOG_URL=http://192.168.99.114:5202/api/v1/c/catalog/items/[0]/pic/
+$ export ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP=192.168.99.114
 ```
 
 ### Build and deploy the app
@@ -198,22 +203,13 @@ webmarketingapigw           5203
 mobileshoppingagg           5120
 webshoppingagg              5121
 ordering-signalrhub         5112
-webmvc                      5110
+webmvc                      5100
 
 ```
 
-liangzhinian2018/identity.api               2.1.505                 2dddcf603005        44 minutes ago      273MB
-liangzhinian2018/payment.api                2.1.505                 46468570cde6        3 hours ago         258MB
-liangzhinian2018/marketing.api              2.1.505                 a21b012f11ed        3 hours ago         275MB
-liangzhinian2018/locations.api              2.1.505                 19b5cc22fa39        3 hours ago         271MB
-liangzhinian2018/basket.api                 2.1.505                 61cdee28bf2d        3 hours ago         270MB
-liangzhinian2018/catalog.api                2.1.505                 1addf3970c69        4 hours ago         309MB
-liangzhinian2018/ordering.api               2.1.505                 0ea6a6b55ad5        4 hours ago         272MB
-liangzhinian2018/ordering.backgroundtasks   2.1.505                 e212bd75c94c        4 hours ago         258MB
-liangzhinian2018/webshoppingagg             2.1.505                 fcd7cd1977f2        3 hours ago         266MB
-liangzhinian2018/mobileshoppingagg          2.1.505                 af5ce61405e5        3 hours ago         266MB
-liangzhinian2018/ocelotapigw                2.1.505                 3df0e43fcfaf        3 hours ago         254MB
-liangzhinian2018/webmvc                     2.1.505                 9836fdd5689a        2 hours ago         259MB
-liangzhinian2018/ordering.signalrhub        2.1.505                 d0f2d3ec1edc        2 hours ago         258MB
-liangzhinian2018/webstatus                  2.1.505                 4717cc574863        20 minutes ago      255MB
+## Showing login: User is not authenticated
+```
+Showing login: User is not authenticated. Happens only in Chrome.
+https://github.com/IdentityServer/IdentityServer4/issues/4170
 
+```
