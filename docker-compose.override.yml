@@ -265,21 +265,21 @@ services:
     # volumes:
     #   - ./src/ApiGateways/Web.Bff.Shopping/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
 
-  # webmarketingapigw:
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - IdentityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
-  #     - CatalogUrlHC=http://catalog-api/hc
-  #     - OrderingUrlHC=http://ordering-api/hc
-  #     - IdentityUrlHC=http://identity-api/hc             
-  #     - BasketUrlHC=http://basket-api/hc
-  #     - MarketingUrlHC=http://marketing-api/hc
-  #     - PaymentUrlHC=http://payment-api/hc
-  #     - LocationUrlHC=http://locations-api/hc
-  #   ports:
-  #     - "5203:80"   
-  #   volumes:
-  #     - ./src/ApiGateways/Web.Bff.Marketing/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
+  webmarketingapigw:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityUrl=http://identity-api              #Local: You need to open your local dev-machine firewall at range 5100-5110.
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - IdentityUrlHC=http://identity-api/hc             
+      - BasketUrlHC=http://basket-api/hc
+      - MarketingUrlHC=http://marketing-api/hc
+      - PaymentUrlHC=http://payment-api/hc
+      - LocationUrlHC=http://locations-api/hc
+    ports:
+      - "5203:80"   
+    volumes:
+      - ./src/ApiGateways/Web.Bff.Marketing/apigw:${ESHOP_OCELOT_VOLUME_SPEC:-/app/configuration}
 
   # mobileshoppingagg:
   #   environment:
@@ -412,26 +412,26 @@ services:
   #   ports:
   #     - "5104:80"
 
-  # webmvc:
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://0.0.0.0:80
-  #     - PurchaseUrl=http://webshoppingapigw
-  #     - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105  # Local Mac: Use http://docker.for.mac.localhost:5105 || Local Windows:  Use 10.0.75.1 in a "Docker for Windows" environment, if using "localhost" from browser. || #Remote access: Use ${ESHOP_EXTERNAL_DNS_NAME_OR_IP} if using external IP or DNS name from browser.
-  #     - MarketingUrl=http://webmarketingapigw                                                          
-  #     - SignalrHubUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
-  #     - CatalogUrlHC=http://catalog-api/hc
-  #     - OrderingUrlHC=http://ordering-api/hc
-  #     - BasketUrlHC=http://basket-api/hc
-  #     - IdentityUrlHC=http://identity-api/hc
-  #     - PurchaseUrlHC=http://webshoppingapigw/hc
-  #     - MarketingUrlHC=http://webmarketingapigw/hc 
-  #     - UseCustomizationData=True
-  #     - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
-  #     - OrchestratorType=${ORCHESTRATOR_TYPE}
-  #     - UseLoadTest=${USE_LOADTEST:-False}
-  #   ports:
-  #     - "5100:80"
+  webmvc:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PurchaseUrl=http://webshoppingapigw
+      - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105  # Local Mac: Use http://docker.for.mac.localhost:5105 || Local Windows:  Use 10.0.75.1 in a "Docker for Windows" environment, if using "localhost" from browser. || #Remote access: Use ${ESHOP_EXTERNAL_DNS_NAME_OR_IP} if using external IP or DNS name from browser.
+      - MarketingUrl=http://webmarketingapigw                                                          
+      - SignalrHubUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
+      - CatalogUrlHC=http://catalog-api/hc
+      - OrderingUrlHC=http://ordering-api/hc
+      - BasketUrlHC=http://basket-api/hc
+      - IdentityUrlHC=http://identity-api/hc
+      - PurchaseUrlHC=http://webshoppingapigw/hc
+      - MarketingUrlHC=http://webmarketingapigw/hc 
+      - UseCustomizationData=True
+      - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
+      - OrchestratorType=${ORCHESTRATOR_TYPE}
+      - UseLoadTest=${USE_LOADTEST:-False}
+    ports:
+      - "5100:80"
 
   # webhooks-client:
   #   environment:

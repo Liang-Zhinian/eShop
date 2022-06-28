@@ -164,20 +164,20 @@ services:
       - catalog-api
       - basket-api
 
-  # webmarketingapigw:
-  #   image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-  #   depends_on:
-  #     - nosql-data
-  #     - sql-data
-  #     - identity-api
-  #     - rabbitmq
-  #     - ordering-api
-  #     - marketing-api
-  #     - catalog-api
-  #     - basket-api
+  webmarketingapigw:
+    image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
+    depends_on:
+      - nosql-data
+      - sql-data
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - marketing-api
+      - catalog-api
+      - basket-api
 
   # mobileshoppingagg:
   #   image: ${REGISTRY:-eshop}/mobileshoppingagg:${TAG:-latest}
@@ -240,15 +240,15 @@ services:
 #      - webshoppingapigw
 #      - webmarketingapigw
 
-  # webmvc:
-  #   image: ${REGISTRY:-eshop}/webmvc:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/Web/WebMVC/Dockerfile    
-  #   depends_on:
-  #     - webshoppingagg
-  #     - webshoppingapigw
-  #     - webmarketingapigw
+  webmvc:
+    image: ${REGISTRY:-eshop}/webmvc:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Web/WebMVC/Dockerfile    
+    depends_on:
+      - webshoppingagg
+      - webshoppingapigw
+      - webmarketingapigw
 
   # webhooks-client:
   #   image: ${REGISTRY:-eshop}/webhooks.client:${TAG:-latest}
