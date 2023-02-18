@@ -1,25 +1,25 @@
 version: '3.4'
             
 
-volumes:
-  mysqldata:
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
-      device: ":/Users/sprite/Documents/docker_data/mysql/data"
-  mysqlconf:
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
-      device: ":/Users/sprite/Documents/docker_data/mysql/conf"
-  mysqlinit:
-    driver: local
-    driver_opts:
-      type: "nfs"
-      o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
-      device: ":/Users/sprite/Documents/docker_data/mysql/init"
+# volumes:
+#   mysqldata:
+#     driver: local
+#     driver_opts:
+#       type: "nfs"
+#       o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
+#       device: ":/Users/sprite/Documents/docker_data/mysql/data"
+#   mysqlconf:
+#     driver: local
+#     driver_opts:
+#       type: "nfs"
+#       o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
+#       device: ":/Users/sprite/Documents/docker_data/mysql/conf"
+#   mysqlinit:
+#     driver: local
+#     driver_opts:
+#       type: "nfs"
+#       o: "addr=192.168.2.59,rw,nolock,soft,nfsvers=3,vers=3"
+#       device: ":/Users/sprite/Documents/docker_data/mysql/init"
      
 
 services:

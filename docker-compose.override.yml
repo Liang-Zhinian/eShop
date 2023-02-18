@@ -24,9 +24,9 @@ services:
       SERVICE_NAME: mysql
     restart: always
     volumes:
-      - mysqldata:/var/lib/mysql
-      - mysqlconf:/etc/mysql/conf.d
-      - mysqlinit:/docker-entrypoint-initdb.d/
+      - ~/Documents/docker/data/:/var/lib/mysql
+      - ./mysql/conf:/etc/mysql/conf.d
+      - ./mysql/init:/docker-entrypoint-initdb.d/
     ports:
       - "3306:3306"    # Important: In a production environment your should remove the external port
 

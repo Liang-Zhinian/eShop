@@ -7,6 +7,7 @@
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Eva.eShop.Services.Ordering.API' " />
   <ItemGroup>
     <Content Remove="appsettings.Development.json" />
   </ItemGroup>
