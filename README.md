@@ -218,3 +218,32 @@ Showing login: User is not authenticated. Happens only in Chrome.
 https://github.com/IdentityServer/IdentityServer4/issues/4170
 
 ```
+
+## 使用以下命令可查看容器中的环境变量
+```
+$ docker exec -it <container_id> bash
+$ printenv
+LocationsUrl=http://locations-api/hc
+OrchestratorType=
+HOSTNAME=95fbe79d3698
+ASPNETCORE_URLS=http://0.0.0.0:80
+spa=http://webspa/hc
+PaymentUrl=http://payment-api/hc
+BasketUrl=http://basket-api/hc
+PWD=/app
+HOME=/root
+OrderingUrl=http://ordering-api/hc
+ASPNETCORE_VERSION=2.1.30
+DOTNET_RUNNING_IN_CONTAINER=true
+TERM=xterm
+ApplicationInsights__InstrumentationKey=
+OrderingBackgroundTasksUrl=http://ordering-backgroundtasks/hc
+SHLVL=1
+mvc=http://webmvc/hc
+MarketingUrl=http://marketing-api/hc
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+IdentityUrl=http://identity-api/hc
+ASPNETCORE_ENVIRONMENT=Development
+CatalogUrl=http://catalog-api/hc
+_=/usr/bin/printenv
+```

@@ -30,7 +30,7 @@ services:
     image: mysql/mysql-server:5.7
 
   nosql-data:
-    image: mongo:latest
+    image: mongo:3.3
 
   basket-data:
     image: redis:alpine
@@ -111,44 +111,6 @@ services:
       - nosql-data
       - rabbitmq
 
-  # webhooks-api:
-  #   image: ${REGISTRY:-eshop}/webhooks.api:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/Webhooks/Webhooks.API/Dockerfile
-  #   depends_on:
-  #     - sql-data    
-
-  # mobileshoppingapigw:
-  #   image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-  #   depends_on:
-  #     - nosql-data
-  #     - sql-data
-  #     - identity-api
-  #     - rabbitmq
-  #     - ordering-api
-  #     - marketing-api
-  #     - catalog-api
-  #     - basket-api
-
-  # mobilemarketingapigw:
-  #   image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/ApiGateways/ApiGw-Base/Dockerfile
-  #   depends_on:
-  #     - nosql-data
-  #     - sql-data
-  #     - identity-api
-  #     - rabbitmq
-  #     - ordering-api
-  #     - marketing-api
-  #     - catalog-api
-  #     - basket-api
-
   webshoppingapigw:
     image: ${REGISTRY:-eshop}/ocelotapigw:${TAG:-latest}
     build:
@@ -178,21 +140,6 @@ services:
       - marketing-api
       - catalog-api
       - basket-api
-
-  # mobileshoppingagg:
-  #   image: ${REGISTRY:-eshop}/mobileshoppingagg:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/ApiGateways/Mobile.Bff.Shopping/aggregator/Dockerfile
-  #   depends_on:
-  #     - nosql-data
-  #     - sql-data
-  #     - identity-api
-  #     - rabbitmq
-  #     - ordering-api
-  #     - marketing-api
-  #     - catalog-api
-  #     - basket-api
 
   webshoppingagg:
     image: ${REGISTRY:-eshop}/webshoppingagg:${TAG:-latest}
@@ -230,16 +177,6 @@ services:
       context: .
       dockerfile: src/Web/WebStatus/Dockerfile
 
-  # webspa:
-  #   image: ${REGISTRY:-eshop}/webspa:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/Web/WebSPA/Dockerfile    
-#    depends_on:
-#      - webshoppingagg
-#      - webshoppingapigw
-#      - webmarketingapigw
-
   webmvc:
     image: ${REGISTRY:-eshop}/webmvc:${TAG:-latest}
     build:
@@ -248,12 +185,4 @@ services:
     depends_on:
       - webshoppingagg
       - webshoppingapigw
-      - webmarketingapigw
-
-  # webhooks-client:
-  #   image: ${REGISTRY:-eshop}/webhooks.client:${TAG:-latest}
-  #   build:
-  #     context: .
-  #     dockerfile: src/Web/WebhookClient/Dockerfile
-  #   depends_on:
-  #     - webhooks-api    
+      - webmarketingapigw    
