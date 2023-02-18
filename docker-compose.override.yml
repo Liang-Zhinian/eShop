@@ -27,7 +27,7 @@ services:
       SERVICE_NAME: mysql
     restart: always
     volumes:
-      - ~/Documents/docker/data/:/var/lib/mysql
+      - ~/Documents/docker/mysql/data/:/var/lib/mysql
       - ./mysql/conf:/etc/mysql/conf.d
       - ./mysql/init:/docker-entrypoint-initdb.d/
     ports:
