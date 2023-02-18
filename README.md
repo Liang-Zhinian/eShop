@@ -1,6 +1,11 @@
 # eShop - Microservices Architecture and Containers based Reference Application
 Sample .NET Core reference application, powered by Microsoft, based on a simplified microservices architecture and Docker containers.
 
+## Download .NET Core SDK 2.1.505
+```
+https://download.visualstudio.microsoft.com/download/pr/7908138c-c0cf-4e5a-b28a-66cf7a781808/a36fe63192ee49593890d84b23729292/dotnet-sdk-2.1.505-osx-x64.pkg
+```
+
 ## Build and deploy the app on the swarm node
 ### Get the IP address of the swarm node
 ```
