@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Eva.BuildingBlocks.EventBus</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Eva.eShop.BuildingBlocks.EventBus</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  <ItemGroup>    
   </ItemGroup>
 
 </Project>

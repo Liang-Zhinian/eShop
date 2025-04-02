@@ -1,6 +1,5 @@
-﻿namespace Eva.eShop.Services.Ordering.Domain.Seedwork
-{
-   
-    public interface IAggregateRoot { }
+﻿namespace Eva.eShop.Services.Ordering.Domain.Seedwork;
 
-}
+public interface IAggregateRoot { }
+
+

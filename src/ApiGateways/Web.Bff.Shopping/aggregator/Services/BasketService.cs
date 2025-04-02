@@ -1,39 +1,95 @@
-﻿using Eva.eShop.Web.Shopping.HttpAggregator.Config;
-using Eva.eShop.Web.Shopping.HttpAggregator.Models;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Web.Shopping.HttpAggregator.Services;
 
-namespace Eva.eShop.Web.Shopping.HttpAggregator.Services
+public class BasketService : IBasketService
 {
-    public class BasketService : IBasketService
+    private readonly Basket.BasketClient _basketClient;
+    private readonly ILogger<BasketService> _logger;
+
+    public BasketService(Basket.BasketClient basketClient, ILogger<BasketService> logger)
     {
+        _basketClient = basketClient;
+        _logger = logger;
+    }
+    
+    public async Task<BasketData> GetByIdAsync(string id)
+    {
+        _logger.LogDebug("grpc client created, request = {@id}", id);
+        var response = await _basketClient.GetBasketByIdAsync(new BasketRequest { Id = id });
+        _logger.LogDebug("grpc response {@response}", response);
 
-        private readonly HttpClient _apiClient;
-        private readonly ILogger<BasketService> _logger;
-        private readonly UrlsConfig _urls;
+        return MapToBasketData(response);
+    }
 
-        public BasketService(HttpClient httpClient,ILogger<BasketService> logger, IOptions<UrlsConfig> config)
+    public async Task UpdateAsync(BasketData currentBasket)
+    {
+        _logger.LogDebug("Grpc update basket currentBasket {@currentBasket}", currentBasket);
+        var request = MapToCustomerBasketRequest(currentBasket);
+        _logger.LogDebug("Grpc update basket request {@request}", request);
+
+        await _basketClient.UpdateBasketAsync(request);
+    }
+
+    private BasketData MapToBasketData(CustomerBasketResponse customerBasketRequest)
+    {
+        if (customerBasketRequest == null)
         {
-            _apiClient = httpClient;
-            _logger = logger;
-            _urls = config.Value;
+            return null;
         }
 
-        public async Task<BasketData> GetById(string id)
+        var map = new BasketData
         {
-            var data = await _apiClient.GetStringAsync(_urls.Basket +  UrlsConfig.BasketOperations.GetItemById(id));
-            var basket = !string.IsNullOrEmpty(data) ? JsonConvert.DeserializeObject<BasketData>(data) : null;
-            return basket;
+            BuyerId = customerBasketRequest.Buyerid
+        };
+
+        customerBasketRequest.Items.ToList().ForEach(item =>
+        {
+            if (item.Id != null)
+            {
+                map.Items.Add(new BasketDataItem
+                {
+                    Id = item.Id,
+                    OldUnitPrice = (decimal)item.Oldunitprice,
+                    PictureUrl = item.Pictureurl,
+                    ProductId = item.Productid,
+                    ProductName = item.Productname,
+                    Quantity = item.Quantity,
+                    UnitPrice = (decimal)item.Unitprice
+                });
+            }
+        });
+
+        return map;
+    }
+
+    private CustomerBasketRequest MapToCustomerBasketRequest(BasketData basketData)
+    {
+        if (basketData == null)
+        {
+            return null;
         }
 
-        public async Task Update(BasketData currentBasket)
+        var map = new CustomerBasketRequest
         {
-            var basketContent = new StringContent(JsonConvert.SerializeObject(currentBasket), System.Text.Encoding.UTF8, "application/json");
+            Buyerid = basketData.BuyerId
+        };
 
-            var data = await _apiClient.PostAsync(_urls.Basket + UrlsConfig.BasketOperations.UpdateBasket(), basketContent);
-        }
+        basketData.Items.ToList().ForEach(item =>
+        {
+            if (item.Id != null)
+            {
+                map.Items.Add(new BasketItemResponse
+                {
+                    Id = item.Id,
+                    Oldunitprice = (double)item.OldUnitPrice,
+                    Pictureurl = item.PictureUrl,
+                    Productid = item.ProductId,
+                    Productname = item.ProductName,
+                    Quantity = item.Quantity,
+                    Unitprice = (double)item.UnitPrice
+                });
+            }
+        });
+
+        return map;
     }
 }

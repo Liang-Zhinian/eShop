@@ -1,97 +1,83 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Eva.eShop.WebMVC;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
+﻿namespace WebMVC.Infrastructure;
+using Serilog;
 
-namespace WebMVC.Infrastructure
+public class WebContextSeed
 {
-    public class WebContextSeed
+    public static void Seed(IApplicationBuilder applicationBuilder, IWebHostEnvironment env)
     {
-        public static void Seed(IApplicationBuilder applicationBuilder, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        var log = Serilog.Log.Logger;
+
+        var settings = (AppSettings)applicationBuilder
+            .ApplicationServices.GetRequiredService<IOptions<AppSettings>>().Value;
+
+        var useCustomizationData = settings.UseCustomizationData;
+        var contentRootPath = env.ContentRootPath;
+        var webroot = env.WebRootPath;
+
+        if (useCustomizationData)
         {
-            var log = loggerFactory.CreateLogger("WebMVC seed");
+            GetPreconfiguredImages(contentRootPath, webroot, log);
 
-            var settings = (AppSettings)applicationBuilder
-                .ApplicationServices.GetRequiredService<IOptions<AppSettings>>().Value;
-
-            var useCustomizationData = settings.UseCustomizationData;
-            var contentRootPath = env.ContentRootPath;
-            var webroot = env.WebRootPath;
-
-            if (useCustomizationData)
-            {
-                GetPreconfiguredImages(contentRootPath, webroot, log);
-
-                GetPreconfiguredCSS(contentRootPath, webroot, log);
-            }
+            GetPreconfiguredCSS(contentRootPath, webroot, log);
         }
+    }
 
-        static void GetPreconfiguredCSS(string contentRootPath, string webroot, ILogger log)
+    static void GetPreconfiguredCSS(string contentRootPath, string webroot, ILogger log)
+    {
+        try
         {
-            try
-            { 
-                string overrideCssFile = Path.Combine(contentRootPath, "Setup", "override.css");
-                if (!File.Exists(overrideCssFile))
-                {
-                    log.LogError($" override css file '{overrideCssFile}' does not exists.");
-                    return;
-                }
-
-                string destinationFilename = Path.Combine(webroot, "css", "override.css");
-                File.Copy(overrideCssFile, destinationFilename, true );
-            }
-            catch (Exception ex)
+            string overrideCssFile = Path.Combine(contentRootPath, "Setup", "override.css");
+            if (!File.Exists(overrideCssFile))
             {
-                log.LogError($"Exception in method GetPreconfiguredCSS WebMVC. Exception Message={ex.Message}");
+                log.Error("Override css file '{FileName}' does not exists.", overrideCssFile);
+                return;
             }
+
+            string destinationFilename = Path.Combine(webroot, "css", "override.css");
+            File.Copy(overrideCssFile, destinationFilename, true);
         }
-
-        static void GetPreconfiguredImages(string contentRootPath, string webroot, ILogger log)
+        catch (Exception ex)
         {
-            try
+            log.Error(ex, "EXCEPTION ERROR: {Message}", ex.Message);
+        }
+    }
+
+    static void GetPreconfiguredImages(string contentRootPath, string webroot, ILogger log)
+    {
+        try
+        {
+            string imagesZipFile = Path.Combine(contentRootPath, "Setup", "images.zip");
+            if (!File.Exists(imagesZipFile))
             {
-                string imagesZipFile = Path.Combine(contentRootPath, "Setup", "images.zip");
-                if (!File.Exists(imagesZipFile))
-                {
-                    log.LogError($" zip file '{imagesZipFile}' does not exists.");
-                    return;
-                }
+                log.Error("Zip file '{ZipFileName}' does not exists.", imagesZipFile);
+                return;
+            }
 
-                string imagePath = Path.Combine(webroot, "images");
-                string[] imageFiles = Directory.GetFiles(imagePath).Select(file => Path.GetFileName(file)).ToArray();
+            string imagePath = Path.Combine(webroot, "images");
+            string[] imageFiles = Directory.GetFiles(imagePath).Select(file => Path.GetFileName(file)).ToArray();
 
-                using (ZipArchive zip = ZipFile.Open(imagesZipFile, ZipArchiveMode.Read))
+            using ZipArchive zip = ZipFile.Open(imagesZipFile, ZipArchiveMode.Read);
+            foreach (ZipArchiveEntry entry in zip.Entries)
+            {
+                if (imageFiles.Contains(entry.Name))
                 {
-                    foreach (ZipArchiveEntry entry in zip.Entries)
+                    string destinationFilename = Path.Combine(imagePath, entry.Name);
+                    if (File.Exists(destinationFilename))
                     {
-                        if (imageFiles.Contains(entry.Name))
-                        {
-                            string destinationFilename = Path.Combine(imagePath, entry.Name);
-                            if (File.Exists(destinationFilename))
-                            {
-                                File.Delete(destinationFilename);
-                            }
-                            entry.ExtractToFile(destinationFilename);
-                        }
-                        else
-                        {
-                            log.LogWarning($"Skip file '{entry.Name}' in zipfile '{imagesZipFile}'");
-                        }
+                        File.Delete(destinationFilename);
                     }
+                    entry.ExtractToFile(destinationFilename);
+                }
+                else
+                {
+                    log.Warning("Skipped file '{FileName}' in zipfile '{ZipFileName}'", entry.Name, imagesZipFile);
                 }
             }
-            catch ( Exception ex )
-            {
-                log.LogError($"Exception in method GetPreconfiguredImages WebMVC. Exception Message={ex.Message}");
-            }
         }
-
+        catch (Exception ex)
+        {
+            log.Error(ex, "EXCEPTION ERROR: {Message}", ex.Message);
+        }
     }
 
 }

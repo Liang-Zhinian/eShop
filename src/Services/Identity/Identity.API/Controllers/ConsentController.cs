@@ -1,13 +1,4 @@
-﻿using IdentityServer4.Models;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Mvc;
-using Eva.eShop.Services.Identity.API.Models.AccountViewModels;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Eva.eShop.Services.Identity.API.Controllers
+﻿namespace Eva.eShop.Services.Identity.API.Controllers
 {
     /// <summary>
     /// This controller implements the consent logic
@@ -19,7 +10,7 @@ namespace Eva.eShop.Services.Identity.API.Controllers
         private readonly IResourceStore _resourceStore;
         private readonly IIdentityServerInteractionService _interaction;
 
-        
+
         public ConsentController(
             ILogger<ConsentController> logger,
             IIdentityServerInteractionService interaction,
@@ -67,7 +58,7 @@ namespace Eva.eShop.Services.Identity.API.Controllers
                 response = ConsentResponse.Denied;
             }
             // user clicked 'yes' - validate the data
-            else if (model.Button == "yes" && model != null)
+            else if (model.Button == "yes")
             {
                 // if the user consented to some scope, build the response model
                 if (model.ScopesConsented != null && model.ScopesConsented.Any())

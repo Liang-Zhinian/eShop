@@ -1,18 +1,10 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.BuildingBlocks.IntegrationEventLogEF.Services;
 
-namespace Eva.BuildingBlocks.IntegrationEventLogEF.Services
+public interface IIntegrationEventLogService
 {
-    public interface IIntegrationEventLogService
-    {
-        Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync();
-        Task SaveEventAsync(IntegrationEvent @event, DbTransaction transaction);
-        Task MarkEventAsPublishedAsync(Guid eventId);
-        Task MarkEventAsInProgressAsync(Guid eventId);
-        Task MarkEventAsFailedAsync(Guid eventId);
-    }
+    Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId);
+    Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction);
+    Task MarkEventAsPublishedAsync(Guid eventId);
+    Task MarkEventAsInProgressAsync(Guid eventId);
+    Task MarkEventAsFailedAsync(Guid eventId);
 }

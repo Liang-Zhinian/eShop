@@ -1,21 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
-    public class VerifyCodeViewModel
+    public record VerifyCodeViewModel
     {
         [Required]
-        public string Provider { get; set; }
+        public string Provider { get; init; }
 
         [Required]
-        public string Code { get; set; }
+        public string Code { get; init; }
 
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; init; }
 
         [Display(Name = "Remember this browser?")]
-        public bool RememberBrowser { get; set; }
+        public bool RememberBrowser { get; init; }
 
         [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; init; }
     }
 }

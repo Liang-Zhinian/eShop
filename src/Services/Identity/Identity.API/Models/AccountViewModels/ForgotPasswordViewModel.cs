@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
-    public class ForgotPasswordViewModel
+    public record ForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; init; }
     }
 }

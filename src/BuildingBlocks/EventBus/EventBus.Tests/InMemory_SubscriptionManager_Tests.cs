@@ -1,4 +1,4 @@
-using Eva.BuildingBlocks.EventBus;
+using Eva.eShop.BuildingBlocks.EventBus;
 using System;
 using System.Linq;
 using Xunit;

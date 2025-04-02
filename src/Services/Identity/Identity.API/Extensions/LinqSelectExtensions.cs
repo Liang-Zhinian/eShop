@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Eva.eShop.Services.Identity.API.Extensions
+﻿namespace Eva.eShop.Services.Identity.API.Extensions
 {
     public static class LinqSelectExtensions
     {

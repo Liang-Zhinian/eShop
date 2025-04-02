@@ -1,9 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Eva.eShop.Services.Identity.API.Models;
-
-namespace Eva.eShop.Services.Identity.API.Services
+﻿namespace Eva.eShop.Services.Identity.API.Services
 {
     public class EFLoginService : ILoginService<ApplicationUser>
     {

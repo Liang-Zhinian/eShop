@@ -1,23 +1,20 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
+﻿namespace Eva.eShop.Services.Basket.API.IntegrationEvents.Events;
 
-namespace Eva.eShop.Services.Basket.API.IntegrationEvents.Events
+// Integration Events notes:
+// An Event is "something that has happened in the past", therefore its name has to be
+// An Integration Event is an event that can cause side effects to other microservices, Bounded-Contexts or external systems.
+public record ProductPriceChangedIntegrationEvent : IntegrationEvent
 {
-    // Integration Events notes: 
-    // An Event is “something that has happened in the past”, therefore its name has to be   
-    // An Integration Event is an event that can cause side effects to other microsrvices, Bounded-Contexts or external systems.
-    public class ProductPriceChangedIntegrationEvent : IntegrationEvent
-    {        
-        public int ProductId { get; private set; }
+    public int ProductId { get; private init; }
 
-        public decimal NewPrice { get; private set; }
+    public decimal NewPrice { get; private init; }
 
-        public decimal OldPrice { get; private set; }
+    public decimal OldPrice { get; private init; }
 
-        public ProductPriceChangedIntegrationEvent(int productId, decimal newPrice, decimal oldPrice)
-        {
-            ProductId = productId;
-            NewPrice = newPrice;
-            OldPrice = oldPrice;
-        }
+    public ProductPriceChangedIntegrationEvent(int productId, decimal newPrice, decimal oldPrice)
+    {
+        ProductId = productId;
+        NewPrice = newPrice;
+        OldPrice = oldPrice;
     }
 }

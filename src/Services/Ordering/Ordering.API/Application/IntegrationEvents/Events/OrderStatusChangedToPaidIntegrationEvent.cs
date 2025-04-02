@@ -1,24 +1,21 @@
-﻿namespace Ordering.API.Application.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Ordering.API.Application.IntegrationEvents.Events;
+
+public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
 {
-    using System.Collections.Generic;
-    using Eva.BuildingBlocks.EventBus.Events;
+    public int OrderId { get; }
+    public string OrderStatus { get; }
+    public string BuyerName { get; }
+    public IEnumerable<OrderStockItem> OrderStockItems { get; }
 
-    public class OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent
+    public OrderStatusChangedToPaidIntegrationEvent(int orderId,
+        string orderStatus,
+        string buyerName,
+        IEnumerable<OrderStockItem> orderStockItems)
     {
-        public int OrderId { get; }
-        public string OrderStatus { get; }
-        public string BuyerName { get; }
-        public IEnumerable<OrderStockItem> OrderStockItems { get; }
-
-        public OrderStatusChangedToPaidIntegrationEvent(int orderId,
-            string orderStatus,
-            string buyerName,
-            IEnumerable<OrderStockItem> orderStockItems)
-        {
-            OrderId = orderId;
-            OrderStockItems = orderStockItems;
-            OrderStatus = orderStatus;
-            BuyerName = buyerName;
-        }
+        OrderId = orderId;
+        OrderStockItems = orderStockItems;
+        OrderStatus = orderStatus;
+        BuyerName = buyerName;
     }
 }
+

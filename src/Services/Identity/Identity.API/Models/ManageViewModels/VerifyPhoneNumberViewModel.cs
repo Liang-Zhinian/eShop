@@ -1,15 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Eva.eShop.Services.Identity.API.Models.ManageViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.ManageViewModels
 {
-    public class VerifyPhoneNumberViewModel
+    public record VerifyPhoneNumberViewModel
     {
         [Required]
-        public string Code { get; set; }
+        public string Code { get; init; }
 
         [Required]
         [Phone]
         [Display(Name = "Phone number")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; init; }
     }
 }

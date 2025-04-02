@@ -1,19 +1,16 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
-using System.Collections.Generic;
+namespace Eva.eShop.Services.Ordering.SignalrHub.IntegrationEvents;
 
-namespace Ordering.SignalrHub.IntegrationEvents
+public record OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
 {
-    public class OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
-    {
-        public int OrderId { get; }
-        public string OrderStatus { get; }
-        public string BuyerName { get; }
+    public int OrderId { get; }
+    public string OrderStatus { get; }
+    public string BuyerName { get; }
 
-        public OrderStatusChangedToAwaitingValidationIntegrationEvent(int orderId, string orderStatus, string buyerName)
-        {
-            OrderId = orderId;
-            OrderStatus = orderStatus;
-            BuyerName = buyerName;
-        }
+    public OrderStatusChangedToAwaitingValidationIntegrationEvent(int orderId, string orderStatus, string buyerName)
+    {
+        OrderId = orderId;
+        OrderStatus = orderStatus;
+        BuyerName = buyerName;
     }
 }
+

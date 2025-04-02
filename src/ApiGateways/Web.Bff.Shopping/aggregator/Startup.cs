@@ -1,187 +1,199 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Eva.eShop.Web.Shopping.HttpAggregator.Config;
-using Eva.eShop.Web.Shopping.HttpAggregator.Filters.Basket.API.Infrastructure.Filters;
-using Eva.eShop.Web.Shopping.HttpAggregator.Infrastructure;
-using Eva.eShop.Web.Shopping.HttpAggregator.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Timeout;
-using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
+﻿namespace Eva.eShop.Web.Shopping.HttpAggregator;
 
-namespace Eva.eShop.Web.Shopping.HttpAggregator
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddCustomMvc(Configuration)
-                .AddCustomAuthentication(Configuration)
-                .AddApplicationServices();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            var pathBase = Configuration["PATH_BASE"];
-            if (!string.IsNullOrEmpty(pathBase))
-            {
-                loggerFactory.CreateLogger("init").LogDebug($"Using PATH BASE '{pathBase}'");
-                app.UsePathBase(pathBase);
-            }
-
-            app.UseCors("CorsPolicy");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseAuthentication();
-
-            app.UseMvc();
-
-            app.UseSwagger().UseSwaggerUI(c =>
-           {
-               c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Purchase BFF V1");
-               //c.ConfigureOAuth2("Eva.eShop.Web.Shopping.HttpAggregatorwaggerui", "", "", "Purchase BFF Swagger UI");
-           });
-
-
-        }
+        Configuration = configuration;
     }
 
-    public static class ServiceCollectionExtensions
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
     {
-        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            var identityUrl = configuration.GetValue<string>("urls:identity");
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        services.AddHealthChecks()
+            .AddCheck("self", () => HealthCheckResult.Healthy())
+            .AddUrlGroup(new Uri(Configuration["CatalogUrlHC"]), name: "catalogapi-check", tags: new string[] { "catalogapi" })
+            .AddUrlGroup(new Uri(Configuration["OrderingUrlHC"]), name: "orderingapi-check", tags: new string[] { "orderingapi" })
+            .AddUrlGroup(new Uri(Configuration["BasketUrlHC"]), name: "basketapi-check", tags: new string[] { "basketapi" })
+            .AddUrlGroup(new Uri(Configuration["IdentityUrlHC"]), name: "identityapi-check", tags: new string[] { "identityapi" })
+            .AddUrlGroup(new Uri(Configuration["PaymentUrlHC"]), name: "paymentapi-check", tags: new string[] { "paymentapi" });
 
-            }).AddJwtBearer(options =>
+        services.AddCustomMvc(Configuration)
+            .AddCustomAuthentication(Configuration)
+            .AddDevspaces()
+            .AddApplicationServices()
+            .AddGrpcServices();
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+    {
+        var pathBase = Configuration["PATH_BASE"];
+        if (!string.IsNullOrEmpty(pathBase))
+        {
+            loggerFactory.CreateLogger<Startup>().LogDebug("Using PATH BASE '{pathBase}'", pathBase);
+            app.UsePathBase(pathBase);
+        }
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseSwagger().UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Purchase BFF V1");
+
+            c.OAuthClientId("webshoppingaggswaggerui");
+            c.OAuthClientSecret(string.Empty);
+            c.OAuthRealm(string.Empty);
+            c.OAuthAppName("web shopping bff Swagger UI");
+        });
+
+        app.UseRouting();
+        app.UseCors("CorsPolicy");
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapDefaultControllerRoute();
+            endpoints.MapControllers();
+            endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
             {
-                options.Authority = identityUrl;
-                options.RequireHttpsMetadata = false;
-                options.Audience = "webshoppingagg";
-                options.Events = new JwtBearerEvents()
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+            {
+                Predicate = r => r.Name.Contains("self")
+            });
+        });
+    }
+}
+
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
+        var identityUrl = configuration.GetValue<string>("urls:identity");
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = identityUrl;
+            options.RequireHttpsMetadata = false;
+            options.Audience = "webshoppingagg";
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions();
+        services.Configure<UrlsConfig>(configuration.GetSection("urls"));
+
+        services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+
+        services.AddSwaggerGen(options =>
+        {
+            options.DescribeAllEnumsAsStrings();
+
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Shopping Aggregator for Web Clients",
+                Version = "v1",
+                Description = "Shopping Aggregator for Web Clients"
+            });
+
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows()
                 {
-                    OnAuthenticationFailed = async ctx =>
+                    Implicit = new OpenApiOAuthFlow()
                     {
-                        int i = 0;
-                    },
-                    OnTokenValidated = async ctx =>
-                    {
-                        int i = 0;
+                        AuthorizationUrl = new Uri($"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize"),
+                        TokenUrl = new Uri($"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/token"),
+
+                        Scopes = new Dictionary<string, string>()
+                        {
+                            { "webshoppingagg", "Shopping Aggregator for Web Clients" }
+                        }
                     }
-                };
+                }
             });
 
-            return services;
-        }
-        public static IServiceCollection AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
+            options.OperationFilter<AuthorizeCheckOperationFilter>();
+        });
+
+        services.AddCors(options =>
         {
-            services.AddOptions();
-            services.Configure<UrlsConfig>(configuration.GetSection("urls"));
+            options.AddPolicy("CorsPolicy",
+                builder => builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+        });
 
-            services.AddMvc();
+        return services;
+    }
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        //register delegating handlers
+        services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddSwaggerGen(options =>
-            {
-                options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
-                {
-                    Title = "Shopping Aggregator for Web Clients",
-                    Version = "v1",
-                    Description = "Shopping Aggregator for Web Clients",
-                    TermsOfService = "Terms Of Service"
-                });
+        //register http services
 
-                options.AddSecurityDefinition("oauth2", new OAuth2Scheme
-                {
-                    Type = "oauth2",
-                    Flow = "implicit",
-                    AuthorizationUrl = $"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/authorize",
-                    TokenUrl = $"{configuration.GetValue<string>("IdentityUrlExternal")}/connect/token",
-                    Scopes = new Dictionary<string, string>()
-                    {
-                        { "webshoppingagg", "Shopping Aggregator for Web Clients" }
-                    }
-                });
+        services.AddHttpClient<IOrderApiClient, OrderApiClient>()
+            .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+            .AddDevspacesSupport();
 
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
-            });
+        return services;
+    }
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
+    public static IServiceCollection AddGrpcServices(this IServiceCollection services)
+    {
+        services.AddTransient<GrpcExceptionInterceptor>();
 
-            return services;
-        }
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        services.AddScoped<IBasketService, BasketService>();
+
+        services.AddGrpcClient<Basket.BasketClient>((services, options) =>
         {
-            //register delegating handlers
-            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            var basketApi = services.GetRequiredService<IOptions<UrlsConfig>>().Value.GrpcBasket;
+            options.Address = new Uri(basketApi);
+        }).AddInterceptor<GrpcExceptionInterceptor>();
 
-            //register http services
-          
-            services.AddHttpClient<IBasketService, BasketService>()
-                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                .AddPolicyHandler(GetRetryPolicy())
-                .AddPolicyHandler(GetCircuitBreakerPolicy());
+        services.AddScoped<ICatalogService, CatalogService>();
 
-            services.AddHttpClient<ICatalogService, CatalogService>()
-                .AddPolicyHandler(GetRetryPolicy())
-                .AddPolicyHandler(GetCircuitBreakerPolicy());
-
-            services.AddHttpClient<IOrderApiClient, OrderApiClient>()
-                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-                .AddPolicyHandler(GetRetryPolicy())
-                .AddPolicyHandler(GetCircuitBreakerPolicy());
-
-
-            return services;
-        }
-
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        services.AddGrpcClient<Catalog.CatalogClient>((services, options) =>
         {
-            return HttpPolicyExtensions
-              .HandleTransientHttpError()
-              .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
-              .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            var catalogApi = services.GetRequiredService<IOptions<UrlsConfig>>().Value.GrpcCatalog;
+            options.Address = new Uri(catalogApi);
+        }).AddInterceptor<GrpcExceptionInterceptor>();
 
-        }
-        static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        services.AddScoped<IOrderingService, OrderingService>();
+
+        services.AddGrpcClient<OrderingGrpc.OrderingGrpcClient>((services, options) =>
         {
-            return HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .CircuitBreakerAsync(5, TimeSpan.FromSeconds(30));
-        }
+            var orderingApi = services.GetRequiredService<IOptions<UrlsConfig>>().Value.GrpcOrdering;
+            options.Address = new Uri(orderingApi);
+        }).AddInterceptor<GrpcExceptionInterceptor>();
+
+        return services;
     }
 }

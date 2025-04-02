@@ -1,6 +1,4 @@
-﻿using IdentityServer4;
-using IdentityServer4.Models;
-using System.Collections.Generic;
+﻿using IdentityServer4.Models;
 
 namespace Eva.eShop.Services.Identity.API.Configuration
 {
@@ -8,17 +6,16 @@ namespace Eva.eShop.Services.Identity.API.Configuration
     {
         // ApiResources define the apis in your system
         public static IEnumerable<ApiResource> GetApis()
-        {
+        {            
             return new List<ApiResource>
             {
                 new ApiResource("orders", "Orders Service"),
                 new ApiResource("basket", "Basket Service"),
-                new ApiResource("marketing", "Marketing Service"),
-                new ApiResource("locations", "Locations Service"),
                 new ApiResource("mobileshoppingagg", "Mobile Shopping Aggregator"),
                 new ApiResource("webshoppingagg", "Web Shopping Aggregator"),
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
                 new ApiResource("webhooks", "Webhooks registration Service"),
+                new ApiResource("MyWebApi", "MyWebApi Service"),
             };
         }
 
@@ -55,8 +52,6 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "webshoppingagg",
                         "orders.signalrhub",
                         "webhooks"
@@ -69,7 +64,7 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                     AllowedGrantTypes = GrantTypes.Hybrid,                    
                     //Used to retrieve the access token on the back channel.
                     ClientSecrets =
-                    {
+                    {                        
                         new Secret("secret".Sha256())
                     },
                     RedirectUris = { clientsUrl["Xamarin"] },
@@ -84,8 +79,6 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "mobileshoppingagg",
                         "webhooks"
                     },
@@ -99,6 +92,7 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                     ClientName = "MVC Client",
                     ClientSecrets = new List<Secret>
                     {
+                        
                         new Secret("secret".Sha256())
                     },
                     ClientUri = $"{clientsUrl["Mvc"]}",                             // public uri of the client
@@ -122,8 +116,6 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "webshoppingagg",
                         "orders.signalrhub",
                         "webhooks"
@@ -191,41 +183,9 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess,
                         "orders",
                         "basket",
-                        "locations",
-                        "marketing",
                         "webshoppingagg",
                         "webhooks"
                     },
-                },
-                new Client
-                {
-                    ClientId = "locationsswaggerui",
-                    ClientName = "Locations Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-
-                    RedirectUris = { $"{clientsUrl["LocationsApi"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{clientsUrl["LocationsApi"]}/swagger/" },
-
-                    AllowedScopes =
-                    {
-                        "locations"
-                    }
-                },
-                new Client
-                {
-                    ClientId = "marketingswaggerui",
-                    ClientName = "Marketing Swagger UI",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowAccessTokensViaBrowser = true,
-
-                    RedirectUris = { $"{clientsUrl["MarketingApi"]}/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"{clientsUrl["MarketingApi"]}/swagger/" },
-
-                    AllowedScopes =
-                    {
-                        "marketing"
-                    }
                 },
                 new Client
                 {
@@ -284,7 +244,8 @@ namespace Eva.eShop.Services.Identity.API.Configuration
 
                     AllowedScopes =
                     {
-                        "webshoppingagg"
+                        "webshoppingagg",
+                        "basket"
                     }
                 },
                 new Client
@@ -332,8 +293,38 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                     },
                     AccessTokenLifetime = 60*60*2, // 2 hours
                     IdentityTokenLifetime= 60*60*2 // 2 hours
-                }
-           };
+                },
+                new Client
+                {
+                    ClientId = "mywebapiswaggerui",
+                    ClientName = "MyWebApi Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["MyWebApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["MyWebApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        "MyWebApi"
+                    }
+                },              
+                // resource owner password grant client
+                new Client
+                {
+                    ClientId = "ro.client",
+                    AllowOfflineAccess = true,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedScopes =
+                    {
+                        "MyWebApi",
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess
+                    }
+                },
+            };
         }
     }
 }

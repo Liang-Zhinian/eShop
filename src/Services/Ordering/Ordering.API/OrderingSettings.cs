@@ -1,12 +1,14 @@
-﻿namespace Eva.eShop.Services.Ordering.API
+﻿namespace Eva.eShop.Services.Ordering.API;
+
+public class OrderingSettings
 {
-    public class OrderingSettings
-    {
-        public bool UseCustomizationData { get; set; }
-        public string ConnectionString { get; set; }
+    public bool UseCustomizationData { get; set; }
 
-        public string EventBusConnection { get; set; }
+    public string ConnectionString { get; set; }
 
-        public int CheckUpdateTime { get; set; }
-    }
+    public string EventBusConnection { get; set; }
+
+    public int GracePeriodTime { get; set; }
+
+    public int CheckUpdateTime { get; set; }
 }

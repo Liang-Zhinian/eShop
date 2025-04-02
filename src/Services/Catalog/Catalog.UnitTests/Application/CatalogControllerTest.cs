@@ -1,90 +1,128 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Eva.eShop.WebMVC.Controllers;
-using Eva.eShop.WebMVC.Services;
-using Eva.eShop.WebMVC.ViewModels;
-using Eva.eShop.WebMVC.ViewModels.CatalogViewModels;
+﻿using Eva.eShop.Services.Catalog.API.IntegrationEvents;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Eva.eShop.Services.Catalog.API;
+using Eva.eShop.Services.Catalog.API.Controllers;
+using Eva.eShop.Services.Catalog.API.Infrastructure;
+using Eva.eShop.Services.Catalog.API.Model;
+using Eva.eShop.Services.Catalog.API.ViewModel;
+using Microsoft.Extensions.Options;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using CatalogModel = Eva.eShop.WebMVC.ViewModels.Catalog;
 
-namespace UnitTest.Catalog.Application
+namespace UnitTest.Catalog.Application;
+
+public class CatalogControllerTest
 {
-    public class CatalogControllerTest
+    private readonly DbContextOptions<CatalogContext> _dbOptions;
+
+    public CatalogControllerTest()
     {
-        private readonly Mock<ICatalogService> _catalogServiceMock;
+        _dbOptions = new DbContextOptionsBuilder<CatalogContext>()
+            .UseInMemoryDatabase(databaseName: "in-memory")
+            .Options;
 
-        public CatalogControllerTest()
-        {
-            _catalogServiceMock = new Mock<ICatalogService>();
-        }
-
-        [Fact]
-        public async Task Get_catalog_items_success()
-        {
-            //Arrange
-            var fakeBrandFilterApplied = 1;
-            var fakeTypesFilterApplied = 2;
-            var fakePage = 2;
-            var fakeCatalog = GetFakeCatalog();
-
-            var expectedNumberOfPages = 5;
-            var expectedTotalPages = 50;
-            var expectedCurrentPage = 2;
-
-            _catalogServiceMock.Setup(x => x.GetCatalogItems
-            (
-                It.Is<int>(y => y == fakePage),
-                It.IsAny<int>(),
-                It.Is<int?>(y => y == fakeBrandFilterApplied),
-                It.Is<int?>(y => y == fakeTypesFilterApplied)
-             ))
-             .Returns(Task.FromResult(fakeCatalog));
-
-            //Act
-            var orderController = new CatalogController(_catalogServiceMock.Object);
-            var actionResult = await orderController.Index(fakeBrandFilterApplied, fakeTypesFilterApplied, fakePage, null);
-
-            //Assert
-            var viewResult = Assert.IsType<ViewResult>(actionResult);
-            var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
-            Assert.Equal(model.PaginationInfo.TotalPages, expectedNumberOfPages);
-            Assert.Equal(model.PaginationInfo.TotalItems, expectedTotalPages);
-            Assert.Equal(model.PaginationInfo.ActualPage, expectedCurrentPage);
-            Assert.Empty(model.PaginationInfo.Next);
-            Assert.Empty(model.PaginationInfo.Previous);
-        }   
-        
-        private CatalogModel GetFakeCatalog()
-        {
-            return new CatalogModel()
-            {
-                PageSize = 10,
-                Count = 50,
-                PageIndex = 2,
-                Data = new List<CatalogItem>()
-                {
-                    new CatalogItem()
-                    {
-                        Id = 1,
-                        Name = "fakeItemA",
-                        CatalogTypeId = 1
-                    },
-                    new CatalogItem()
-                    {
-                        Id = 2,
-                        Name = "fakeItemB",
-                        CatalogTypeId = 1
-                    },
-                    new CatalogItem()
-                    {
-                        Id = 3,
-                        Name = "fakeItemC",
-                        CatalogTypeId = 1
-                    }
-                }
-            };
-        }
+        using var dbContext = new CatalogContext(_dbOptions);
+        dbContext.AddRange(GetFakeCatalog());
+        dbContext.SaveChanges();
     }
+
+    [Fact]
+    public async Task Get_catalog_items_success()
+    {
+        //Arrange
+        var brandFilterApplied = 1;
+        var typesFilterApplied = 2;
+        var pageSize = 4;
+        var pageIndex = 1;
+
+        var expectedItemsInPage = 2;
+        var expectedTotalItems = 6;
+
+        var catalogContext = new CatalogContext(_dbOptions);
+        var catalogSettings = new TestCatalogSettings();
+
+        var integrationServicesMock = new Mock<ICatalogIntegrationEventService>();
+
+        //Act
+        var orderController = new CatalogController(catalogContext, catalogSettings, integrationServicesMock.Object);
+        var actionResult = await orderController.ItemsByTypeIdAndBrandIdAsync(typesFilterApplied, brandFilterApplied, pageSize, pageIndex);
+
+        //Assert
+        Assert.IsType<ActionResult<PaginatedItemsViewModel<CatalogItem>>>(actionResult);
+        var page = Assert.IsAssignableFrom<PaginatedItemsViewModel<CatalogItem>>(actionResult.Value);
+        Assert.Equal(expectedTotalItems, page.Count);
+        Assert.Equal(pageIndex, page.PageIndex);
+        Assert.Equal(pageSize, page.PageSize);
+        Assert.Equal(expectedItemsInPage, page.Data.Count());
+    }
+
+    private List<CatalogItem> GetFakeCatalog()
+    {
+        return new List<CatalogItem>()
+        {
+            new()
+            {
+                Id = 1,
+                Name = "fakeItemA",
+                CatalogTypeId = 2,
+                CatalogBrandId = 1,
+                PictureFileName = "fakeItemA.png"
+            },
+            new()
+            {
+                Id = 2,
+                Name = "fakeItemB",
+                CatalogTypeId = 2,
+                CatalogBrandId = 1,
+                PictureFileName = "fakeItemB.png"
+            },
+            new()
+            {
+                Id = 3,
+                Name = "fakeItemC",
+                CatalogTypeId = 2,
+                CatalogBrandId = 1,
+                PictureFileName = "fakeItemC.png"
+            },
+            new()
+            {
+                Id = 4,
+                Name = "fakeItemD",
+                CatalogTypeId = 2,
+                CatalogBrandId = 1,
+                PictureFileName = "fakeItemD.png"
+            },
+            new()
+            {
+                Id = 5,
+                Name = "fakeItemE",
+                CatalogTypeId = 2,
+                CatalogBrandId = 1,
+                PictureFileName = "fakeItemE.png"
+            },
+            new()
+            {
+                Id = 6,
+                Name = "fakeItemF",
+                CatalogTypeId = 2,
+                CatalogBrandId = 1,
+                PictureFileName = "fakeItemF.png"
+            }
+        };
+    }
+}
+
+public class TestCatalogSettings : IOptionsSnapshot<CatalogSettings>
+{
+    public CatalogSettings Value => new()
+    {
+        PicBaseUrl = "http://image-server.com/",
+        AzureStorageEnabled = true
+    };
+
+    public CatalogSettings Get(string name) => Value;
 }

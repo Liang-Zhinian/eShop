@@ -1,4 +1,4 @@
-﻿using Eva.BuildingBlocks.EventBus.Abstractions;
+﻿using Eva.eShop.BuildingBlocks.EventBus.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;

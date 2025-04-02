@@ -1,7 +1,7 @@
-﻿namespace Eva.eShop.Services.Basket.API
+﻿namespace Eva.eShop.Services.Basket.API;
+
+public class BasketSettings
 {
-    public class BasketSettings
-    {
-        public string ConnectionString { get; set; }
-    }
+    public string ConnectionString { get; set; }
 }
+

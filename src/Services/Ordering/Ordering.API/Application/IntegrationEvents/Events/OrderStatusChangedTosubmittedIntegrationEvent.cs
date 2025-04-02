@@ -1,22 +1,15 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.API.Application.IntegrationEvents.Events;
 
-namespace Ordering.API.Application.IntegrationEvents.Events
+public record OrderStatusChangedToSubmittedIntegrationEvent : IntegrationEvent
 {
-    public class OrderStatusChangedToSubmittedIntegrationEvent : IntegrationEvent
-    {
-        public int OrderId { get; }
-        public string OrderStatus { get; }
-        public string BuyerName { get; }
+    public int OrderId { get; }
+    public string OrderStatus { get; }
+    public string BuyerName { get; }
 
-        public OrderStatusChangedToSubmittedIntegrationEvent(int orderId, string orderStatus, string buyerName)
-        {
-            OrderId = orderId;
-            OrderStatus = orderStatus;
-            BuyerName = buyerName;
-        }
+    public OrderStatusChangedToSubmittedIntegrationEvent(int orderId, string orderStatus, string buyerName)
+    {
+        OrderId = orderId;
+        OrderStatus = orderStatus;
+        BuyerName = buyerName;
     }
 }

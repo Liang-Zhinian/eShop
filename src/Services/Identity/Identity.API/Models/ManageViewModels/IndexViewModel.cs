@@ -1,18 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-
-namespace Eva.eShop.Services.Identity.API.Models.ManageViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.ManageViewModels
 {
-    public class IndexViewModel
+    public record IndexViewModel
     {
-        public bool HasPassword { get; set; }
+        public bool HasPassword { get; init; }
 
-        public IList<UserLoginInfo> Logins { get; set; }
+        public IList<UserLoginInfo> Logins { get; init; }
 
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; init; }
 
-        public bool TwoFactor { get; set; }
+        public bool TwoFactor { get; init; }
 
-        public bool BrowserRemembered { get; set; }
+        public bool BrowserRemembered { get; init; }
     }
 }

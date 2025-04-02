@@ -1,12 +1,10 @@
-﻿namespace Ordering.API.Application.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Ordering.API.Application.IntegrationEvents.Events;    
+
+public record GracePeriodConfirmedIntegrationEvent : IntegrationEvent
 {
-    using Eva.BuildingBlocks.EventBus.Events;
+    public int OrderId { get; }
 
-    public class GracePeriodConfirmedIntegrationEvent : IntegrationEvent
-    {
-        public int OrderId { get; }
-
-        public GracePeriodConfirmedIntegrationEvent(int orderId) =>
-            OrderId = orderId;
-    }
+    public GracePeriodConfirmedIntegrationEvent(int orderId) =>
+        OrderId = orderId;
 }
+

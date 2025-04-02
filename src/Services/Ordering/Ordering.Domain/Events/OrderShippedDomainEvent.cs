@@ -1,15 +1,11 @@
-﻿using MediatR;
-using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
+﻿namespace Eva.eShop.Services.Ordering.Domain.Events;
 
-namespace Ordering.Domain.Events
+public class OrderShippedDomainEvent : INotification
 {
-    public class OrderShippedDomainEvent : INotification
-    {
-        public Order Order { get; }
+    public Order Order { get; }
 
-        public OrderShippedDomainEvent(Order order)
-        {
-            Order = order;           
-        }
+    public OrderShippedDomainEvent(Order order)
+    {
+        Order = order;
     }
 }

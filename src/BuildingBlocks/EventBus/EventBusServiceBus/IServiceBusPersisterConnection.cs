@@ -1,12 +1,7 @@
-﻿namespace Eva.BuildingBlocks.EventBusServiceBus
+namespace Eva.eShop.BuildingBlocks.EventBusServiceBus;
+
+public interface IServiceBusPersisterConnection : IAsyncDisposable
 {
-    using Microsoft.Azure.ServiceBus;
-    using System;
-
-    public interface IServiceBusPersisterConnection : IDisposable
-    {
-        ServiceBusConnectionStringBuilder ServiceBusConnectionStringBuilder { get; }
-
-        ITopicClient CreateModel();
-    }
+    ServiceBusClient TopicClient { get; }
+    ServiceBusAdministrationClient AdministrationClient { get; }
 }

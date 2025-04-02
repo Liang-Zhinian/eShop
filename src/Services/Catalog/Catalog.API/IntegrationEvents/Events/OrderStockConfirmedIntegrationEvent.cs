@@ -1,11 +1,8 @@
-﻿namespace Eva.eShop.Services.Catalog.API.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Catalog.API.IntegrationEvents.Events;
+
+public record OrderStockConfirmedIntegrationEvent : IntegrationEvent
 {
-    using BuildingBlocks.EventBus.Events;
+    public int OrderId { get; }
 
-    public class OrderStockConfirmedIntegrationEvent : IntegrationEvent
-    {
-        public int OrderId { get; }
-
-        public OrderStockConfirmedIntegrationEvent(int orderId) => OrderId = orderId;
-    }
+    public OrderStockConfirmedIntegrationEvent(int orderId) => OrderId = orderId;
 }

@@ -1,42 +1,37 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Eva.eShop.Mobile.Shopping.HttpAggregator.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Mobile.Shopping.HttpAggregator.Controllers;
 
-namespace Eva.eShop.Mobile.Shopping.HttpAggregator.Controllers
+[Route("api/v1/[controller]")]
+[Authorize]
+[ApiController]
+public class OrderController : ControllerBase
 {
-    [Route("api/v1/[controller]")]
-    [Authorize]
-    public class OrderController : Controller
+    private readonly IBasketService _basketService;
+    private readonly IOrderingService _orderingService;
+
+    public OrderController(IBasketService basketService, IOrderingService orderingService)
     {
-        private readonly IBasketService _basketService;
-        private readonly IOrderApiClient _orderClient;
-        public OrderController(IBasketService basketService, IOrderApiClient orderClient)
+        _basketService = basketService;
+        _orderingService = orderingService;
+    }
+
+    [Route("draft/{basketId}")]
+    [HttpGet]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(OrderData), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<OrderData>> GetOrderDraftAsync(string basketId)
+    {
+        if (string.IsNullOrEmpty(basketId))
         {
-            _basketService = basketService;
-            _orderClient = orderClient;
+            return BadRequest("Need a valid basketid");
+        }
+        // Get the basket data and build a order draft based on it
+        var basket = await _basketService.GetByIdAsync(basketId);
+
+        if (basket == null)
+        {
+            return BadRequest($"No basket found for id {basketId}");
         }
 
-        [Route("draft/{basketId}")]
-        [HttpGet]
-        public async Task<IActionResult> GetOrderDraft(string basketId)
-        {
-            if (string.IsNullOrEmpty(basketId))
-            {
-                return BadRequest("Need a valid basketid");
-            }
-            // Get the basket data and build a order draft based on it
-            var basket = await _basketService.GetById(basketId);
-            if (basket == null)
-            {
-                return BadRequest($"No basket found for id {basketId}");
-            }
-
-            var orderDraft = await _orderClient.GetOrderDraftFromBasket(basket);
-            return Ok(orderDraft);
-        }
+        return await _orderingService.GetOrderDraftAsync(basket);
     }
 }

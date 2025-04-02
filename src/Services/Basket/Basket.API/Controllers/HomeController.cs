@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace Eva.eShop.Services.Basket.API.Controllers;
 
-namespace Eva.eShop.Services.Basket.API.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    // GET: /<controller>/
+    public IActionResult Index()
     {
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return new RedirectResult("~/swagger");
-        }
+        return new RedirectResult("~/swagger");
     }
 }
+

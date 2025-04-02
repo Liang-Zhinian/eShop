@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace Eva.eShop.Services.Ordering.Infrastructure.Idempotency;
 
-namespace Eva.eShop.Services.Ordering.Infrastructure.Idempotency
+public class ClientRequest
 {
-    public class ClientRequest
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public DateTime Time { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public DateTime Time { get; set; }
 }

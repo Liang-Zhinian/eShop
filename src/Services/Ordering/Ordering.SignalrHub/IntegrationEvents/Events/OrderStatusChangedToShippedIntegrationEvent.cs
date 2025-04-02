@@ -1,22 +1,16 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.SignalrHub.IntegrationEvents.Events;
 
-namespace Ordering.SignalrHub.IntegrationEvents.Events
+public record OrderStatusChangedToShippedIntegrationEvent : IntegrationEvent
 {
-    public class OrderStatusChangedToShippedIntegrationEvent : IntegrationEvent
-    {
-        public int OrderId { get; }
-        public string OrderStatus { get; }
-        public string BuyerName { get; }
+    public int OrderId { get; }
+    public string OrderStatus { get; }
+    public string BuyerName { get; }
 
-        public OrderStatusChangedToShippedIntegrationEvent(int orderId, string orderStatus, string buyerName)
-        {
-            OrderId = orderId;
-            OrderStatus = orderStatus;
-            BuyerName = buyerName;
-        }
+    public OrderStatusChangedToShippedIntegrationEvent(int orderId, string orderStatus, string buyerName)
+    {
+        OrderId = orderId;
+        OrderStatus = orderStatus;
+        BuyerName = buyerName;
     }
 }
+

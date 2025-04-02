@@ -1,37 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Eva.eShop.WebMVC.ViewModels;
-using Eva.eShop.WebMVC.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Polly.CircuitBreaker;
+﻿namespace Eva.eShop.WebMVC.ViewComponents;
 
-namespace Eva.eShop.WebMVC.ViewComponents
+public class CartList : ViewComponent
 {
-    public class CartList : ViewComponent
+    private readonly IBasketService _cartSvc;
+
+    public CartList(IBasketService cartSvc) => _cartSvc = cartSvc;
+
+    public async Task<IViewComponentResult> InvokeAsync(ApplicationUser user)
     {
-        private readonly IBasketService _cartSvc;
-
-        public CartList(IBasketService cartSvc) => _cartSvc = cartSvc;
-
-        public async Task<IViewComponentResult> InvokeAsync(ApplicationUser user)
+        var vm = new Basket();
+        try
         {
-            var vm = new Basket();
-            try
-            {
-                vm = await GetItemsAsync(user);
-                return View(vm);
-            }
-            catch (BrokenCircuitException)
-            {
-                // Catch error when Basket.api is in circuit-opened mode                 
-                ViewBag.BasketInoperativeMsg = "Basket Service is inoperative, please try later on. (Business Msg Due to Circuit-Breaker)";
-            }
-
+            vm = await GetItemsAsync(user);
             return View(vm);
         }
-        
-        private Task<Basket> GetItemsAsync(ApplicationUser user) => _cartSvc.GetBasket(user);
+        catch (Exception ex)
+        {
+            ViewBag.BasketInoperativeMsg = $"Basket Service is inoperative, please try later on. ({ex.GetType().Name} - {ex.Message}))";
+        }
+
+        return View(vm);
     }
+
+    private Task<Basket> GetItemsAsync(ApplicationUser user) => _cartSvc.GetBasket(user);
 }

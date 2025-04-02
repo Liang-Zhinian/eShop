@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-
-namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
-    public class SendCodeViewModel
+    public record SendCodeViewModel
     {
-        public string SelectedProvider { get; set; }
+        public string SelectedProvider { get; init; }
 
-        public ICollection<SelectListItem> Providers { get; set; }
+        public ICollection<SelectListItem> Providers { get; init; }
 
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; init; }
 
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; init; }
     }
 }

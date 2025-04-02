@@ -1,12 +1,7 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.Domain.Seedwork;
 
-namespace Eva.eShop.Services.Ordering.Domain.Seedwork
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {        
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-        Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken));
-    }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+    Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }

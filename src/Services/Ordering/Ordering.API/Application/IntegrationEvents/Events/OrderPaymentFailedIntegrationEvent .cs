@@ -1,11 +1,8 @@
-﻿namespace Ordering.API.Application.IntegrationEvents.Events
+﻿namespace Eva.eShop.Services.Ordering.API.Application.IntegrationEvents.Events;
+
+public record OrderPaymentFailedIntegrationEvent : IntegrationEvent
 {
-    using Eva.BuildingBlocks.EventBus.Events;
+    public int OrderId { get; }
 
-    public class OrderPaymentFailedIntegrationEvent : IntegrationEvent
-    {
-        public int OrderId { get; }
-
-        public OrderPaymentFailedIntegrationEvent(int orderId) => OrderId = orderId;
-    }
+    public OrderPaymentFailedIntegrationEvent(int orderId) => OrderId = orderId;
 }

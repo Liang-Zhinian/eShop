@@ -1,42 +1,44 @@
-﻿using Eva.eShop.Web.Shopping.HttpAggregator.Config;
-using Eva.eShop.Web.Shopping.HttpAggregator.Models;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Web.Shopping.HttpAggregator.Services;
 
-namespace Eva.eShop.Web.Shopping.HttpAggregator.Services
+public class CatalogService : ICatalogService
 {
-    public class CatalogService : ICatalogService
+    private readonly Catalog.CatalogClient _client;
+    private readonly ILogger<CatalogService> _logger;
+
+    public CatalogService(Catalog.CatalogClient client, ILogger<CatalogService> logger)
     {
+        _client = client;
+        _logger = logger;
+    }
 
-        private readonly HttpClient _httpClient;
-        private readonly ILogger<CatalogService> _logger;
-        private readonly UrlsConfig _urls;
+    public async Task<CatalogItem> GetCatalogItemAsync(int id)
+    {
+        var request = new CatalogItemRequest { Id = id };
+        _logger.LogInformation("grpc request {@request}", request);
+        var response = await _client.GetItemByIdAsync(request);
+        _logger.LogInformation("grpc response {@response}", response);
+        return MapToCatalogItemResponse(response);
 
-        public CatalogService(HttpClient httpClient, ILogger<CatalogService> logger, IOptions<UrlsConfig> config)
+    }
+
+    public async Task<IEnumerable<CatalogItem>> GetCatalogItemsAsync(IEnumerable<int> ids)
+    {
+        var request = new CatalogItemsRequest { Ids = string.Join(",", ids), PageIndex = 1, PageSize = 10 };
+        _logger.LogInformation("grpc request {@request}", request);
+        var response = await _client.GetItemsByIdsAsync(request);
+        _logger.LogInformation("grpc response {@response}", response);
+        return response.Data.Select(this.MapToCatalogItemResponse);
+
+    }
+
+    private CatalogItem MapToCatalogItemResponse(CatalogItemResponse catalogItemResponse)
+    {
+        return new CatalogItem
         {
-            _httpClient = httpClient;
-            _logger = logger;
-            _urls = config.Value;
-        }
-
-        public async Task<CatalogItem> GetCatalogItem(int id)
-        {
-            var stringContent = await _httpClient.GetStringAsync(_urls.Catalog + UrlsConfig.CatalogOperations.GetItemById(id));
-            var catalogItem = JsonConvert.DeserializeObject<CatalogItem>(stringContent);
-
-            return catalogItem;
-        }
-
-        public async Task<IEnumerable<CatalogItem>> GetCatalogItems(IEnumerable<int> ids)
-        {
-            var stringContent = await _httpClient.GetStringAsync(_urls.Catalog + UrlsConfig.CatalogOperations.GetItemsById(ids));
-            var catalogItems = JsonConvert.DeserializeObject<CatalogItem[]>(stringContent);
-
-            return catalogItems;
-        }
+            Id = catalogItemResponse.Id,
+            Name = catalogItemResponse.Name,
+            PictureUri = catalogItemResponse.PictureUri,
+            Price = (decimal)catalogItemResponse.Price
+        };
     }
 }

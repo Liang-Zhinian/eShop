@@ -1,20 +1,17 @@
-﻿namespace Eva.eShop.WebMVC.ViewModels
+﻿namespace Eva.eShop.WebMVC.ViewModels;
+
+public record CampaignItem
 {
-    using System;
+    public int Id { get; init; }
 
-    public class CampaignItem
-    {
-        public int Id { get; set; }
+    public string Name { get; init; }
 
-        public string Name { get; set; }
+    public string Description { get; init; }
 
-        public string Description { get; set; }
+    public DateTime From { get; init; }
 
-        public DateTime From { get; set; }
+    public DateTime To { get; init; }
 
-        public DateTime To { get; set; }
-
-        public string PictureUri { get; set; }
-        public string DetailsUri { get; set; }
-    }
+    public string PictureUri { get; init; }
+    public string DetailsUri { get; init; }
 }

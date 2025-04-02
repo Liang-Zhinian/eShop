@@ -1,15 +1,10 @@
-﻿namespace Eva.eShop.Services.Ordering.API.Application.Queries
+﻿namespace Eva.eShop.Services.Ordering.API.Application.Queries;
+
+public interface IOrderQueries
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    Task<Order> GetOrderAsync(int id);
 
-    public interface IOrderQueries
-    {
-        Task<Order> GetOrderAsync(int id);
+    Task<IEnumerable<OrderSummary>> GetOrdersFromUserAsync(Guid userId);
 
-        Task<IEnumerable<OrderSummary>> GetOrdersFromUserAsync(Guid userId);
-
-        Task<IEnumerable<CardType>> GetCardTypesAsync();
-    }
+    Task<IEnumerable<CardType>> GetCardTypesAsync();
 }

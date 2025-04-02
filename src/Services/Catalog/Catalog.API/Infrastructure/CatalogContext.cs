@@ -1,52 +1,32 @@
-﻿namespace Eva.eShop.Services.Catalog.API.Infrastructure
+﻿using Eva.eShop.Services.Catalog.API.Model;
+
+namespace Eva.eShop.Services.Catalog.API.Infrastructure;
+
+public class CatalogContext : DbContext
 {
-    using Microsoft.EntityFrameworkCore;
-    using EntityConfigurations;
-    using Model;
-    using Microsoft.EntityFrameworkCore.Design;
-    using Eva.BuildingBlocks.IntegrationEventLogEF;
-    using Microsoft.EntityFrameworkCore.Metadata;
-
-    public class CatalogContext : DbContext
+    public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
     {
-        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
-        {
-        }
-        public DbSet<CatalogItem> CatalogItems { get; set; }
-        public DbSet<CatalogBrand> CatalogBrands { get; set; }
-        public DbSet<CatalogType> CatalogTypes { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            //builder.HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
-            builder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
-            builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
-            builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
-        }     
     }
+    public DbSet<CatalogItem> CatalogItems { get; set; }
+    public DbSet<CatalogBrand> CatalogBrands { get; set; }
+    public DbSet<CatalogType> CatalogTypes { get; set; }
 
-
-    public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        public CatalogContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder =  new DbContextOptionsBuilder<CatalogContext>()
-                .UseMySQL("Server=localhost;Database=Eva_eShop_Services_CatalogDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None;");
-
-            return new CatalogContext(optionsBuilder.Options);
-        }
+        builder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
     }
+}
 
-    public class IntegrationEventLogContextDesignFactory : IDesignTimeDbContextFactory<IntegrationEventLogContext>
+
+public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
+{
+    public CatalogContext CreateDbContext(string[] args)
     {
-        public IntegrationEventLogContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<IntegrationEventLogContext>()
-                .UseMySql("Server=127.0.0.1;database=Eva_eShop_Services_CatalogDb;uid=root;pwd=P@ssword;charset=utf8;port=3306;SslMode=None");
+        var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
+            .UseSqlServer("Server=.;Initial Catalog=Eva.eShop.Services.CatalogDb;Integrated Security=true");
 
-            return new IntegrationEventLogContext(optionsBuilder.Options);
-        }
+        return new CatalogContext(optionsBuilder.Options);
     }
 }

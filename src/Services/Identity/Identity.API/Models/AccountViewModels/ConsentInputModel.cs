@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
-    public class ConsentInputModel
+    public record ConsentInputModel
     {
-        public string Button { get; set; }
-        public IEnumerable<string> ScopesConsented { get; set; }
-        public bool RememberConsent { get; set; }
-        public string ReturnUrl { get; set; }
+        public string Button { get; init; }
+        public IEnumerable<string> ScopesConsented { get; init; }
+        public bool RememberConsent { get; init; }
+        public string ReturnUrl { get; init; }
     }
 }

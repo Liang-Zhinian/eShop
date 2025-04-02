@@ -1,21 +1,13 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.API.Application.Commands;
 
-namespace Ordering.API.Application.Commands
+public class SetAwaitingValidationOrderStatusCommand : IRequest<bool>
 {
-    public class SetAwaitingValidationOrderStatusCommand : IRequest<bool>
+
+    [DataMember]
+    public int OrderNumber { get; private set; }
+
+    public SetAwaitingValidationOrderStatusCommand(int orderNumber)
     {
-
-        [DataMember]
-        public int OrderNumber { get; private set; }
-
-        public SetAwaitingValidationOrderStatusCommand(int orderNumber)
-        {
-            OrderNumber = orderNumber;
-        }
+        OrderNumber = orderNumber;
     }
 }

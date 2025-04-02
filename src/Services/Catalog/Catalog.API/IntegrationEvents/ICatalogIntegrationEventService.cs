@@ -1,11 +1,7 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Catalog.API.IntegrationEvents;
 
-namespace Catalog.API.IntegrationEvents
+public interface ICatalogIntegrationEventService
 {
-    public interface ICatalogIntegrationEventService
-    {
-        Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent evt);
-        Task PublishThroughEventBusAsync(IntegrationEvent evt);
-    }
+    Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent evt);
+    Task PublishThroughEventBusAsync(IntegrationEvent evt);
 }

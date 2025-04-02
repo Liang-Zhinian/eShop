@@ -1,17 +1,13 @@
-﻿using Eva.eShop.Services.Ordering.Domain.Seedwork;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
 
-namespace Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate
+//This is just the RepositoryContracts or Interface defined at the Domain Layer
+//as requisite for the Order Aggregate
+
+public interface IOrderRepository : IRepository<Order>
 {
-    //This is just the RepositoryContracts or Interface defined at the Domain Layer
-    //as requisite for the Order Aggregate
+    Order Add(Order order);
 
-    public interface IOrderRepository : IRepository<Order>
-    {
-        Order Add(Order order);
-        
-        void Update(Order order);
+    void Update(Order order);
 
-        Task<Order> GetAsync(int orderId);
-    }
+    Task<Order> GetAsync(int orderId);
 }

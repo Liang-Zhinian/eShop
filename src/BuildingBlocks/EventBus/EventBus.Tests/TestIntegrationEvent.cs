@@ -1,11 +1,11 @@
-﻿using Eva.BuildingBlocks.EventBus.Events;
+﻿using Eva.eShop.BuildingBlocks.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace EventBus.Tests
 {
-    public class TestIntegrationEvent : IntegrationEvent
+    public record TestIntegrationEvent : IntegrationEvent
     {
     }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Eva.eShop.BuildingBlocks.IntegrationEventLogEF;
 
-namespace Eva.BuildingBlocks.IntegrationEventLogEF
+public enum EventStateEnum
 {
-    public enum EventStateEnum
-    {
-        NotPublished = 0,
-        InProgress = 1,
-        Published = 2,
-        PublishedFailed = 3
-    }
+    NotPublished = 0,
+    InProgress = 1,
+    Published = 2,
+    PublishedFailed = 3
 }
+

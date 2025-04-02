@@ -11,7 +11,7 @@
   {
     "outputFileName": "wwwroot/js/site.js",
     "inputFiles": [
-      "wwwroot/lib/@aspnet/signalr/dist/browser/signalr.js",
+      "wwwroot/lib/@microsoft/signalr/dist/browser/signalr.js",
       "wwwroot/lib/toastr/toastr.min.js"
     ],
     // Optionally specify minification options
@@ -29,7 +29,7 @@
     ],
     // Optionally specify minification options
     "minify": {
-      "enabled": true,
+      "enabled": false,
       "renameLocals": true
     },
     // Optinally generate .map file

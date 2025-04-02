@@ -1,30 +1,20 @@
-﻿using Autofac;
-using Eva.BuildingBlocks.EventBus.Abstractions;
-using Ordering.SignalrHub.IntegrationEvents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.SignalrHub.AutofacModules;
 
-namespace Ordering.SignalrHub.AutofacModules
+public class ApplicationModule
+    : Autofac.Module
 {
-    public class ApplicationModule
-        : Autofac.Module
+
+    public string QueriesConnectionString { get; }
+
+    public ApplicationModule()
+    {
+    }
+
+    protected override void Load(ContainerBuilder builder)
     {
 
-        public string QueriesConnectionString { get; }
+        builder.RegisterAssemblyTypes(typeof(OrderStatusChangedToAwaitingValidationIntegrationEvent).GetTypeInfo().Assembly)
+            .AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
 
-        public ApplicationModule()
-        {
-        }
-
-        protected override void Load(ContainerBuilder builder)
-        {
-
-            builder.RegisterAssemblyTypes(typeof(OrderStatusChangedToAwaitingValidationIntegrationEvent).GetTypeInfo().Assembly)
-                .AsClosedTypesOf(typeof(IIntegrationEventHandler<>));
-
-        }
     }
 }

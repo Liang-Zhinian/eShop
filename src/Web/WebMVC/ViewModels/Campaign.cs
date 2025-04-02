@@ -1,12 +1,9 @@
-﻿namespace Eva.eShop.WebMVC.ViewModels
-{
-    using System.Collections.Generic;
+﻿namespace Eva.eShop.WebMVC.ViewModels;
 
-    public class Campaign
-    {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public int Count { get; set; }
-        public List<CampaignItem> Data { get; set; }
-    }
+public record Campaign
+{
+    public int PageIndex { get; init; }
+    public int PageSize { get; init; }
+    public int Count { get; init; }
+    public List<CampaignItem> Data { get; init; }
 }

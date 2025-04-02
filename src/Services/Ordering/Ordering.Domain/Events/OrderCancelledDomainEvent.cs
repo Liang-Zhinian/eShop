@@ -1,18 +1,12 @@
-﻿using MediatR;
-using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Eva.eShop.Services.Ordering.Domain.Events;
 
-namespace Ordering.Domain.Events
+public class OrderCancelledDomainEvent : INotification
 {
-    public class OrderCancelledDomainEvent : INotification
-    {
-        public Order Order { get; }
+    public Order Order { get; }
 
-        public OrderCancelledDomainEvent(Order order)
-        {
-            Order = order;
-        }
+    public OrderCancelledDomainEvent(Order order)
+    {
+        Order = order;
     }
 }
+

@@ -1,32 +1,27 @@
-﻿
-using System;
+﻿namespace Eva.eShop.Services.Ordering.API.Application.Models;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using static Eva.eShop.Services.Ordering.API.Application.Commands.CreateOrderCommand;
 
-namespace Ordering.API.Application.Models
+public static class BasketItemExtensions
 {
-    public static class BasketItemExtensions
+    public static IEnumerable<OrderItemDTO> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems)
     {
-        public static IEnumerable<OrderItemDTO> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems)
+        foreach (var item in basketItems)
         {
-            foreach (var item in basketItems)
-            {
-                yield return item.ToOrderItemDTO();
-            }
+            yield return item.ToOrderItemDTO();
         }
+    }
 
-        public static OrderItemDTO ToOrderItemDTO(this BasketItem item)
+    public static OrderItemDTO ToOrderItemDTO(this BasketItem item)
+    {
+        return new OrderItemDTO()
         {
-            return new OrderItemDTO()
-            {
-                ProductId = int.TryParse(item.ProductId, out int id) ? id : -1,
-                ProductName = item.ProductName,
-                PictureUrl = item.PictureUrl,
-                UnitPrice = item.UnitPrice,
-                Units = item.Quantity
-            };
-        }
+            ProductId = item.ProductId,
+            ProductName = item.ProductName,
+            PictureUrl = item.PictureUrl,
+            UnitPrice = item.UnitPrice,
+            Units = item.Quantity
+        };
     }
 }

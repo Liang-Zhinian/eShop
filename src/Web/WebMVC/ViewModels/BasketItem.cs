@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.WebMVC.ViewModels;
 
-namespace Eva.eShop.WebMVC.ViewModels
+public record BasketItem
 {
-    public class BasketItem
-    {
-        public string Id { get; set; }
-        public string ProductId { get; set; }
-        public string ProductName { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal OldUnitPrice { get; set; }
-        public int Quantity { get; set; }
-        public string PictureUrl { get; set; }
-    }
+    public string Id { get; init; }
+    public int ProductId { get; init; }
+    public string ProductName { get; init; }
+    public decimal UnitPrice { get; init; }
+    public decimal OldUnitPrice { get; init; }
+    public int Quantity { get; init; }
+    public string PictureUrl { get; init; }
 }

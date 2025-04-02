@@ -1,31 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Mobile.Shopping.HttpAggregator.Models;
 
-namespace Eva.eShop.Mobile.Shopping.HttpAggregator.Models
+public class BasketData
 {
-    public class BasketData
-    {
-        public string BuyerId { get; set; }
-        public List<BasketDataItem> Items { get; set; }
+    public string BuyerId { get; set; }
 
-        public BasketData(string buyerId)
-        {
-            BuyerId = buyerId;
-            Items = new List<BasketDataItem>();
-        }
+    public List<BasketDataItem> Items { get; set; } = new();
+
+    public BasketData()
+    {
     }
 
-    public class BasketDataItem
+    public BasketData(string buyerId)
     {
-        public string Id { get; set; }
-        public string ProductId { get; set; }
-        public string ProductName { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal OldUnitPrice { get; set; }
-        public int Quantity { get; set; }
-        public string PictureUrl { get; set; }
-
+        BuyerId = buyerId;
     }
 }

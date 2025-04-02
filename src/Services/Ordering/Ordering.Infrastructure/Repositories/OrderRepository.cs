@@ -1,55 +1,49 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Eva.eShop.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-using Eva.eShop.Services.Ordering.Domain.Seedwork;
-using Ordering.Domain.Exceptions;
-using System;
-using System.Threading.Tasks;
+﻿namespace Eva.eShop.Services.Ordering.Infrastructure.Repositories;
 
-namespace Eva.eShop.Services.Ordering.Infrastructure.Repositories
+public class OrderRepository
+    : IOrderRepository
 {
-    public class OrderRepository
-        : IOrderRepository
+    private readonly OrderingContext _context;
+
+    public IUnitOfWork UnitOfWork => _context;
+
+    public OrderRepository(OrderingContext context)
     {
-        private readonly OrderingContext _context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
 
-        public IUnitOfWork UnitOfWork
+    public Order Add(Order order)
+    {
+        return _context.Orders.Add(order).Entity;
+
+    }
+
+    public async Task<Order> GetAsync(int orderId)
+    {
+        var order = await _context
+                            .Orders
+                            .Include(x => x.Address)
+                            .FirstOrDefaultAsync(o => o.Id == orderId);
+        if (order == null)
         {
-            get
-            {
-                return _context;
-            }
+            order = _context
+                        .Orders
+                        .Local
+                        .FirstOrDefault(o => o.Id == orderId);
+        }
+        if (order != null)
+        {
+            await _context.Entry(order)
+                .Collection(i => i.OrderItems).LoadAsync();
+            await _context.Entry(order)
+                .Reference(i => i.OrderStatus).LoadAsync();
         }
 
-        public OrderRepository(OrderingContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+        return order;
+    }
 
-        public Order Add(Order order)
-        {
-            return  _context.Orders.Add(order).Entity;
-               
-        }
-
-        public async Task<Order> GetAsync(int orderId)
-        {
-            var order = await _context.Orders.FindAsync(orderId);
-            if (order != null)
-            {
-                await _context.Entry(order)
-                    .Collection(i => i.OrderItems).LoadAsync();
-                await _context.Entry(order)
-                    .Reference(i => i.OrderStatus).LoadAsync();
-                await _context.Entry(order)
-                    .Reference(i => i.Address).LoadAsync();
-            }
-
-            return order;
-        }
-
-        public void Update(Order order)
-        {
-            _context.Entry(order).State = EntityState.Modified;
-        }
+    public void Update(Order order)
+    {
+        _context.Entry(order).State = EntityState.Modified;
     }
 }

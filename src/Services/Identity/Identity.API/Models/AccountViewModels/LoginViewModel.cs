@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
+﻿namespace Eva.eShop.Services.Identity.API.Models.AccountViewModels
 {
-    public class LoginViewModel
+    public record LoginViewModel
     {
         [Required]
         [EmailAddress]

@@ -1,44 +1,50 @@
-﻿using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Logging;
-using System;
+﻿namespace Eva.eShop.BuildingBlocks.EventBusServiceBus;
 
-namespace Eva.BuildingBlocks.EventBusServiceBus
+public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnection
 {
-    public class DefaultServiceBusPersisterConnection :IServiceBusPersisterConnection
+    private readonly string _serviceBusConnectionString;
+    private ServiceBusClient _topicClient;
+    private ServiceBusAdministrationClient _subscriptionClient;
+
+    bool _disposed;
+
+    public DefaultServiceBusPersisterConnection(string serviceBusConnectionString)
     {
-        private readonly ILogger<DefaultServiceBusPersisterConnection> _logger;
-        private readonly ServiceBusConnectionStringBuilder _serviceBusConnectionStringBuilder;
-        private ITopicClient _topicClient;
+        _serviceBusConnectionString = serviceBusConnectionString;
+        _subscriptionClient = new ServiceBusAdministrationClient(_serviceBusConnectionString);
+        _topicClient = new ServiceBusClient(_serviceBusConnectionString);
+    }
 
-        bool _disposed;
-
-        public DefaultServiceBusPersisterConnection(ServiceBusConnectionStringBuilder serviceBusConnectionStringBuilder,
-            ILogger<DefaultServiceBusPersisterConnection> logger)
+    public ServiceBusClient TopicClient
+    {
+        get
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            
-            _serviceBusConnectionStringBuilder = serviceBusConnectionStringBuilder ?? 
-                throw new ArgumentNullException(nameof(serviceBusConnectionStringBuilder));
-            _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
-        }
-
-        public ServiceBusConnectionStringBuilder ServiceBusConnectionStringBuilder => _serviceBusConnectionStringBuilder;
-
-        public ITopicClient CreateModel()
-        {
-            if(_topicClient.IsClosedOrClosing)
+            if (_topicClient.IsClosed)
             {
-                _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
+                _topicClient = new ServiceBusClient(_serviceBusConnectionString);
             }
-
             return _topicClient;
         }
+    }
 
-        public void Dispose()
+    public ServiceBusAdministrationClient AdministrationClient => 
+        _subscriptionClient;
+
+    public ServiceBusClient CreateModel()
+    {
+        if (_topicClient.IsClosed)
         {
-            if (_disposed) return;
-
-            _disposed = true;
+            _topicClient = new ServiceBusClient(_serviceBusConnectionString);
         }
+
+        return _topicClient;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed) return;
+
+        _disposed = true;
+        await _topicClient.DisposeAsync();
     }
 }

@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
+namespace Eva.eShop.Services.Basket.API.Model;
 
-namespace Eva.eShop.Services.Basket.API.Model
+public class CustomerBasket
 {
-    public class CustomerBasket
-    {
-        public string BuyerId { get;  set; }
-        public List<BasketItem> Items { get; set; } 
+    public string BuyerId { get; set; }
 
-        public CustomerBasket(string customerId)
-        {
-            BuyerId = customerId;
-            Items = new List<BasketItem>();
-        }
+    public List<BasketItem> Items { get; set; } = new();
+
+    public CustomerBasket()
+    {
+
+    }
+
+    public CustomerBasket(string customerId)
+    {
+        BuyerId = customerId;
     }
 }
+
