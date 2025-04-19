@@ -17,9 +17,11 @@ try
             var env = services.GetService<IWebHostEnvironment>();
             var logger = services.GetService<ILogger<ApplicationDbContextSeed>>();
             var settings = services.GetService<IOptions<AppSettings>>();
+            var roleManager = services.GetService<RoleManager<IdentityRole>>();
+            var userManager = services.GetService<UserManager<ApplicationUser>>();
 
             new ApplicationDbContextSeed()
-                .SeedAsync(context, env, logger, settings)
+                .SeedAsync(context, roleManager, userManager, env, logger, settings)
                 .Wait();
         })
         .MigrateDbContext<ConfigurationDbContext>((context, services) =>

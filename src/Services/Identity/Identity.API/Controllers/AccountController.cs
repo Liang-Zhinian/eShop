@@ -14,6 +14,7 @@
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        //private readonly IAuthenticationSchemeProvider _schemeProvider;
 
         public AccountController(
 
@@ -23,7 +24,8 @@
             IClientStore clientStore,
             ILogger<AccountController> logger,
             UserManager<ApplicationUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration/*,
+            IAuthenticationSchemeProvider schemeProvider*/)
         {
             _loginService = loginService;
             _interaction = interaction;
@@ -31,6 +33,7 @@
             _logger = logger;
             _userManager = userManager;
             _configuration = configuration;
+            //_schemeProvider = schemeProvider;
         }
 
         /// <summary>

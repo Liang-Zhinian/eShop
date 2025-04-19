@@ -20,6 +20,8 @@ namespace Eva.eShop.Services.Identity.API.Data
             clientUrls.Add("WebhooksApi", configuration.GetValue<string>("WebhooksApiClient"));
             clientUrls.Add("WebhooksWeb", configuration.GetValue<string>("WebhooksWebClient"));
             clientUrls.Add("MyWebApi", configuration.GetValue<string>("MyWebApiClient"));
+            clientUrls.Add("IdentityApi", configuration.GetValue<string>("identityUrl"));
+            clientUrls.Add("NativeAppClient", configuration.GetValue<string>("NativeAppClient"));
 
             if (!context.Clients.Any())
             {

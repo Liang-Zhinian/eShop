@@ -3,10 +3,16 @@
     using Microsoft.Extensions.Logging;
     public class ApplicationDbContextSeed
     {
+        private string[] roles = new[] { "User", "Manager", "Administrator", "PowerUser" };
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher = new PasswordHasher<ApplicationUser>();
 
-        public async Task SeedAsync(ApplicationDbContext context, IWebHostEnvironment env,
-            ILogger<ApplicationDbContextSeed> logger, IOptions<AppSettings> settings, int? retry = 0)
+        public async Task SeedAsync(ApplicationDbContext context,
+                                    RoleManager<IdentityRole> roleManager,
+                                    UserManager<ApplicationUser> userManager,
+            IWebHostEnvironment env,
+            ILogger<ApplicationDbContextSeed> logger, 
+            IOptions<AppSettings> settings, 
+            int? retry = 0)
         {
             int retryForAvaiability = retry.Value;
 
@@ -29,6 +35,9 @@
                 {
                     GetPreconfiguredImages(contentRootPath, webroot, logger);
                 }
+
+                InitializeRoles(roleManager).Wait();
+                InitializeUserRoles(userManager).Wait();
             }
             catch (Exception ex)
             {
@@ -38,7 +47,36 @@
 
                     logger.LogError(ex, "EXCEPTION ERROR while migrating {DbContextName}", nameof(ApplicationDbContext));
 
-                    await SeedAsync(context, env, logger, settings, retryForAvaiability);
+                    await SeedAsync(context, roleManager, userManager, env, logger, settings, retryForAvaiability);
+                }
+            }
+        }
+
+        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager)
+        {
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    var newRole = new IdentityRole(role);
+                    await roleManager.CreateAsync(newRole);
+                    // In the real world, there might be claims associated with roles
+                    // await roleManager.AddClaimAsync(newRole, new Claim("foo", "bar"))
+                }
+            }
+        }
+
+        private async Task InitializeUserRoles(UserManager<ApplicationUser> userManager)
+        {
+            foreach (var user in userManager.Users)
+            {
+                if (!(await userManager.GetRolesAsync(user)).Any())
+                {
+                    await userManager.AddToRolesAsync(user, roles);
+                }
+                if (!(await userManager.GetClaimsAsync(user)).Any())
+                {
+                    await userManager.AddClaimsAsync(user, roles.Select(y => new Claim(JwtClaimTypes.Role, y)));
                 }
             }
         }

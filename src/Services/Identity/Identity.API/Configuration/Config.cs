@@ -16,6 +16,7 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                 new ApiResource("orders.signalrhub", "Ordering Signalr Hub"),
                 new ApiResource("webhooks", "Webhooks registration Service"),
                 new ApiResource("MyWebApi", "MyWebApi Service"),
+                new ApiResource("identity", "Identity API Service", new[] { JwtClaimTypes.Name, JwtClaimTypes.Role }),
             };
         }
 
@@ -324,6 +325,118 @@ namespace Eva.eShop.Services.Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OfflineAccess
                     }
                 },
+                new Client
+                {
+                    ClientId = "identityswaggerui",
+                    ClientName = "Identity API Swagger UI",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+
+                    RedirectUris = { $"{clientsUrl["IdentityApi"]}/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"{clientsUrl["IdentityApi"]}/swagger/" },
+
+                    AllowedScopes =
+                    {
+                        JwtClaimTypes.Role,
+                        "identity"
+                    }
+                },
+                new Client
+                {
+                    ClientId = "native.code",
+                    ClientName = "Native Client (Code with PKCE)",
+                    RequireClientSecret = false,
+                    RedirectUris = new List<string>
+                    {
+                        $"{clientsUrl["NativeAppClient"]}:/oauthredirect"
+                    },
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        JwtClaimTypes.Role,
+                        "api1",
+                        "appointment",
+                        "catalog",
+                        "identity",
+                        "mobilereservationagg",
+                        "schedules",
+                        "sites",
+                        "identityaccess"
+                    },
+                    AllowOfflineAccess = true
+                },
+                // phone number token grant client
+                new Client
+                {
+                    ClientId = "phone_number_authentication.client",
+                    AllowedGrantTypes = new List<string> { "phone_number_token" },
+                    AccessTokenLifetime = 86400,
+                    IdentityTokenLifetime = 86400,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    SlidingRefreshTokenLifetime = 30,
+                    AllowOfflineAccess = true,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    AlwaysSendClientClaims = true,
+                    Enabled = true,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        JwtClaimTypes.Role,
+                        "api1",
+                        "appointment",
+                        "catalog",
+                        "identity",
+                        "mobilereservationagg",
+                        "schedules",
+                        "sites",
+                        "identityaccess"
+                    }
+                },
+                // phone number token grant client
+                new Client
+                {
+                    ClientId = "wechat_authentication.client",
+                    AllowedGrantTypes = new List<string> { "wechat_token" },
+                    AccessTokenLifetime = 86400,
+                    IdentityTokenLifetime = 86400,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    SlidingRefreshTokenLifetime = 30,
+                    AllowOfflineAccess = true,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                    AlwaysSendClientClaims = true,
+                    Enabled = true,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        JwtClaimTypes.Role,
+                        "api1",
+                        "appointment",
+                        "catalog",
+                        "identity",
+                        "mobilereservationagg",
+                        "schedules",
+                        "sites",
+                        "identityaccess"
+                    }
+                }
             };
         }
     }

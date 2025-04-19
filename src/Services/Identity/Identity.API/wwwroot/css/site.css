@@ -328,7 +328,7 @@ select::-ms-expand {
 
 .navbar-brand {
     margin-top: 20px;
-    background-image: url(../images/brand.PNG);
+    /*background-image: url(../images/brand.PNG);*/
     width: 201px;
     height: 44px;
     margin-left: 0px !important;
@@ -469,7 +469,7 @@ footer {
 
     footer .brand {
         margin-top: 25px;
-        background-image: url(../images/brand_dark.PNG);
+        /*background-image: url(../images/brand_dark.PNG);*/
         max-width: 231px;
         height: 52px;
         margin-left: 0px !important;
